@@ -12,6 +12,7 @@ namespace StuffyHelper.Core.Features.Shopping
         public Guid ParticipantId { get; set; }
         public Guid EventId { get; set; }
         public string Check { get; set; }
+        public bool IsActive { get; set; }
 
         public virtual EventEntry Event { get; set; }
         public virtual ParticipantEntry Participant { get; set; }
@@ -25,6 +26,7 @@ namespace StuffyHelper.Core.Features.Shopping
             ParticipantId = entry.ParticipantId;
             EventId = entry.EventId;
             Check = entry.Check;
+            IsActive = entry.IsActive;
         }
 
     }

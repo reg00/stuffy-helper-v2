@@ -6,6 +6,7 @@
         public Guid ParticipantId { get; set; }
         public Guid EventId { get; set; }
         public string Check { get; set; }
+        public bool IsActive { get; set; }
 
         public ShoppingEntry ToCommonEntry()
         {
@@ -15,6 +16,7 @@
                 ParticipantId = ParticipantId,
                 EventId = EventId,
                 ShoppingDate = ShoppingDate,
+                IsActive = true
             };
         }
     }

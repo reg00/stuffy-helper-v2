@@ -6,6 +6,7 @@
         public double Amount { get; set; }
         public int Count { get; set; }
         public Guid ShoppingId { get; set; }
+        public bool IsActive { get; set; }
 
         public PurchaseEntry ToCommonEntry()
         {
@@ -14,7 +15,8 @@
                 Name = Name,
                 Amount = Amount,
                 ShoppingId = ShoppingId,
-                Count = Count
+                Count = Count,
+                IsActive = true
             };
         }
     }

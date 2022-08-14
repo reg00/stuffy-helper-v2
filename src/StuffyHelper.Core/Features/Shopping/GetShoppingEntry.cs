@@ -10,6 +10,7 @@ namespace StuffyHelper.Core.Features.Shopping
         public Guid Id { get; set; }
         public DateTime ShoppingDate { get; set; }
         public string Check { get; set; }
+        public bool IsActive { get; set; }
 
         public GetEventEntry? Event { get; set; }
         public GetParticipantEntry? Participant { get; set; }
@@ -27,6 +28,7 @@ namespace StuffyHelper.Core.Features.Shopping
             Id = entry.Id;
             ShoppingDate = entry.ShoppingDate;
             Check = entry.Check;
+            IsActive = entry.IsActive;
 
             Event = includeEvent ? new GetEventEntry(entry.Event, null, false, false) : null;
             Participant = includeParticipant ? new GetParticipantEntry(entry.Participant, null, false, false, false) : null;

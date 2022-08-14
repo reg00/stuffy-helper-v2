@@ -9,6 +9,7 @@ namespace StuffyHelper.Core.Features.Participant
     public class GetParticipantEntry
     {
         public Guid Id { get; set; }
+        public bool IsActive { get; set; }
 
         public GetUserEntry? User { get; set; }
         public GetEventEntry? Event { get; set; }
@@ -28,6 +29,7 @@ namespace StuffyHelper.Core.Features.Participant
             EnsureArg.IsNotNull(user, nameof(user));
 
             Id = entry.Id;
+            IsActive = entry.IsActive;
             User = user;
             Event = includeEvent ? new GetEventEntry(entry.Event, user, false, false) : null;
             Shoppings = includeShoppings ? entry.Shoppings.Select(x => new GetShoppingEntry(x, false, false, false)).ToList() : new List<GetShoppingEntry>();

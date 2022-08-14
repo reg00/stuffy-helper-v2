@@ -14,6 +14,7 @@ namespace StuffyHelper.Core.Features.Event
         public DateTime EventDate { get; set; }
         public string UserId { get; set; }
         public bool IsCompleted { get; set; }
+        public bool IsActive { get; set; }
 
 
         public GetUserEntry? User { get; set; }
@@ -39,6 +40,7 @@ namespace StuffyHelper.Core.Features.Event
             CreatedDate = entry.CreatedDate;
             EventDate = entry.EventDate;
             IsCompleted = entry.IsCompleted;
+            IsActive = entry.IsActive;
             User = user;
             Participants = includeParticipants ? entry.Participants.Select(x => new GetParticipantEntry(x, user, false, false, false)).ToList() : new List<GetParticipantEntry>();
             Shoppings = includeShoppings ? entry.Shoppings.Select(x => new GetShoppingEntry(x, false, false, false)).ToList() : new List<GetShoppingEntry>();

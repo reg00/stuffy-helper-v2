@@ -3,6 +3,7 @@
     public class UpsertParticipantEntry
     {
         public Guid EventId { get; set; }
+        public bool IsActive { get; set; }
 
         public ParticipantEntry ToCommonEntry(string userId)
         {
@@ -10,6 +11,7 @@
             {
                 EventId = EventId,
                 UserId = userId,
+                IsActive = true
             };
         }
     }

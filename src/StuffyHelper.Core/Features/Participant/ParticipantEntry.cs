@@ -10,6 +10,7 @@ namespace StuffyHelper.Core.Features.Participant
         public Guid Id { get; set; }
         public string UserId { get; set; }
         public Guid EventId { get; set; }
+        public bool IsActive { get; set; }
 
         public virtual EventEntry Event { get; set; }
         public virtual List<ShoppingEntry> Shoppings { get; set; } = new List<ShoppingEntry>();
@@ -21,6 +22,7 @@ namespace StuffyHelper.Core.Features.Participant
             EnsureArg.IsNotNull(entry, nameof(entry));
 
             EventId = entry.EventId;
+            IsActive = entry.IsActive;
         }
     }
 }
