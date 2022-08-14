@@ -13,6 +13,7 @@ namespace StuffyHelper.Core.Features.Event
         public DateTime EventDate { get; set; }
         public string UserId { get; set; }
         public bool IsCompleted { get; set; }
+        public bool IsActive { get; set; }
 
         public virtual List<ParticipantEntry> Participants { get; set; } = new List<ParticipantEntry>();
         public virtual List<ShoppingEntry> Shoppings { get; set; } = new List<ShoppingEntry>();
@@ -25,6 +26,7 @@ namespace StuffyHelper.Core.Features.Event
             Description = entry.Description;
             EventDate = entry.EventDate;
             IsCompleted = entry.IsCompleted;
+            IsActive = entry.IsActive;
         }
     }
 }

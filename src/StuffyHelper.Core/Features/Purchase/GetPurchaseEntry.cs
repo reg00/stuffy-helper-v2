@@ -10,6 +10,7 @@ namespace StuffyHelper.Core.Features.Purchase
         public string Name { get; set; }
         public double Amount { get; set; }
         public int Count { get; set; }
+        public bool IsActive { get; set; }
         public GetShoppingEntry? Shopping { get; set; }
         public List<GetPurchaseUsageEntry> PurchaseUsages { get; set; }
 
@@ -26,6 +27,7 @@ namespace StuffyHelper.Core.Features.Purchase
             Name = entry.Name;
             Amount = entry.Amount;
             Count = entry.Count;
+            IsActive = entry.IsActive;
             Shopping = includeShopping ? new GetShoppingEntry(entry.Shopping, false, false, false) : null;
             PurchaseUsages = includePurchaseUsages ? entry.PurchaseUsages.Select(x => new GetPurchaseUsageEntry(x, false, false)).ToList() : new List<GetPurchaseUsageEntry>();
         }

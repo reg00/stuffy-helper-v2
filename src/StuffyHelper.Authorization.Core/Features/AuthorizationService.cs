@@ -168,6 +168,12 @@ namespace StuffyHelper.Authorization.Core.Features
             else
                 user = await _userManager.FindByIdAsync(userId);
 
+            if (user == null)
+            {
+                var error = string.IsNullOrWhiteSpace(userName) ? $"Пользователь с идентификатором {userId} отсутствует" : $"Пользователь с логином {userName} отсутствует";
+                throw new EntityNotFoundException(error);
+            }
+
             var rolesList = await _userManager.GetRolesAsync(user);
 
             return new UserEntry(user, rolesList);

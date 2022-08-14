@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\StuffyHelper.Authorization.Core\StuffyHelper.Authorization.Core.csproj" />
     <ProjectReference Include="..\StuffyHelper.Authorization.EntityFrameworkCore\StuffyHelper.Authorization.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\StuffyHelper.Core\StuffyHelper.Core.csproj" />
   </ItemGroup>
 
 </Project>

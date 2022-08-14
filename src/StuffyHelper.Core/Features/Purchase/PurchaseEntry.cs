@@ -11,6 +11,7 @@ namespace StuffyHelper.Core.Features.Purchase
         public double Amount { get; set; }
         public int Count { get; set; }
         public Guid ShoppingId { get; set; }
+        public bool IsActive { get; set; }
 
         public virtual ShoppingEntry Shopping { get; set; }
         public virtual List<PurchaseUsageEntry> PurchaseUsages { get; set; } = new List<PurchaseUsageEntry>();
@@ -24,6 +25,7 @@ namespace StuffyHelper.Core.Features.Purchase
             Amount = entry.Amount;
             Count = entry.Count;
             ShoppingId = entry.ShoppingId;
+            IsActive = entry.IsActive;
         }
     }
 }
