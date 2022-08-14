@@ -1,13 +1,17 @@
 using StuffyHelper.Api.Registration;
 using StuffyHelper.Authorization.Core.Registration;
+using StuffyHelper.Core.Registration;
+using StuffyHelper.EntityFrameworkCore.Features.Schema;
+using StuffyHelper.EntityFrameworkCore.Registration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddEckApi(builder.Configuration);
+builder.Services.AddServices();
 
-//builder.Services.AddDbStore<EckContext>(builder.Configuration);
-//builder.Services.AddEfDbServices();
+builder.Services.AddDbStore<StuffyHelperContext>(builder.Configuration);
+builder.Services.AddEfDbServices();
 
 var app = builder.Build();
 
@@ -27,6 +31,5 @@ app.UseExceptionHandling();
 app.UseEckApi();
 
 app.SeedUserData();
-//app.SeedEckData();
 
 app.Run();
