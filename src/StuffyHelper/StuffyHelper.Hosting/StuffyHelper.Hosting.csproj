@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\StuffyHelper.Api\StuffyHelper.Api.csproj" />
+    <ProjectReference Include="..\..\StuffyHelper.Core\StuffyHelper.Core.csproj" />
+    <ProjectReference Include="..\..\StuffyHelper.EntityFrameworkCore\StuffyHelper.EntityFrameworkCore.csproj" />
   </ItemGroup>
 
 </Project>
