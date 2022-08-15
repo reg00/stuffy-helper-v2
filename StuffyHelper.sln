@@ -3,17 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Authorization.EntityFrameworkCore", "..\StuffyHelper.Authorization.EntityFrameworkCore\StuffyHelper.Authorization.EntityFrameworkCore.csproj", "{DA3CF683-6F90-43F0-AAB0-C368F8F1F593}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Authorization.EntityFrameworkCore", "src\StuffyHelper.Authorization.EntityFrameworkCore\StuffyHelper.Authorization.EntityFrameworkCore.csproj", "{DA3CF683-6F90-43F0-AAB0-C368F8F1F593}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Authorization.Core", "..\StuffyHelper.Authorization.Core\StuffyHelper.Authorization.Core.csproj", "{33B78268-CE05-4231-AEA4-1BF6AD0AAA32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Authorization.Core", "src\StuffyHelper.Authorization.Core\StuffyHelper.Authorization.Core.csproj", "{33B78268-CE05-4231-AEA4-1BF6AD0AAA32}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Api", "..\StuffyHelper.Api\StuffyHelper.Api.csproj", "{D9252782-73E9-4D50-8700-B3307D3A2E75}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Api", "src\StuffyHelper.Api\StuffyHelper.Api.csproj", "{D9252782-73E9-4D50-8700-B3307D3A2E75}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Core", "..\StuffyHelper.Core\StuffyHelper.Core.csproj", "{6740CA1E-1832-43FE-AB6A-B0ED6CFE08C9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Core", "src\StuffyHelper.Core\StuffyHelper.Core.csproj", "{6740CA1E-1832-43FE-AB6A-B0ED6CFE08C9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.EntityFrameworkCore", "..\StuffyHelper.EntityFrameworkCore\StuffyHelper.EntityFrameworkCore.csproj", "{49562321-5974-4E36-AC8C-59AD55B11DC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.EntityFrameworkCore", "src\StuffyHelper.EntityFrameworkCore\StuffyHelper.EntityFrameworkCore.csproj", "{49562321-5974-4E36-AC8C-59AD55B11DC1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Hosting", "..\StuffyHelper.Hosting\StuffyHelper.Hosting.csproj", "{FE6FB530-005E-44C1-808E-8B1141E3007E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Hosting", "src\StuffyHelper.Hosting\StuffyHelper.Hosting.csproj", "{FE6FB530-005E-44C1-808E-8B1141E3007E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
