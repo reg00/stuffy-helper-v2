@@ -55,10 +55,9 @@ namespace StuffyHelper.Core.Features.Participant
         {
             EnsureArg.IsNotNull(participant, nameof(participant));
 
+            var user = await _authorizationService.GetUser(userId: participant.UserId);
             var entry = participant.ToCommonEntry();
             var result = await _participantStore.AddParticipantAsync(entry, cancellationToken);
-
-            var user = await _authorizationService.GetUser(userId: participant.UserId);
 
             return new GetParticipantEntry(result, new GetUserEntry(user), false, false, false);
         }
@@ -75,6 +74,7 @@ namespace StuffyHelper.Core.Features.Participant
             EnsureArg.IsNotNull(participant, nameof(participant));
             EnsureArg.IsNotDefault(participantId, nameof(participantId));
 
+            var user = await _authorizationService.GetUser(userId: participant.UserId);
             var existingParticipant = await _participantStore.GetParticipantAsync(participantId, cancellationToken);
 
             if (existingParticipant is null)
@@ -84,7 +84,6 @@ namespace StuffyHelper.Core.Features.Participant
 
             existingParticipant.PatchFrom(participant);
             var result = await _participantStore.UpdateParticipantAsync(existingParticipant, cancellationToken);
-            var user = await _authorizationService.GetUser(userId: participant.UserId);
 
             return new GetParticipantEntry(result, new GetUserEntry(user), false, false, false);
         }

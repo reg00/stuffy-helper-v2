@@ -65,10 +65,9 @@ namespace StuffyHelper.Core.Features.Event
         {
             EnsureArg.IsNotNull(@event, nameof(@event));
 
+            var user = await _authorizationService.GetUser(userId: @event.UserId);
             var entry = @event.ToCommonEntry();
             var result = await _eventStore.AddEventAsync(entry, cancellationToken);
-
-            var user = await _authorizationService.GetUser(userId: @event.UserId);
 
             return new GetEventEntry(result, new GetUserEntry(user), false, false);
         }
@@ -85,6 +84,7 @@ namespace StuffyHelper.Core.Features.Event
             EnsureArg.IsNotNull(@event, nameof(@event));
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
+            var user = await _authorizationService.GetUser(userId: @event.UserId);
             var existingEvent = await _eventStore.GetEventAsync(eventId, cancellationToken);
 
             if (existingEvent is null)
@@ -94,7 +94,6 @@ namespace StuffyHelper.Core.Features.Event
 
             existingEvent.PatchFrom(@event);
             var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
-            var user = await _authorizationService.GetUser(userId: @event.UserId);
 
             return new GetEventEntry(result, new GetUserEntry(user), false, false);
         }

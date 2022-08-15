@@ -6,14 +6,15 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using StuffyHelper.Authorization.Core.Registration;
 using StuffyHelper.Authorization.EntityFrameworkCore.Registration;
+using StuffyHelper.EntityFrameworkCore.Registration;
 
 namespace StuffyHelper.Api.Registration
 {
     public static class ApiRegistrationExtensions
     {
-        public static IServiceCollection AddEckApi(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddEckAuth(configuration);
+            services.AddAuth(configuration);
 
             services
                 .AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
@@ -59,14 +60,14 @@ namespace StuffyHelper.Api.Registration
             return services;
         }
 
-        public static IApplicationBuilder UseEckApi(this IApplicationBuilder app)
+        public static IApplicationBuilder UseApi(this IApplicationBuilder app)
         {
             app.UseSwagger();
             app.UseSwaggerUI();
 
             app.UseRouting();
 
-            app.UseEckAuth();
+            app.UseAuth();
 
             app.UseEndpoints(options =>
             {
@@ -76,7 +77,7 @@ namespace StuffyHelper.Api.Registration
             return app;
         }
 
-        private static IServiceCollection AddEckAuth(this IServiceCollection services, IConfiguration configuration)
+        private static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddEfAuthDbServices(configuration);
             services.AddJwtAuthentication(configuration);
@@ -85,8 +86,9 @@ namespace StuffyHelper.Api.Registration
             return services;
         }
 
-        private static IApplicationBuilder UseEckAuth(this IApplicationBuilder app)
+        private static IApplicationBuilder UseAuth(this IApplicationBuilder app)
         {
+            app.ApplicationServices.AddAuthDatabaseMigration();
             app.ApplicationServices.AddEfDatabaseMigration();
 
             app.UseAuthTokenChecker();

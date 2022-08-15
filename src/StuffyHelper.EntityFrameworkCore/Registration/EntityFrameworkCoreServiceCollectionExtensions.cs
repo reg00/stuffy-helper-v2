@@ -29,7 +29,6 @@ namespace StuffyHelper.EntityFrameworkCore.Registration
             });
 
             return services;
-
         }
     }
 }

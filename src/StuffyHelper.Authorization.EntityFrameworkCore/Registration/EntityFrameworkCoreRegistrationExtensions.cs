@@ -38,7 +38,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Registration
             return services;
         }
 
-        public static IServiceProvider AddEfDatabaseMigration(this IServiceProvider services)
+        public static IServiceProvider AddAuthDatabaseMigration(this IServiceProvider services)
         {
             using (var scope = services.CreateScope())
             {
