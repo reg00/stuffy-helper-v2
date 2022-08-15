@@ -36,17 +36,17 @@ namespace StuffyHelper.Core.Features.Participant
             CancellationToken cancellationToken = default)
         {
             var resp = await _participantStore.GetParticipantsAsync(offset, limit, eventId, userId, isActive, cancellationToken);
-            var Participants = new List<GetParticipantEntry>();
+            var participants = new List<GetParticipantEntry>();
 
             foreach (var @Participant in resp.Data)
             {
                 var user = await _authorizationService.GetUser(userId: @Participant.UserId);
-                Participants.Add(new GetParticipantEntry(@Participant, new GetUserEntry(user), true, true, true));
+                participants.Add(new GetParticipantEntry(@Participant, new GetUserEntry(user), true, true, true));
             }
 
             return new Response<GetParticipantEntry>()
             {
-                Data = Participants,
+                Data = participants,
                 TotalPages = resp.TotalPages
             };
         }
