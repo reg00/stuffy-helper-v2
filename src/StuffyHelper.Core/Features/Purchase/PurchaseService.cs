@@ -35,7 +35,6 @@ namespace StuffyHelper.Core.Features.Purchase
             CancellationToken cancellationToken = default)
         {
             var resp = await _purchaseStore.GetPurchasesAsync(offset, limit, name, countMin, countMax, amountMin, amountMax, shoppingId, isActive, cancellationToken);
-            var purchases = new List<GetPurchaseEntry>();
 
             return new Response<GetPurchaseEntry>()
             {
