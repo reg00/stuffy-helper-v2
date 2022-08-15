@@ -4,13 +4,14 @@
     {
         public Guid EventId { get; set; }
         public bool IsActive { get; set; }
+        public string UserId { get; set; }
 
-        public ParticipantEntry ToCommonEntry(string userId)
+        public ParticipantEntry ToCommonEntry()
         {
             return new ParticipantEntry()
             {
                 EventId = EventId,
-                UserId = userId,
+                UserId = UserId,
                 IsActive = true
             };
         }
