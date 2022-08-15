@@ -33,25 +33,25 @@
         public const string DeleteEventRoute = GetEventRoute;
         public const string UpdateEventRoute = GetEventRoute;
 
-        public const string AddParticipantRoute = $"{GetEventRoute}/{ParticipantsSegment}";
+        public const string AddParticipantRoute = $"{DefaultRouteSegment}/{ParticipantsSegment}";
         public const string GetParticipantRoute = $"{AddParticipantRoute}/{ParticipantIdRouteSegment}";
         public const string GetParticipantsRoute = AddParticipantRoute;
         public const string DeleteParticipantRoute = GetParticipantRoute;
         public const string UpdateParticipantRoute = GetParticipantRoute;
 
-        public const string AddPurchaseRoute = $"{GetEventRoute}/{PurchasesSegment}";
+        public const string AddPurchaseRoute = $"{DefaultRouteSegment}/{PurchasesSegment}";
         public const string GetPurchaseRoute = $"{AddPurchaseRoute}/{PurchaseIdRouteSegment}";
         public const string GetPurchasesRoute = AddPurchaseRoute;
         public const string DeletePurchaseRoute = GetPurchaseRoute;
         public const string UpdatePurchaseRoute = GetPurchaseRoute;
 
-        public const string AddPurchaseUsageRoute = $"{GetPurchaseRoute}/{PurchaseUsagesSegment}";
+        public const string AddPurchaseUsageRoute = $"{DefaultRouteSegment}/{PurchaseUsagesSegment}";
         public const string GetPurchaseUsageRoute = $"{AddPurchaseUsageRoute}/{PurchaseUsageIdRouteSegment}";
         public const string GetPurchaseUsagesRoute = AddPurchaseUsageRoute;
         public const string DeletePurchaseUsageRoute = GetPurchaseUsageRoute;
         public const string UpdatePurchaseUsageRoute = GetPurchaseUsageRoute;
 
-        public const string AddShoppingRoute = $"{GetEventRoute}/{ShoppingsSegment}";
+        public const string AddShoppingRoute = $"{DefaultRouteSegment}/{ShoppingsSegment}";
         public const string GetShoppingRoute = $"{AddShoppingRoute}/{ShoppingIdRouteSegment}";
         public const string GetShoppingsRoute = AddShoppingRoute;
         public const string DeleteShoppingRoute = GetShoppingRoute;

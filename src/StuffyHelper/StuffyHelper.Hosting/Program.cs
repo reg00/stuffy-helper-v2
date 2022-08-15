@@ -7,7 +7,7 @@ using StuffyHelper.EntityFrameworkCore.Registration;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddEckApi(builder.Configuration);
+builder.Services.AddApi(builder.Configuration);
 builder.Services.AddServices();
 
 builder.Services.AddDbStore<StuffyHelperContext>(builder.Configuration);
@@ -28,7 +28,7 @@ app.UseSwaggerUI(c =>
 
 app.UseExceptionHandling();
 
-app.UseEckApi();
+app.UseApi();
 
 app.SeedUserData();
 
