@@ -14,12 +14,12 @@ namespace StuffyHelper.Authorization.Core.Features
 {
     public class AuthorizationService : IAuthorizationService
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<StuffyUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly AuthorizationConfiguration _authorizationConfiguration;
 
         public AuthorizationService(
-            UserManager<IdentityUser> userManager,
+            UserManager<StuffyUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<AuthorizationConfiguration> authorizationConfiguration)
         {
@@ -65,7 +65,7 @@ namespace StuffyHelper.Authorization.Core.Features
             if (model.UserType != UserType.User && CheckUserIsAdmin(user) != true)
                 throw new UnauthorizedAccessException("Недостаточно прав для добавления данного пользователя");
 
-            IdentityUser identityUser = model.InitializeUser();
+            StuffyUser identityUser = model.InitializeUser();
 
             var result = await _userManager.CreateAsync(identityUser, model.Password);
 
@@ -107,7 +107,7 @@ namespace StuffyHelper.Authorization.Core.Features
             if (string.IsNullOrWhiteSpace(userName) && string.IsNullOrWhiteSpace(userId))
                 throw new AuthorizationException("UserName or UserId required");
 
-            IdentityUser userToDelete;
+            StuffyUser userToDelete;
 
             if (!string.IsNullOrWhiteSpace(userName))
                 userToDelete = await _userManager.FindByNameAsync(userName);
@@ -161,7 +161,7 @@ namespace StuffyHelper.Authorization.Core.Features
             if (string.IsNullOrWhiteSpace(userName) && string.IsNullOrWhiteSpace(userId))
                 throw new AuthorizationException("UserName or UserId required");
 
-            IdentityUser user;
+            StuffyUser user;
 
             if (!string.IsNullOrWhiteSpace(userName))
                 user = await _userManager.FindByNameAsync(userName);

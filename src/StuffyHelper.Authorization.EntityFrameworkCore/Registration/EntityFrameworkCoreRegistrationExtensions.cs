@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StuffyHelper.Authorization.Core.Configs;
 using StuffyHelper.Authorization.Core.Features;
+using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features;
 using StuffyHelper.Authorization.EntityFrameworkCore.Schema;
 
@@ -22,7 +23,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Registration
             services.AddDbContext<UserDbContext>(
                 options => options.UseNpgsql(authOptions.ConnectionString));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<StuffyUser, IdentityRole>(options =>
             {
                 options.Password.RequiredLength = 6;
                 options.Password.RequireLowercase = false;

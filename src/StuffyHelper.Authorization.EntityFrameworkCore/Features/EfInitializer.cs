@@ -12,12 +12,12 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features
     {
         private readonly ILogger<EfInitializer> _logger;
         private readonly UserDbContext _context;
-        private readonly IPasswordHasher<IdentityUser> _passwordHasher;
+        private readonly IPasswordHasher<StuffyUser> _passwordHasher;
 
         public EfInitializer(
             ILogger<EfInitializer> logger,
             UserDbContext context,
-            IPasswordHasher<IdentityUser> passwordHasher)
+            IPasswordHasher<StuffyUser> passwordHasher)
         {
             EnsureArg.IsNotNull(logger, nameof(logger));
             EnsureArg.IsNotNull(context, nameof(context));
@@ -51,13 +51,17 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features
                 if (existsUser.Any())
                     return;
 
-                IdentityUser user = new()
+                StuffyUser user = new()
                 {
                     Id = Guid.NewGuid().ToString(),
                     Email = "admin@rcud-rt.ru",
                     UserName = "admin",
                     NormalizedUserName = "ADMIN",
-                    NormalizedEmail = "ADMIN@RCUD-RT.RU"
+                    NormalizedEmail = "ADMIN@RCUD-RT.RU",
+                    FirstName = "Вячеслав",
+                    MiddleName = "Олегович",
+                    LastName = "Максимов",
+                    PhoneNumber = "+79174409895"
                 };
 
                 _context.Users.Add(user);

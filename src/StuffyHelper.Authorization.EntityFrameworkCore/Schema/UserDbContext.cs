@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using StuffyHelper.Authorization.Core.Models;
 
 namespace StuffyHelper.Authorization.EntityFrameworkCore.Schema
 {
-    public class UserDbContext : IdentityDbContext<IdentityUser>
+    public class UserDbContext : IdentityDbContext<StuffyUser>
     {
         public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
         {
