@@ -27,7 +27,7 @@ namespace StuffyHelper.Authorization.Core.Extensions
             return token;
         }
 
-        public static async Task<JwtSecurityToken> CreateToken(this IdentityUser user, UserManager<IdentityUser> _userManager, AuthorizationConfiguration authorizationConfiguration)
+        public static async Task<JwtSecurityToken> CreateToken(this StuffyUser user, UserManager<StuffyUser> _userManager, AuthorizationConfiguration authorizationConfiguration)
         {
             var userRoles = await _userManager.GetRolesAsync(user);
             var authClaims = new List<Claim>
@@ -50,7 +50,7 @@ namespace StuffyHelper.Authorization.Core.Extensions
                 await _roleManager.CreateAsync(new IdentityRole(nameof(UserType.User)));
         }
 
-        public static async Task AddRoleToUser(this IdentityUser user, RoleManager<IdentityRole> _roleManager, UserManager<IdentityUser> _userManager, UserType role)
+        public static async Task AddRoleToUser(this StuffyUser user, RoleManager<IdentityRole> _roleManager, UserManager<StuffyUser> _userManager, UserType role)
         {
             EnsureArg.IsNotNull(user, nameof(user));
             EnsureArg.IsNotNull(_roleManager, nameof(_roleManager));
@@ -63,13 +63,17 @@ namespace StuffyHelper.Authorization.Core.Extensions
                 await _userManager.AddToRoleAsync(user, nameof(UserType.User));
         }
 
-        public static IdentityUser InitializeUser(this RegisterModel model)
+        public static StuffyUser InitializeUser(this RegisterModel model)
         {
             return new()
             {
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = model.Username
+                UserName = model.Username,
+                PhoneNumber = model.Phone,
+                LastName = model.LastName,
+                MiddleName = model.MiddleName,
+                FirstName = model.FirstName
             };
         }
 
