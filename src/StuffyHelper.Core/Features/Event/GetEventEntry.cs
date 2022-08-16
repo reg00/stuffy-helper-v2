@@ -32,7 +32,7 @@ namespace StuffyHelper.Core.Features.Event
         public GetEventEntry(EventEntry entry, GetUserEntry user, bool includeParticipants, bool includeShoppings)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
-            EnsureArg.IsNotNull(user, nameof(user));
+            //EnsureArg.IsNotNull(user, nameof(user));
 
             Id = entry.Id;
             Name = entry.Name;

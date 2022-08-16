@@ -26,7 +26,7 @@ namespace StuffyHelper.Core.Features.Participant
         public GetParticipantEntry(ParticipantEntry entry, GetUserEntry user, bool includeEvent, bool includeShoppings, bool includePurchaseUsages)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
-            EnsureArg.IsNotNull(user, nameof(user));
+            //EnsureArg.IsNotNull(user, nameof(user));
 
             Id = entry.Id;
             IsActive = entry.IsActive;
