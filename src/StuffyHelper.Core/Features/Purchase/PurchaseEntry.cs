@@ -2,6 +2,7 @@
 using StuffyHelper.Core.Features.PurchaseType;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.Shopping;
+using StuffyHelper.Core.Features.UnitType;
 
 namespace StuffyHelper.Core.Features.Purchase
 {
@@ -14,10 +15,12 @@ namespace StuffyHelper.Core.Features.Purchase
         public int Count { get; set; }
         public Guid ShoppingId { get; set; }
         public Guid PurchaseTypeId { get; set; }
+        public Guid UnitTypeId { get; set; }
         public bool IsActive { get; set; }
 
         public virtual ShoppingEntry Shopping { get; set; }
         public virtual PurchaseTypeEntry PurchaseType { get; set; }
+        public virtual UnitTypeEntry UnitType { get; set; }
         public virtual List<PurchaseUsageEntry> PurchaseUsages { get; set; } = new List<PurchaseUsageEntry>();
 
 

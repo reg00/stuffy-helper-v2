@@ -1,26 +1,21 @@
 ﻿using EnsureThat;
 using StuffyHelper.Core.Features.Purchase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace StuffyHelper.Core.Features.PurchaseType
+namespace StuffyHelper.Core.Features.UnitType
 {
-    public class GetPurchaseTypeEntry
+    public class GetUnitTypeEntry
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public bool IsActive { get; set; }
         public List<GetPurchaseEntry> Purchases { get; set; }
 
-        public GetPurchaseTypeEntry()
+        public GetUnitTypeEntry()
         {
             Purchases = new List<GetPurchaseEntry>();
         }
 
-        public GetPurchaseTypeEntry(PurchaseTypeEntry entry, bool includePurchases)
+        public GetUnitTypeEntry(UnitTypeEntry entry, bool includePurchases)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 

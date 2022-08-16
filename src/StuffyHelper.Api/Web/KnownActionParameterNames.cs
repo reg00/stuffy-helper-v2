@@ -8,5 +8,6 @@
         internal const string PurchaseUsageId = "purchaseUsageId";
         internal const string ShoppingId = "shoppingId";
         internal const string PurchaseTypeId = "purchaseTypeId";
+        internal const string UnitTypeId = "unitTypeId";
     }
 }
