@@ -2,31 +2,31 @@
 using Microsoft.EntityFrameworkCore;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.PurchaseType;
+using StuffyHelper.Core.Features.UnitType;
 using StuffyHelper.EntityFrameworkCore.Features.Schema;
 
 namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 {
-    public class EfPurchaseTypeStore : IPurchaseTypeStore
+    public class EfUnitTypeStore : IUnitTypeStore
     {
         private readonly StuffyHelperContext _context;
 
-        public EfPurchaseTypeStore(StuffyHelperContext context)
+        public EfUnitTypeStore(StuffyHelperContext context)
         {
             _context = context;
         }
 
-        public async Task<PurchaseTypeEntry> GetPurchaseTypeAsync(Guid purchaseTypeId, CancellationToken cancellationToken)
+        public async Task<UnitTypeEntry> GetUnitTypeAsync(Guid unitTypeId, CancellationToken cancellationToken)
         {
-            EnsureArg.IsNotDefault(purchaseTypeId, nameof(purchaseTypeId));
+            EnsureArg.IsNotDefault(unitTypeId, nameof(unitTypeId));
 
             try
             {
-                var entry = await _context.PurchaseTypes
-                    .FirstOrDefaultAsync(e => e.Id == purchaseTypeId, cancellationToken);
+                var entry = await _context.UnitTypes
+                    .FirstOrDefaultAsync(e => e.Id == unitTypeId, cancellationToken);
 
                 if (entry is null)
-                    throw new ResourceNotFoundException($"PurchaseType with Id '{purchaseTypeId}' Not Found.");
+                    throw new ResourceNotFoundException($"UnitType with Id '{unitTypeId}' Not Found.");
 
                 return entry;
             }
@@ -41,7 +41,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
         }
 
-        public async Task<Response<PurchaseTypeEntry>> GetPurchaseTypesAsync(
+        public async Task<Response<UnitTypeEntry>> GetUnitTypesAsync(
             int offset = 0,
             int limit = 10,
             string name = null,
@@ -51,14 +51,14 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
         {
             try
             {
-                var searchedData = await _context.PurchaseTypes
+                var searchedData = await _context.UnitTypes
                     .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.Contains(name, StringComparison.OrdinalIgnoreCase)) &&
                     (isActive == null || isActive == e.IsActive) &&
                     (purchaseId == null || e.Purchases.Any(x => x.Id == purchaseId)))
                     .OrderByDescending(e => e.Name)
                     .ToListAsync(cancellationToken);
 
-                return new Response<PurchaseTypeEntry>()
+                return new Response<UnitTypeEntry>()
                 {
                     Data = searchedData.Skip(offset).Take(limit),
                     TotalPages = (int)Math.Ceiling(searchedData.Count() / (double)limit),
@@ -71,13 +71,13 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
         }
 
-        public async Task<PurchaseTypeEntry> AddPurchaseTypeAsync(PurchaseTypeEntry purchaseType, CancellationToken cancellationToken = default)
+        public async Task<UnitTypeEntry> AddUnitTypeAsync(UnitTypeEntry unitType, CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotNull(purchaseType, nameof(purchaseType));
+            EnsureArg.IsNotNull(unitType, nameof(unitType));
 
             try
             {
-                var entry = await _context.PurchaseTypes.AddAsync(purchaseType, cancellationToken);
+                var entry = await _context.UnitTypes.AddAsync(unitType, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
                 return entry.Entity;
             }
@@ -87,24 +87,24 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
         }
 
-        public async Task DeletePurchaseTypeAsync(Guid purchaseTypeId, CancellationToken cancellationToken = default)
+        public async Task DeleteUnitTypeAsync(Guid unitTypeId, CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotDefault(purchaseTypeId, nameof(purchaseTypeId));
+            EnsureArg.IsNotDefault(unitTypeId, nameof(unitTypeId));
 
             try
             {
-                var purchaseType = await _context.PurchaseTypes
+                var unitType = await _context.UnitTypes
                     .FirstOrDefaultAsync(
-                    s => s.Id == purchaseTypeId, cancellationToken);
+                    s => s.Id == unitTypeId, cancellationToken);
 
-                if (purchaseType is null)
+                if (unitType is null)
                 {
-                    throw new ResourceNotFoundException($"PurchaseType with Id '{purchaseTypeId}' not found.");
+                    throw new ResourceNotFoundException($"UnitType with Id '{unitTypeId}' not found.");
                 }
 
-                purchaseType.IsActive = false;
+                unitType.IsActive = false;
 
-                _context.PurchaseTypes.Update(purchaseType);
+                _context.UnitTypes.Update(unitType);
                 await _context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
@@ -113,13 +113,13 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
         }
 
-        public async Task<PurchaseTypeEntry> UpdatePurchaseTypeAsync(PurchaseTypeEntry purchaseType, CancellationToken cancellationToken = default)
+        public async Task<UnitTypeEntry> UpdateUnitTypeAsync(UnitTypeEntry unitType, CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotNull(purchaseType, nameof(purchaseType));
+            EnsureArg.IsNotNull(unitType, nameof(unitType));
 
             try
             {
-                var entry = _context.PurchaseTypes.Update(purchaseType);
+                var entry = _context.UnitTypes.Update(unitType);
                 await _context.SaveChangesAsync(cancellationToken);
                 return entry.Entity;
             }

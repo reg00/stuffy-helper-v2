@@ -8,6 +8,7 @@ using StuffyHelper.Core.Features.Purchase;
 using StuffyHelper.Core.Features.PurchaseType;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.Shopping;
+using StuffyHelper.Core.Features.UnitType;
 using StuffyHelper.EntityFrameworkCore.Configs;
 
 
@@ -32,6 +33,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
         public virtual DbSet<PurchaseUsageEntry> PurchaseUsages { get; set; }
         public virtual DbSet<ShoppingEntry> Shoppings { get; set; }
         public virtual DbSet<PurchaseTypeEntry> PurchaseTypes { get; set; }
+        public virtual DbSet<UnitTypeEntry> UnitTypes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -87,12 +89,14 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.HasOne(e => e.Shopping).WithMany(e => e.Purchases).HasForeignKey(e => e.ShoppingId);
                 entity.HasMany(e => e.PurchaseUsages).WithOne(e => e.Purchase).HasForeignKey(e => e.PurchaseId);
                 entity.HasOne(e => e.PurchaseType).WithMany(e => e.Purchases).HasForeignKey(e => e.PurchaseTypeId);
+                entity.HasOne(e => e.UnitType).WithMany(e => e.Purchases).HasForeignKey(e => e.UnitTypeId);
 
                 entity.HasIndex(e => e.Name);
 
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.ShoppingId).IsRequired();
                 entity.Property(e => e.PurchaseTypeId).IsRequired();
+                entity.Property(e => e.UnitTypeId).IsRequired();
             });
 
             modelBuilder.Entity<PurchaseUsageEntry>(entity =>
@@ -131,6 +135,18 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.HasKey(e => e.Id);
 
                 entity.HasMany(e => e.Purchases).WithOne(e => e.PurchaseType).HasForeignKey(e => e.PurchaseTypeId);
+
+                entity.HasIndex(e => e.Name).IsUnique();
+
+                entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<UnitTypeEntry>(entity =>
+            {
+                entity.ToTable("unit-types");
+                entity.HasKey(e => e.Id);
+
+                entity.HasMany(e => e.Purchases).WithOne(e => e.UnitType).HasForeignKey(e => e.UnitTypeId);
 
                 entity.HasIndex(e => e.Name).IsUnique();
 

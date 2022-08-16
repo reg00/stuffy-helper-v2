@@ -13,6 +13,7 @@
         private const string PurchaseUsagesSegment = "purchase-usages";
         private const string ShoppingsSegment = "shoppings";
         private const string PurchaseTypesSegment = "purchase-types";
+        private const string UnitTypesSegment = "unit-types";
 
         private const string EventIdRouteSegment = $"{{{KnownActionParameterNames.EventId}}}";
         private const string ParticipantIdRouteSegment = $"{{{KnownActionParameterNames.ParticipantId}}}";
@@ -20,6 +21,7 @@
         private const string PurchaseUsageIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseUsageId}}}";
         private const string ShoppingIdRouteSegment = $"{{{KnownActionParameterNames.ShoppingId}}}";
         private const string PurchaseTypeIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseTypeId}}}";
+        private const string UnitTypeIdRouteSegment = $"{{{KnownActionParameterNames.UnitTypeId}}}";
 
 
         public const string RegisterRoute = $"{AuthRoute}/register";
@@ -65,5 +67,11 @@
         public const string GetPurchaseTypesRoute = AddPurchaseTypeRoute;
         public const string DeletePurchaseTypeRoute = GetPurchaseTypeRoute;
         public const string UpdatePurchaseTypeRoute = GetPurchaseTypeRoute;
+
+        public const string AddUnitTypeRoute = $"{DefaultRouteSegment}/{UnitTypesSegment}";
+        public const string GetUnitTypeRoute = $"{AddUnitTypeRoute}/{UnitTypeIdRouteSegment}";
+        public const string GetUnitTypesRoute = AddUnitTypeRoute;
+        public const string DeleteUnitTypeRoute = GetUnitTypeRoute;
+        public const string UpdateUnitTypeRoute = GetUnitTypeRoute;
     }
 }

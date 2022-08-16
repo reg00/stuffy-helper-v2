@@ -8,6 +8,7 @@
         public int Count { get; set; }
         public Guid ShoppingId { get; set; }
         public Guid PurchaseTypeId { get; set; }
+        public Guid UnitTypeId { get; set; }
         public bool IsActive { get; set; }
 
         public PurchaseEntry ToCommonEntry()
@@ -19,6 +20,7 @@
                 Weight = Weight,
                 ShoppingId = ShoppingId,
                 PurchaseTypeId = PurchaseTypeId,
+                UnitTypeId = UnitTypeId,
                 Count = Count,
                 IsActive = true
             };

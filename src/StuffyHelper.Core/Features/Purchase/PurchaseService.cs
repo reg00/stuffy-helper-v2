@@ -19,7 +19,7 @@ namespace StuffyHelper.Core.Features.Purchase
 
             var entry = await _purchaseStore.GetPurchaseAsync(purchaseId, cancellationToken);
 
-            return new GetPurchaseEntry(entry, true , true, true);
+            return new GetPurchaseEntry(entry, true , true, true, true);
         }
 
         public async Task<Response<GetPurchaseEntry>> GetPurchasesAsync(
@@ -34,15 +34,16 @@ namespace StuffyHelper.Core.Features.Purchase
             double? weightMax = null,
             Guid? shoppingId = null,
             Guid? purchaseTypeId = null,
+            Guid? unitTypeId = null,
             bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
             var resp = await _purchaseStore.GetPurchasesAsync(offset, limit, name, countMin, countMax, amountMin, amountMax,
-                                                              weightMin, weightMax, shoppingId, purchaseTypeId, isActive, cancellationToken);
+                                                              weightMin, weightMax, shoppingId, purchaseTypeId, unitTypeId, isActive, cancellationToken);
 
             return new Response<GetPurchaseEntry>()
             {
-                Data = resp.Data.Select(x => new GetPurchaseEntry(x, true, true, true)),
+                Data = resp.Data.Select(x => new GetPurchaseEntry(x, true, true, true, true)),
                 TotalPages = resp.TotalPages
             };
         }
@@ -54,7 +55,7 @@ namespace StuffyHelper.Core.Features.Purchase
             var entry = purchase.ToCommonEntry();
             var result = await _purchaseStore.AddPurchaseAsync(entry, cancellationToken);
 
-            return new GetPurchaseEntry(result, false, false, false);
+            return new GetPurchaseEntry(result, false, false, false, false);
         }
 
         public async Task DeletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default)
@@ -79,7 +80,7 @@ namespace StuffyHelper.Core.Features.Purchase
             existingPurchase.PatchFrom(purchase);
             var result = await _purchaseStore.UpdatePurchaseAsync(existingPurchase, cancellationToken);
 
-            return new GetPurchaseEntry(result, false, false, false);
+            return new GetPurchaseEntry(result, false, false, false, false);
         }
     }
 }
