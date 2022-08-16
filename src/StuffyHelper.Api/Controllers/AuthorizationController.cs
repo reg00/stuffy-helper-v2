@@ -17,6 +17,23 @@ namespace StuffyHelper.Api.Controllers
         }
 
         [HttpPost]
+        [Route(KnownRoutes.RegisterRoute)]
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        {
+            EnsureArg.IsNotNull(model, nameof(model));
+
+            if (!ModelState.IsValid)
+            {
+                var error = string.Join(", ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
+                return Unauthorized(new Response() { Status = "Error", Message = error });
+            }
+
+            var user = await _authorizationService.Register(model, User);
+
+            return Ok(new GetUserEntry(user));
+        }
+
+        [HttpPost]
         [Route(KnownRoutes.LoginRoute)]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {

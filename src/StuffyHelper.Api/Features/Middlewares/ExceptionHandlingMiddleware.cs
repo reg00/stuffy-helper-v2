@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StuffyHelper.Authorization.Core.Exceptions;
+using StuffyHelper.Core.Exceptions;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Runtime.ExceptionServices;
@@ -65,18 +66,17 @@ namespace StuffyHelper.Api.Features.Middlewares
                 case NotSupportedException _:
                     statusCode = HttpStatusCode.BadRequest;
                     break;
-                //case ResourceNotFoundException _:
-                //case Core.Exceptions.EntityNotFoundException _:
+                case ResourceNotFoundException _:
+                case Core.Exceptions.EntityNotFoundException _:
                 case Authorization.Core.Exceptions.EntityNotFoundException _:
                     statusCode = HttpStatusCode.NotFound;
                     break;
                 case AuthStoreException _:
                     statusCode = HttpStatusCode.InternalServerError;
                     break;
-                //case Core.Exceptions.EntityAlreadyExistsException _:
+                case Core.Exceptions.EntityAlreadyExistsException _:
                 case Authorization.Core.Exceptions.EntityAlreadyExistsException _:
-                //case EntityConflictException _:
-                //case DicomConflictException _:
+                case EntityConflictException _:
                     statusCode = HttpStatusCode.Conflict;
                     break;
                 case UnauthorizedAccessException _:

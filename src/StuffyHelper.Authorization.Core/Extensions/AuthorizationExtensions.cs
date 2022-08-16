@@ -73,7 +73,8 @@ namespace StuffyHelper.Authorization.Core.Extensions
                 PhoneNumber = model.Phone,
                 LastName = model.LastName,
                 MiddleName = model.MiddleName,
-                FirstName = model.FirstName
+                FirstName = model.FirstName,
+                NickName = model.NickName,
             };
         }
 

@@ -48,6 +48,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             DateTime? shoppingDateEnd = null,
             Guid? participantId = null,
             Guid? eventId = null,
+            string description = null,
             bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
@@ -58,7 +59,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     (shoppingDateEnd == null || e.ShoppingDate <= shoppingDateEnd.Value) &&
                     (participantId == null || e.ParticipantId == participantId) &&
                     (eventId == null || e.EventId == eventId) &&
-                    (isActive == null || isActive == e.IsActive))
+                    (isActive == null || isActive == e.IsActive) &&
+                    (string.IsNullOrEmpty(description) || e.Description.Contains(description, StringComparison.OrdinalIgnoreCase)))
                     .OrderByDescending(e => e.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
 
