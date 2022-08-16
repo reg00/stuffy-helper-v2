@@ -14,7 +14,10 @@ namespace StuffyHelper.Core.Features.Purchase
             int? countMax = null,
             double? amountMin = null,
             double? amountMax = null,
+            double? weightMin = null,
+            double? weightMax = null,
             Guid? shoppingId = null,
+            Guid? purchaseTypeId = null,
             bool? isActive = null,
             CancellationToken cancellationToken = default);
 

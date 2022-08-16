@@ -31,11 +31,14 @@ namespace StuffyHelper.Api.Controllers
             int? countMax = null,
             double? amountMin = null,
             double? amountMax = null,
+            double? weightMin = null,
+            double? weightMax = null,
             Guid? shoppingId = null,
+            Guid? purchaseTypeId = null,
             bool? isActive = null)
         {
-            var purchaseResponse = await _purchaseService.GetPurchasesAsync(offset, limit, name, countMin, countMax, amountMin, amountMax,
-                                                                            shoppingId, isActive, HttpContext.RequestAborted);
+            var purchaseResponse = await _purchaseService.GetPurchasesAsync(offset, limit, name, countMin, countMax, amountMin, amountMax, weightMin, weightMax,
+                                                                            shoppingId, purchaseTypeId, isActive, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, purchaseResponse);
         }

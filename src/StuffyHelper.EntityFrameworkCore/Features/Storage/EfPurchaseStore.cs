@@ -49,7 +49,10 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             int? countMax = null,
             double? amountMin = null,
             double? amountMax = null,
+            double? weightMin = null,
+            double? weightMax = null,
             Guid? shoppingId = null,
+            Guid? purchaseTypeId = null,
             bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
@@ -61,8 +64,11 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     (countMax == null || countMax >= e.Count) &&
                     (amountMin == null || amountMin <= e.Amount) &&
                     (amountMax == null || amountMax >= e.Amount) &&
+                    (weightMin == null || weightMin <= e.Weight) &&
+                    (weightMax == null || weightMax >= e.Weight) &&
                     (isActive == null || isActive == e.IsActive) &&
-                    (shoppingId == null || e.ShoppingId == shoppingId))
+                    (shoppingId == null || e.ShoppingId == shoppingId) && 
+                    (purchaseTypeId == null || e.PurchaseTypeId == purchaseTypeId))
                     .OrderByDescending(e => e.Shopping.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
 
