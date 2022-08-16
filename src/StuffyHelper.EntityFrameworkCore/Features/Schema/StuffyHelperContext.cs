@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Purchase;
+using StuffyHelper.Core.Features.PurchaseType;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.Shopping;
 using StuffyHelper.EntityFrameworkCore.Configs;
@@ -30,6 +31,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
         public virtual DbSet<PurchaseEntry> Purchases { get; set; }
         public virtual DbSet<PurchaseUsageEntry> PurchaseUsages { get; set; }
         public virtual DbSet<ShoppingEntry> Shoppings { get; set; }
+        public virtual DbSet<PurchaseTypeEntry> PurchaseTypes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -84,11 +86,13 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
 
                 entity.HasOne(e => e.Shopping).WithMany(e => e.Purchases).HasForeignKey(e => e.ShoppingId);
                 entity.HasMany(e => e.PurchaseUsages).WithOne(e => e.Purchase).HasForeignKey(e => e.PurchaseId);
+                entity.HasOne(e => e.PurchaseType).WithMany(e => e.Purchases).HasForeignKey(e => e.PurchaseTypeId);
 
                 entity.HasIndex(e => e.Name);
 
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.ShoppingId).IsRequired();
+                entity.Property(e => e.PurchaseTypeId).IsRequired();
             });
 
             modelBuilder.Entity<PurchaseUsageEntry>(entity =>
@@ -119,6 +123,18 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.Property(e => e.ShoppingDate).IsRequired();
                 entity.Property(e => e.ParticipantId).IsRequired();
                 entity.Property(e => e.EventId).IsRequired();
+            });
+
+            modelBuilder.Entity<PurchaseTypeEntry>(entity =>
+            {
+                entity.ToTable("purchase-types");
+                entity.HasKey(e => e.Id);
+
+                entity.HasMany(e => e.Purchases).WithOne(e => e.PurchaseType).HasForeignKey(e => e.PurchaseTypeId);
+
+                entity.HasIndex(e => e.Name).IsUnique();
+
+                entity.Property(e => e.Name).IsRequired();
             });
 
             OnModelCreatingPartial(modelBuilder);

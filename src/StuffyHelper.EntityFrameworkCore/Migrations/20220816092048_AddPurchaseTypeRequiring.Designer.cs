@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StuffyHelper.EntityFrameworkCore.Features.Schema;
@@ -11,9 +12,10 @@ using StuffyHelper.EntityFrameworkCore.Features.Schema;
 namespace StuffyHelper.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(StuffyHelperContext))]
-    partial class StuffyHelperContextModelSnapshot : ModelSnapshot
+    [Migration("20220816092048_AddPurchaseTypeRequiring")]
+    partial class AddPurchaseTypeRequiring
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,9 +114,6 @@ namespace StuffyHelper.EntityFrameworkCore.Migrations
 
                     b.Property<Guid>("ShoppingId")
                         .HasColumnType("uuid");
-
-                    b.Property<double>("Weight")
-                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 

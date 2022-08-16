@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StuffyHelper.EntityFrameworkCore.Features.Schema;
@@ -11,9 +12,10 @@ using StuffyHelper.EntityFrameworkCore.Features.Schema;
 namespace StuffyHelper.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(StuffyHelperContext))]
-    partial class StuffyHelperContextModelSnapshot : ModelSnapshot
+    [Migration("20220816091107_AddPurchaseType")]
+    partial class AddPurchaseType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,14 +109,11 @@ namespace StuffyHelper.EntityFrameworkCore.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid>("PurchaseTypeId")
+                    b.Property<Guid?>("PurchaseTypeId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ShoppingId")
                         .HasColumnType("uuid");
-
-                    b.Property<double>("Weight")
-                        .HasColumnType("double precision");
 
                     b.HasKey("Id");
 
@@ -222,9 +221,7 @@ namespace StuffyHelper.EntityFrameworkCore.Migrations
                 {
                     b.HasOne("StuffyHelper.Core.Features.PurchaseType.PurchaseTypeEntry", "PurchaseType")
                         .WithMany("Purchases")
-                        .HasForeignKey("PurchaseTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PurchaseTypeId");
 
                     b.HasOne("StuffyHelper.Core.Features.Shopping.ShoppingEntry", "Shopping")
                         .WithMany("Purchases")
