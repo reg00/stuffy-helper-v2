@@ -20,6 +20,7 @@
         private const string ShoppingIdRouteSegment = $"{{{KnownActionParameterNames.ShoppingId}}}";
 
 
+        public const string RegisterRoute = $"{AuthRoute}/register";
         public const string RolesRoute = $"{AuthRoute}/roles";
         public const string LoginRoute = $"{AuthRoute}/login";
         public const string LogoutRoute = $"{AuthRoute}/logout";

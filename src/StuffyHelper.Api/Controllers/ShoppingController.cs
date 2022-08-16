@@ -35,12 +35,13 @@ namespace StuffyHelper.Api.Controllers
             DateTime? shoppingDateEnd = null,
             Guid? participantId = null,
             Guid? eventId = null,
+            string description = null,
             bool? isActive = null)
         {
-            var ShoppingResponse = await _shoppingService.GetShoppingsAsync(offset, limit, shoppingDateStart, shoppingDateEnd,
-                                                                            participantId, eventId, isActive, HttpContext.RequestAborted);
+            var shoppingResponse = await _shoppingService.GetShoppingsAsync(offset, limit, shoppingDateStart, shoppingDateEnd,
+                                                                            participantId, eventId, description, isActive, HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, ShoppingResponse);
+            return StatusCode((int)HttpStatusCode.OK, shoppingResponse);
         }
 
         [HttpGet]
