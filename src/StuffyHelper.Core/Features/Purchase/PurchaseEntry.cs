@@ -10,7 +10,7 @@ namespace StuffyHelper.Core.Features.Purchase
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public double Amount { get; set; }
+        public double Cost { get; set; }
         public double Weight { get; set; }
         public int Count { get; set; }
         public Guid ShoppingId { get; set; }
@@ -29,7 +29,7 @@ namespace StuffyHelper.Core.Features.Purchase
             EnsureArg.IsNotNull(entry, nameof(entry));
 
             Name = entry.Name;
-            Amount = entry.Amount;
+            Cost = entry.Cost;
             Weight = entry.Weight;
             Count = entry.Count;
             ShoppingId = entry.ShoppingId;

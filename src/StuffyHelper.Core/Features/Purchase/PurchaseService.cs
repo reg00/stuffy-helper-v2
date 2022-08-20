@@ -28,8 +28,8 @@ namespace StuffyHelper.Core.Features.Purchase
             string name = null,
             int? countMin = null,
             int? countMax = null,
-            double? amountMin = null,
-            double? amountMax = null,
+            double? costMin = null,
+            double? costMax = null,
             double? weightMin = null,
             double? weightMax = null,
             Guid? shoppingId = null,
@@ -38,7 +38,7 @@ namespace StuffyHelper.Core.Features.Purchase
             bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
-            var resp = await _purchaseStore.GetPurchasesAsync(offset, limit, name, countMin, countMax, amountMin, amountMax,
+            var resp = await _purchaseStore.GetPurchasesAsync(offset, limit, name, countMin, countMax, costMin, costMax,
                                                               weightMin, weightMax, shoppingId, purchaseTypeId, unitTypeId, isActive, cancellationToken);
 
             return new Response<GetPurchaseEntry>()
