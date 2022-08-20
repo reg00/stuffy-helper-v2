@@ -3,7 +3,7 @@
     public class UpsertPurchaseEntry
     {
         public string Name { get; set; }
-        public double Amount { get; set; }
+        public double Cost { get; set; }
         public double Weight { get; set; }
         public int Count { get; set; }
         public Guid ShoppingId { get; set; }
@@ -16,7 +16,7 @@
             return new PurchaseEntry()
             {
                 Name = Name,
-                Amount = Amount,
+                Cost = Cost,
                 Weight = Weight,
                 ShoppingId = ShoppingId,
                 PurchaseTypeId = PurchaseTypeId,

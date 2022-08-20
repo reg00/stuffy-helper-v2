@@ -29,8 +29,8 @@ namespace StuffyHelper.Api.Controllers
             string name = null,
             int? countMin = null,
             int? countMax = null,
-            double? amountMin = null,
-            double? amountMax = null,
+            double? costMin = null,
+            double? costMax = null,
             double? weightMin = null,
             double? weightMax = null,
             Guid? shoppingId = null,
@@ -38,7 +38,7 @@ namespace StuffyHelper.Api.Controllers
             Guid? unitTypeId = null,
             bool? isActive = null)
         {
-            var purchaseResponse = await _purchaseService.GetPurchasesAsync(offset, limit, name, countMin, countMax, amountMin, amountMax, weightMin, weightMax,
+            var purchaseResponse = await _purchaseService.GetPurchasesAsync(offset, limit, name, countMin, countMax, costMin, costMax, weightMin, weightMax,
                                                                             shoppingId, purchaseTypeId, unitTypeId, isActive, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, purchaseResponse);

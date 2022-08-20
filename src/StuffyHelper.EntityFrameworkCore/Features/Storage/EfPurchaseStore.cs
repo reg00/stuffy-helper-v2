@@ -47,8 +47,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             string name = null,
             int? countMin = null,
             int? countMax = null,
-            double? amountMin = null,
-            double? amountMax = null,
+            double? costMin = null,
+            double? costMax = null,
             double? weightMin = null,
             double? weightMax = null,
             Guid? shoppingId = null,
@@ -63,8 +63,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.Contains(name, StringComparison.OrdinalIgnoreCase)) &&
                     (countMin == null || countMin <= e.Count) &&
                     (countMax == null || countMax >= e.Count) &&
-                    (amountMin == null || amountMin <= e.Amount) &&
-                    (amountMax == null || amountMax >= e.Amount) &&
+                    (costMin == null || costMin <= e.Cost) &&
+                    (costMax == null || costMax >= e.Cost) &&
                     (weightMin == null || weightMin <= e.Weight) &&
                     (weightMax == null || weightMax >= e.Weight) &&
                     (isActive == null || isActive == e.IsActive) &&
