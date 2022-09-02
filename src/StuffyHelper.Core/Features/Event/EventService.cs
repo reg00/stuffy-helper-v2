@@ -57,7 +57,8 @@ namespace StuffyHelper.Core.Features.Event
             return new Response<GetEventEntry>()
             {
                 Data = events,
-                TotalPages = resp.TotalPages
+                TotalPages = resp.TotalPages,
+                Total = resp.Total
             };
         }
 

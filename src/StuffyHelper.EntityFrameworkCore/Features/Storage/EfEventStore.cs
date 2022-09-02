@@ -61,13 +61,13 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             try
             {
                 var searchedData = await _context.Events
-                    .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.Contains(name, StringComparison.OrdinalIgnoreCase)) &&
-                    (string.IsNullOrWhiteSpace(description) || e.Description.Contains(description, StringComparison.OrdinalIgnoreCase)) &&
+                    .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.ToLower().Contains(name.ToLower())) &&
+                    (string.IsNullOrWhiteSpace(description) || e.Description.ToLower().Contains(description.ToLower())) &&
                     (createdDateStart == null || createdDateStart.Value >= e.CreatedDate) &&
                     (createdDateEnd == null || createdDateEnd.Value <= e.CreatedDate) &&
                     (eventDateStart == null || eventDateStart.Value >= e.EventDate) &&
                     (eventDateEnd == null || eventDateEnd.Value <= e.EventDate) &&
-                    (string.IsNullOrWhiteSpace(userId) || e.UserId.Contains(userId, StringComparison.OrdinalIgnoreCase)) &&
+                    (string.IsNullOrWhiteSpace(userId) || e.UserId.ToLower() == userId.ToLower()) &&
                     (isCompleted == null || isCompleted == e.IsCompleted) &&
                     (isActive == null || isActive == e.IsActive) &&
                     (participantId == null || e.Participants.Any(x => x.Id == participantId)) &&

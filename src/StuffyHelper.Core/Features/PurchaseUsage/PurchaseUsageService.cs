@@ -34,7 +34,8 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
             return new Response<GetPurchaseUsageEntry>()
             {
                 Data = resp.Data.Select(x => new GetPurchaseUsageEntry(x, true ,true)),
-                TotalPages = resp.TotalPages
+                TotalPages = resp.TotalPages,
+                Total = resp.Total
             };
         }
 
