@@ -60,7 +60,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             try
             {
                 var searchedData = await _context.Purchases
-                    .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.Contains(name, StringComparison.OrdinalIgnoreCase)) &&
+                    .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.ToLower().Contains(name.ToLower())) &&
                     (countMin == null || countMin <= e.Count) &&
                     (countMax == null || countMax >= e.Count) &&
                     (costMin == null || costMin <= e.Cost) &&

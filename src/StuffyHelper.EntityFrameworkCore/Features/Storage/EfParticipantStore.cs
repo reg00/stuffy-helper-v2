@@ -53,7 +53,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             try
             {
                 var searchedData = await _context.Participants
-                    .Where(e => (string.IsNullOrWhiteSpace(userId) || e.UserId.Equals(userId, StringComparison.OrdinalIgnoreCase)) &&
+                    .Where(e => (string.IsNullOrWhiteSpace(userId) || e.UserId.ToLower().Equals(userId.ToLower())) &&
                     (isActive == null || isActive == e.IsActive) &&
                     (eventId == null || e.EventId == eventId))
                     .OrderByDescending(e => e.Event.CreatedDate)

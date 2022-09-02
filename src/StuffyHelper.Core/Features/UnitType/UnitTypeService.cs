@@ -35,7 +35,8 @@ namespace StuffyHelper.Core.Features.UnitType
             return new Response<GetUnitTypeEntry>()
             {
                 Data = resp.Data.Select(x => new GetUnitTypeEntry(x, true)),
-                TotalPages = resp.TotalPages
+                TotalPages = resp.TotalPages,
+                Total = resp.Total
             };
         }
 
