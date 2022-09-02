@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  api:
+    image: slavadno/stuffyhelper
+    build: .
+    ports:
+      - 7777:8080
+    environment:
+      - Authorization__ConnectionString=Server=postgres-web;Port=5432;Database=stuffy-helper-auth-v2;User Id=postgres;Password=12345;
+      - Authorization__JWT__Secret=stuffy-helper-secret
+      - Authorization__JWT__ValidIssuer=stuffy-helper-issuer
+      - Authorization__JWT__ValidAudience=stuffy-helper-audience
+      - EntityFramework__DbProvider=PostgreSql;
+      - EntityFramework__ConnectionString=Server=postgres-web;Port=5432;Database=stuffy-helper-v2;User Id=postgres;Password=12345;
+    depends_on:
+      - postgres-web
+    restart: unless-stopped
+
+  postgres-web:
+    image: postgres:12.4-alpine
+    environment:
+        - POSTGRES_MULTIPLE_DATABASES=stuffy-helper-v2,stuffy-helper-auth-v2
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=12345
+    ports:
+      - '5432:5432'
+    volumes:
+        - ../docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    
+volumes:
+  postgres-web:

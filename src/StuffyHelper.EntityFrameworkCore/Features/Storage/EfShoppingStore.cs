@@ -60,7 +60,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     (participantId == null || e.ParticipantId == participantId) &&
                     (eventId == null || e.EventId == eventId) &&
                     (isActive == null || isActive == e.IsActive) &&
-                    (string.IsNullOrEmpty(description) || e.Description.Contains(description, StringComparison.OrdinalIgnoreCase)))
+                    (string.IsNullOrEmpty(description) || e.Description.ToLower().Contains(description.ToLower())))
                     .OrderByDescending(e => e.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
 

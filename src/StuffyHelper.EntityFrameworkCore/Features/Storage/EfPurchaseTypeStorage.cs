@@ -52,7 +52,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             try
             {
                 var searchedData = await _context.PurchaseTypes
-                    .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.Contains(name, StringComparison.OrdinalIgnoreCase)) &&
+                    .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.ToLower().Contains(name.ToLower())) &&
                     (isActive == null || isActive == e.IsActive) &&
                     (purchaseId == null || e.Purchases.Any(x => x.Id == purchaseId)))
                     .OrderByDescending(e => e.Name)

@@ -47,7 +47,8 @@ namespace StuffyHelper.Core.Features.Participant
             return new Response<GetParticipantEntry>()
             {
                 Data = participants,
-                TotalPages = resp.TotalPages
+                TotalPages = resp.TotalPages,
+                Total = resp.Total
             };
         }
 

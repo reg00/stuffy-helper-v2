@@ -39,7 +39,8 @@ namespace StuffyHelper.Core.Features.Shopping
             return new Response<GetShoppingEntry>()
             {
                 Data = resp.Data.Select(x => new GetShoppingEntry(x, true, true, true)),
-                TotalPages = resp.TotalPages
+                TotalPages = resp.TotalPages,
+                Total = resp.Total
             };
         }
 
