@@ -21,7 +21,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
 
             Id = entry.Id;
             Participant = includeParticipant ? new GetParticipantEntry(entry.Participant, null, false, false, false) : null;
-            Purchase = includePurchase ? new GetPurchaseEntry(entry.Purchase, false, false, false, false) : null;
+            Purchase = includePurchase ? new GetPurchaseEntry(entry.Purchase, false, false, false) : null;
         }
     }
 }

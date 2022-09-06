@@ -52,7 +52,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             double? weightMin = null,
             double? weightMax = null,
             Guid? shoppingId = null,
-            Guid? purchaseTypeId = null,
+            IEnumerable<string> purchaseTags = null,
             Guid? unitTypeId = null,
             bool? isActive = null,
             CancellationToken cancellationToken = default)
@@ -60,6 +60,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             try
             {
                 var searchedData = await _context.Purchases
+                    .Include(e => e.PurchaseTags)
                     .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.ToLower().Contains(name.ToLower())) &&
                     (countMin == null || countMin <= e.Count) &&
                     (countMax == null || countMax >= e.Count) &&
@@ -69,8 +70,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     (weightMax == null || weightMax >= e.Weight) &&
                     (isActive == null || isActive == e.IsActive) &&
                     (shoppingId == null || e.ShoppingId == shoppingId) && 
-                    (unitTypeId == null || e.UnitTypeId == unitTypeId) && 
-                    (purchaseTypeId == null || e.PurchaseTypeId == purchaseTypeId))
+                    (unitTypeId == null || e.UnitTypeId == unitTypeId) &&
+                    (purchaseTags == null || !purchaseTags.Any() || e.PurchaseTags.Any(tag => purchaseTags.Select(tag => tag.ToLower()).Contains(tag.Name.ToLower()))))
                     .OrderByDescending(e => e.Shopping.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
 
