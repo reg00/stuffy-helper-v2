@@ -1,9 +1,13 @@
-﻿namespace StuffyHelper.Core.Features.Participant
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace StuffyHelper.Core.Features.Participant
 {
     public class UpsertParticipantEntry
     {
+        [Required]
         public Guid EventId { get; set; }
         public bool IsActive { get; set; }
+        [Required]
         public string UserId { get; set; }
 
         public ParticipantEntry ToCommonEntry()

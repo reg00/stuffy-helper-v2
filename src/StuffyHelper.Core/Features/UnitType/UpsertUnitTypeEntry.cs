@@ -1,7 +1,10 @@
-﻿namespace StuffyHelper.Core.Features.UnitType
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace StuffyHelper.Core.Features.UnitType
 {
     public class UpsertUnitTypeEntry
     {
+        [Required]
         public string Name { get; set; }
         public bool IsActive { get; set; }
 
