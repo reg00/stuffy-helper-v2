@@ -6,12 +6,12 @@ services:
     ports:
       - 7777:8080
     environment:
-      - Authorization__ConnectionString=Server=postgres-web;Port=5432;Database=stuffy-helper-auth-v2;User Id=postgres;Password=12345;
+      - Authorization__ConnectionString=Server=postgres-web;Port=5432;Database=stuffy-helper-auth-v3;User Id=postgres;Password=123;
       - Authorization__JWT__Secret=stuffy-helper-secret
       - Authorization__JWT__ValidIssuer=stuffy-helper-issuer
       - Authorization__JWT__ValidAudience=stuffy-helper-audience
       - EntityFramework__DbProvider=PostgreSql;
-      - EntityFramework__ConnectionString=Server=postgres-web;Port=5432;Database=stuffy-helper-v2;User Id=postgres;Password=12345;
+      - EntityFramework__ConnectionString=Server=postgres-web;Port=5432;Database=stuffy-helper-v3;User Id=postgres;Password=123;
     depends_on:
       - postgres-web
     restart: unless-stopped
@@ -19,14 +19,10 @@ services:
   postgres-web:
     image: postgres:12.4-alpine
     environment:
-        - POSTGRES_MULTIPLE_DATABASES=stuffy-helper-v2,stuffy-helper-auth-v2
+        - POSTGRES_MULTIPLE_DATABASES=stuffy-helper-v3,stuffy-helper-auth-v3
         - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=12345
-    ports:
-      - '5432:5432'
+        - POSTGRES_PASSWORD=123
+        - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
-        - ../docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
+        - ../pgdata:/var/lib/postgresql/data
     restart: unless-stopped
-    
-volumes:
-  postgres-web:
