@@ -30,8 +30,10 @@ namespace StuffyHelper.Api.Controllers
             string description = null,
             DateTime? createdDateStart = null,
             DateTime? createdDateEnd = null,
-            DateTime? eventDateStart = null,
-            DateTime? eventDateEnd = null,
+            DateTime? eventDateStartMin = null,
+            DateTime? eventDateStartMax = null,
+            DateTime? eventDateEndMin = null,
+            DateTime? eventDateEndMax = null,
             string userId = null,
             bool? isCompleted = null,
             bool? isActive = null,
@@ -39,8 +41,8 @@ namespace StuffyHelper.Api.Controllers
             Guid? shoppingId = null)
         {
             var eventResponse = await _eventService.GetEventsAsync(offset, limit, name, description, createdDateStart, createdDateEnd,
-                                                                   eventDateStart, eventDateEnd, userId, isCompleted, isActive,
-                                                                   participantId, shoppingId, HttpContext.RequestAborted);
+                                                                   eventDateStartMin, eventDateStartMax, eventDateEndMin, eventDateEndMax, userId,
+                                                                   isCompleted, isActive, participantId, shoppingId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, eventResponse);
         }

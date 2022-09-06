@@ -49,8 +49,10 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             string description = null,
             DateTime? createdDateStart = null,
             DateTime? createdDateEnd = null,
-            DateTime? eventDateStart = null,
-            DateTime? eventDateEnd = null,
+            DateTime? eventDateStartMin = null,
+            DateTime? eventDateStartMax = null,
+            DateTime? eventDateEndMin = null,
+            DateTime? eventDateEndMax = null,
             string userId = null,
             bool? isCompleted = null,
             bool? isActive = null,
@@ -65,8 +67,10 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     (string.IsNullOrWhiteSpace(description) || e.Description.ToLower().Contains(description.ToLower())) &&
                     (createdDateStart == null || createdDateStart.Value >= e.CreatedDate) &&
                     (createdDateEnd == null || createdDateEnd.Value <= e.CreatedDate) &&
-                    (eventDateStart == null || eventDateStart.Value >= e.EventDate) &&
-                    (eventDateEnd == null || eventDateEnd.Value <= e.EventDate) &&
+                    (eventDateStartMin == null || eventDateStartMin.Value >= e.EventDateStart) &&
+                    (eventDateStartMax == null || eventDateStartMax.Value <= e.EventDateStart) &&
+                    (eventDateEndMin == null || eventDateEndMin.Value >= e.EventDateEnd) &&
+                    (eventDateEndMax == null || eventDateEndMax.Value <= e.EventDateEnd) &&
                     (string.IsNullOrWhiteSpace(userId) || e.UserId.ToLower() == userId.ToLower()) &&
                     (isCompleted == null || isCompleted == e.IsCompleted) &&
                     (isActive == null || isActive == e.IsActive) &&
@@ -102,7 +106,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new EntityAlreadyExistsException($"Event with name '{@event.Name}' and event date '{@event.EventDate}' already exists", ex);
+                    throw new EntityAlreadyExistsException($"Event with name '{@event.Name}' and event date '{@event.EventDateStart}' already exists", ex);
 
                 else throw new DataStoreException(ex);
             }
@@ -151,7 +155,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new EntityAlreadyExistsException($"Event with name '{@event.Name}' and event date '{@event.EventDate}' already exists", ex);
+                    throw new EntityAlreadyExistsException($"Event with name '{@event.Name}' and event date '{@event.EventDateStart}' already exists", ex);
 
                 else throw new DataStoreException(ex);
             }

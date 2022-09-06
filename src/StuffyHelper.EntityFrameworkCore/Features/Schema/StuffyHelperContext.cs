@@ -58,10 +58,10 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.HasMany(e => e.Shoppings).WithOne(x => x.Event).HasForeignKey(e => e.EventId);
                 entity.HasMany(e => e.Participants).WithOne(x => x.Event).HasForeignKey(e => e.EventId);
 
-                entity.HasIndex(e => new { e.Name, e.EventDate }).IsUnique();
+                entity.HasIndex(e => new { e.Name, e.EventDateStart }).IsUnique();
 
                 entity.Property(e => e.Name).IsRequired();
-                entity.Property(e => e.EventDate).IsRequired();
+                entity.Property(e => e.EventDateStart).IsRequired();
                 entity.Property(e => e.UserId).IsRequired();
                 entity.Property(e => e.IsCompleted).HasDefaultValue(false);
             });
