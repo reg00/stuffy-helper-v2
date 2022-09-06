@@ -12,7 +12,7 @@ namespace StuffyHelper.Authorization.Core.Features
 
         Task Logout(HttpContext httpContext);
 
-        Task<UserEntry> Register(RegisterModel model, ClaimsPrincipal user);
+        Task<UserEntry> Register(RegisterModel model);
 
         IEnumerable<IdentityRole> GetRoles();
 

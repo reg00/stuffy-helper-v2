@@ -25,7 +25,5 @@ namespace StuffyHelper.Authorization.Core.Models
 
         [Phone(ErrorMessage = "Неверный формат телефона")]
         public string Phone { get; set; }
-
-        public UserType UserType { get; set; }
     }
 }
