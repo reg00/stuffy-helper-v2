@@ -10,7 +10,8 @@ namespace StuffyHelper.Core.Features.Event
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime EventDate { get; set; }
+        public DateTime EventDateStart { get; set; }
+        public DateTime EventDateEnd { get; set; }
         public string UserId { get; set; }
         public bool IsCompleted { get; set; }
         public bool IsActive { get; set; }
@@ -24,7 +25,8 @@ namespace StuffyHelper.Core.Features.Event
 
             Name = entry.Name;
             Description = entry.Description;
-            EventDate = entry.EventDate;
+            EventDateEnd = entry.EventDateEnd;
+            EventDateStart = entry.EventDateStart;
             IsCompleted = entry.IsCompleted;
             IsActive = entry.IsActive;
         }

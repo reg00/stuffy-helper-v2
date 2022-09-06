@@ -34,8 +34,10 @@ namespace StuffyHelper.Core.Features.Event
             string description = null,
             DateTime? createdDateStart = null,
             DateTime? createdDateEnd = null,
-            DateTime? eventDateStart = null,
-            DateTime? eventDateEnd = null,
+            DateTime? eventDateStartMin = null,
+            DateTime? eventDateStartMax = null,
+            DateTime? eventDateEndMin = null,
+            DateTime? eventDateEndMax = null,
             string userId = null,
             bool? isCompleted = null,
             bool? isActive = null,
@@ -44,8 +46,8 @@ namespace StuffyHelper.Core.Features.Event
             CancellationToken cancellationToken = default)
         {
             var resp = await _eventStore.GetEventsAsync(offset, limit, name, description, createdDateStart,
-                                                        createdDateEnd, eventDateStart, eventDateEnd, userId, isCompleted,
-                                                        isActive, participantId, shoppingId, cancellationToken);
+                                                        createdDateEnd, eventDateStartMin, eventDateStartMax, eventDateEndMin , eventDateEndMax,
+                                                        userId, isCompleted, isActive, participantId, shoppingId, cancellationToken);
             var events = new List<GetEventEntry>();
 
             foreach (var @event in resp.Data)
