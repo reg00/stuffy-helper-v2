@@ -1,7 +1,10 @@
-﻿namespace StuffyHelper.Core.Features.PurchaseType
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace StuffyHelper.Core.Features.PurchaseType
 {
     public class UpsertPurchaseTypeEntry
     {
+        [Required]
         public string Name { get; set; }
         public bool IsActive { get; set; }
 
