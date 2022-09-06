@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Purchase;
-using StuffyHelper.Core.Features.PurchaseType;
+using StuffyHelper.Core.Features.PurchaseTag;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.Shopping;
 using StuffyHelper.Core.Features.UnitType;
@@ -21,7 +21,7 @@ namespace StuffyHelper.EntityFrameworkCore.Registration
             services.AddScoped<IPurchaseStore, EfPurchaseStore>();
             services.AddScoped<IPurchaseUsageStore, EfPurchaseUsageStore>();
             services.AddScoped<IShoppingStore, EfShoppingStore>();
-            services.AddScoped<IPurchaseTypeStore, EfPurchaseTypeStore>();
+            services.AddScoped<IPurchaseTagStore, EfPurchaseTagStore>();
             services.AddScoped<IUnitTypeStore, EfUnitTypeStore>();
 
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

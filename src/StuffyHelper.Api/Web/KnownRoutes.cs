@@ -12,7 +12,7 @@
         private const string PurchasesSegment = "purchases";
         private const string PurchaseUsagesSegment = "purchase-usages";
         private const string ShoppingsSegment = "shoppings";
-        private const string PurchaseTypesSegment = "purchase-types";
+        private const string PurchaseTagsSegment = "purchase-tags";
         private const string UnitTypesSegment = "unit-types";
 
         private const string EventIdRouteSegment = $"{{{KnownActionParameterNames.EventId}}}";
@@ -20,7 +20,7 @@
         private const string PurchaseIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseId}}}";
         private const string PurchaseUsageIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseUsageId}}}";
         private const string ShoppingIdRouteSegment = $"{{{KnownActionParameterNames.ShoppingId}}}";
-        private const string PurchaseTypeIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseTypeId}}}";
+        private const string PurchaseTagIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseTagId}}}";
         private const string UnitTypeIdRouteSegment = $"{{{KnownActionParameterNames.UnitTypeId}}}";
 
 
@@ -62,11 +62,11 @@
         public const string DeleteShoppingRoute = GetShoppingRoute;
         public const string UpdateShoppingRoute = GetShoppingRoute;
 
-        public const string AddPurchaseTypeRoute = $"{DefaultRouteSegment}/{PurchaseTypesSegment}";
-        public const string GetPurchaseTypeRoute = $"{AddPurchaseTypeRoute}/{PurchaseTypeIdRouteSegment}";
-        public const string GetPurchaseTypesRoute = AddPurchaseTypeRoute;
-        public const string DeletePurchaseTypeRoute = GetPurchaseTypeRoute;
-        public const string UpdatePurchaseTypeRoute = GetPurchaseTypeRoute;
+        public const string AddPurchaseTagRoute = $"{DefaultRouteSegment}/{PurchaseTagsSegment}";
+        public const string GetPurchaseTagRoute = $"{AddPurchaseTagRoute}/{PurchaseTagIdRouteSegment}";
+        public const string GetPurchaseTagsRoute = AddPurchaseTagRoute;
+        public const string DeletePurchaseTagRoute = GetPurchaseTagRoute;
+        public const string UpdatePurchaseTagRoute = GetPurchaseTagRoute;
 
         public const string AddUnitTypeRoute = $"{DefaultRouteSegment}/{UnitTypesSegment}";
         public const string GetUnitTypeRoute = $"{AddUnitTypeRoute}/{UnitTypeIdRouteSegment}";

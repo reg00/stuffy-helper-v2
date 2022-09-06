@@ -1,16 +1,16 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace StuffyHelper.Core.Features.PurchaseType
+namespace StuffyHelper.Core.Features.PurchaseTag
 {
-    public class UpsertPurchaseTypeEntry
+    public class UpsertPurchaseTagEntry
     {
         [Required]
         public string Name { get; set; }
         public bool IsActive { get; set; }
 
-        public PurchaseTypeEntry ToCommonEntry()
+        public PurchaseTagEntry ToCommonEntry()
         {
-            return new PurchaseTypeEntry()
+            return new PurchaseTagEntry()
             {
                 Name = Name,
                 IsActive = true
