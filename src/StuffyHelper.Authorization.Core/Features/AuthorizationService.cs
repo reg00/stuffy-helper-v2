@@ -52,18 +52,14 @@ namespace StuffyHelper.Authorization.Core.Features
             await httpContext.SignOutAsync();
         }
 
-        public async Task<UserEntry> Register(RegisterModel model, ClaimsPrincipal user)
+        public async Task<UserEntry> Register(RegisterModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
-            EnsureArg.IsNotNull(user, nameof(user));
 
             var userExists = await _userManager.FindByNameAsync(model.Username);
 
             if (userExists != null)
                 throw new EntityAlreadyExistsException($"Пользователь с логином {model.Username} уже существует");
-
-            if (model.UserType != UserType.User && CheckUserIsAdmin(user) != true)
-                throw new UnauthorizedAccessException("Недостаточно прав для добавления данного пользователя");
 
             StuffyUser identityUser = model.InitializeUser();
 
@@ -73,7 +69,7 @@ namespace StuffyHelper.Authorization.Core.Features
                 throw new AuthorizationException($"Ошибка создания пользователя! Детали: {string.Join(' ', result.Errors.Select(x => x.Description))}");
 
             await _roleManager.CreateRolesIfNotExists();
-            await identityUser.AddRoleToUser(_roleManager, _userManager, model.UserType);
+            await identityUser.AddRoleToUser(_roleManager, _userManager, UserType.User);
             var rolesList = await _userManager.GetRolesAsync(identityUser);
 
             return new UserEntry(identityUser, rolesList);
