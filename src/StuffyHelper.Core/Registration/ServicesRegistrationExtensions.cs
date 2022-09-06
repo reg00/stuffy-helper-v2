@@ -2,7 +2,8 @@
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Purchase;
-using StuffyHelper.Core.Features.PurchaseType;
+using StuffyHelper.Core.Features.PurchaseTag;
+using StuffyHelper.Core.Features.PurchaseTag.Pipeline;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.Shopping;
 using StuffyHelper.Core.Features.UnitType;
@@ -18,8 +19,9 @@ namespace StuffyHelper.Core.Registration
             services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<IPurchaseUsageService, PurchaseUsageService>();
             services.AddScoped<IShoppingService, ShoppingService>();
-            services.AddScoped<IPurchaseTypeService, PurchaseTypeService>();
+            services.AddScoped<IPurchaseTagService, PurchaseTagService>();
             services.AddScoped<IUnitTypeService, UnitTypeService>();
+            services.AddScoped<IPurchaseTagPipeline, PurchaseTagPipeline>();
 
             return services;
         }

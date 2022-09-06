@@ -1,5 +1,5 @@
 ﻿using EnsureThat;
-using StuffyHelper.Core.Features.PurchaseType;
+using StuffyHelper.Core.Features.PurchaseTag;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.Shopping;
 using StuffyHelper.Core.Features.UnitType;
@@ -15,7 +15,7 @@ namespace StuffyHelper.Core.Features.Purchase
         public int Count { get; set; }
         public bool IsActive { get; set; }
         public GetShoppingEntry? Shopping { get; set; }
-        public GetPurchaseTypeEntry? PurchaseType { get; set; }
+        public List<GetPurchaseTagEntry> PurchaseTags { get; set; }
         public GetUnitTypeEntry? UnitType { get; set; }
         public List<GetPurchaseUsageEntry> PurchaseUsages { get; set; }
 
@@ -24,7 +24,7 @@ namespace StuffyHelper.Core.Features.Purchase
             PurchaseUsages = new List<GetPurchaseUsageEntry>();
         }
 
-        public GetPurchaseEntry(PurchaseEntry entry, bool includeShopping, bool includePurchaseUsages, bool includePurchaseType, bool includeUnitType)
+        public GetPurchaseEntry(PurchaseEntry entry, bool includeShopping, bool includePurchaseUsages, bool includeUnitType)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
@@ -36,7 +36,7 @@ namespace StuffyHelper.Core.Features.Purchase
             IsActive = entry.IsActive;
             Shopping = includeShopping ? new GetShoppingEntry(entry.Shopping, false, false, false) : null;
             PurchaseUsages = includePurchaseUsages ? entry.PurchaseUsages.Select(x => new GetPurchaseUsageEntry(x, false, false)).ToList() : new List<GetPurchaseUsageEntry>();
-            PurchaseType = includePurchaseType ? new GetPurchaseTypeEntry(entry.PurchaseType, false) : null;
+            PurchaseTags = entry.PurchaseTags.Select(x => new GetPurchaseTagEntry(x, false)).ToList();
             UnitType = includeUnitType ? new GetUnitTypeEntry(entry.UnitType, false) : null;
         }
     }
