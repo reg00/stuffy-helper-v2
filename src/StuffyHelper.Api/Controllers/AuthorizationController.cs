@@ -28,7 +28,7 @@ namespace StuffyHelper.Api.Controllers
                 return Unauthorized(new Response() { Status = "Error", Message = error });
             }
 
-            var user = await _authorizationService.Register(model, User);
+            var user = await _authorizationService.Register(model);
 
             return Ok(new GetUserEntry(user));
         }
