@@ -8,18 +8,20 @@ namespace StuffyHelper.Core.Features.Event
 {
     public class GetEventEntry
     {
+        [Required]
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
+        [Required]
         public DateTime CreatedDate { get; set; }
         [Required]
         public DateTime EventDateStart { get; set; }
         public DateTime EventDateEnd { get; set; }
         [Required]
         public string UserId { get; set; }
+        [Required]
         public bool IsCompleted { get; set; }
-        public bool IsActive { get; set; }
 
         [Required]
         public GetUserEntry? User { get; set; }
@@ -37,7 +39,6 @@ namespace StuffyHelper.Core.Features.Event
         public GetEventEntry(EventEntry entry, GetUserEntry user, bool includeParticipants, bool includeShoppings)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
-            //EnsureArg.IsNotNull(user, nameof(user));
 
             Id = entry.Id;
             Name = entry.Name;
@@ -46,7 +47,6 @@ namespace StuffyHelper.Core.Features.Event
             EventDateEnd = entry.EventDateEnd;
             EventDateStart = entry.EventDateStart;
             IsCompleted = entry.IsCompleted;
-            IsActive = entry.IsActive;
             User = user;
             Participants = includeParticipants ? entry.Participants.Select(x => new GetParticipantEntry(x, user, false, false, false)).ToList() : new List<GetParticipantEntry>();
             Shoppings = includeShoppings ? entry.Shoppings.Select(x => new GetShoppingEntry(x, false, false, false)).ToList() : new List<GetShoppingEntry>();
