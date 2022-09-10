@@ -3,6 +3,7 @@ using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.Shopping;
+using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.Participant
 {
@@ -11,7 +12,9 @@ namespace StuffyHelper.Core.Features.Participant
         public Guid Id { get; set; }
         public bool IsActive { get; set; }
 
+        [Required]
         public GetUserEntry? User { get; set; }
+        [Required]
         public GetEventEntry? Event { get; set; }
         public List<GetShoppingEntry> Shoppings { get; set; }
         public List<GetPurchaseUsageEntry> PurchaseUsages { get; set; }
