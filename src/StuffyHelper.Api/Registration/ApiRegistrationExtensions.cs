@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using StuffyHelper.Api.Features.Middlewares;
 using StuffyHelper.Authorization.Core.Registration;
 using StuffyHelper.Authorization.EntityFrameworkCore.Registration;
 using StuffyHelper.EntityFrameworkCore.Registration;
@@ -14,6 +15,16 @@ namespace StuffyHelper.Api.Registration
     {
         public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin();
+                    builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
+                });
+            });
+
             services.AddAuth(configuration);
 
             services
@@ -62,10 +73,12 @@ namespace StuffyHelper.Api.Registration
 
         public static IApplicationBuilder UseApi(this IApplicationBuilder app)
         {
+            app.UseMiddleware<CorsHeaderMiddleware>();
             app.UseSwagger();
             app.UseSwaggerUI();
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuth();
 
