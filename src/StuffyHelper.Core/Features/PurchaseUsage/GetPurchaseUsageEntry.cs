@@ -1,13 +1,16 @@
 ﻿using EnsureThat;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Purchase;
+using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.PurchaseUsage
 {
     public class GetPurchaseUsageEntry
     {
         public Guid Id { get; set; }
+        [Required]
         public GetParticipantEntry? Participant { get; set; }
+        [Required]
         public GetPurchaseEntry? Purchase { get; set; }
 
         public GetPurchaseUsageEntry()

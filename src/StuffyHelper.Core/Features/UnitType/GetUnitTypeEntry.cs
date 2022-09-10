@@ -1,11 +1,13 @@
 ﻿using EnsureThat;
 using StuffyHelper.Core.Features.Purchase;
+using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.UnitType
 {
     public class GetUnitTypeEntry
     {
         public Guid Id { get; set; }
+        [Required]
         public string Name { get; set; }
         public bool IsActive { get; set; }
         public List<GetPurchaseEntry> Purchases { get; set; }

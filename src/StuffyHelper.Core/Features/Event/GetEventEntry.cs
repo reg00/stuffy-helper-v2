@@ -2,22 +2,26 @@
 using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Shopping;
+using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.Event
 {
     public class GetEventEntry
     {
         public Guid Id { get; set; }
+        [Required]
         public string Name { get; set; }
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; }
+        [Required]
         public DateTime EventDateStart { get; set; }
         public DateTime EventDateEnd { get; set; }
+        [Required]
         public string UserId { get; set; }
         public bool IsCompleted { get; set; }
         public bool IsActive { get; set; }
 
-
+        [Required]
         public GetUserEntry? User { get; set; }
         public List<GetParticipantEntry> Participants { get; set; }
         public List<GetShoppingEntry> Shoppings { get; set; } 
