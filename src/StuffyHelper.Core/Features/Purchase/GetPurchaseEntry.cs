@@ -9,6 +9,7 @@ namespace StuffyHelper.Core.Features.Purchase
 {
     public class GetPurchaseEntry
     {
+        [Required]
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
@@ -16,7 +17,7 @@ namespace StuffyHelper.Core.Features.Purchase
         public double Cost { get; set; }
         public double Weight { get; set; }
         public int Count { get; set; }
-        public bool IsActive { get; set; }
+
         [Required]
         public GetShoppingEntry? Shopping { get; set; }
         public List<GetPurchaseTagEntry> PurchaseTags { get; set; }
@@ -38,7 +39,6 @@ namespace StuffyHelper.Core.Features.Purchase
             Cost = entry.Cost;
             Weight = entry.Weight;
             Count = entry.Count;
-            IsActive = entry.IsActive;
             Shopping = includeShopping ? new GetShoppingEntry(entry.Shopping, false, false, false) : null;
             PurchaseUsages = includePurchaseUsages ? entry.PurchaseUsages.Select(x => new GetPurchaseUsageEntry(x, false, false)).ToList() : new List<GetPurchaseUsageEntry>();
             PurchaseTags = entry.PurchaseTags.Select(x => new GetPurchaseTagEntry(x, false)).ToList();
