@@ -3,19 +3,24 @@ using StuffyHelper.Core.Features.PurchaseTag;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.Shopping;
 using StuffyHelper.Core.Features.UnitType;
+using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.Purchase
 {
     public class GetPurchaseEntry
     {
         public Guid Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public double Cost { get; set; }
         public double Weight { get; set; }
         public int Count { get; set; }
         public bool IsActive { get; set; }
+        [Required]
         public GetShoppingEntry? Shopping { get; set; }
         public List<GetPurchaseTagEntry> PurchaseTags { get; set; }
+        [Required]
         public GetUnitTypeEntry? UnitType { get; set; }
         public List<GetPurchaseUsageEntry> PurchaseUsages { get; set; }
 
