@@ -7,6 +7,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
 {
     public class GetPurchaseUsageEntry
     {
+        [Required]
         public Guid Id { get; set; }
         [Required]
         public GetParticipantEntry? Participant { get; set; }

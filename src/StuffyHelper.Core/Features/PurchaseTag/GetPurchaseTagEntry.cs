@@ -6,10 +6,11 @@ namespace StuffyHelper.Core.Features.PurchaseTag
 {
     public class GetPurchaseTagEntry
     {
+        [Required]
         public Guid Id { get; set; }
         [Required]
         public string Name { get; set; }
-        public bool IsActive { get; set; }
+
         public List<GetPurchaseEntry> Purchases { get; set; }
 
         public GetPurchaseTagEntry()
@@ -23,7 +24,6 @@ namespace StuffyHelper.Core.Features.PurchaseTag
 
             Id = entry.Id;
             Name = entry.Name;
-            IsActive = entry.IsActive;
             Purchases = includePurchases ? entry.Purchases.Select(x => new GetPurchaseEntry(x, false, false, false)).ToList() : new List<GetPurchaseEntry>();
         }
     }
