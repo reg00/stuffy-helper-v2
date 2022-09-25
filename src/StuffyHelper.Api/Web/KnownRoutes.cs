@@ -14,6 +14,11 @@
         private const string ShoppingsSegment = "shoppings";
         private const string PurchaseTagsSegment = "purchase-tags";
         private const string UnitTypesSegment = "unit-types";
+        private const string MediaSegment = "media";
+        private const string FormFileSegment = "form-file";
+        private const string PresignedUrlSegment = "presigned-url";
+        private const string MetadataSegment = "metadata";
+
 
         private const string EventIdRouteSegment = $"{{{KnownActionParameterNames.EventId}}}";
         private const string ParticipantIdRouteSegment = $"{{{KnownActionParameterNames.ParticipantId}}}";
@@ -22,6 +27,7 @@
         private const string ShoppingIdRouteSegment = $"{{{KnownActionParameterNames.ShoppingId}}}";
         private const string PurchaseTagIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseTagId}}}";
         private const string UnitTypeIdRouteSegment = $"{{{KnownActionParameterNames.UnitTypeId}}}";
+        private const string MediaUidRouteSegment = $"{{{KnownActionParameterNames.MediaUid}}}";
 
 
         public const string RegisterRoute = $"{AuthRoute}/register";
@@ -73,5 +79,14 @@
         public const string GetUnitTypesRoute = AddUnitTypeRoute;
         public const string DeleteUnitTypeRoute = GetUnitTypeRoute;
         public const string UpdateUnitTypeRoute = GetUnitTypeRoute;
+
+        private const string GetMediaRouteSegment = $"{GetEventsRoute}/{EventIdRouteSegment}/{MediaSegment}/{MediaUidRouteSegment}";
+        public const string RetrieveMediaFromFileRoute = $"{GetMediaRouteSegment}/{FormFileSegment}";
+        public const string RetrieveMediaPresignedUrlRoute = $"{GetMediaRouteSegment}/{PresignedUrlSegment}";
+        public const string GetMediaMetadataRoute = $"{GetMediaRouteSegment}/{MetadataSegment}";
+        public const string GetMediasMetadatasRoute = $"{DefaultRouteSegment}/{MediaSegment}/{MetadataSegment}";
+        public const string StoreMediaFormFileRoute = $"{GetEventsRoute}/{EventIdRouteSegment}/{MediaSegment}/{FormFileSegment}";
+        public const string StoreMediaPresignedUrlRoute = $"{GetEventsRoute}/{EventIdRouteSegment}/{MediaSegment}/{PresignedUrlSegment}";
+        public const string DeleteMediaRoute = GetMediaRouteSegment;
     }
 }

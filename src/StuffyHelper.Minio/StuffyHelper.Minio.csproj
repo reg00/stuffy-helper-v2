@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Reg00.Infrastructure.Minio" Version="1.0.0" />
+    <PackageReference Include="Reg00.Infrastructure.S3" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\StuffyHelper.Core\StuffyHelper.Core.csproj" />
+  </ItemGroup>
+
+</Project>

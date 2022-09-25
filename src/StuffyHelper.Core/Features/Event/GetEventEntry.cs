@@ -1,5 +1,6 @@
 ﻿using EnsureThat;
 using StuffyHelper.Authorization.Core.Models;
+using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Shopping;
 using System.ComponentModel.DataAnnotations;
@@ -27,6 +28,7 @@ namespace StuffyHelper.Core.Features.Event
         public GetUserEntry? User { get; set; }
         public List<GetParticipantEntry> Participants { get; set; }
         public List<GetShoppingEntry> Shoppings { get; set; } 
+        public List<GetMediaEntry> Medias { get; set; } 
 
 
 
@@ -34,9 +36,10 @@ namespace StuffyHelper.Core.Features.Event
         {
             Participants = new List<GetParticipantEntry>();
             Shoppings = new List<GetShoppingEntry>();
+            Medias = new List<GetMediaEntry>();
         }
 
-        public GetEventEntry(EventEntry entry, GetUserEntry user, bool includeParticipants, bool includeShoppings)
+        public GetEventEntry(EventEntry entry, GetUserEntry user, bool includeParticipants, bool includeShoppings, bool includeMedias)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
@@ -50,6 +53,7 @@ namespace StuffyHelper.Core.Features.Event
             User = user;
             Participants = includeParticipants ? entry.Participants.Select(x => new GetParticipantEntry(x, user, false, false, false)).ToList() : new List<GetParticipantEntry>();
             Shoppings = includeShoppings ? entry.Shoppings.Select(x => new GetShoppingEntry(x, false, false, false)).ToList() : new List<GetShoppingEntry>();
+            Medias = includeMedias ? entry.Medias.Select(x => new GetMediaEntry(x)).ToList() : new List<GetMediaEntry>();
         }
     }
 }
