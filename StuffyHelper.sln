@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.EntityFramewor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Hosting", "src\StuffyHelper.Hosting\StuffyHelper.Hosting.csproj", "{FE6FB530-005E-44C1-808E-8B1141E3007E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StuffyHelper.Minio", "src\StuffyHelper.Minio\StuffyHelper.Minio.csproj", "{C034FD17-D686-40C6-9C96-56695C3294A3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +47,10 @@ Global
 		{FE6FB530-005E-44C1-808E-8B1141E3007E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE6FB530-005E-44C1-808E-8B1141E3007E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE6FB530-005E-44C1-808E-8B1141E3007E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C034FD17-D686-40C6-9C96-56695C3294A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C034FD17-D686-40C6-9C96-56695C3294A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C034FD17-D686-40C6-9C96-56695C3294A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C034FD17-D686-40C6-9C96-56695C3294A3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,6 +8,7 @@ using StuffyHelper.Api.Features.Middlewares;
 using StuffyHelper.Authorization.Core.Registration;
 using StuffyHelper.Authorization.EntityFrameworkCore.Registration;
 using StuffyHelper.EntityFrameworkCore.Registration;
+using StuffyHelper.Minio.Registration;
 
 namespace StuffyHelper.Api.Registration
 {
@@ -67,6 +68,8 @@ namespace StuffyHelper.Api.Registration
                     }
                 });
             });
+
+            services.AddMinioBlobDataStores(configuration);
 
             return services;
         }

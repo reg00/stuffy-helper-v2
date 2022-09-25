@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using StuffyHelper.Core.Features.Event;
+using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Purchase;
 using StuffyHelper.Core.Features.PurchaseTag;
@@ -22,6 +23,7 @@ namespace StuffyHelper.Core.Registration
             services.AddScoped<IPurchaseTagService, PurchaseTagService>();
             services.AddScoped<IUnitTypeService, UnitTypeService>();
             services.AddScoped<IPurchaseTagPipeline, PurchaseTagPipeline>();
+            services.AddScoped<IMediaService, MediaService>();
 
             return services;
         }
