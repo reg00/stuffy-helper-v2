@@ -9,5 +9,6 @@
         internal const string ShoppingId = "shoppingId";
         internal const string PurchaseTagId = "purchaseTagId";
         internal const string UnitTypeId = "unitTypeId";
+        internal const string MediaUid = "mediaUid";
     }
 }

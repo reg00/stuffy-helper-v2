@@ -32,7 +32,7 @@ namespace StuffyHelper.Core.Features.Participant
 
             Id = entry.Id;
             User = user;
-            Event = includeEvent ? new GetEventEntry(entry.Event, user, false, false) : null;
+            Event = includeEvent ? new GetEventEntry(entry.Event, user, false, false, false) : null;
             Shoppings = includeShoppings ? entry.Shoppings.Select(x => new GetShoppingEntry(x, false, false, false)).ToList() : new List<GetShoppingEntry>();
             PurchaseUsages = includePurchaseUsages ? entry.PurchaseUsages.Select(x => new GetPurchaseUsageEntry(x, false, false)).ToList() : new List<GetPurchaseUsageEntry>();
         }

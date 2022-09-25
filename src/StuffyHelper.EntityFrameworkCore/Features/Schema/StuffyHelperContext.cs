@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using StuffyHelper.Core.Features.Event;
+using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Purchase;
 using StuffyHelper.Core.Features.PurchaseTag;
@@ -34,6 +35,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
         public virtual DbSet<ShoppingEntry> Shoppings { get; set; }
         public virtual DbSet<PurchaseTagEntry> PurchaseTags { get; set; }
         public virtual DbSet<UnitTypeEntry> UnitTypes { get; set; }
+        public virtual DbSet<MediaEntry> Medias { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -57,6 +59,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
 
                 entity.HasMany(e => e.Shoppings).WithOne(x => x.Event).HasForeignKey(e => e.EventId);
                 entity.HasMany(e => e.Participants).WithOne(x => x.Event).HasForeignKey(e => e.EventId);
+                entity.HasMany(e => e.Medias).WithOne(x => x.Event).HasForeignKey(e => e.EventId);
 
                 entity.HasIndex(e => new { e.Name, e.EventDateStart }).IsUnique();
 
@@ -147,6 +150,19 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.HasIndex(e => e.Name).IsUnique();
 
                 entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<MediaEntry>(entity =>
+            {
+                entity.ToTable("media");
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(e => e.Event).WithMany(e => e.Medias).HasForeignKey(e => e.EventId);
+
+                entity.HasIndex(e => e.MediaUid).IsUnique();
+
+                entity.Property(e => e.EventId).IsRequired();
+                entity.Property(e => e.MediaUid).IsRequired();
             });
 
             OnModelCreatingPartial(modelBuilder);
