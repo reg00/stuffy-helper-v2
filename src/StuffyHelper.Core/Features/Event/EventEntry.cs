@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Shopping;
 
@@ -18,6 +19,7 @@ namespace StuffyHelper.Core.Features.Event
 
         public virtual List<ParticipantEntry> Participants { get; set; } = new List<ParticipantEntry>();
         public virtual List<ShoppingEntry> Shoppings { get; set; } = new List<ShoppingEntry>();
+        public virtual List<MediaEntry> Medias { get; set; } = new List<MediaEntry>();
 
         public void PatchFrom(UpsertEventEntry entry)
         {

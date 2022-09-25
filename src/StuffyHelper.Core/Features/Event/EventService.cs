@@ -24,7 +24,7 @@ namespace StuffyHelper.Core.Features.Event
             var entry = await _eventStore.GetEventAsync(eventId, cancellationToken);
             var user = await _authorizationService.GetUser(userId: entry.UserId);
 
-            return new GetEventEntry(entry, new GetUserEntry(user), true, true);
+            return new GetEventEntry(entry, new GetUserEntry(user), true, true, true);
         }
 
         public async Task<Response<GetEventEntry>> GetEventsAsync(
@@ -53,7 +53,7 @@ namespace StuffyHelper.Core.Features.Event
             foreach (var @event in resp.Data)
             {
                 var user = await _authorizationService.GetUser(userId: @event.UserId);
-                events.Add(new GetEventEntry(@event, new GetUserEntry(user), true, true));
+                events.Add(new GetEventEntry(@event, new GetUserEntry(user), true, true, true));
             }
 
             return new Response<GetEventEntry>()
@@ -72,7 +72,7 @@ namespace StuffyHelper.Core.Features.Event
             var entry = @event.ToCommonEntry();
             var result = await _eventStore.AddEventAsync(entry, cancellationToken);
 
-            return new GetEventEntry(result, new GetUserEntry(user), false, false);
+            return new GetEventEntry(result, new GetUserEntry(user), false, false, false);
         }
 
         public async Task DeleteEventAsync(Guid eventId, CancellationToken cancellationToken = default)
@@ -98,7 +98,7 @@ namespace StuffyHelper.Core.Features.Event
             existingEvent.PatchFrom(@event);
             var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
 
-            return new GetEventEntry(result, new GetUserEntry(user), false, false);
+            return new GetEventEntry(result, new GetUserEntry(user), false, false, false);
         }
     }
 }

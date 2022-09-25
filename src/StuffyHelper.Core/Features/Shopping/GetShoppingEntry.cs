@@ -36,7 +36,7 @@ namespace StuffyHelper.Core.Features.Shopping
             Check = entry.Check;
             Description = entry.Description;
 
-            Event = includeEvent ? new GetEventEntry(entry.Event, null, false, false) : null;
+            Event = includeEvent ? new GetEventEntry(entry.Event, null, false, false, false) : null;
             Participant = includeParticipant ? new GetParticipantEntry(entry.Participant, null, false, false, false) : null;
             Purchases = includePurchases ? entry.Purchases.Select(x => new GetPurchaseEntry(x, false, false, false)).ToList() : new List<GetPurchaseEntry>();
         }
