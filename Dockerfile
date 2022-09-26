@@ -20,6 +20,9 @@ COPY src/StuffyHelper.Authorization.Core/StuffyHelper.Authorization.Core.csproj 
 COPY src/StuffyHelper.Authorization.EntityFrameworkCore/StuffyHelper.Authorization.EntityFrameworkCore.csproj \
      src/StuffyHelper.Authorization.EntityFrameworkCore/StuffyHelper.Authorization.EntityFrameworkCore.csproj
 
+COPY src/StuffyHelper.Minio/StuffyHelper.Minio.csproj \
+     src/StuffyHelper.Minio/StuffyHelper.Minio.csproj
+
 RUN dotnet restore src/StuffyHelper.Hosting/StuffyHelper.Hosting.csproj
 
 RUN dotnet restore src/StuffyHelper.Api/StuffyHelper.Api.csproj
@@ -31,6 +34,8 @@ RUN dotnet restore src/StuffyHelper.EntityFrameworkCore/StuffyHelper.EntityFrame
 RUN dotnet restore src/StuffyHelper.Authorization.Core/StuffyHelper.Authorization.Core.csproj
 
 RUN dotnet restore src/StuffyHelper.Authorization.EntityFrameworkCore/StuffyHelper.Authorization.EntityFrameworkCore.csproj
+
+RUN dotnet restore src/StuffyHelper.Minio/StuffyHelper.Minio.csproj
 
 COPY ./ ./
 
