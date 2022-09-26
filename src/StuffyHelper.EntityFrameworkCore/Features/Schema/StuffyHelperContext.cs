@@ -159,7 +159,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
 
                 entity.HasOne(e => e.Event).WithMany(e => e.Medias).HasForeignKey(e => e.EventId);
 
-                entity.HasIndex(e => e.MediaUid).IsUnique();
+                entity.HasIndex(e => new { e.EventId, e.MediaUid }).IsUnique();
 
                 entity.Property(e => e.EventId).IsRequired();
                 entity.Property(e => e.MediaUid).IsRequired();

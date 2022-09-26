@@ -29,14 +29,13 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.StoreMediaFormFileRoute)]
         public async Task<IActionResult> StoreMediaFormFileAsync(
             IFormFile file,
-            [FromRoute] Guid eventId,
-            [FromQuery][Required] string mediaUid)
+            [FromRoute] Guid eventId)
         {
             EnsureArg.IsNotNull(file, nameof(file));
 
             var slide = await _mediaService.StoreMediaFormFileAsync(
                 eventId,
-                mediaUid,
+                Path.GetFileNameWithoutExtension(file.FileName),
                 FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(file.FileName)),
                 file.OpenReadStream(),
                 HttpContext.RequestAborted);

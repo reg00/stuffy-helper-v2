@@ -53,7 +53,7 @@ namespace StuffyHelper.Core.Features.Event
             User = user;
             Participants = includeParticipants ? entry.Participants.Select(x => new GetParticipantEntry(x, user, false, false, false)).ToList() : new List<GetParticipantEntry>();
             Shoppings = includeShoppings ? entry.Shoppings.Select(x => new GetShoppingEntry(x, false, false, false)).ToList() : new List<GetShoppingEntry>();
-            Medias = includeMedias ? entry.Medias.Select(x => new GetMediaEntry(x)).ToList() : new List<GetMediaEntry>();
+            Medias = includeMedias ? entry.Medias.Select(x => new GetMediaEntry(x, false)).ToList() : new List<GetMediaEntry>();
         }
     }
 }
