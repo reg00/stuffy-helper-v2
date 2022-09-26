@@ -12,6 +12,12 @@ services:
       - Authorization__JWT__ValidAudience=stuffy-helper-audience
       - EntityFramework__DbProvider=PostgreSql;
       - EntityFramework__ConnectionString=Server=postgres-web;Port=5432;Database=stuffy-helper-v3;User Id=postgres;Password=123;
+      - MinioStore__Endpoint=localhost:9000
+      - MinioStore__AccessKey=minioadmin
+      - MinioStore__SecretKey=minioadmin
+      - MinioStore__NetworkTimeout=3600
+      - MinioStore__PresignedUrlExpiry=12:00:00
+      - StuffyFileWeb__StuffyFileStore__ContainerName=rawfilewebcontainer
     depends_on:
       - postgres-web
     restart: unless-stopped
