@@ -80,7 +80,7 @@ namespace StuffyHelper.Core.Features.Media
                 mediaUid,
                 cancellationToken);
 
-            return new GetMediaEntry(entry);
+            return new GetMediaEntry(entry, true);
         }
 
         public async Task<IEnumerable<GetMediaEntry>> GetMediaMetadatasAsync(int offset, int limit, Guid? eventId = null, DateTimeOffset? createdDateStart = null, DateTimeOffset? createdDateEnd = null, CancellationToken cancellationToken = default)
@@ -89,7 +89,7 @@ namespace StuffyHelper.Core.Features.Media
             {
                 return (await _mediaStore.GetMediasAsync(
                 offset, limit, eventId, createdDateStart, createdDateEnd, cancellationToken))
-                .Select(s => new GetMediaEntry(s));
+                .Select(s => new GetMediaEntry(s, true));
             }
             catch (ResourceNotFoundException)
             {
@@ -174,7 +174,7 @@ namespace StuffyHelper.Core.Features.Media
                     entry.FileType,
                     cancellationToken);
 
-                return new GetMediaEntry(entry);
+                return new GetMediaEntry(entry, false);
             }
             catch (EntityAlreadyExistsException)
             {
