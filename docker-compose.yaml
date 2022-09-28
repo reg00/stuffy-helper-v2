@@ -17,7 +17,7 @@ services:
       - MinioStore__SecretKey=minioadmin
       - MinioStore__NetworkTimeout=3600
       - MinioStore__PresignedUrlExpiry=12:00:00
-      - StuffyFileWeb__StuffyFileStore__ContainerName=rawfilewebcontainer
+      - StuffyFileWeb__StuffyFileStore__ContainerName=stuffyfilewebcontainer
     depends_on:
       - postgres-web
     restart: unless-stopped
