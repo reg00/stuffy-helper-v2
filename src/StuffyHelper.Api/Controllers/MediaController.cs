@@ -29,7 +29,8 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.StoreMediaFormFileRoute)]
         public async Task<IActionResult> StoreMediaFormFileAsync(
             IFormFile file,
-            [FromRoute] Guid eventId)
+            [FromRoute][Required] Guid eventId,
+            [FromRoute][Required] MediaType mediaType)
         {
             EnsureArg.IsNotNull(file, nameof(file));
 
@@ -38,6 +39,7 @@ namespace StuffyHelper.Api.Controllers
                 Path.GetFileNameWithoutExtension(file.FileName),
                 FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(file.FileName)),
                 file.OpenReadStream(),
+                mediaType,
                 HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, slide);
@@ -87,7 +89,7 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteMediaRoute)]
-        public async Task<IActionResult> DeleteStudySeriesSlideAsync(
+        public async Task<IActionResult> DeleteMediaAsync(
             Guid eventId,
             string mediaUid)
         {
@@ -99,40 +101,40 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK);
         }
 
-        [HttpGet]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        [Route(KnownRoutes.RetrieveMediaPresignedUrlRoute)]
-        public async Task<IActionResult> GetStudySeriesSlidePresignedUrlAsync(
-            Guid eventId,
-            string mediaUid)
-        {
-            var uri = await _mediaService.ObtainGetMediaPresignedUrl(
-                eventId,
-                mediaUid,
-                HttpContext.RequestAborted);
+        //[HttpGet]
+        //[ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        //[ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
+        //[ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        //[Route(KnownRoutes.RetrieveMediaPresignedUrlRoute)]
+        //public async Task<IActionResult> GetStudySeriesSlidePresignedUrlAsync(
+        //    Guid eventId,
+        //    string mediaUid)
+        //{
+        //    var uri = await _mediaService.ObtainGetMediaPresignedUrl(
+        //        eventId,
+        //        mediaUid,
+        //        HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, uri.ToString());
-        }
+        //    return StatusCode((int)HttpStatusCode.OK, uri.ToString());
+        //}
 
-        [HttpPost]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        [Route(KnownRoutes.StoreMediaPresignedUrlRoute)]
-        public async Task<IActionResult> PutStudySeriesSlidePresignedUrlAsync(
-            Guid eventId,
-            string mediaUid,
-            FileType fileType)
-        {
-            var uri = await _mediaService.ObtainPutMediaPresignedUrl(
-                eventId,
-                mediaUid,
-                fileType,
-                HttpContext.RequestAborted);
+        //[HttpPost]
+        //[ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        //[ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        //[Route(KnownRoutes.StoreMediaPresignedUrlRoute)]
+        //public async Task<IActionResult> PutStudySeriesSlidePresignedUrlAsync(
+        //    Guid eventId,
+        //    string mediaUid,
+        //    FileType fileType)
+        //{
+        //    var uri = await _mediaService.ObtainPutMediaPresignedUrl(
+        //        eventId,
+        //        mediaUid,
+        //        fileType,
+        //        HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, uri.ToString());
-        }
+        //    return StatusCode((int)HttpStatusCode.OK, uri.ToString());
+        //}
 
         [HttpGet]
         [Produces(KnownContentTypes.ApplicationJson)]
@@ -140,15 +142,16 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetMediasMetadatasRoute)]
-        public async Task<IActionResult> GetSlidesMetadataAsync(
+        public async Task<IActionResult> GetMediaMetadatasAsync(
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
             DateTimeOffset? createdDateStart = null,
-            DateTimeOffset? createdDateEnd = null)
+            DateTimeOffset? createdDateEnd = null,
+            MediaType? mediaType = null)
         {
             var slide = await _mediaService.GetMediaMetadatasAsync(offset, limit, eventId, createdDateStart,
-                                                                    createdDateEnd, HttpContext.RequestAborted);
+                                                                    createdDateEnd, mediaType, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, slide);
         }

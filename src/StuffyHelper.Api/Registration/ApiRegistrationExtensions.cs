@@ -9,6 +9,8 @@ using StuffyHelper.Authorization.Core.Registration;
 using StuffyHelper.Authorization.EntityFrameworkCore.Registration;
 using StuffyHelper.EntityFrameworkCore.Registration;
 using StuffyHelper.Minio.Registration;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace StuffyHelper.Api.Registration
 {
@@ -30,7 +32,11 @@ namespace StuffyHelper.Api.Registration
 
             services
                 .AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
-                .AddJsonOptions(options => options.UseDateOnlyTimeOnlyStringConverters());
+                .AddJsonOptions(options =>
+                {
+                    options.UseDateOnlyTimeOnlyStringConverters();
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                 });
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>

@@ -85,6 +85,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             Guid? eventId = null,
             DateTimeOffset? createdDateStart = null,
             DateTimeOffset? createdDateEnd = null,
+            MediaType? mediaType = null,
             CancellationToken cancellationToken = default)
         {
             try
@@ -94,7 +95,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .Where(e => 
                     (eventId == null || e.EventId == eventId) &&
                     (createdDateStart == null || e.CreatedDate >= createdDateStart) &&
-                    (createdDateEnd == null || e.CreatedDate <= createdDateEnd))
+                    (createdDateEnd == null || e.CreatedDate <= createdDateEnd) && 
+                    (mediaType == null || e.MediaType == mediaType))
                     .Skip(offset).Take(limit)
                     .ToListAsync(cancellationToken);
             }
