@@ -17,6 +17,7 @@
             Guid? eventId = null,
             DateTimeOffset? createdDateStart = null,
             DateTimeOffset? createdDateEnd = null,
+            MediaType? mediaType = null,
             CancellationToken cancellationToken = default);
 
         Task DeleteMediaAsync(

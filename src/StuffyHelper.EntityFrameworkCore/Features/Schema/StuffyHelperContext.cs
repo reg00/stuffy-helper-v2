@@ -163,6 +163,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
 
                 entity.Property(e => e.EventId).IsRequired();
                 entity.Property(e => e.MediaUid).IsRequired();
+                entity.Property(e => e.MediaType).IsRequired();
             });
 
             OnModelCreatingPartial(modelBuilder);

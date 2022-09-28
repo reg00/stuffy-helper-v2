@@ -8,6 +8,7 @@ namespace StuffyHelper.Core.Features.Media
         public Guid Id { get; set; }
         public FileType FileType { get; set; }
         public string MediaUid { get; set; }
+        public MediaType MediaType { get; set; }
 
         public GetEventEntry? Event { get; set; }
 
@@ -20,6 +21,7 @@ namespace StuffyHelper.Core.Features.Media
             Id = media.Id;
             FileType = media.FileType;
             MediaUid = media.MediaUid;
+            MediaType = media.MediaType;
             Event = includeEvent ? new GetEventEntry(media.Event, null, false, false, false) : null;
         }
     }
