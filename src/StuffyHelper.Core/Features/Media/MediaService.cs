@@ -83,12 +83,19 @@ namespace StuffyHelper.Core.Features.Media
             return new GetMediaEntry(entry, true);
         }
 
-        public async Task<IEnumerable<GetMediaEntry>> GetMediaMetadatasAsync(int offset, int limit, Guid? eventId = null, DateTimeOffset? createdDateStart = null, DateTimeOffset? createdDateEnd = null, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<GetMediaEntry>> GetMediaMetadatasAsync(
+            int offset,
+            int limit,
+            Guid? eventId = null,
+            DateTimeOffset? createdDateStart = null,
+            DateTimeOffset? createdDateEnd = null,
+            MediaType? mediaType = null,
+            CancellationToken cancellationToken = default)
         {
             try
             {
                 return (await _mediaStore.GetMediasAsync(
-                offset, limit, eventId, createdDateStart, createdDateEnd, cancellationToken))
+                offset, limit, eventId, createdDateStart, createdDateEnd, mediaType, cancellationToken))
                 .Select(s => new GetMediaEntry(s, true));
             }
             catch (ResourceNotFoundException)
@@ -97,70 +104,76 @@ namespace StuffyHelper.Core.Features.Media
             }
         }
 
-        public async Task<Uri> ObtainGetMediaPresignedUrl(Guid eventId, string mediaUid, CancellationToken cancellationToken = default)
+        //public async Task<Uri> ObtainGetMediaPresignedUrl(Guid eventId, string mediaUid, CancellationToken cancellationToken = default)
+        //{
+        //    EnsureArg.IsNotDefault(eventId, nameof(eventId));
+        //    EnsureArg.IsNotNullOrWhiteSpace(mediaUid, nameof(mediaUid));
+
+        //    var entry = await _mediaStore.GetMediaAsync(
+        //       eventId,
+        //       mediaUid,
+        //       cancellationToken);
+
+        //    return await _fileStore.ObtainGetPresignedUrl(
+        //        eventId.ToString(),
+        //        mediaUid,
+        //        entry.FileType,
+        //        cancellationToken);
+        //}
+
+        //public async Task<Uri> ObtainPutMediaPresignedUrl(Guid eventId, string mediaUid, FileType fileType, CancellationToken cancellationToken = default)
+        //{
+        //    EnsureArg.IsNotDefault(eventId, nameof(eventId));
+        //    EnsureArg.IsNotNullOrWhiteSpace(mediaUid, nameof(mediaUid));
+
+        //    var entry = new MediaEntry(eventId, mediaUid, fileType);
+
+        //    try
+        //    {
+        //        await _mediaStore.AddMediaAsync(entry, cancellationToken);
+
+        //        return await _fileStore.ObtainPutPresignedUrl(
+        //        eventId.ToString(),
+        //        mediaUid,
+        //        fileType,
+        //        cancellationToken);
+        //    }
+        //    catch (EntityAlreadyExistsException)
+        //    {
+        //        throw;
+        //    }
+        //    catch (ResourceNotFoundException)
+        //    {
+        //        throw;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        await _mediaStore.DeleteMediaAsync(
+        //            entry,
+        //            cancellationToken);
+
+        //        await _fileStore.DeleteFilesIfExistAsync(
+        //            eventId.ToString(),
+        //            mediaUid,
+        //            fileType,
+        //            cancellationToken: cancellationToken);
+
+        //        throw;
+        //    }
+        //}
+
+        public async Task<GetMediaEntry> StoreMediaFormFileAsync(
+            Guid eventId,
+            string mediaUid,
+            FileType fileType,
+            Stream requestStream,
+            MediaType mediaType,
+            CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
             EnsureArg.IsNotNullOrWhiteSpace(mediaUid, nameof(mediaUid));
 
-            var entry = await _mediaStore.GetMediaAsync(
-               eventId,
-               mediaUid,
-               cancellationToken);
-
-            return await _fileStore.ObtainGetPresignedUrl(
-                eventId.ToString(),
-                mediaUid,
-                entry.FileType,
-                cancellationToken);
-        }
-
-        public async Task<Uri> ObtainPutMediaPresignedUrl(Guid eventId, string mediaUid, FileType fileType, CancellationToken cancellationToken = default)
-        {
-            EnsureArg.IsNotDefault(eventId, nameof(eventId));
-            EnsureArg.IsNotNullOrWhiteSpace(mediaUid, nameof(mediaUid));
-
-            var entry = new MediaEntry(eventId, mediaUid, fileType);
-
-            try
-            {
-                await _mediaStore.AddMediaAsync(entry, cancellationToken);
-
-                return await _fileStore.ObtainPutPresignedUrl(
-                eventId.ToString(),
-                mediaUid,
-                fileType,
-                cancellationToken);
-            }
-            catch (EntityAlreadyExistsException)
-            {
-                throw;
-            }
-            catch (ResourceNotFoundException)
-            {
-                throw;
-            }
-            catch (Exception)
-            {
-                await _mediaStore.DeleteMediaAsync(
-                    entry,
-                    cancellationToken);
-
-                await _fileStore.DeleteFilesIfExistAsync(
-                    eventId.ToString(),
-                    mediaUid,
-                    fileType,
-                    cancellationToken: cancellationToken);
-
-                throw;
-            }
-        }
-
-        public async Task<GetMediaEntry> StoreMediaFormFileAsync(Guid eventId, string mediaUid, FileType fileType, Stream requestStream, CancellationToken cancellationToken = default)
-        {
-            EnsureArg.IsNotDefault(eventId, nameof(eventId));
-            EnsureArg.IsNotNullOrWhiteSpace(mediaUid, nameof(mediaUid));
-
-            var entry = new MediaEntry(eventId, mediaUid, fileType);
+            var entry = new MediaEntry(eventId, mediaUid, fileType, mediaType);
 
             try
             {
