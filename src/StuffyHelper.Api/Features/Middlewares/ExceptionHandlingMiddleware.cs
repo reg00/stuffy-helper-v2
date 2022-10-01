@@ -4,9 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Core.Exceptions;
+using StuffyHelper.Core.Features.Common;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Runtime.ExceptionServices;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace StuffyHelper.Api.Features.Middlewares
 {
@@ -14,6 +18,7 @@ namespace StuffyHelper.Api.Features.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
+        private readonly JsonSerializerOptions jsonSerializerOptions;
 
         public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
@@ -22,12 +27,18 @@ namespace StuffyHelper.Api.Features.Middlewares
 
             _next = next;
             _logger = logger;
+            jsonSerializerOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                WriteIndented = true
+            };
         }
 
         public async Task Invoke(HttpContext context)
         {
             EnsureArg.IsNotNull(context, nameof(context));
-            ExceptionDispatchInfo exceptionDispatchInfo = null;
+
             try
             {
                 await _next(context);
@@ -40,18 +51,19 @@ namespace StuffyHelper.Api.Features.Middlewares
                     throw;
                 }
 
-                // Get the Exception, but don't continue processing in the catch block as its bad for stack usage.
-                exceptionDispatchInfo = ExceptionDispatchInfo.Capture(exception);
-            }
-
-            if (exceptionDispatchInfo != null)
-            {
-                IActionResult result = MapExceptionToResult(exceptionDispatchInfo.SourceException);
-                await ExecuteResultAsync(context, result);
+                var exceptionDispatchInfo = ExceptionDispatchInfo.Capture(exception);
+                if (exceptionDispatchInfo != null)
+                {
+                    var statusCode = MapStatusCodeToResult(exceptionDispatchInfo.SourceException);
+                    context.Response.ContentType = new MediaTypeHeaderValue("application/json").ToString();
+                    context.Response.StatusCode = (int)statusCode;
+                    var result = JsonSerializer.Serialize(new ErrorResponse() { Message = exception.Message }, jsonSerializerOptions);
+                    await context.Response.WriteAsync(result);
+                }
             }
         }
 
-        public IActionResult MapExceptionToResult(Exception exception)
+        public HttpStatusCode MapStatusCodeToResult(Exception exception)
         {
             EnsureArg.IsNotNull(exception, nameof(exception));
 
@@ -99,16 +111,7 @@ namespace StuffyHelper.Api.Features.Middlewares
                     break;
             }
 
-            return GetContentResult(statusCode, message);
-        }
-
-        private static IActionResult GetContentResult(HttpStatusCode statusCode, string message)
-        {
-            return new ContentResult
-            {
-                StatusCode = (int)statusCode,
-                Content = message,
-            };
+            return statusCode;
         }
 
         protected internal virtual async Task ExecuteResultAsync(HttpContext context, IActionResult result)

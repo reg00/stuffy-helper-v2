@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Api.Web;
 using StuffyHelper.Authorization.Core.Models;
+using StuffyHelper.Core.Features.Common;
 using System.IdentityModel.Tokens.Jwt;
 
 namespace StuffyHelper.Api.Controllers
@@ -24,8 +25,9 @@ namespace StuffyHelper.Api.Controllers
 
             if (!ModelState.IsValid)
             {
-                var error = string.Join(", ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-                return Unauthorized(new Response() { Status = "Error", Message = error });
+                var errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
+                var error = errors.Count() > 1 ? new ErrorResponse() { Errors = errors } : new ErrorResponse() { Message = errors.FirstOrDefault() };
+                return Unauthorized(error);
             }
 
             var user = await _authorizationService.Register(model);
@@ -41,8 +43,9 @@ namespace StuffyHelper.Api.Controllers
 
             if (!ModelState.IsValid)
             {
-                var error = string.Join(", ", ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage));
-                return Unauthorized(new Response() { Status = "Error", Message = error });
+                var errors = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage);
+                var error = errors.Count() > 1 ? new ErrorResponse() { Errors = errors } : new ErrorResponse() { Message = errors.FirstOrDefault() };
+                return Unauthorized(error);
             }
 
             var token = await _authorizationService.Login(model);
