@@ -30,8 +30,8 @@ namespace StuffyHelper.Api.Controllers
         public async Task<IActionResult> StoreMediaFormFileAsync(
             IFormFile file,
             [FromRoute][Required] Guid eventId,
-            [FromRoute][Required] MediaType mediaType,
-            [FromRoute] string link)
+            [Required] MediaType mediaType,
+            string link)
         {
             EnsureArg.IsNotNull(file, nameof(file));
 
