@@ -32,6 +32,7 @@
             FileType fileType,
             Stream requestStream,
             MediaType mediaType,
+            string link = null,
             CancellationToken cancellationToken = default);
 
         //Task<Uri> ObtainGetMediaPresignedUrl(

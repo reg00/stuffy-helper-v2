@@ -168,12 +168,16 @@ namespace StuffyHelper.Core.Features.Media
             FileType fileType,
             Stream requestStream,
             MediaType mediaType,
+            string link = null,
             CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
             EnsureArg.IsNotNullOrWhiteSpace(mediaUid, nameof(mediaUid));
 
-            var entry = new MediaEntry(eventId, mediaUid, fileType, mediaType);
+            if (mediaType == MediaType.Link && string.IsNullOrWhiteSpace(link))
+                throw new StuffyException("link cannot be null");
+
+            var entry = new MediaEntry(eventId, mediaUid, fileType, mediaType, link);
 
             try
             {

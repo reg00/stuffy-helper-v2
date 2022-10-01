@@ -11,6 +11,7 @@ namespace StuffyHelper.Core.Features.Media
         public DateTimeOffset CreatedDate { get; set; }
         public FileType FileType { get; set; }
         public MediaType MediaType { get; set; }
+        public string? Link { get; set; }
 
         public virtual EventEntry Event { get; set; }
 
@@ -18,7 +19,7 @@ namespace StuffyHelper.Core.Features.Media
         {
         }
 
-        public MediaEntry(Guid eventId, string mediaUid, FileType fileType, MediaType mediaType)
+        public MediaEntry(Guid eventId, string mediaUid, FileType fileType, MediaType mediaType, string link)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
@@ -26,6 +27,7 @@ namespace StuffyHelper.Core.Features.Media
             FileType = fileType;
             MediaUid = mediaUid;
             MediaType = mediaType;
+            Link = link;
         }
     }
 }

@@ -30,7 +30,8 @@ namespace StuffyHelper.Api.Controllers
         public async Task<IActionResult> StoreMediaFormFileAsync(
             IFormFile file,
             [FromRoute][Required] Guid eventId,
-            [FromRoute][Required] MediaType mediaType)
+            [FromRoute][Required] MediaType mediaType,
+            [FromRoute] string link)
         {
             EnsureArg.IsNotNull(file, nameof(file));
 
@@ -40,6 +41,7 @@ namespace StuffyHelper.Api.Controllers
                 FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(file.FileName)),
                 file.OpenReadStream(),
                 mediaType,
+                link,
                 HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, slide);
