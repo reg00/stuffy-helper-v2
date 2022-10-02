@@ -119,35 +119,29 @@ namespace StuffyHelper.Authorization.Core.Features
             await _userManager.DeleteAsync(userToDelete);
         }
 
-        public async Task<UserEntry> UpdateUser(string userName, UpdateModel model)
+        public async Task<UserEntry> UpdateUser(ClaimsPrincipal user, UpdateModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
-            EnsureArg.IsNotNull(userName, nameof(userName));
+            EnsureArg.IsNotNull(user, nameof(user));
 
-            IdentityResult passwordChangeResult = null;
-            var userToUpdate = await _userManager.FindByNameAsync(userName);
+            var userToUpdate = await _userManager.FindByNameAsync(user.Identity.Name);
 
             if (userToUpdate is null)
-                throw new EntityNotFoundException($"Пользователь с логином {userName} отсутствует");
+                throw new EntityNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
 
-            userToUpdate.Email = string.IsNullOrWhiteSpace(model.Email) ? userToUpdate.Email : model.Email;
-            userToUpdate.UserName = string.IsNullOrWhiteSpace(model.Username) ? userToUpdate.UserName : model.Username;
+            userToUpdate.PatchFrom(model);
 
             if (!string.IsNullOrWhiteSpace(model.Password))
             {
                 string token = await _userManager.GeneratePasswordResetTokenAsync(userToUpdate);
-                passwordChangeResult = await _userManager.ResetPasswordAsync(userToUpdate, token, model.Password);
+                var passwordChangeResult = await _userManager.ResetPasswordAsync(userToUpdate, token, model.Password);
                 passwordChangeResult.HandleIdentityResult();
             }
 
             var updateUserResult = await _userManager.UpdateAsync(userToUpdate);
             var updatedUser = await _userManager.FindByIdAsync(userToUpdate.Id);
             updateUserResult.HandleIdentityResult();
-
             var rolesList = await _userManager.GetRolesAsync(updatedUser);
-            await _userManager.RemoveFromRolesAsync(userToUpdate, rolesList);
-            await userToUpdate.AddRoleToUser(_roleManager, _userManager, model.UserType);
-            rolesList = await _userManager.GetRolesAsync(updatedUser);
 
             return new UserEntry(updatedUser, rolesList);
         }

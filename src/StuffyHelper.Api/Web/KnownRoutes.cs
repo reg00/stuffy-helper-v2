@@ -33,6 +33,7 @@
         public const string RegisterRoute = $"{AuthRoute}/register";
         public const string RolesRoute = $"{AuthRoute}/roles";
         public const string LoginRoute = $"{AuthRoute}/login";
+        public const string EditUserRoute = $"{AuthRoute}/edit";
         public const string LogoutRoute = $"{AuthRoute}/logout";
         public const string IsAdminRoute = $"{AuthRoute}/is-admin";
         public const string AccountRoute = $"{AuthRoute}/account";
