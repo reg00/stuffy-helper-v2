@@ -24,7 +24,7 @@ namespace StuffyHelper.Authorization.Core.Features
 
         Task DeleteUser(string userName = null, string userId = null);
 
-        Task<UserEntry> UpdateUser(string userName, UpdateModel model);
+        Task<UserEntry> UpdateUser(ClaimsPrincipal user, UpdateModel model);
 
         Task<UserEntry> GetUser(string userName = null, string userId = null);
     }
