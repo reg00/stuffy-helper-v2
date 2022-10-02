@@ -24,8 +24,8 @@ namespace StuffyHelper.Api.Controllers
         [Consumes(KnownContentTypes.MultipartFormData)]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(GetMediaEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.UnsupportedMediaType)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.UnsupportedMediaType)]
         [Route(KnownRoutes.StoreMediaFormFileRoute)]
         public async Task<IActionResult> StoreMediaFormFileAsync(
             IFormFile file,
@@ -53,8 +53,8 @@ namespace StuffyHelper.Api.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
         [Produces(KnownContentTypes.MultipartFormData)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.RetrieveMediaFromFileRoute)]
         public async Task<IActionResult> RetrieveMediaFormFileAsync(
             Guid eventId,
@@ -72,8 +72,8 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(GetMediaEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetMediaMetadataRoute)]
         public async Task<IActionResult> GetMediaMetadataAsync(
             Guid eventId,
@@ -89,7 +89,7 @@ namespace StuffyHelper.Api.Controllers
 
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteMediaRoute)]
         public async Task<IActionResult> DeleteMediaAsync(
             Guid eventId,
@@ -104,9 +104,9 @@ namespace StuffyHelper.Api.Controllers
         }
 
         //[HttpGet]
-        //[ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-        //[ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-        //[ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        //[ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.OK)]
+        //[ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        //[ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         //[Route(KnownRoutes.RetrieveMediaPresignedUrlRoute)]
         //public async Task<IActionResult> GetStudySeriesSlidePresignedUrlAsync(
         //    Guid eventId,
@@ -121,8 +121,8 @@ namespace StuffyHelper.Api.Controllers
         //}
 
         //[HttpPost]
-        //[ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-        //[ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        //[ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.OK)]
+        //[ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         //[Route(KnownRoutes.StoreMediaPresignedUrlRoute)]
         //public async Task<IActionResult> PutStudySeriesSlidePresignedUrlAsync(
         //    Guid eventId,
@@ -141,8 +141,8 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(IEnumerable<GetMediaEntry>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetMediasMetadatasRoute)]
         public async Task<IActionResult> GetMediaMetadatasAsync(
             int offset = 0,
