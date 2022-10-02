@@ -19,8 +19,8 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Response<GetUnitTypeEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetUnitTypesRoute)]
         [Authorize]
         public async Task<IActionResult> GetAsync(
@@ -38,8 +38,8 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(GetUnitTypeEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetUnitTypeRoute)]
         [Authorize]
         public async Task<IActionResult> GetAsync(Guid unitTypeId)
@@ -52,7 +52,7 @@ namespace StuffyHelper.Api.Controllers
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(GetUnitTypeEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddUnitTypeRoute)]
         [Authorize]
         public async Task<IActionResult> PostAsync([FromBody] UpsertUnitTypeEntry addEntry)
@@ -64,7 +64,7 @@ namespace StuffyHelper.Api.Controllers
 
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteUnitTypeRoute)]
         [Authorize]
         public async Task<IActionResult> DeleteAsync(Guid unitTypeId)
@@ -77,7 +77,7 @@ namespace StuffyHelper.Api.Controllers
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(GetUnitTypeEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdateUnitTypeRoute)]
         [Authorize]
         public async Task<IActionResult> PatchAsync(Guid unitTypeId, [FromBody] UpsertUnitTypeEntry updateEntry)
