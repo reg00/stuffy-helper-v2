@@ -9,7 +9,6 @@
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
-        public string NickName { get; set; }
         public string Phone { get; set; }
 
         public GetUserEntry()
@@ -24,7 +23,6 @@
             MiddleName = user?.MiddleName;
             LastName = user?.LastName;
             Phone = user?.PhoneNumber;
-            NickName = user?.NickName;
             Role = roles?.Contains(nameof(UserType.Admin)) == true ? nameof(UserType.Admin) : nameof(UserType.User);
         }
 
@@ -36,7 +34,6 @@
             FirstName = user?.FirstName;
             MiddleName = user?.MiddleName;
             LastName = user?.LastName;
-            NickName = user?.NickName;
             Phone = user?.Phone;
             Role = user.Role;
         }

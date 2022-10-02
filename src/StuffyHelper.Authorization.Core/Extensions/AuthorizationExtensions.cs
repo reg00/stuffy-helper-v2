@@ -70,11 +70,6 @@ namespace StuffyHelper.Authorization.Core.Extensions
                 Email = model.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
                 UserName = model.Username,
-                PhoneNumber = model.Phone,
-                LastName = model.LastName,
-                MiddleName = model.MiddleName,
-                FirstName = model.FirstName,
-                NickName = model.NickName,
             };
         }
 

@@ -30,7 +30,7 @@ namespace StuffyHelper.Api.Controllers
 
             if (!ModelState.IsValid)
             {
-                return Unauthorized(new ErrorResponse(ModelState));
+                return BadRequest(new ErrorResponse(ModelState));
             }
 
             var user = await _authorizationService.Register(model);
@@ -49,7 +49,7 @@ namespace StuffyHelper.Api.Controllers
 
             if (!ModelState.IsValid)
             {
-                return Unauthorized(new ErrorResponse(ModelState));
+                return BadRequest(new ErrorResponse(ModelState));
             }
 
             var token = await _authorizationService.Login(model);
@@ -112,6 +112,25 @@ namespace StuffyHelper.Api.Controllers
         public IActionResult GetUserLogins(string userName = null)
         {
             return Ok(_authorizationService.GetUserLogins(userName));
+        }
+
+        [HttpPatch]
+        [Authorize]
+        [ProducesResponseType(typeof(UserEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.EditUserRoute)]
+        public async Task<IActionResult> EditUserAsync(UpdateModel updateModel)
+        {
+            EnsureArg.IsNotNull(updateModel, nameof(updateModel));
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ErrorResponse(ModelState));
+            }
+
+            var user = await _authorizationService.UpdateUser(User, updateModel);
+
+            return Ok(new GetUserEntry(user));
         }
     }
 }
