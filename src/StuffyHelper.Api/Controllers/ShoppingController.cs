@@ -19,8 +19,8 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Response<GetShoppingEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetShoppingsRoute)]
         [Authorize]
         public async Task<IActionResult> GetAsync(
@@ -42,8 +42,8 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(GetShoppingEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetShoppingRoute)]
         [Authorize]
         public async Task<IActionResult> GetAsync(Guid shoppingId)
@@ -56,7 +56,7 @@ namespace StuffyHelper.Api.Controllers
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(GetShoppingEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddShoppingRoute)]
         [Authorize]
         public async Task<IActionResult> PostAsync([FromBody] UpsertShoppingEntry addEntry)
@@ -68,7 +68,7 @@ namespace StuffyHelper.Api.Controllers
 
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteShoppingRoute)]
         [Authorize]
         public async Task<IActionResult> DeleteAsync(Guid shoppingId)
@@ -81,7 +81,7 @@ namespace StuffyHelper.Api.Controllers
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(GetShoppingEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdateShoppingRoute)]
         [Authorize]
         public async Task<IActionResult> PatchAsync(Guid shoppingId, [FromBody] UpsertShoppingEntry updateEntry)

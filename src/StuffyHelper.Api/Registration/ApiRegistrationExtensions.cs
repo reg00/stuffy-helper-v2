@@ -41,6 +41,7 @@ namespace StuffyHelper.Api.Registration
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 {
+                    options.UseCamelCasing(true);
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
