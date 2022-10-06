@@ -20,8 +20,6 @@ namespace StuffyHelper.Core.Features.Event
         public DateTime EventDateStart { get; set; }
         public DateTime EventDateEnd { get; set; }
         [Required]
-        public string UserId { get; set; }
-        [Required]
         public bool IsCompleted { get; set; }
 
         [Required]
