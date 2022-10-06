@@ -8,7 +8,7 @@ namespace StuffyHelper.Authorization.Core.Features
 {
     public interface IAuthorizationService
     {
-        Task<JwtSecurityToken> Login(LoginModel model);
+        Task<JwtSecurityToken> Login(LoginModel model, HttpContext httpContext);
 
         Task Logout(HttpContext httpContext);
 
