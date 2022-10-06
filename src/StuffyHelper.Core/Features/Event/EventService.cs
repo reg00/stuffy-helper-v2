@@ -3,6 +3,7 @@ using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
+using System.Security.Claims;
 
 namespace StuffyHelper.Core.Features.Event
 {
@@ -64,15 +65,16 @@ namespace StuffyHelper.Core.Features.Event
             };
         }
 
-        public async Task<GetEventEntry> AddEventAsync(UpsertEventEntry @event, CancellationToken cancellationToken = default)
+        public async Task<GetEventEntry> AddEventAsync(UpsertEventEntry @event, ClaimsPrincipal user, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(@event, nameof(@event));
+            EnsureArg.IsNotNull(user, nameof(user));
 
-            var user = await _authorizationService.GetUser(userId: @event.UserId);
-            var entry = @event.ToCommonEntry();
+            var identityUser = await _authorizationService.GetUser(userName: user.Identity.Name);
+            var entry = @event.ToCommonEntry(identityUser.Id);
             var result = await _eventStore.AddEventAsync(entry, cancellationToken);
 
-            return new GetEventEntry(result, new GetUserEntry(user), false, false, false);
+            return new GetEventEntry(result, new GetUserEntry(identityUser), false, false, false);
         }
 
         public async Task DeleteEventAsync(Guid eventId, CancellationToken cancellationToken = default)
@@ -87,8 +89,8 @@ namespace StuffyHelper.Core.Features.Event
             EnsureArg.IsNotNull(@event, nameof(@event));
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
-            var user = await _authorizationService.GetUser(userId: @event.UserId);
             var existingEvent = await _eventStore.GetEventAsync(eventId, cancellationToken);
+            var user = await _authorizationService.GetUser(userId: existingEvent.UserId);
 
             if (existingEvent is null)
             {
