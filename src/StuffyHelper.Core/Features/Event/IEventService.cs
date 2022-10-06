@@ -1,4 +1,5 @@
 ﻿using StuffyHelper.Core.Features.Common;
+using System.Security.Claims;
 
 namespace StuffyHelper.Core.Features.Event
 {
@@ -24,7 +25,7 @@ namespace StuffyHelper.Core.Features.Event
             Guid? shoppingId = null,
             CancellationToken cancellationToken = default);
 
-        Task<GetEventEntry> AddEventAsync(UpsertEventEntry @event, CancellationToken cancellationToken = default);
+        Task<GetEventEntry> AddEventAsync(UpsertEventEntry @event, ClaimsPrincipal user, CancellationToken cancellationToken = default);
 
         Task DeleteEventAsync(Guid eventId, CancellationToken cancellationToken = default);
 
