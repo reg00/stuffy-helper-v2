@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +8,7 @@ using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Core.Features.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace StuffyHelper.Api.Controllers
 {
@@ -52,8 +54,8 @@ namespace StuffyHelper.Api.Controllers
                 return BadRequest(new ErrorResponse(ModelState));
             }
 
-            var token = await _authorizationService.Login(model);
-
+            var token = await _authorizationService.Login(model, HttpContext);
+            
             Response.Headers.Add("token", new JwtSecurityTokenHandler().WriteToken(token));
             Response.Headers.Add("expiration", token.ValidTo.ToString());
 
@@ -63,27 +65,29 @@ namespace StuffyHelper.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [Route(KnownRoutes.LogoutRoute)]
         public async Task<IActionResult> Logout()
         {
             await _authorizationService.Logout(HttpContext);
-
             return Ok();
         }
 
         [HttpGet]
         [ProducesResponseType(typeof(IdentityRole), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        [Authorize(Roles = $"{nameof(UserType.Admin)}")]
         [Route(KnownRoutes.RolesRoute)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{nameof(UserType.Admin)}")]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = $"{nameof(UserType.Admin)}")]
         public IActionResult GetRoles()
         {
             return Ok(_authorizationService.GetRoles());
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.IsAdminRoute)]
@@ -93,7 +97,8 @@ namespace StuffyHelper.Api.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AccountRoute)]
@@ -104,8 +109,16 @@ namespace StuffyHelper.Api.Controllers
             return Ok(new GetUserEntry(user));
         }
 
+        //[HttpGet]
+        //[Route(KnownRoutes.LoginRoute)]
+        //public async Task<IActionResult> Login()
+        //{
+        //    return Unauthorized();
+        //}
+
         [HttpGet]
-        [Authorize(Roles = $"{nameof(UserType.Admin)}")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{nameof(UserType.Admin)}")]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = $"{nameof(UserType.Admin)}")]
         [ProducesResponseType(typeof(IEnumerable<UserEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UserLoginsRoute)]
@@ -115,7 +128,8 @@ namespace StuffyHelper.Api.Controllers
         }
 
         [HttpPatch]
-        [Authorize]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [ProducesResponseType(typeof(UserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.EditUserRoute)]
