@@ -109,13 +109,6 @@ namespace StuffyHelper.Api.Controllers
             return Ok(new GetUserEntry(user));
         }
 
-        //[HttpGet]
-        //[Route(KnownRoutes.LoginRoute)]
-        //public async Task<IActionResult> Login()
-        //{
-        //    return Unauthorized();
-        //}
-
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{nameof(UserType.Admin)}")]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = $"{nameof(UserType.Admin)}")]
