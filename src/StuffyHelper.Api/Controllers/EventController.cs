@@ -69,7 +69,7 @@ namespace StuffyHelper.Api.Controllers
         [Authorize]
         public async Task<IActionResult> PostAsync([FromBody] UpsertEventEntry addEntry)
         {
-            var @event = await _eventService.AddEventAsync(addEntry, HttpContext.RequestAborted);
+            var @event = await _eventService.AddEventAsync(addEntry, User, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, @event);
         }
