@@ -1,5 +1,6 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
@@ -28,7 +29,7 @@ namespace StuffyHelper.Authorization.Core.Features
             _authorizationConfiguration = authorizationConfiguration.Value;
         }
 
-        public async Task<JwtSecurityToken> Login(LoginModel model)
+        public async Task<JwtSecurityToken> Login(LoginModel model, HttpContext httpContext)
         {
             EnsureArg.IsNotNull(model, nameof(model));
 
@@ -38,6 +39,20 @@ namespace StuffyHelper.Authorization.Core.Features
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var token = await user.CreateToken(_userManager, _authorizationConfiguration);
+
+                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.UserName));
+                identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+                var principal = new ClaimsPrincipal(identity);
+                await httpContext.SignInAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    principal,
+                    new AuthenticationProperties
+                    {
+                        IsPersistent = true,
+                        AllowRefresh = true,
+                        ExpiresUtc = DateTime.UtcNow.AddHours(_authorizationConfiguration.JWT.TokenExpireInHours)
+                    });
 
                 return token;
             }
@@ -50,6 +65,8 @@ namespace StuffyHelper.Authorization.Core.Features
         public async Task Logout(HttpContext httpContext)
         {
             await httpContext.SignOutAsync();
+            await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
         }
 
         public async Task<UserEntry> Register(RegisterModel model)
