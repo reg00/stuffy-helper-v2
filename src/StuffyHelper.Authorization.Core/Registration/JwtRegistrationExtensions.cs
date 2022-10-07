@@ -43,7 +43,7 @@ namespace StuffyHelper.Authorization.Core.Registration
                         //context.HttpContext.Response.Redirect("api/auth/login");
                     }
                 };
-                //options.LoginPath = "/api/auth/login";
+                options.LoginPath = "/api/auth/login";
                 options.LogoutPath = "/api/auth/logout";
                 options.AccessDeniedPath = "/api/auth/login";
                 options.ExpireTimeSpan = TimeSpan.FromHours(authorizationOptions.JWT.TokenExpireInHours);
