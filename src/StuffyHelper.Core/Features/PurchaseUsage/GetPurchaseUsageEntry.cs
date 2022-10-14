@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Purchase;
 using System.ComponentModel.DataAnnotations;
@@ -10,22 +11,23 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         [Required]
         public Guid Id { get; set; }
         [Required]
-        public GetParticipantEntry? Participant { get; set; }
+        public ParticipantShortEntry? Participant { get; set; }
         [Required]
-        public GetPurchaseEntry? Purchase { get; set; }
+        public PurchaseShortEntry? Purchase { get; set; }
 
         public GetPurchaseUsageEntry()
         {
 
         }
 
-        public GetPurchaseUsageEntry(PurchaseUsageEntry entry, bool includeParticipant, bool includePurchase)
+        public GetPurchaseUsageEntry(PurchaseUsageEntry entry, UserShortEntry user)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
+            EnsureArg.IsNotNull(user, nameof(user));
 
             Id = entry.Id;
-            Participant = includeParticipant ? new GetParticipantEntry(entry.Participant, null, false, false, false) : null;
-            Purchase = includePurchase ? new GetPurchaseEntry(entry.Purchase, false, false, false) : null;
+            Participant = new ParticipantShortEntry(entry.Participant, user);
+            Purchase = new PurchaseShortEntry(entry.Purchase);
         }
     }
 }

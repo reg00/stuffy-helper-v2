@@ -3,6 +3,7 @@ using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
+using StuffyHelper.Core.Features.Participant;
 using System.Security.Claims;
 
 namespace StuffyHelper.Core.Features.Event
@@ -25,10 +26,18 @@ namespace StuffyHelper.Core.Features.Event
             var entry = await _eventStore.GetEventAsync(eventId, cancellationToken);
             var user = await _authorizationService.GetUser(userId: entry.UserId);
 
-            return new GetEventEntry(entry, new GetUserEntry(user), true, true, true);
+            var participants = new List<ParticipantShortEntry>();
+
+            foreach (var item in entry.Participants)
+            {
+                var participantUser = await _authorizationService.GetUser(userId: item.UserId);
+                participants.Add(new ParticipantShortEntry(item, new UserShortEntry(participantUser)));
+            }
+
+            return new GetEventEntry(entry, new UserShortEntry(user), participants);
         }
 
-        public async Task<Response<GetEventEntry>> GetEventsAsync(
+        public async Task<Response<EventShortEntry>> GetEventsAsync(
             int offset = 0,
             int limit = 10,
             string name = null,
@@ -49,15 +58,12 @@ namespace StuffyHelper.Core.Features.Event
             var resp = await _eventStore.GetEventsAsync(offset, limit, name, description, createdDateStart,
                                                         createdDateEnd, eventDateStartMin, eventDateStartMax, eventDateEndMin , eventDateEndMax,
                                                         userId, isCompleted, isActive, participantId, shoppingId, cancellationToken);
-            var events = new List<GetEventEntry>();
+            var events = new List<EventShortEntry>();
 
             foreach (var @event in resp.Data)
-            {
-                var user = await _authorizationService.GetUser(userId: @event.UserId);
-                events.Add(new GetEventEntry(@event, new GetUserEntry(user), true, true, true));
-            }
+                events.Add(new EventShortEntry(@event));
 
-            return new Response<GetEventEntry>()
+            return new Response<EventShortEntry>()
             {
                 Data = events,
                 TotalPages = resp.TotalPages,
@@ -65,7 +71,7 @@ namespace StuffyHelper.Core.Features.Event
             };
         }
 
-        public async Task<GetEventEntry> AddEventAsync(UpsertEventEntry @event, ClaimsPrincipal user, CancellationToken cancellationToken = default)
+        public async Task<EventShortEntry> AddEventAsync(UpsertEventEntry @event, ClaimsPrincipal user, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(@event, nameof(@event));
             EnsureArg.IsNotNull(user, nameof(user));
@@ -74,7 +80,7 @@ namespace StuffyHelper.Core.Features.Event
             var entry = @event.ToCommonEntry(identityUser.Id);
             var result = await _eventStore.AddEventAsync(entry, cancellationToken);
 
-            return new GetEventEntry(result, new GetUserEntry(identityUser), false, false, false);
+            return new EventShortEntry(result);
         }
 
         public async Task DeleteEventAsync(Guid eventId, CancellationToken cancellationToken = default)
@@ -84,7 +90,7 @@ namespace StuffyHelper.Core.Features.Event
             await _eventStore.DeleteEventAsync(eventId, cancellationToken);
         }
 
-        public async Task<GetEventEntry> UpdateEventAsync(Guid eventId, UpsertEventEntry @event, CancellationToken cancellationToken = default)
+        public async Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpsertEventEntry @event, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(@event, nameof(@event));
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
@@ -100,7 +106,7 @@ namespace StuffyHelper.Core.Features.Event
             existingEvent.PatchFrom(@event);
             var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
 
-            return new GetEventEntry(result, new GetUserEntry(user), false, false, false);
+            return new EventShortEntry(result);
         }
     }
 }
