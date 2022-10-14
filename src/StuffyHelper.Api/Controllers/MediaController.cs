@@ -36,7 +36,8 @@ namespace StuffyHelper.Api.Controllers
             IFormFile file,
             [FromRoute][Required] Guid eventId,
             [Required] MediaType mediaType,
-            string link)
+            string link,
+            bool isPrimal)
         {
             EnsureArg.IsNotNull(file, nameof(file));
 
@@ -47,6 +48,7 @@ namespace StuffyHelper.Api.Controllers
                 file.OpenReadStream(),
                 mediaType,
                 link,
+                isPrimal,
                 HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, slide);

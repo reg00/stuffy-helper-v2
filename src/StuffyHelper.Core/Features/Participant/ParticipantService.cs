@@ -3,6 +3,7 @@ using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
+using StuffyHelper.Core.Features.PurchaseUsage;
 
 namespace StuffyHelper.Core.Features.Participant
 {
@@ -24,10 +25,18 @@ namespace StuffyHelper.Core.Features.Participant
             var entry = await _participantStore.GetParticipantAsync(participantId, cancellationToken);
             var user = await _authorizationService.GetUser(userId: entry.UserId);
 
-            return new GetParticipantEntry(entry, new GetUserEntry(user), true, true, true);
+            var purchaseUsages = new List<PurchaseUsageShortEntry>();
+
+            foreach (var item in entry.PurchaseUsages)
+            {
+                var purchaseUsageUser = await _authorizationService.GetUser(userId: item.Participant.UserId);
+                purchaseUsages.Add(new PurchaseUsageShortEntry(item, purchaseUsageUser));
+            }
+
+            return new GetParticipantEntry(entry, new UserShortEntry(user), purchaseUsages);
         }
 
-        public async Task<Response<GetParticipantEntry>> GetParticipantsAsync(
+        public async Task<Response<ParticipantShortEntry>> GetParticipantsAsync(
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
@@ -36,15 +45,15 @@ namespace StuffyHelper.Core.Features.Participant
             CancellationToken cancellationToken = default)
         {
             var resp = await _participantStore.GetParticipantsAsync(offset, limit, eventId, userId, isActive, cancellationToken);
-            var participants = new List<GetParticipantEntry>();
+            var participants = new List<ParticipantShortEntry>();
 
             foreach (var @Participant in resp.Data)
             {
                 var user = await _authorizationService.GetUser(userId: @Participant.UserId);
-                participants.Add(new GetParticipantEntry(@Participant, new GetUserEntry(user), true, true, true));
+                participants.Add(new ParticipantShortEntry(@Participant, new UserShortEntry(user)));
             }
 
-            return new Response<GetParticipantEntry>()
+            return new Response<ParticipantShortEntry>()
             {
                 Data = participants,
                 TotalPages = resp.TotalPages,
@@ -52,7 +61,7 @@ namespace StuffyHelper.Core.Features.Participant
             };
         }
 
-        public async Task<GetParticipantEntry> AddParticipantAsync(UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
+        public async Task<ParticipantShortEntry> AddParticipantAsync(UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(participant, nameof(participant));
 
@@ -60,7 +69,7 @@ namespace StuffyHelper.Core.Features.Participant
             var entry = participant.ToCommonEntry();
             var result = await _participantStore.AddParticipantAsync(entry, cancellationToken);
 
-            return new GetParticipantEntry(result, new GetUserEntry(user), false, false, false);
+            return new ParticipantShortEntry(result, new UserShortEntry(user));
         }
 
         public async Task DeleteParticipantAsync(Guid participantId, CancellationToken cancellationToken = default)
@@ -70,7 +79,7 @@ namespace StuffyHelper.Core.Features.Participant
             await _participantStore.DeleteParticipantAsync(participantId, cancellationToken);
         }
 
-        public async Task<GetParticipantEntry> UpdateParticipantAsync(Guid participantId, UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
+        public async Task<ParticipantShortEntry> UpdateParticipantAsync(Guid participantId, UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(participant, nameof(participant));
             EnsureArg.IsNotDefault(participantId, nameof(participantId));
@@ -86,7 +95,7 @@ namespace StuffyHelper.Core.Features.Participant
             existingParticipant.PatchFrom(participant);
             var result = await _participantStore.UpdateParticipantAsync(existingParticipant, cancellationToken);
 
-            return new GetParticipantEntry(result, new GetUserEntry(user), false, false, false);
+            return new ParticipantShortEntry(result, new UserShortEntry(user));
         }
     }
 }

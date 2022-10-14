@@ -80,10 +80,10 @@ namespace StuffyHelper.Core.Features.Media
                 mediaUid,
                 cancellationToken);
 
-            return new GetMediaEntry(entry, true);
+            return new GetMediaEntry(entry);
         }
 
-        public async Task<IEnumerable<GetMediaEntry>> GetMediaMetadatasAsync(
+        public async Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
             int offset,
             int limit,
             Guid? eventId = null,
@@ -96,11 +96,11 @@ namespace StuffyHelper.Core.Features.Media
             {
                 return (await _mediaStore.GetMediasAsync(
                 offset, limit, eventId, createdDateStart, createdDateEnd, mediaType, cancellationToken))
-                .Select(s => new GetMediaEntry(s, true));
+                .Select(s => new MediaShortEntry(s));
             }
             catch (ResourceNotFoundException)
             {
-                return new List<GetMediaEntry>();
+                return new List<MediaShortEntry>();
             }
         }
 
@@ -162,13 +162,14 @@ namespace StuffyHelper.Core.Features.Media
         //    }
         //}
 
-        public async Task<GetMediaEntry> StoreMediaFormFileAsync(
+        public async Task<MediaShortEntry> StoreMediaFormFileAsync(
             Guid eventId,
             string mediaUid,
             FileType fileType,
             Stream requestStream,
             MediaType mediaType,
             string link = null,
+            bool? isPrimal = null,
             CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
@@ -177,7 +178,7 @@ namespace StuffyHelper.Core.Features.Media
             if (mediaType == MediaType.Link && string.IsNullOrWhiteSpace(link))
                 throw new StuffyException("link cannot be null");
 
-            var entry = new MediaEntry(eventId, mediaUid, fileType, mediaType, link);
+            var entry = new MediaEntry(eventId, mediaUid, fileType, mediaType, link, isPrimal ?? false);
 
             try
             {
@@ -191,7 +192,7 @@ namespace StuffyHelper.Core.Features.Media
                     entry.FileType,
                     cancellationToken);
 
-                return new GetMediaEntry(entry, false);
+                return new MediaShortEntry(entry);
             }
             catch (EntityAlreadyExistsException)
             {

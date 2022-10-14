@@ -6,7 +6,7 @@ namespace StuffyHelper.Core.Features.Purchase
     {
         Task<GetPurchaseEntry> GetPurchaseAsync(Guid purchaseId, CancellationToken cancellationToken);
 
-        Task<Response<GetPurchaseEntry>> GetPurchasesAsync(
+        Task<Response<PurchaseShortEntry>> GetPurchasesAsync(
             int offset = 0,
             int limit = 10,
             string name = null,
@@ -22,10 +22,10 @@ namespace StuffyHelper.Core.Features.Purchase
             bool? isActive = null,
             CancellationToken cancellationToken = default);
 
-        Task<GetPurchaseEntry> AddPurchaseAsync(UpsertPurchaseEntry purchase, CancellationToken cancellationToken = default);
+        Task<PurchaseShortEntry> AddPurchaseAsync(UpsertPurchaseEntry purchase, CancellationToken cancellationToken = default);
 
         Task DeletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default);
 
-        Task<GetPurchaseEntry> UpdatePurchaseAsync(Guid purchaseId, UpsertPurchaseEntry purchase, CancellationToken cancellationToken = default);
+        Task<PurchaseShortEntry> UpdatePurchaseAsync(Guid purchaseId, UpsertPurchaseEntry purchase, CancellationToken cancellationToken = default);
     }
 }

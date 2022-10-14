@@ -19,7 +19,7 @@ namespace StuffyHelper.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(Response<GetEventEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Response<EventShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -67,7 +67,7 @@ namespace StuffyHelper.Api.Controllers
 
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
-        [ProducesResponseType(typeof(GetEventEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddEventRoute)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -94,7 +94,7 @@ namespace StuffyHelper.Api.Controllers
 
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
-        [ProducesResponseType(typeof(GetEventEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdateEventRoute)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

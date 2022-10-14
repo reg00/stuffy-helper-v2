@@ -19,7 +19,7 @@ namespace StuffyHelper.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(Response<GetPurchaseTagEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Response<PurchaseTagShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -55,7 +55,7 @@ namespace StuffyHelper.Api.Controllers
 
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
-        [ProducesResponseType(typeof(GetPurchaseTagEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(PurchaseTagShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddPurchaseTagRoute)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -82,7 +82,7 @@ namespace StuffyHelper.Api.Controllers
 
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
-        [ProducesResponseType(typeof(GetPurchaseTagEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(PurchaseTagShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdatePurchaseTagRoute)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]

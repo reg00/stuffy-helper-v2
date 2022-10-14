@@ -12,7 +12,7 @@
             string mediaUid,
             CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<GetMediaEntry>> GetMediaMetadatasAsync(
+        Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
             int offset,
             int limit,
             Guid? eventId = null,
@@ -26,13 +26,14 @@
             string mediaUid,
             CancellationToken cancellationToken = default);
 
-        Task<GetMediaEntry> StoreMediaFormFileAsync(
+        Task<MediaShortEntry> StoreMediaFormFileAsync(
             Guid eventId,
             string mediaUid,
             FileType fileType,
             Stream requestStream,
             MediaType mediaType,
             string link = null,
+            bool? isPrimal = null,
             CancellationToken cancellationToken = default);
 
         //Task<Uri> ObtainGetMediaPresignedUrl(

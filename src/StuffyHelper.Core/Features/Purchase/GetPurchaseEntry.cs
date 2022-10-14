@@ -19,18 +19,13 @@ namespace StuffyHelper.Core.Features.Purchase
         public int Count { get; set; }
 
         [Required]
-        public GetShoppingEntry? Shopping { get; set; }
-        public List<GetPurchaseTagEntry> PurchaseTags { get; set; }
+        public ShoppingShortEntry? Shopping { get; set; }
+        public List<PurchaseTagShortEntry> PurchaseTags { get; set; }
         [Required]
-        public GetUnitTypeEntry? UnitType { get; set; }
-        public List<GetPurchaseUsageEntry> PurchaseUsages { get; set; }
+        public UnitTypeShortEntry? UnitType { get; set; }
+        public List<PurchaseUsageShortEntry> PurchaseUsages { get; set; }
 
-        public GetPurchaseEntry()
-        {
-            PurchaseUsages = new List<GetPurchaseUsageEntry>();
-        }
-
-        public GetPurchaseEntry(PurchaseEntry entry, bool includeShopping, bool includePurchaseUsages, bool includeUnitType)
+        public GetPurchaseEntry(PurchaseEntry entry)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
@@ -39,10 +34,10 @@ namespace StuffyHelper.Core.Features.Purchase
             Cost = entry.Cost;
             Weight = entry.Weight;
             Count = entry.Count;
-            Shopping = includeShopping ? new GetShoppingEntry(entry.Shopping, false, false, false) : null;
-            PurchaseUsages = includePurchaseUsages ? entry.PurchaseUsages.Select(x => new GetPurchaseUsageEntry(x, false, false)).ToList() : new List<GetPurchaseUsageEntry>();
-            PurchaseTags = entry.PurchaseTags.Select(x => new GetPurchaseTagEntry(x, false)).ToList();
-            UnitType = includeUnitType ? new GetUnitTypeEntry(entry.UnitType, false) : null;
+            Shopping = new ShoppingShortEntry(entry.Shopping);
+            PurchaseUsages = entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x)).ToList();
+            PurchaseTags = entry.PurchaseTags.Select(x => new PurchaseTagShortEntry(x)).ToList();
+            UnitType = new UnitTypeShortEntry(entry.UnitType);
         }
     }
 }
