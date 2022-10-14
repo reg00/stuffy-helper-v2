@@ -17,17 +17,12 @@ namespace StuffyHelper.Core.Features.Shopping
         public string Description { get; set; }
 
         [Required]
-        public GetEventEntry? Event { get; set; }
+        public EventShortEntry? Event { get; set; }
         [Required]
-        public GetParticipantEntry? Participant { get; set; }
-        public List<GetPurchaseEntry> Purchases { get; set; }
+        public ParticipantShortEntry? Participant { get; set; }
+        public List<PurchaseShortEntry> Purchases { get; set; }
 
-        public GetShoppingEntry()
-        {
-            Purchases = new List<GetPurchaseEntry>();
-        }
-
-        public GetShoppingEntry(ShoppingEntry entry, bool includeEvent, bool includeParticipant, bool includePurchases)
+        public GetShoppingEntry(ShoppingEntry entry)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
@@ -36,9 +31,9 @@ namespace StuffyHelper.Core.Features.Shopping
             Check = entry.Check;
             Description = entry.Description;
 
-            Event = includeEvent ? new GetEventEntry(entry.Event, null, false, false, false) : null;
-            Participant = includeParticipant ? new GetParticipantEntry(entry.Participant, null, false, false, false) : null;
-            Purchases = includePurchases ? entry.Purchases.Select(x => new GetPurchaseEntry(x, false, false, false)).ToList() : new List<GetPurchaseEntry>();
+            Event = new EventShortEntry(entry.Event);
+            Participant = new ParticipantShortEntry(entry.Participant);
+            Purchases = entry.Purchases.Select(x => new PurchaseShortEntry(x)).ToList();
         }
     }
 }

@@ -7,7 +7,7 @@ namespace StuffyHelper.Core.Features.Event
     {
         Task<GetEventEntry> GetEventAsync(Guid eventId, CancellationToken cancellationToken);
 
-        Task<Response<GetEventEntry>> GetEventsAsync(
+        Task<Response<EventShortEntry>> GetEventsAsync(
             int offset = 0,
             int limit = 10,
             string name = null,
@@ -25,10 +25,10 @@ namespace StuffyHelper.Core.Features.Event
             Guid? shoppingId = null,
             CancellationToken cancellationToken = default);
 
-        Task<GetEventEntry> AddEventAsync(UpsertEventEntry @event, ClaimsPrincipal user, CancellationToken cancellationToken = default);
+        Task<EventShortEntry> AddEventAsync(UpsertEventEntry @event, ClaimsPrincipal user, CancellationToken cancellationToken = default);
 
         Task DeleteEventAsync(Guid eventId, CancellationToken cancellationToken = default);
 
-        Task<GetEventEntry> UpdateEventAsync(Guid eventId, UpsertEventEntry @event, CancellationToken cancellationToken = default);
+        Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpsertEventEntry @event, CancellationToken cancellationToken = default);
     }
 }

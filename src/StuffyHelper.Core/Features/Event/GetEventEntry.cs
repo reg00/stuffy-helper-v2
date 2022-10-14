@@ -23,21 +23,21 @@ namespace StuffyHelper.Core.Features.Event
         public bool IsCompleted { get; set; }
 
         [Required]
-        public GetUserEntry? User { get; set; }
-        public List<GetParticipantEntry> Participants { get; set; }
-        public List<GetShoppingEntry> Shoppings { get; set; } 
-        public List<GetMediaEntry> Medias { get; set; } 
+        public UserShortEntry? User { get; set; }
+        public List<ParticipantShortEntry> Participants { get; set; }
+        public List<ShoppingShortEntry> Shoppings { get; set; } 
+        public List<MediaShortEntry> Medias { get; set; } 
 
 
 
         public GetEventEntry()
         {
-            Participants = new List<GetParticipantEntry>();
-            Shoppings = new List<GetShoppingEntry>();
-            Medias = new List<GetMediaEntry>();
+            Participants = new List<ParticipantShortEntry>();
+            Shoppings = new List<ShoppingShortEntry>();
+            Medias = new List<MediaShortEntry>();
         }
 
-        public GetEventEntry(EventEntry entry, GetUserEntry user, bool includeParticipants, bool includeShoppings, bool includeMedias)
+        public GetEventEntry(EventEntry entry, UserShortEntry user, List<ParticipantShortEntry> participants = null)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
@@ -49,9 +49,9 @@ namespace StuffyHelper.Core.Features.Event
             EventDateStart = entry.EventDateStart;
             IsCompleted = entry.IsCompleted;
             User = user;
-            Participants = includeParticipants ? entry.Participants.Select(x => new GetParticipantEntry(x, user, false, false, false)).ToList() : new List<GetParticipantEntry>();
-            Shoppings = includeShoppings ? entry.Shoppings.Select(x => new GetShoppingEntry(x, false, false, false)).ToList() : new List<GetShoppingEntry>();
-            Medias = includeMedias ? entry.Medias.Select(x => new GetMediaEntry(x, false)).ToList() : new List<GetMediaEntry>();
+            Participants = participants;
+            Shoppings = entry.Shoppings.Select(x => new ShoppingShortEntry(x)).ToList();
+            Medias = entry.Medias.Select(x => new MediaShortEntry(x)).ToList();
         }
     }
 }
