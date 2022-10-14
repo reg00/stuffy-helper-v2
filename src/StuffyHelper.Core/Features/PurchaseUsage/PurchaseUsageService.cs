@@ -1,4 +1,6 @@
 ﻿using EnsureThat;
+using StuffyHelper.Authorization.Core.Features;
+using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 
@@ -7,10 +9,11 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
     public class PurchaseUsageService : IPurchaseUsageService
     {
         private readonly IPurchaseUsageStore _purchaseUsageStore;
-
-        public PurchaseUsageService(IPurchaseUsageStore purchaseUsageStore)
+        private readonly IAuthorizationService _authorizationService;
+        public PurchaseUsageService(IPurchaseUsageStore purchaseUsageStore, IAuthorizationService authorizationService)
         {
             _purchaseUsageStore = purchaseUsageStore;
+            _authorizationService = authorizationService;
         }
 
         public async Task<GetPurchaseUsageEntry> GetPurchaseUsageAsync(Guid purchaseUsageId, CancellationToken cancellationToken)
@@ -18,11 +21,12 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
             EnsureArg.IsNotDefault(purchaseUsageId, nameof(purchaseUsageId));
 
             var entry = await _purchaseUsageStore.GetPurchaseUsageAsync(purchaseUsageId, cancellationToken);
+            var user = await _authorizationService.GetUser(userId: entry.Participant.UserId);
 
-            return new GetPurchaseUsageEntry(entry, true, true);
+            return new GetPurchaseUsageEntry(entry, new UserShortEntry(user));
         }
 
-        public async Task<Response<GetPurchaseUsageEntry>> GetPurchaseUsagesAsync(
+        public async Task<Response<PurchaseUsageShortEntry>> GetPurchaseUsagesAsync(
             int offset = 0,
             int limit = 10,
             Guid? participantId = null,
@@ -31,22 +35,29 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         {
             var resp = await _purchaseUsageStore.GetPurchaseUsagesAsync(offset, limit, participantId, purchaseId, cancellationToken);
 
-            return new Response<GetPurchaseUsageEntry>()
+            var purchaseUsages = new List<PurchaseUsageShortEntry>();
+            foreach (var pu in resp.Data)
             {
-                Data = resp.Data.Select(x => new GetPurchaseUsageEntry(x, true ,true)),
+                var user = await _authorizationService.GetUser(userId: pu.Participant.UserId);
+                purchaseUsages.Add(new PurchaseUsageShortEntry(pu, user));
+            }
+
+            return new Response<PurchaseUsageShortEntry>()
+            {
+                Data = purchaseUsages,
                 TotalPages = resp.TotalPages,
                 Total = resp.Total
             };
         }
 
-        public async Task<GetPurchaseUsageEntry> AddPurchaseUsageAsync(UpsertPurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default)
+        public async Task<PurchaseUsageShortEntry> AddPurchaseUsageAsync(UpsertPurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchaseUsage, nameof(purchaseUsage));
 
             var entry = purchaseUsage.ToCommonEntry();
             var result = await _purchaseUsageStore.AddPurchaseUsageAsync(entry, cancellationToken);
 
-            return new GetPurchaseUsageEntry(result, false, false);
+            return new PurchaseUsageShortEntry(result);
         }
 
         public async Task DeletePurchaseUsageAsync(Guid purchaseUsageId, CancellationToken cancellationToken = default)
@@ -56,7 +67,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
             await _purchaseUsageStore.DeletePurchaseUsageAsync(purchaseUsageId, cancellationToken);
         }
 
-        public async Task<GetPurchaseUsageEntry> UpdatePurchaseUsageAsync(Guid purchaseUsageId, UpsertPurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default)
+        public async Task<PurchaseUsageShortEntry> UpdatePurchaseUsageAsync(Guid purchaseUsageId, UpsertPurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchaseUsage, nameof(purchaseUsage));
             EnsureArg.IsNotDefault(purchaseUsageId, nameof(purchaseUsageId));
@@ -71,7 +82,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
             existingPurchaseUsage.PatchFrom(purchaseUsage);
             var result = await _purchaseUsageStore.UpdatePurchaseUsageAsync(existingPurchaseUsage, cancellationToken);
 
-            return new GetPurchaseUsageEntry(result, false, false);
+            return new PurchaseUsageShortEntry(result);
         }
     }
 }

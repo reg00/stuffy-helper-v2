@@ -24,10 +24,10 @@ namespace StuffyHelper.Core.Features.Purchase
 
             var entry = await _purchaseStore.GetPurchaseAsync(purchaseId, cancellationToken);
 
-            return new GetPurchaseEntry(entry, true, true, true);
+            return new GetPurchaseEntry(entry);
         }
 
-        public async Task<Response<GetPurchaseEntry>> GetPurchasesAsync(
+        public async Task<Response<PurchaseShortEntry>> GetPurchasesAsync(
             int offset = 0,
             int limit = 10,
             string name = null,
@@ -46,15 +46,15 @@ namespace StuffyHelper.Core.Features.Purchase
             var resp = await _purchaseStore.GetPurchasesAsync(offset, limit, name, countMin, countMax, costMin, costMax,
                                                               weightMin, weightMax, shoppingId, purchaseTags, unitTypeId, isActive, cancellationToken);
 
-            return new Response<GetPurchaseEntry>()
+            return new Response<PurchaseShortEntry>()
             {
-                Data = resp.Data.Select(x => new GetPurchaseEntry(x, true, true, true)),
+                Data = resp.Data.Select(x => new PurchaseShortEntry(x)),
                 TotalPages = resp.TotalPages,
                 Total = resp.Total
             };
         }
 
-        public async Task<GetPurchaseEntry> AddPurchaseAsync(UpsertPurchaseEntry purchase, CancellationToken cancellationToken = default)
+        public async Task<PurchaseShortEntry> AddPurchaseAsync(UpsertPurchaseEntry purchase, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchase, nameof(purchase));
 
@@ -62,7 +62,7 @@ namespace StuffyHelper.Core.Features.Purchase
             await _purchaseTagPipeline.ProcessAsync(entry, purchase.PurchaseTags, cancellationToken);
             var result = await _purchaseStore.AddPurchaseAsync(entry, cancellationToken);
 
-            return new GetPurchaseEntry(result, false, false, false);
+            return new PurchaseShortEntry(result);
         }
 
         public async Task DeletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default)
@@ -72,7 +72,7 @@ namespace StuffyHelper.Core.Features.Purchase
             await _purchaseStore.DeletePurchaseAsync(purchaseId, cancellationToken);
         }
 
-        public async Task<GetPurchaseEntry> UpdatePurchaseAsync(Guid purchaseId, UpsertPurchaseEntry purchase, CancellationToken cancellationToken = default)
+        public async Task<PurchaseShortEntry> UpdatePurchaseAsync(Guid purchaseId, UpsertPurchaseEntry purchase, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchase, nameof(purchase));
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
@@ -88,7 +88,7 @@ namespace StuffyHelper.Core.Features.Purchase
             await _purchaseTagPipeline.ProcessAsync(existingPurchase, purchase.PurchaseTags, cancellationToken);
             var result = await _purchaseStore.UpdatePurchaseAsync(existingPurchase, cancellationToken);
 
-            return new GetPurchaseEntry(result, false, false, false);
+            return new PurchaseShortEntry(result);
         }
     }
 }

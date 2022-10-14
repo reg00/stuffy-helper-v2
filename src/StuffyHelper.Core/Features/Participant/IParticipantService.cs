@@ -6,7 +6,7 @@ namespace StuffyHelper.Core.Features.Participant
     {
         Task<GetParticipantEntry> GetParticipantAsync(Guid participantId, CancellationToken cancellationToken);
 
-        Task<Response<GetParticipantEntry>> GetParticipantsAsync(
+        Task<Response<ParticipantShortEntry>> GetParticipantsAsync(
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
@@ -14,10 +14,10 @@ namespace StuffyHelper.Core.Features.Participant
             bool? isActive = null,
             CancellationToken cancellationToken = default);
 
-        Task<GetParticipantEntry> AddParticipantAsync(UpsertParticipantEntry participant, CancellationToken cancellationToken = default);
+        Task<ParticipantShortEntry> AddParticipantAsync(UpsertParticipantEntry participant, CancellationToken cancellationToken = default);
 
         Task DeleteParticipantAsync(Guid participantId, CancellationToken cancellationToken = default);
 
-        Task<GetParticipantEntry> UpdateParticipantAsync(Guid participantId, UpsertParticipantEntry participant, CancellationToken cancellationToken = default);
+        Task<ParticipantShortEntry> UpdateParticipantAsync(Guid participantId, UpsertParticipantEntry participant, CancellationToken cancellationToken = default);
     }
 }

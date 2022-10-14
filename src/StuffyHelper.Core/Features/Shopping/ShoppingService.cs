@@ -19,10 +19,10 @@ namespace StuffyHelper.Core.Features.Shopping
 
             var entry = await _shoppingStore.GetShoppingAsync(shoppingId, cancellationToken);
 
-            return new GetShoppingEntry(entry, true, true, true);
+            return new GetShoppingEntry(entry);
         }
 
-        public async Task<Response<GetShoppingEntry>> GetShoppingsAsync(
+        public async Task<Response<ShoppingShortEntry>> GetShoppingsAsync(
             int offset = 0,
             int limit = 10,
             DateTime? shoppingDateStart = null,
@@ -36,22 +36,22 @@ namespace StuffyHelper.Core.Features.Shopping
             var resp = await _shoppingStore.GetShoppingsAsync(offset, limit, shoppingDateStart, shoppingDateEnd,
                                                                participantId, eventId, description, isActive, cancellationToken);
 
-            return new Response<GetShoppingEntry>()
+            return new Response<ShoppingShortEntry>()
             {
-                Data = resp.Data.Select(x => new GetShoppingEntry(x, true, true, true)),
+                Data = resp.Data.Select(x => new ShoppingShortEntry(x)),
                 TotalPages = resp.TotalPages,
                 Total = resp.Total
             };
         }
 
-        public async Task<GetShoppingEntry> AddShoppingAsync(UpsertShoppingEntry shopping, CancellationToken cancellationToken = default)
+        public async Task<ShoppingShortEntry> AddShoppingAsync(UpsertShoppingEntry shopping, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(shopping, nameof(shopping));
 
             var entry = shopping.ToCommonEntry();
             var result = await _shoppingStore.AddShoppingAsync(entry, cancellationToken);
 
-            return new GetShoppingEntry(result, false, false, false);
+            return new ShoppingShortEntry(result);
         }
 
         public async Task DeleteShoppingAsync(Guid shoppingId, CancellationToken cancellationToken = default)
@@ -61,7 +61,7 @@ namespace StuffyHelper.Core.Features.Shopping
             await _shoppingStore.DeleteShoppingAsync(shoppingId, cancellationToken);
         }
 
-        public async Task<GetShoppingEntry> UpdateShoppingAsync(Guid shoppingId, UpsertShoppingEntry shopping, CancellationToken cancellationToken = default)
+        public async Task<ShoppingShortEntry> UpdateShoppingAsync(Guid shoppingId, UpsertShoppingEntry shopping, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(shopping, nameof(shopping));
             EnsureArg.IsNotDefault(shoppingId, nameof(shoppingId));
@@ -76,7 +76,7 @@ namespace StuffyHelper.Core.Features.Shopping
             existingShopping.PatchFrom(shopping);
             var result = await _shoppingStore.UpdateShoppingAsync(existingShopping, cancellationToken);
 
-            return new GetShoppingEntry(result, false, false, false);
+            return new ShoppingShortEntry(result);
         }
     }
 }
