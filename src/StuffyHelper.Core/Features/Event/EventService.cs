@@ -1,8 +1,10 @@
 ﻿using EnsureThat;
+using Microsoft.AspNetCore.Http;
 using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
+using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
 using System.Security.Claims;
 
@@ -12,11 +14,16 @@ namespace StuffyHelper.Core.Features.Event
     {
         private readonly IEventStore _eventStore;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IMediaService _mediaService;
 
-        public EventService(IEventStore eventStore, IAuthorizationService authorizationService)
+        public EventService(
+            IEventStore eventStore,
+            IAuthorizationService authorizationService,
+            IMediaService mediaService)
         {
             _eventStore = eventStore;
             _authorizationService = authorizationService;
+            _mediaService = mediaService;
         }
 
         public async Task<GetEventEntry> GetEventAsync(Guid eventId, CancellationToken cancellationToken)
@@ -71,16 +78,56 @@ namespace StuffyHelper.Core.Features.Event
             };
         }
 
-        public async Task<EventShortEntry> AddEventAsync(UpsertEventEntry @event, ClaimsPrincipal user, CancellationToken cancellationToken = default)
+        public async Task<EventShortEntry> AddEventAsync(
+            IFormFile file,
+            string name,
+            DateTime eventDateStart,
+            ClaimsPrincipal user,
+            string? description = null,
+            DateTime? eventDateEnd = null,
+            CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotNull(@event, nameof(@event));
             EnsureArg.IsNotNull(user, nameof(user));
 
+            EventEntry result = null;
+            MediaShortEntry media = null;
             var identityUser = await _authorizationService.GetUser(userName: user.Identity.Name);
-            var entry = @event.ToCommonEntry(identityUser.Id);
-            var result = await _eventStore.AddEventAsync(entry, cancellationToken);
+            var entry = new EventEntry(
+                name,
+                description,
+                eventDateStart,
+                eventDateEnd,
+                identityUser.Id);
 
-            return new EventShortEntry(result);
+            if(file != null)
+                FileTypeMapper.ValidateExtIsImage(Path.GetExtension(file.FileName));
+
+            try
+            {
+                result = await _eventStore.AddEventAsync(entry, cancellationToken);
+
+                if (file != null)
+                    media = await _mediaService.StoreMediaFormFileAsync(
+                            result.Id,
+                            Path.GetFileNameWithoutExtension(file.FileName),
+                            FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(file.FileName)),
+                            file.OpenReadStream(),
+                            MediaType.Image,
+                            isPrimal: true,
+                            cancellationToken: cancellationToken);
+
+                return new EventShortEntry(result);
+            }
+            catch
+            {
+                if(file != null)
+                {
+                    await _eventStore.DeleteEventAsync(result.Id, cancellationToken);
+                    await _mediaService.DeleteMediaAsync(media.Id, cancellationToken);
+                }
+
+                throw;
+            }
         }
 
         public async Task DeleteEventAsync(Guid eventId, CancellationToken cancellationToken = default)

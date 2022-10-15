@@ -7,8 +7,7 @@
             CancellationToken cancellationToken = default);
 
         Task<MediaEntry> GetMediaAsync(
-            Guid eventId,
-            string mediaUid,
+            Guid mediaId,
             CancellationToken cancellationToken = default);
 
         Task<IEnumerable<MediaEntry>> GetMediasAsync(

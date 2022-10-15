@@ -1,6 +1,7 @@
 ﻿using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Web;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace StuffyHelper.Core.Features.Common
 {
@@ -103,6 +104,21 @@ namespace StuffyHelper.Core.Features.Common
             else
             {
                 throw new FileTypeNotSupportedException($"File type {fileType} is not supported.");
+            }
+        }
+
+        public static bool ValidateExtIsImage(string ext)
+        {
+            if (FileTypeExtMap.TryGetValue(ext, out FileType result))
+            {
+                if (result == FileType.Jpeg || result == FileType.Jpg || result == FileType.Png)
+                    return true;
+
+                throw new FileTypeNotSupportedException($"File must be an image.");
+            }
+            else
+            {
+                throw new FileTypeNotSupportedException($"File type {ext} is not supported.");
             }
         }
     }
