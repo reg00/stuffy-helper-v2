@@ -6,7 +6,7 @@ namespace StuffyHelper.Core.Features.Media
     {
         public Guid Id { get; set; }
         public FileType FileType { get; set; }
-        public string MediaUid { get; set; }
+        public string FileName { get; set; }
         public MediaType MediaType { get; set; }
         public string? Link { get; set; }
 
@@ -16,7 +16,7 @@ namespace StuffyHelper.Core.Features.Media
 
             Id = media.Id;
             FileType = media.FileType;
-            MediaUid = media.MediaUid;
+            FileName = media.FileName;
             MediaType = media.MediaType;
             Link = media.Link;
         }

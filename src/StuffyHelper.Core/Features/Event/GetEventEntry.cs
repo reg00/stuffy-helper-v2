@@ -18,7 +18,7 @@ namespace StuffyHelper.Core.Features.Event
         public DateTime CreatedDate { get; set; }
         [Required]
         public DateTime EventDateStart { get; set; }
-        public DateTime EventDateEnd { get; set; }
+        public DateTime? EventDateEnd { get; set; }
         [Required]
         public bool IsCompleted { get; set; }
 
