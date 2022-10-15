@@ -3,13 +3,11 @@
     public interface IMediaService
     {
         Task<MediaBlobEntry> GetMediaFormFileAsync(
-            Guid eventId,
-            string mediaUid,
+            Guid mediaId,
             CancellationToken cancellationToken = default);
 
         Task<GetMediaEntry> GetMediaMetadataAsync(
-            Guid eventId,
-            string mediaUid,
+            Guid mediaId,
             CancellationToken cancellationToken = default);
 
         Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
@@ -22,17 +20,16 @@
             CancellationToken cancellationToken = default);
 
         Task DeleteMediaAsync(
-            Guid eventId,
-            string mediaUid,
+            Guid mediaId,
             CancellationToken cancellationToken = default);
 
         Task<MediaShortEntry> StoreMediaFormFileAsync(
             Guid eventId,
-            string mediaUid,
+            string fileName,
             FileType fileType,
             Stream requestStream,
             MediaType mediaType,
-            string link = null,
+            string? link = null,
             bool? isPrimal = null,
             CancellationToken cancellationToken = default);
 

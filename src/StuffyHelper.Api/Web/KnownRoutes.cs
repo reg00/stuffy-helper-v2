@@ -27,7 +27,7 @@
         private const string ShoppingIdRouteSegment = $"{{{KnownActionParameterNames.ShoppingId}}}";
         private const string PurchaseTagIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseTagId}}}";
         private const string UnitTypeIdRouteSegment = $"{{{KnownActionParameterNames.UnitTypeId}}}";
-        private const string MediaUidRouteSegment = $"{{{KnownActionParameterNames.MediaUid}}}";
+        private const string MediaIdRouteSegment = $"{{{KnownActionParameterNames.MediaId}}}";
 
 
         public const string RegisterRoute = $"{AuthRoute}/register";
@@ -81,7 +81,7 @@
         public const string DeleteUnitTypeRoute = GetUnitTypeRoute;
         public const string UpdateUnitTypeRoute = GetUnitTypeRoute;
 
-        private const string GetMediaRouteSegment = $"{GetEventsRoute}/{EventIdRouteSegment}/{MediaSegment}/{MediaUidRouteSegment}";
+        private const string GetMediaRouteSegment = $"{DefaultRouteSegment}/{MediaSegment}/{MediaIdRouteSegment}";
         public const string RetrieveMediaFromFileRoute = $"{GetMediaRouteSegment}/{FormFileSegment}";
         public const string RetrieveMediaPresignedUrlRoute = $"{GetMediaRouteSegment}/{PresignedUrlSegment}";
         public const string GetMediaMetadataRoute = $"{GetMediaRouteSegment}/{MetadataSegment}";
