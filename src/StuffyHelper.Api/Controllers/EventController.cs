@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Api.Web;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Event;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 
 namespace StuffyHelper.Api.Controllers
@@ -66,15 +68,29 @@ namespace StuffyHelper.Api.Controllers
         }
 
         [HttpPost]
-        [Produces(KnownContentTypes.ApplicationJson)]
+        [Consumes(KnownContentTypes.MultipartFormData)]
+        [RequestSizeLimit(int.MaxValue)]
+        [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
         [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddEventRoute)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> PostAsync([FromBody] UpsertEventEntry addEntry)
+        public async Task<IActionResult> PostAsync(
+             [Required] string name,
+             [Required] DateTime eventDateStart,
+             IFormFile file,
+             string description = null,
+             DateTime? eventDateEnd = null)
         {
-            var @event = await _eventService.AddEventAsync(addEntry, User, HttpContext.RequestAborted);
+            var @event = await _eventService.AddEventAsync(
+                file,
+                name,
+                eventDateStart,
+                User,
+                description,
+                eventDateEnd,
+                HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, @event);
         }

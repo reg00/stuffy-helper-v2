@@ -36,8 +36,7 @@ namespace StuffyHelper.Api.Controllers
             IFormFile file,
             [FromRoute][Required] Guid eventId,
             [Required] MediaType mediaType,
-            string link,
-            bool isPrimal)
+            string link)
         {
             EnsureArg.IsNotNull(file, nameof(file));
 
@@ -48,7 +47,7 @@ namespace StuffyHelper.Api.Controllers
                 file.OpenReadStream(),
                 mediaType,
                 link,
-                isPrimal,
+                false,
                 HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, slide);
@@ -66,16 +65,14 @@ namespace StuffyHelper.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> RetrieveMediaFormFileAsync(
-            Guid eventId,
-            string mediaUid)
+            Guid mediaId)
         {
             var slide =
                 await _mediaService.GetMediaFormFileAsync(
-                eventId,
-                mediaUid,
+                mediaId,
                 HttpContext.RequestAborted);
 
-            return File(slide.Stream, slide.ContentType, $"{mediaUid}{slide.Ext}");
+            return File(slide.Stream, slide.ContentType, $"{slide.FileName}{slide.Ext}");
         }
 
         [HttpGet]
@@ -87,12 +84,10 @@ namespace StuffyHelper.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetMediaMetadataAsync(
-            Guid eventId,
-            string mediaUid)
+            Guid mediaId)
         {
             var slide = await _mediaService.GetMediaMetadataAsync(
-                eventId,
-                mediaUid,
+                mediaId,
                 HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, slide);
@@ -105,12 +100,10 @@ namespace StuffyHelper.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteMediaAsync(
-            Guid eventId,
-            string mediaUid)
+            Guid mediaId)
         {
             await _mediaService.DeleteMediaAsync(
-                eventId,
-                mediaUid,
+                mediaId,
                 HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK);

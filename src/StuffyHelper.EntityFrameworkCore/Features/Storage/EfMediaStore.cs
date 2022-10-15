@@ -53,18 +53,18 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
         }
 
-        public async Task<MediaEntry> GetMediaAsync(Guid eventId, string mediaUid, CancellationToken cancellationToken = default)
+        public async Task<MediaEntry> GetMediaAsync(Guid mediaId, CancellationToken cancellationToken = default)
         {
             try
             {
                 var slide = await _context.Medias
                     .Include(e => e.Event)
-                    .FirstOrDefaultAsync(e=> e.EventId == eventId && e.MediaUid == mediaUid,
+                    .FirstOrDefaultAsync(e=> e.Id == mediaId,
                     cancellationToken);
 
                 if (slide is null)
                 {
-                    throw new ResourceNotFoundException($"Media with Uid: {mediaUid} not found.");
+                    throw new ResourceNotFoundException($"Media with id: {mediaId} not found.");
                 }
 
                 return slide;
