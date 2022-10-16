@@ -33,6 +33,10 @@
             bool? isPrimal = null,
             CancellationToken cancellationToken = default);
 
+        Task<Uri> GetEventPrimalMediaUri(
+            Guid eventId,
+            CancellationToken cancellationToken = default);
+
         //Task<Uri> ObtainGetMediaPresignedUrl(
         //    Guid eventId,
         //    string mediaUid,

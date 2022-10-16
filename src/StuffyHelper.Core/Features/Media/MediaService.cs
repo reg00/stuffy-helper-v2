@@ -49,6 +49,32 @@ namespace StuffyHelper.Core.Features.Media
             }
         }
 
+        public async Task<Uri> GetEventPrimalMediaUri(Guid eventId, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
+
+            try
+            {
+                var entry = await _mediaStore.GetPrimalEventMedia(
+                    eventId,
+                    cancellationToken);
+
+                return await _fileStore.ObtainGetPresignedUrl(
+                    entry.EventId.ToString(),
+                    entry.Id.ToString(),
+                    entry.FileType,
+                    cancellationToken);
+            }
+            catch(ResourceNotFoundException)
+            {
+                return null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<MediaBlobEntry> GetMediaFormFileAsync(Guid mediaId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(mediaId, nameof(mediaId));
