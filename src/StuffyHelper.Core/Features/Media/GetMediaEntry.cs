@@ -21,7 +21,7 @@ namespace StuffyHelper.Core.Features.Media
             FileName = media.FileName;
             MediaType = media.MediaType;
             Link = media.Link;
-            Event = new EventShortEntry(media.Event);
+            Event = new EventShortEntry(media.Event, null);
         }
     }
 }
