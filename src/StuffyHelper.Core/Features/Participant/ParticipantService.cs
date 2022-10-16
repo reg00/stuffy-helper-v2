@@ -3,6 +3,7 @@ using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
+using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.PurchaseUsage;
 
 namespace StuffyHelper.Core.Features.Participant
@@ -11,11 +12,16 @@ namespace StuffyHelper.Core.Features.Participant
     {
         private readonly IParticipantStore _participantStore;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IMediaService _mediaService;
 
-        public ParticipantService(IParticipantStore participantStore, IAuthorizationService authorizationService)
+        public ParticipantService(
+            IParticipantStore participantStore,
+            IAuthorizationService authorizationService,
+            IMediaService mediaService)
         {
             _participantStore = participantStore;
             _authorizationService = authorizationService;
+            _mediaService = mediaService;
         }
 
         public async Task<GetParticipantEntry> GetParticipantAsync(Guid participantId, CancellationToken cancellationToken)
@@ -33,7 +39,9 @@ namespace StuffyHelper.Core.Features.Participant
                 purchaseUsages.Add(new PurchaseUsageShortEntry(item, purchaseUsageUser));
             }
 
-            return new GetParticipantEntry(entry, new UserShortEntry(user), purchaseUsages);
+            var mediaUri = await _mediaService.GetEventPrimalMediaUri(entry.EventId, cancellationToken);
+
+            return new GetParticipantEntry(entry, new UserShortEntry(user), mediaUri, purchaseUsages);
         }
 
         public async Task<Response<ParticipantShortEntry>> GetParticipantsAsync(

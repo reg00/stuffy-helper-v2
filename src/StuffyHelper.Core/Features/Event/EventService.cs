@@ -41,7 +41,9 @@ namespace StuffyHelper.Core.Features.Event
                 participants.Add(new ParticipantShortEntry(item, new UserShortEntry(participantUser)));
             }
 
-            return new GetEventEntry(entry, new UserShortEntry(user), participants);
+            var imageUri = await _mediaService.GetEventPrimalMediaUri(entry.Id, cancellationToken);
+
+            return new GetEventEntry(entry, new UserShortEntry(user), imageUri, participants);
         }
 
         public async Task<Response<EventShortEntry>> GetEventsAsync(
@@ -68,7 +70,10 @@ namespace StuffyHelper.Core.Features.Event
             var events = new List<EventShortEntry>();
 
             foreach (var @event in resp.Data)
-                events.Add(new EventShortEntry(@event));
+            {
+                var imageUri = await _mediaService.GetEventPrimalMediaUri(@event.Id, cancellationToken);
+                events.Add(new EventShortEntry(@event, imageUri));
+            }
 
             return new Response<EventShortEntry>()
             {
@@ -90,6 +95,7 @@ namespace StuffyHelper.Core.Features.Event
             EnsureArg.IsNotNull(user, nameof(user));
 
             EventEntry result = null;
+            Uri? mediaUri = null;
             MediaShortEntry media = null;
             var identityUser = await _authorizationService.GetUser(userName: user.Identity.Name);
             var entry = new EventEntry(
@@ -107,6 +113,7 @@ namespace StuffyHelper.Core.Features.Event
                 result = await _eventStore.AddEventAsync(entry, cancellationToken);
 
                 if (file != null)
+                {
                     media = await _mediaService.StoreMediaFormFileAsync(
                             result.Id,
                             Path.GetFileNameWithoutExtension(file.FileName),
@@ -116,7 +123,10 @@ namespace StuffyHelper.Core.Features.Event
                             isPrimal: true,
                             cancellationToken: cancellationToken);
 
-                return new EventShortEntry(result);
+                    mediaUri = await _mediaService.GetEventPrimalMediaUri(result.Id);
+                }
+
+                return new EventShortEntry(result, mediaUri);
             }
             catch
             {
@@ -143,7 +153,6 @@ namespace StuffyHelper.Core.Features.Event
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             var existingEvent = await _eventStore.GetEventAsync(eventId, cancellationToken);
-            var user = await _authorizationService.GetUser(userId: existingEvent.UserId);
 
             if (existingEvent is null)
             {
@@ -152,8 +161,9 @@ namespace StuffyHelper.Core.Features.Event
 
             existingEvent.PatchFrom(@event);
             var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
+            var mediaUri = await _mediaService.GetEventPrimalMediaUri(result.Id);
 
-            return new EventShortEntry(result);
+            return new EventShortEntry(result, mediaUri);
         }
     }
 }

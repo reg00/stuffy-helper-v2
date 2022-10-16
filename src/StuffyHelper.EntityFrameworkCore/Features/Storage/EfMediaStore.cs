@@ -4,6 +4,7 @@ using Npgsql;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.EntityFrameworkCore.Features.Schema;
+using System.Threading;
 
 namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 {
@@ -57,17 +58,17 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
         {
             try
             {
-                var slide = await _context.Medias
+                var media = await _context.Medias
                     .Include(e => e.Event)
                     .FirstOrDefaultAsync(e=> e.Id == mediaId,
                     cancellationToken);
 
-                if (slide is null)
+                if (media is null)
                 {
                     throw new ResourceNotFoundException($"Media with id: {mediaId} not found.");
                 }
 
-                return slide;
+                return media;
             }
             catch (ResourceNotFoundException)
             {
@@ -99,6 +100,32 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     (mediaType == null || e.MediaType == mediaType))
                     .Skip(offset).Take(limit)
                     .ToListAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new DataStoreException(ex);
+            }
+        }
+
+        public async Task<MediaEntry> GetPrimalEventMedia(Guid eventId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var media = await _context.Medias
+                    .Include(e => e.Event)
+                    .FirstOrDefaultAsync(e => e.EventId == eventId && e.IsPrimal == true,
+                    cancellationToken);
+
+                if (media is null)
+                {
+                    throw new ResourceNotFoundException($"Media with id: {eventId} not found.");
+                }
+
+                return media;
+            }
+            catch (ResourceNotFoundException)
+            {
+                throw;
             }
             catch (Exception ex)
             {

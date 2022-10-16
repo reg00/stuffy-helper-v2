@@ -26,13 +26,17 @@ namespace StuffyHelper.Core.Features.Participant
             PurchaseUsages = new List<PurchaseUsageShortEntry>();
         }
 
-        public GetParticipantEntry(ParticipantEntry entry, UserShortEntry user, List<PurchaseUsageShortEntry> purchaseUsages = null)
+        public GetParticipantEntry(
+            ParticipantEntry entry,
+            UserShortEntry user,
+            Uri? mediaUri = null,
+            List<PurchaseUsageShortEntry> purchaseUsages = null)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
             Id = entry.Id;
             User = user;
-            Event = new EventShortEntry(entry.Event);
+            Event = new EventShortEntry(entry.Event, mediaUri);
             Shoppings = entry.Shoppings.Select(x => new ShoppingShortEntry(x)).ToList();
             PurchaseUsages = purchaseUsages;
         }
