@@ -14,6 +14,7 @@ namespace StuffyHelper.Core.Features.Event
         public DateTime EventDateStart { get; set; }
         public DateTime? EventDateEnd { get; set; }
         public string UserId { get; set; }
+        public Uri? ImageUri { get; set; }
         public bool IsCompleted { get; set; }
         public bool IsActive { get; set; }
 
