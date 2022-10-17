@@ -31,7 +31,7 @@ namespace StuffyHelper.Core.Features.Shopping
             Check = entry.Check;
             Description = entry.Description;
 
-            Event = new EventShortEntry(entry.Event, null);
+            Event = new EventShortEntry(entry.Event);
             Participant = new ParticipantShortEntry(entry.Participant);
             Purchases = entry.Purchases.Select(x => new PurchaseShortEntry(x)).ToList();
         }

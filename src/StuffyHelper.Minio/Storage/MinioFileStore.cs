@@ -15,6 +15,7 @@ namespace StuffyHelper.Minio.Storage
     public class MinioFileStore : IFileStore
     {
         private readonly MinioBucketClient _bucket;
+        private readonly MinioClient _client;
 
         public MinioFileStore(MinioClient client,
             IOptionsMonitor<BlobContainerConfiguration> namedBlobBucketConfigurationAccessor,
@@ -26,7 +27,9 @@ namespace StuffyHelper.Minio.Storage
             var bucketConfiguration = namedBlobBucketConfigurationAccessor
                 .Get(Constants.BlobBucketConfigurationName);
 
+            _client = client;
             _bucket = client.GetBucketClientAsync(minioClientOptions, bucketConfiguration.ContainerName).Result;
+            SetPublicPolicy(bucketConfiguration.ContainerName);
         }
 
         public MinioFileStore(MinioClient client,
@@ -37,6 +40,17 @@ namespace StuffyHelper.Minio.Storage
             EnsureArg.IsNotNull(bucketName, nameof(bucketName));
 
             _bucket = client.GetBucketClientAsync(minioClientOptions, bucketName).Result;
+            _client = client;
+            SetPublicPolicy(bucketName);
+        }
+
+        private void SetPublicPolicy(string bucketName)
+        {
+            string policyJson = $@"{{""Version"": ""2012-10-17"",""Statement"": [{{""Action"": [""s3:GetObject""], ""Effect"": ""Allow"", ""Principal"": {{ ""AWS"": [ ""*"" ] }}, ""Resource"": [ ""arn:aws:s3:::{bucketName}/*"" ] }} ] }}";
+            var policyArgs = new SetPolicyArgs()
+                .WithBucket(bucketName)
+                .WithPolicy(policyJson);
+            _client.SetPolicyAsync(policyArgs).ConfigureAwait(false);
         }
 
         public async Task DeleteFilesIfExistAsync(
@@ -120,7 +134,7 @@ namespace StuffyHelper.Minio.Storage
             return sb.ToString().TrimEnd('/');
         }
 
-        public Task<Uri> ObtainGetPresignedUrl(
+        public async Task<Uri> ObtainGetPresignedUrl(
             string eventId,
             string fileId,
             FileType fileType,
@@ -133,8 +147,8 @@ namespace StuffyHelper.Minio.Storage
 
             try
             {
-                var url = _bucket.GenerateGetPresignedUrl(objectName, cancellationToken);
-                return url;
+                var url = await _bucket.GenerateGetPresignedUrl(objectName, cancellationToken);
+                return new Uri(url.GetLeftPart(UriPartial.Path));
             }
             catch (Exception ex)
             {
