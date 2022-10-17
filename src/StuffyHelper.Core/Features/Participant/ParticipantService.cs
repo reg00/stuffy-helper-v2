@@ -39,9 +39,7 @@ namespace StuffyHelper.Core.Features.Participant
                 purchaseUsages.Add(new PurchaseUsageShortEntry(item, purchaseUsageUser));
             }
 
-            var mediaUri = await _mediaService.GetEventPrimalMediaUri(entry.EventId, cancellationToken);
-
-            return new GetParticipantEntry(entry, new UserShortEntry(user), mediaUri, purchaseUsages);
+            return new GetParticipantEntry(entry, new UserShortEntry(user), purchaseUsages);
         }
 
         public async Task<Response<ParticipantShortEntry>> GetParticipantsAsync(

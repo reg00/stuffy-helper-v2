@@ -16,9 +16,7 @@ namespace StuffyHelper.Core.Features.Event
         public bool IsCompleted { get; set; }
         public Uri? ImageUri { get; set; }
 
-        public EventShortEntry(
-            EventEntry entry,
-            Uri? imageUri = null)
+        public EventShortEntry(EventEntry entry)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
@@ -27,7 +25,7 @@ namespace StuffyHelper.Core.Features.Event
             Description = entry.Description;
             EventDateStart = entry.EventDateStart;
             IsCompleted = entry.IsCompleted;
-            ImageUri = imageUri;
+            ImageUri = entry.ImageUri;
         }
     }
 }

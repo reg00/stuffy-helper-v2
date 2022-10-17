@@ -42,7 +42,6 @@ namespace StuffyHelper.Core.Features.Event
         public GetEventEntry(
             EventEntry entry,
             UserShortEntry user,
-            Uri? mediaUri = null,
             List<ParticipantShortEntry> participants = null)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
@@ -56,7 +55,7 @@ namespace StuffyHelper.Core.Features.Event
             IsCompleted = entry.IsCompleted;
             User = user;
             Participants = participants;
-            MediaUri = mediaUri;
+            MediaUri = entry.ImageUri;
             Shoppings = entry.Shoppings.Select(x => new ShoppingShortEntry(x)).ToList();
             Medias = entry.Medias.Select(x => new MediaShortEntry(x)).ToList();
         }
