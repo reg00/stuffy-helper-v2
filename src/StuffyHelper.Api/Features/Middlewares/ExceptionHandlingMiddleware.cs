@@ -79,16 +79,14 @@ namespace StuffyHelper.Api.Features.Middlewares
                     statusCode = HttpStatusCode.BadRequest;
                     break;
                 case ResourceNotFoundException _:
-                case Core.Exceptions.EntityNotFoundException _:
-                case Authorization.Core.Exceptions.EntityNotFoundException _:
+                case AuthorizationResourceNotFoundException _:
                     statusCode = HttpStatusCode.NotFound;
                     break;
                 case AuthStoreException _:
                     statusCode = HttpStatusCode.InternalServerError;
                     break;
-                case Core.Exceptions.EntityAlreadyExistsException _:
-                case Authorization.Core.Exceptions.EntityAlreadyExistsException _:
-                case EntityConflictException _:
+                case EntityAlreadyExistsException _:
+                case AuthorizationEntityAlreadyExistsException _:
                     statusCode = HttpStatusCode.Conflict;
                     break;
                 case UnauthorizedAccessException _:

@@ -82,7 +82,7 @@ namespace StuffyHelper.Authorization.Core.Extensions
                 var errors = string.Join(' ', identityResult.Errors.Select(y => y.Description));
 
                 if (identityResult.Errors.Any(x => x.Code == "DuplicateUserName"))
-                    throw new EntityAlreadyExistsException(errors);
+                    throw new AuthorizationEntityAlreadyExistsException(errors);
 
                 throw new AuthorizationException($"Ошибка обновления пользователя!. Детали: {errors}");
             }
