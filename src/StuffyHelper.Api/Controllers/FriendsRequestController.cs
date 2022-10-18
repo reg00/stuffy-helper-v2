@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Api.Web;
-using StuffyHelper.Authorization.Core.Features.FriendsRequest;
+using StuffyHelper.Authorization.Core.Features.Friend;
 using StuffyHelper.Core.Features.Common;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
@@ -62,6 +62,22 @@ namespace StuffyHelper.Api.Controllers
             var request = await _requestService.GetRequestAsync(requestId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, request);
+        }
+
+        [HttpPost]
+        [Consumes(KnownContentTypes.MultipartFormData)]
+        [RequestSizeLimit(int.MaxValue)]
+        [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.AcceptRequestRoute)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> AcceptAsync(Guid requestId)
+        {
+            await _requestService.AcceptRequest(requestId, HttpContext.RequestAborted);
+
+            return StatusCode((int)HttpStatusCode.OK);
         }
 
         [HttpPost]

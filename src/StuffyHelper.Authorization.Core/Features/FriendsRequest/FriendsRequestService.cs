@@ -1,20 +1,34 @@
 ﻿using EnsureThat;
 using StuffyHelper.Authorization.Core.Exceptions;
+using StuffyHelper.Authorization.Core.Features.Friends;
 using System.Security.Claims;
 
-namespace StuffyHelper.Authorization.Core.Features.FriendsRequest
+namespace StuffyHelper.Authorization.Core.Features.Friend
 {
     public class FriendsRequestService : IFriendsRequestService
     {
         private readonly IFriendsRequestStore _requestStore;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IFriendService _friendshipService;
 
         public FriendsRequestService(
             IFriendsRequestStore requestStore,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            IFriendService friendshipService)
         {
             _requestStore = requestStore;
             _authorizationService = authorizationService;
+            _friendshipService = friendshipService;
+        }
+
+        public async Task AcceptRequest(Guid requestId, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotDefault(requestId, nameof(requestId));
+
+            var request = await _requestStore.GetRequest(requestId, cancellationToken);
+            await _friendshipService.AddFriendAsync(request.UserIdFrom, request.UserIdTo, cancellationToken);
+            await _friendshipService.AddFriendAsync(request.UserIdTo, request.UserIdFrom, cancellationToken);
+            await _requestStore.ComfirmRequestAsync(requestId, cancellationToken);
         }
 
         public async Task<FriendsRequestShort> GetRequestAsync(Guid requestId, CancellationToken cancellationToken)

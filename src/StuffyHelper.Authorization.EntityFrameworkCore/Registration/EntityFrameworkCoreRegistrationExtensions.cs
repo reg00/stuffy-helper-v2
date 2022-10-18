@@ -5,7 +5,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StuffyHelper.Authorization.Core.Configs;
 using StuffyHelper.Authorization.Core.Features;
-using StuffyHelper.Authorization.Core.Features.FriendsRequest;
+using StuffyHelper.Authorization.Core.Features.Friends;
+using StuffyHelper.Authorization.Core.Features.Friend;
 using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema;
@@ -38,6 +39,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Registration
 
             services.AddScoped<IInitializer, EfInitializer>();
             services.AddScoped<IFriendsRequestStore, EfFriendsRequestStorage>();
+            services.AddScoped<IFriendStore, EfFriendStorage>();
 
             return services;
         }
