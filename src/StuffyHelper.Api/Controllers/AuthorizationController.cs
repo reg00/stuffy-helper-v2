@@ -9,6 +9,7 @@ using StuffyHelper.Core.Features.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using StuffyHelper.Authorization.Core.Models.User;
 
 namespace StuffyHelper.Api.Controllers
 {

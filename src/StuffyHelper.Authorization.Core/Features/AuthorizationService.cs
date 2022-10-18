@@ -8,6 +8,7 @@ using StuffyHelper.Authorization.Core.Configs;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Extensions;
 using StuffyHelper.Authorization.Core.Models;
+using StuffyHelper.Authorization.Core.Models.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 

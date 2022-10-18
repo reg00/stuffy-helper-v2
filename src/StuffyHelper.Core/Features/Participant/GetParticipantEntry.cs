@@ -1,5 +1,5 @@
 ﻿using EnsureThat;
-using StuffyHelper.Authorization.Core.Models;
+using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.Shopping;

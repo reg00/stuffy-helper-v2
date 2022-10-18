@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using StuffyHelper.Authorization.Core.Configs;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Models;
+using StuffyHelper.Authorization.Core.Models.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models;
+using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Authorization.EntityFrameworkCore.Schema;
 
 namespace StuffyHelper.Authorization.EntityFrameworkCore.Features
