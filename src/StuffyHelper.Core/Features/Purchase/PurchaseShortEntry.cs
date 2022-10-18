@@ -1,4 +1,6 @@
 ﻿using EnsureThat;
+using StuffyHelper.Core.Features.PurchaseTag;
+using StuffyHelper.Core.Features.UnitType;
 using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.Purchase
@@ -14,6 +16,9 @@ namespace StuffyHelper.Core.Features.Purchase
         public double Weight { get; set; }
         public int Count { get; set; }
 
+        public List<PurchaseTagShortEntry> PurchaseTags { get; set; }
+        public UnitTypeShortEntry? UnitType { get; set; }
+
         public PurchaseShortEntry(PurchaseEntry entry)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
@@ -23,6 +28,8 @@ namespace StuffyHelper.Core.Features.Purchase
             Cost = entry.Cost;
             Weight = entry.Weight;
             Count = entry.Count;
+            UnitType = new UnitTypeShortEntry(entry.UnitType);
+            PurchaseTags = entry.PurchaseTags.Select(x => new PurchaseTagShortEntry(x)).ToList();
         }
     }
 }
