@@ -1,6 +1,6 @@
 ﻿using EnsureThat;
 
-namespace StuffyHelper.Authorization.Core.Features.FriendsRequest
+namespace StuffyHelper.Authorization.Core.Features.Friend
 {
     public class FriendsRequestShort
     {

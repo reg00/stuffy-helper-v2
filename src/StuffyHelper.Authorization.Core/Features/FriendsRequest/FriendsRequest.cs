@@ -2,7 +2,7 @@
 using StuffyHelper.Authorization.Core.Models.User;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace StuffyHelper.Authorization.Core.Features.FriendsRequest
+namespace StuffyHelper.Authorization.Core.Features.Friend
 {
     public class FriendsRequest
     {

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema;
@@ -11,9 +12,10 @@ using StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema;
 namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221018180850_FixFriends")]
+    partial class FixFriends
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,9 +175,9 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserIdTo");
+                    b.HasIndex("UserIdFrom");
 
-                    b.HasIndex("UserIdFrom", "UserIdTo");
+                    b.HasIndex("UserIdTo");
 
                     b.ToTable("friends-requests", (string)null);
                 });
@@ -201,7 +203,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
 
                     b.HasIndex("FriendId");
 
-                    b.HasIndex("UserId", "FriendId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("friends", (string)null);
                 });

@@ -1,4 +1,4 @@
-﻿namespace StuffyHelper.Authorization.Core.Features.FriendsRequest
+﻿namespace StuffyHelper.Authorization.Core.Features.Friend
 {
     public interface IFriendsRequestStore
     {
@@ -11,5 +11,7 @@
         Task<FriendsRequest> AddRequestAsync(FriendsRequest request, CancellationToken cancellationToken = default);
 
         Task DeleteRequestAsync(Guid requestId, CancellationToken cancellationToken = default);
+
+        Task ComfirmRequestAsync(Guid requestId, CancellationToken cancellationToken = default);
     }
 }

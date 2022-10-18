@@ -1,7 +1,6 @@
 ﻿using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Web;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace StuffyHelper.Core.Features.Common
 {
