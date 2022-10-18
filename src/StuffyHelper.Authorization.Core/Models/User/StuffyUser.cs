@@ -1,7 +1,7 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Identity;
 
-namespace StuffyHelper.Authorization.Core.Models
+namespace StuffyHelper.Authorization.Core.Models.User
 {
     public class StuffyUser : IdentityUser
     {

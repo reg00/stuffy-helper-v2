@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using StuffyHelper.Authorization.Core.Configs;
 using StuffyHelper.Authorization.Core.Features;
-using StuffyHelper.Authorization.Core.Models;
+using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features;
 using StuffyHelper.Authorization.EntityFrameworkCore.Schema;
 

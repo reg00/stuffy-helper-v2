@@ -1,4 +1,6 @@
-﻿namespace StuffyHelper.Authorization.Core.Models
+﻿using StuffyHelper.Authorization.Core.Models.User;
+
+namespace StuffyHelper.Authorization.Core.Models
 {
     public class UserEntry
     {
