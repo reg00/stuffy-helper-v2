@@ -1,9 +1,11 @@
 ﻿using System.Security.Claims;
 
-namespace StuffyHelper.Authorization.Core.Features.FriendsRequest
+namespace StuffyHelper.Authorization.Core.Features.Friend
 {
     public interface IFriendsRequestService
     {
+        Task AcceptRequest(Guid requestId, CancellationToken cancellationToken = default);
+
         Task<FriendsRequestShort> GetRequestAsync(Guid requestId, CancellationToken cancellationToken);
 
         Task<IEnumerable<FriendsRequestShort>> GetSendedRequestsAsync(

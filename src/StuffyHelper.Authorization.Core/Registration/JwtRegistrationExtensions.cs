@@ -8,7 +8,8 @@ using Microsoft.Net.Http.Headers;
 using StuffyHelper.Authorization.Core.Configs;
 using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Features.Authorization;
-using StuffyHelper.Authorization.Core.Features.FriendsRequest;
+using StuffyHelper.Authorization.Core.Features.Friends;
+using StuffyHelper.Authorization.Core.Features.Friend;
 using System.Text;
 
 namespace StuffyHelper.Authorization.Core.Registration
@@ -85,6 +86,7 @@ namespace StuffyHelper.Authorization.Core.Registration
         {
             services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<IFriendsRequestService, FriendsRequestService>();
+            services.AddScoped<IFriendService, FriendService>();
 
             return services;
         }

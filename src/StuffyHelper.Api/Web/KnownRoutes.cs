@@ -18,7 +18,8 @@
         private const string FormFileSegment = "form-file";
         private const string PresignedUrlSegment = "presigned-url";
         private const string MetadataSegment = "metadata";
-        private const string RequestSegment = "request";
+        private const string RequestSegment = "requests";
+        private const string FriendsSegment = "friends";
 
 
         private const string EventIdRouteSegment = $"{{{KnownActionParameterNames.EventId}}}";
@@ -94,10 +95,13 @@
 
         private const string RequestRoute = $"{DefaultRouteSegment}/{RequestSegment}";
         public const string AddRequestRoute = RequestRoute;
+        public const string AcceptRequestRoute = $"{GetRequestRoute}/accept";
         public const string GetRequestRoute = $"{RequestRoute}/{RequestIdRouteSegment}";
         public const string GetSendedRequestsRoute = $"{RequestRoute}/sended";
         public const string GetIncomingRequestsRoute = $"{RequestRoute}/incoming";
         public const string DeleteRequestRoute = GetRequestRoute;
         public const string UpdateRequestRoute = GetRequestRoute;
+
+        public const string GetFriendsRoute = $"{DefaultRouteSegment}/{FriendsSegment}";
     }
 }
