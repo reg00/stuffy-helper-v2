@@ -16,7 +16,7 @@ namespace StuffyHelper.Authorization.Core.Features
 
         IEnumerable<IdentityRole> GetRoles();
 
-        bool? CheckUserIsAdmin(ClaimsPrincipal user);
+        Task<bool> CheckUserIsAdmin(ClaimsPrincipal user);
 
         Task<UserEntry> GetUserByToken(ClaimsPrincipal user, CancellationToken cancellationToken = default);
 

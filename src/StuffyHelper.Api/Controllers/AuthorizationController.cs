@@ -92,9 +92,10 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.IsAdminRoute)]
-        public IActionResult CheckUserIsAdmin()
+        public async Task<IActionResult> CheckUserIsAdmin()
         {
-            return Ok(_authorizationService.CheckUserIsAdmin(User));
+            var isAdmin = await _authorizationService.CheckUserIsAdmin(User);
+            return Ok(isAdmin);
         }
 
         [HttpGet]

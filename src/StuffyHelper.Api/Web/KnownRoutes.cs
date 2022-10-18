@@ -18,6 +18,7 @@
         private const string FormFileSegment = "form-file";
         private const string PresignedUrlSegment = "presigned-url";
         private const string MetadataSegment = "metadata";
+        private const string RequestSegment = "request";
 
 
         private const string EventIdRouteSegment = $"{{{KnownActionParameterNames.EventId}}}";
@@ -28,6 +29,7 @@
         private const string PurchaseTagIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseTagId}}}";
         private const string UnitTypeIdRouteSegment = $"{{{KnownActionParameterNames.UnitTypeId}}}";
         private const string MediaIdRouteSegment = $"{{{KnownActionParameterNames.MediaId}}}";
+        private const string RequestIdRouteSegment = $"{{{KnownActionParameterNames.RequestId}}}";
 
 
         public const string RegisterRoute = $"{AuthRoute}/register";
@@ -89,5 +91,13 @@
         public const string StoreMediaFormFileRoute = $"{GetEventsRoute}/{EventIdRouteSegment}/{MediaSegment}/{FormFileSegment}";
         public const string StoreMediaPresignedUrlRoute = $"{GetEventsRoute}/{EventIdRouteSegment}/{MediaSegment}/{PresignedUrlSegment}";
         public const string DeleteMediaRoute = GetMediaRouteSegment;
+
+        private const string RequestRoute = $"{DefaultRouteSegment}/{RequestSegment}";
+        public const string AddRequestRoute = RequestRoute;
+        public const string GetRequestRoute = $"{RequestRoute}/{RequestIdRouteSegment}";
+        public const string GetSendedRequestsRoute = $"{RequestRoute}/sended";
+        public const string GetIncomingRequestsRoute = $"{RequestRoute}/incoming";
+        public const string DeleteRequestRoute = GetRequestRoute;
+        public const string UpdateRequestRoute = GetRequestRoute;
     }
 }

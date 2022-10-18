@@ -12,7 +12,7 @@ using StuffyHelper.Authorization.Core.Models.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
-namespace StuffyHelper.Authorization.Core.Features
+namespace StuffyHelper.Authorization.Core.Features.Authorization
 {
     public class AuthorizationService : IAuthorizationService
     {
@@ -40,10 +40,17 @@ namespace StuffyHelper.Authorization.Core.Features
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var token = await user.CreateToken(_userManager, _authorizationConfiguration);
+                var roles = await _userManager.GetRolesAsync(user);
 
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.UserName));
                 identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+
+                foreach (var role in roles)
+                {
+                    identity.AddClaim(new Claim(ClaimTypes.Role, role));
+                }
+
                 var principal = new ClaimsPrincipal(identity);
                 await httpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
@@ -58,7 +65,7 @@ namespace StuffyHelper.Authorization.Core.Features
                 return token;
             }
             else if (user is null)
-                throw new EntityNotFoundException($"Пользователь с логином {model.Username} отсутствует");
+                throw new AuthorizationResourceNotFoundException($"Пользователь с логином {model.Username} отсутствует");
             else
                 throw new AuthorizationException($"Неверный пароль");
         }
@@ -77,7 +84,7 @@ namespace StuffyHelper.Authorization.Core.Features
             var userExists = await _userManager.FindByNameAsync(model.Username);
 
             if (userExists != null)
-                throw new EntityAlreadyExistsException($"Пользователь с логином {model.Username} уже существует");
+                throw new AuthorizationEntityAlreadyExistsException($"Пользователь с логином {model.Username} уже существует");
 
             StuffyUser identityUser = model.InitializeUser();
 
@@ -95,7 +102,11 @@ namespace StuffyHelper.Authorization.Core.Features
 
         public IEnumerable<IdentityRole> GetRoles() => _roleManager.Roles.ToList();
 
-        public bool? CheckUserIsAdmin(ClaimsPrincipal user) => user?.IsInRole(nameof(UserType.Admin));
+        public async Task<bool> CheckUserIsAdmin(ClaimsPrincipal user)
+        {
+            var stuffyUser = await _userManager.FindByNameAsync(user?.Identity?.Name);
+            return await _userManager.IsInRoleAsync(stuffyUser, nameof(UserType.Admin));
+        } 
 
         public async Task<UserEntry> GetUserByToken(ClaimsPrincipal user, CancellationToken cancellationToken = default)
         {
@@ -129,7 +140,7 @@ namespace StuffyHelper.Authorization.Core.Features
                 userToDelete = await _userManager.FindByIdAsync(userId);
 
             if (userToDelete is null)
-                throw new EntityNotFoundException($"Пользователь с логином {userName} отсутствует");
+                throw new AuthorizationResourceNotFoundException($"Пользователь с логином {userName} отсутствует");
 
             var rolesList = await _userManager.GetRolesAsync(userToDelete);
 
@@ -145,7 +156,7 @@ namespace StuffyHelper.Authorization.Core.Features
             var userToUpdate = await _userManager.FindByNameAsync(user.Identity.Name);
 
             if (userToUpdate is null)
-                throw new EntityNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
+                throw new AuthorizationResourceNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
 
             userToUpdate.PatchFrom(model);
 
@@ -179,7 +190,7 @@ namespace StuffyHelper.Authorization.Core.Features
             if (user == null)
             {
                 var error = string.IsNullOrWhiteSpace(userName) ? $"Пользователь с идентификатором {userId} отсутствует" : $"Пользователь с логином {userName} отсутствует";
-                throw new EntityNotFoundException(error);
+                throw new AuthorizationResourceNotFoundException(error);
             }
 
             var rolesList = await _userManager.GetRolesAsync(user);
