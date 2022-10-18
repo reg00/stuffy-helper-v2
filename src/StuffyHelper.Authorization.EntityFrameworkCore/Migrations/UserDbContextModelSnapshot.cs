@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using StuffyHelper.Authorization.EntityFrameworkCore.Schema;
+using StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema;
 
 #nullable disable
 
@@ -154,7 +154,59 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("StuffyHelper.Authorization.Core.Models.StuffyUser", b =>
+            modelBuilder.Entity("StuffyHelper.Authorization.Core.Features.FriendsRequest.FriendsRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsComfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserIdFrom")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserIdTo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserIdFrom");
+
+                    b.HasIndex("UserIdTo");
+
+                    b.ToTable("friends-requests", (string)null);
+                });
+
+            modelBuilder.Entity("StuffyHelper.Authorization.Core.Models.Friends.AspNetFriends", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("FriendsSince")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("UserAId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserBId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserAId");
+
+                    b.HasIndex("UserBId");
+
+                    b.ToTable("asp-net-friends", (string)null);
+                });
+
+            modelBuilder.Entity("StuffyHelper.Authorization.Core.Models.User.StuffyUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -238,7 +290,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("StuffyHelper.Authorization.Core.Models.StuffyUser", null)
+                    b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -247,7 +299,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("StuffyHelper.Authorization.Core.Models.StuffyUser", null)
+                    b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -262,7 +314,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StuffyHelper.Authorization.Core.Models.StuffyUser", null)
+                    b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -271,11 +323,56 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("StuffyHelper.Authorization.Core.Models.StuffyUser", null)
+                    b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("StuffyHelper.Authorization.Core.Features.FriendsRequest.FriendsRequest", b =>
+                {
+                    b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", "UserFrom")
+                        .WithMany("SendedRequests")
+                        .HasForeignKey("UserIdFrom")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", "UserTo")
+                        .WithMany("IncomingRequests")
+                        .HasForeignKey("UserIdTo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserFrom");
+
+                    b.Navigation("UserTo");
+                });
+
+            modelBuilder.Entity("StuffyHelper.Authorization.Core.Models.Friends.AspNetFriends", b =>
+                {
+                    b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", "UserA")
+                        .WithMany()
+                        .HasForeignKey("UserAId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", "UserB")
+                        .WithMany()
+                        .HasForeignKey("UserBId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserA");
+
+                    b.Navigation("UserB");
+                });
+
+            modelBuilder.Entity("StuffyHelper.Authorization.Core.Models.User.StuffyUser", b =>
+                {
+                    b.Navigation("IncomingRequests");
+
+                    b.Navigation("SendedRequests");
                 });
 #pragma warning restore 612, 618
         }

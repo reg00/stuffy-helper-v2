@@ -10,5 +10,6 @@
         internal const string PurchaseTagId = "purchaseTagId";
         internal const string UnitTypeId = "unitTypeId";
         internal const string MediaId = "mediaId";
+        internal const string RequestId = "requestId";
     }
 }
