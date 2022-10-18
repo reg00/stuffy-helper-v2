@@ -4,7 +4,6 @@ using Npgsql;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.EntityFrameworkCore.Features.Schema;
-using System.Threading;
 
 namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 {

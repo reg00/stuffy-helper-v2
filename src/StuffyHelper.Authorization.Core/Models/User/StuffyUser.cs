@@ -1,6 +1,7 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Identity;
-using StuffyHelper.Authorization.Core.Features.FriendsRequest;
+using StuffyHelper.Authorization.Core.Features.Friends;
+using StuffyHelper.Authorization.Core.Features.Friend;
 
 namespace StuffyHelper.Authorization.Core.Models.User
 {
@@ -12,6 +13,7 @@ namespace StuffyHelper.Authorization.Core.Models.User
 
         public virtual List<FriendsRequest> IncomingRequests { get; set; } = new List<FriendsRequest>();
         public virtual List<FriendsRequest> SendedRequests { get; set; } = new List<FriendsRequest>();
+        public virtual List<FriendEntry> Friends { get; set; } = new List<FriendEntry>();
 
         public void PatchFrom(UpdateModel model)
         {

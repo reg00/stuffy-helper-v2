@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using StuffyHelper.Authorization.Core.Exceptions;
-using StuffyHelper.Authorization.Core.Features.FriendsRequest;
+using StuffyHelper.Authorization.Core.Features.Friend;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema;
 
 namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
@@ -114,8 +114,32 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
                     throw new AuthorizationResourceNotFoundException($"Request with Id '{requestId}' not found.");
                 }
 
-
                 _context.FriendsRequests.Remove(request);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new AuthorizationException(ex.Message);
+            }
+        }
+
+        public async Task ComfirmRequestAsync(Guid requestId, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotDefault(requestId, nameof(requestId));
+
+            try
+            {
+                var request = await _context.FriendsRequests
+                    .FirstOrDefaultAsync(
+                    s => s.Id == requestId, cancellationToken);
+
+                if (request is null)
+                {
+                    throw new AuthorizationResourceNotFoundException($"Request with Id '{requestId}' not found.");
+                }
+
+                request.IsComfirmed = true;
+                _context.FriendsRequests.Update(request);
                 await _context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)

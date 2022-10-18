@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema;
@@ -11,9 +12,10 @@ using StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema;
 namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    partial class UserDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221018133011_AddFriends")]
+    partial class AddFriends
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,33 +156,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("StuffyHelper.Authorization.Core.Features.Friend.FriendsRequest", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsComfirmed")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("UserIdFrom")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("UserIdTo")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserIdTo");
-
-                    b.HasIndex("UserIdFrom", "UserIdTo");
-
-                    b.ToTable("friends-requests", (string)null);
-                });
-
-            modelBuilder.Entity("StuffyHelper.Authorization.Core.Features.Friends.FriendEntry", b =>
+            modelBuilder.Entity("StuffyHelper.Authorization.Core.Features.Friends.Friendship", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -201,9 +177,35 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
 
                     b.HasIndex("FriendId");
 
-                    b.HasIndex("UserId", "FriendId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("friends", (string)null);
+                    b.ToTable("friendships", (string)null);
+                });
+
+            modelBuilder.Entity("StuffyHelper.Authorization.Core.Features.FriendsRequest.FriendsRequest", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<bool>("IsComfirmed")
+                        .HasColumnType("boolean");
+
+                    b.Property<string>("UserIdFrom")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserIdTo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserIdFrom");
+
+                    b.HasIndex("UserIdTo");
+
+                    b.ToTable("friends-requests", (string)null);
                 });
 
             modelBuilder.Entity("StuffyHelper.Authorization.Core.Models.User.StuffyUser", b =>
@@ -330,26 +332,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("StuffyHelper.Authorization.Core.Features.Friend.FriendsRequest", b =>
-                {
-                    b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", "UserFrom")
-                        .WithMany("SendedRequests")
-                        .HasForeignKey("UserIdFrom")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", "UserTo")
-                        .WithMany("IncomingRequests")
-                        .HasForeignKey("UserIdTo")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserFrom");
-
-                    b.Navigation("UserTo");
-                });
-
-            modelBuilder.Entity("StuffyHelper.Authorization.Core.Features.Friends.FriendEntry", b =>
+            modelBuilder.Entity("StuffyHelper.Authorization.Core.Features.Friends.Friendship", b =>
                 {
                     b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", "Friend")
                         .WithMany()
@@ -366,6 +349,25 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
                     b.Navigation("Friend");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("StuffyHelper.Authorization.Core.Features.FriendsRequest.FriendsRequest", b =>
+                {
+                    b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", "UserFrom")
+                        .WithMany("SendedRequests")
+                        .HasForeignKey("UserIdFrom")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("StuffyHelper.Authorization.Core.Models.User.StuffyUser", "UserTo")
+                        .WithMany("IncomingRequests")
+                        .HasForeignKey("UserIdTo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserFrom");
+
+                    b.Navigation("UserTo");
                 });
 
             modelBuilder.Entity("StuffyHelper.Authorization.Core.Models.User.StuffyUser", b =>
