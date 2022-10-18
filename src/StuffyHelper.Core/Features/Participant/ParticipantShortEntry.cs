@@ -1,5 +1,5 @@
 ﻿using EnsureThat;
-using StuffyHelper.Authorization.Core.Models;
+using StuffyHelper.Authorization.Core.Models.User;
 using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.Participant
