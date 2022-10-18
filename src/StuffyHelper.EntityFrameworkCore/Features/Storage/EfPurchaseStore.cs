@@ -23,6 +23,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             try
             {
                 var entry = await _context.Purchases
+                    .Include(e => e.UnitType)
                     .FirstOrDefaultAsync(e => e.Id == purchaseId, cancellationToken);
 
                 if (entry is null)
@@ -61,6 +62,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             {
                 var searchedData = await _context.Purchases
                     .Include(e => e.PurchaseTags)
+                    .Include(e => e.UnitType)
                     .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.ToLower().Contains(name.ToLower())) &&
                     (countMin == null || countMin <= e.Count) &&
                     (countMax == null || countMax >= e.Count) &&
