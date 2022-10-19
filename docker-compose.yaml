@@ -20,6 +20,7 @@ services:
       - StuffyFileWeb__StuffyFileStore__ContainerName=stuffyfilewebcontainer
     depends_on:
       - postgres-web
+      - s3
     restart: unless-stopped
 
   postgres-web:
@@ -32,3 +33,14 @@ services:
     volumes:
         - ../pgdata:/var/lib/postgresql/data
     restart: unless-stopped
+    
+  s3:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./storage/minio:/data
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    command: server /data
