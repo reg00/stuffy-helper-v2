@@ -33,20 +33,19 @@ namespace StuffyHelper.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> StoreMediaFormFileAsync(
-            IFormFile file,
             [FromRoute][Required] Guid eventId,
-            [Required] MediaType mediaType,
-            string link)
+            [FromForm] AddMediaEntry media)
         {
-            EnsureArg.IsNotNull(file, nameof(file));
+            EnsureArg.IsNotNull(media, nameof(media));
+            EnsureArg.IsNotNull(media.File, nameof(media.File));
 
             var slide = await _mediaService.StoreMediaFormFileAsync(
                 eventId,
-                Path.GetFileNameWithoutExtension(file.FileName),
-                FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(file.FileName)),
-                file.OpenReadStream(),
-                mediaType,
-                link,
+                Path.GetFileNameWithoutExtension(media.File.FileName),
+                FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(media.File.FileName)),
+                media.File.OpenReadStream(),
+                media.MediaType,
+                media.Link,
                 false,
                 HttpContext.RequestAborted);
 
