@@ -79,40 +79,37 @@ namespace StuffyHelper.Core.Features.Event
         }
 
         public async Task<EventShortEntry> AddEventAsync(
-            IFormFile file,
-            string name,
-            DateTime eventDateStart,
+            AddEventEntry eventEntry,
             ClaimsPrincipal user,
-            string? description = null,
-            DateTime? eventDateEnd = null,
             CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(user, nameof(user));
+            EnsureArg.IsNotNull(eventEntry, nameof(eventEntry));
 
             EventEntry result = null;
             MediaShortEntry media = null;
             var identityUser = await _authorizationService.GetUser(userName: user.Identity.Name);
             var entry = new EventEntry(
-                name,
-                description,
-                eventDateStart,
-                eventDateEnd,
+                eventEntry.Name,
+                eventEntry.Description,
+                eventEntry.EventDateStart,
+                eventEntry.EventDateEnd,
                 identityUser.Id);
 
-            if(file != null)
-                FileTypeMapper.ValidateExtIsImage(Path.GetExtension(file.FileName));
+            if(eventEntry.File != null)
+                FileTypeMapper.ValidateExtIsImage(Path.GetExtension(eventEntry.File.FileName));
 
             try
             {
                 result = await _eventStore.AddEventAsync(entry, cancellationToken);
 
-                if (file != null)
+                if (eventEntry.File != null)
                 {
                     media = await _mediaService.StoreMediaFormFileAsync(
                             result.Id,
-                            Path.GetFileNameWithoutExtension(file.FileName),
-                            FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(file.FileName)),
-                            file.OpenReadStream(),
+                            Path.GetFileNameWithoutExtension(eventEntry.File.FileName),
+                            FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(eventEntry.File.FileName)),
+                            eventEntry.File.OpenReadStream(),
                             MediaType.Image,
                             isPrimal: true,
                             cancellationToken: cancellationToken);
@@ -126,7 +123,7 @@ namespace StuffyHelper.Core.Features.Event
             }
             catch
             {
-                if(file != null)
+                if(eventEntry.File != null)
                 {
                     await _eventStore.DeleteEventAsync(result.Id, cancellationToken);
                     await _mediaService.DeleteMediaAsync(media.Id, cancellationToken);
@@ -143,7 +140,7 @@ namespace StuffyHelper.Core.Features.Event
             await _eventStore.DeleteEventAsync(eventId, cancellationToken);
         }
 
-        public async Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpsertEventEntry @event, CancellationToken cancellationToken = default)
+        public async Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpdateEventEntry @event, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(@event, nameof(@event));
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
