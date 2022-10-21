@@ -77,19 +77,11 @@ namespace StuffyHelper.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PostAsync(
-             [Required] string name,
-             [Required] DateTime eventDateStart,
-             IFormFile file,
-             string description = null,
-             DateTime? eventDateEnd = null)
+             [FromForm] AddEventEntry entry)
         {
             var @event = await _eventService.AddEventAsync(
-                file,
-                name,
-                eventDateStart,
+                entry,
                 User,
-                description,
-                eventDateEnd,
                 HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, @event);
@@ -115,7 +107,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.UpdateEventRoute)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> PatchAsync(Guid eventId, [FromBody] UpsertEventEntry updateEntry)
+        public async Task<IActionResult> PatchAsync(Guid eventId, [FromBody] UpdateEventEntry updateEntry)
         {
             var entry = await _eventService.UpdateEventAsync(eventId, updateEntry, HttpContext.RequestAborted);
 

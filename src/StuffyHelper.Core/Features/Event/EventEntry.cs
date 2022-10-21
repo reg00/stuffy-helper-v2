@@ -44,7 +44,7 @@ namespace StuffyHelper.Core.Features.Event
             IsActive = true;
         }
 
-        public void PatchFrom(UpsertEventEntry entry)
+        public void PatchFrom(UpdateEventEntry entry)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 

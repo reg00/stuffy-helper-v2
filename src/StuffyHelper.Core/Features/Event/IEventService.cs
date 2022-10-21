@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using StuffyHelper.Core.Features.Common;
+﻿using StuffyHelper.Core.Features.Common;
 using System.Security.Claims;
 
 namespace StuffyHelper.Core.Features.Event
@@ -27,16 +26,12 @@ namespace StuffyHelper.Core.Features.Event
             CancellationToken cancellationToken = default);
 
         Task<EventShortEntry> AddEventAsync(
-            IFormFile file,
-            string name,
-            DateTime eventDateStart,
+            AddEventEntry entry,
             ClaimsPrincipal user,
-            string? description = null,
-            DateTime? eventDateEnd = null,
             CancellationToken cancellationToken = default);
 
         Task DeleteEventAsync(Guid eventId, CancellationToken cancellationToken = default);
 
-        Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpsertEventEntry @event, CancellationToken cancellationToken = default);
+        Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpdateEventEntry @event, CancellationToken cancellationToken = default);
     }
 }
