@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.Event
 {
-    public class UpsertEventEntry
+    public class UpdateEventEntry
     {
         [Required]
         public string Name { get; set; }
