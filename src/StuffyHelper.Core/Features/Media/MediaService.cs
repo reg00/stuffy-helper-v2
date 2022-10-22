@@ -183,34 +183,32 @@ namespace StuffyHelper.Core.Features.Media
         //}
 
         public async Task<MediaShortEntry> StoreMediaFormFileAsync(
-            Guid eventId,
-            string fileName,
-            FileType fileType,
-            Stream requestStream,
-            MediaType mediaType,
-            string? link = null,
-            bool? isPrimal = null,
+            AddMediaEntry media,
+            bool isPrimal = false,
             CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotDefault(eventId, nameof(eventId));
-            EnsureArg.IsNotNullOrWhiteSpace(fileName, nameof(fileName));
+            EnsureArg.IsNotNull(media, nameof(media));
+            EnsureArg.IsNotDefault(media.EventId, nameof(media.EventId));
 
-            if (mediaType == MediaType.Link && string.IsNullOrWhiteSpace(link))
+            if (media.MediaType == MediaType.Link && string.IsNullOrWhiteSpace(media.Link))
                 throw new StuffyException("link cannot be null");
+            else if (media.MediaType != MediaType.Link && media.File is null)
+                throw new StuffyException("file cannot be null");
 
-            var entry = new MediaEntry(eventId, fileName, fileType, mediaType, link, isPrimal ?? false);
+            var entry = media.ToCommonEntry(isPrimal);
 
             try
             {
                 var mediaEntry = await _mediaStore.AddMediaAsync(
                     entry, cancellationToken);
 
-                await _fileStore.StoreFileAsync(
-                    eventId.ToString(),
-                    mediaEntry.Id.ToString(),
-                    requestStream,
-                    entry.FileType,
-                    cancellationToken);
+                if(media.MediaType != MediaType.Link)
+                    await _fileStore.StoreFileAsync(
+                        entry.EventId.ToString(),
+                        mediaEntry.Id.ToString(),
+                        media.File!.OpenReadStream(),
+                        entry.FileType,
+                        cancellationToken);
 
                 return new MediaShortEntry(entry);
             }
@@ -224,11 +222,12 @@ namespace StuffyHelper.Core.Features.Media
                     entry,
                     cancellationToken);
 
-                await _fileStore.DeleteFilesIfExistAsync(
-                    eventId.ToString(),
-                    entry.Id.ToString(),
-                    entry.FileType,
-                    cancellationToken: cancellationToken);
+                if (media.MediaType != MediaType.Link)
+                    await _fileStore.DeleteFilesIfExistAsync(
+                        media.EventId.ToString(),
+                        entry.Id.ToString(),
+                        entry.FileType,
+                        cancellationToken: cancellationToken);
 
                 throw;
             }
