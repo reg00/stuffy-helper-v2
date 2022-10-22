@@ -24,7 +24,9 @@ namespace StuffyHelper.Core.Features.Event
 
         public EventEntry()
         {
-
+            Participants = new List<ParticipantEntry>();
+            Shoppings = new List<ShoppingEntry>();
+            Medias = new List<MediaEntry>();
         }
 
         public EventEntry(
@@ -42,6 +44,10 @@ namespace StuffyHelper.Core.Features.Event
             CreatedDate = DateTime.UtcNow;
             IsCompleted = false;
             IsActive = true;
+
+            Participants = new List<ParticipantEntry>();
+            Shoppings = new List<ShoppingEntry>();
+            Medias = new List<MediaEntry>();
         }
 
         public void PatchFrom(UpdateEventEntry entry)

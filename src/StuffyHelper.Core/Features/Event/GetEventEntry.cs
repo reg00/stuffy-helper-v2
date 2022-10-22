@@ -42,7 +42,7 @@ namespace StuffyHelper.Core.Features.Event
         public GetEventEntry(
             EventEntry entry,
             UserShortEntry user,
-            List<ParticipantShortEntry> participants = null)
+            List<ParticipantShortEntry> participants)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
