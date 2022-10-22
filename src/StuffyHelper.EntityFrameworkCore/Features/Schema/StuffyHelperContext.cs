@@ -160,7 +160,6 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.HasOne(e => e.Event).WithMany(e => e.Medias).HasForeignKey(e => e.EventId);
 
                 entity.Property(e => e.EventId).IsRequired();
-                entity.Property(e => e.FileName).IsRequired();
                 entity.Property(e => e.MediaType).IsRequired();
             });
 
