@@ -22,6 +22,9 @@ namespace StuffyHelper.Api.Controllers
             _authorizationService = authorizationService;
         }
 
+        /// <summary>
+        /// Регистрация пользователя
+        /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Unauthorized)]
@@ -41,6 +44,9 @@ namespace StuffyHelper.Api.Controllers
             return Ok(new GetUserEntry(user));
         }
 
+        /// <summary>
+        /// Логин
+        /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Unauthorized)]
@@ -65,6 +71,9 @@ namespace StuffyHelper.Api.Controllers
             return Ok(new GetUserEntry(user));
         }
 
+        /// <summary>
+        /// Выход
+        /// </summary>
         [HttpPost]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
@@ -75,6 +84,9 @@ namespace StuffyHelper.Api.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Список ролей
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(IdentityRole), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -86,6 +98,9 @@ namespace StuffyHelper.Api.Controllers
             return Ok(_authorizationService.GetRoles());
         }
 
+        /// <summary>
+        /// Проверка пользователя на администратора
+        /// </summary>
         [HttpGet]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
@@ -98,6 +113,9 @@ namespace StuffyHelper.Api.Controllers
             return Ok(isAdmin);
         }
 
+        /// <summary>
+        /// Получение данных о пользователе
+        /// </summary>
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
@@ -111,6 +129,9 @@ namespace StuffyHelper.Api.Controllers
             return Ok(new GetUserEntry(user));
         }
 
+        /// <summary>
+        /// Список зарегистрированных пользователей
+        /// </summary>
         [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{nameof(UserType.Admin)}")]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = $"{nameof(UserType.Admin)}")]
@@ -122,6 +143,9 @@ namespace StuffyHelper.Api.Controllers
             return Ok(_authorizationService.GetUserLogins(userName));
         }
 
+        /// <summary>
+        /// Изменение данных пользователя
+        /// </summary>
         [HttpPatch]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]

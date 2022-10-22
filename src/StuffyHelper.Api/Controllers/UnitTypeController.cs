@@ -18,6 +18,9 @@ namespace StuffyHelper.Api.Controllers
             _unitTypeService = unitTypeService;
         }
 
+        /// <summary>
+        /// Получение списка единиц измерения
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(Response<UnitTypeShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
@@ -38,6 +41,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, unitTypeResponse);
         }
 
+        /// <summary>
+        /// Получение информации о единице измерения по идентификатору
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(GetUnitTypeEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
@@ -53,6 +59,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, unitTypeEntry);
         }
 
+        /// <summary>
+        /// Добавление единицы измерения
+        /// </summary>
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(UnitTypeShortEntry), (int)HttpStatusCode.OK)]
@@ -67,6 +76,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, unitType);
         }
 
+        /// <summary>
+        /// Удаление единицы измерения
+        /// </summary>
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -80,6 +92,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK);
         }
 
+        /// <summary>
+        /// Изменение единицы измерения
+        /// </summary>
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(UnitTypeShortEntry), (int)HttpStatusCode.OK)]

@@ -21,6 +21,9 @@ namespace StuffyHelper.Api.Controllers
             _friendshipService = friendshipService;
         }
 
+        /// <summary>
+        /// Получение списка друзей
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(AuthResponse<UserShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]

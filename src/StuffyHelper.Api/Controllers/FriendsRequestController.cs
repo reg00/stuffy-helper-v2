@@ -19,6 +19,9 @@ namespace StuffyHelper.Api.Controllers
             _requestService = requestService;
         }
 
+        /// <summary>
+        /// Получение списка отправленных заявок в друзья
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<FriendsRequestShort>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
@@ -34,6 +37,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, requests);
         }
 
+        /// <summary>
+        /// Получение списка входящих заявок в друзья
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<FriendsRequestShort>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
@@ -49,6 +55,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, requests);
         }
 
+        /// <summary>
+        /// Получение информации о заявке в друзья по идентификатору
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(FriendsRequestShort), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
@@ -64,6 +73,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, request);
         }
 
+        /// <summary>
+        /// Принять заявку в друзья
+        /// </summary>
         [HttpPost]
         [Consumes(KnownContentTypes.MultipartFormData)]
         [RequestSizeLimit(int.MaxValue)]
@@ -80,6 +92,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK);
         }
 
+        /// <summary>
+        /// Отправить заявку в друзья
+        /// </summary>
         [HttpPost]
         [Consumes(KnownContentTypes.MultipartFormData)]
         [RequestSizeLimit(int.MaxValue)]
@@ -96,6 +111,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, request);
         }
 
+        /// <summary>
+        /// Удалить заявку в друзья
+        /// </summary>
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]

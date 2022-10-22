@@ -18,6 +18,9 @@ namespace StuffyHelper.Api.Controllers
             _PurchaseUsageService = PurchaseUsageService;
         }
 
+        /// <summary>
+        /// Получение списка того, какие участники какие продукты используют
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(Response<PurchaseUsageShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
@@ -37,6 +40,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, purchaseUsageResponse);
         }
 
+        /// <summary>
+        /// Получение данных об использовании участником продукта по идентификатору
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(GetPurchaseUsageEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
@@ -52,6 +58,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, purchaseUsageEntry);
         }
 
+        /// <summary>
+        /// Добавление использования участником продукта
+        /// </summary>
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(PurchaseUsageShortEntry), (int)HttpStatusCode.OK)]
@@ -66,6 +75,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, purchaseUsage);
         }
 
+        /// <summary>
+        /// Удаление использования участником продукта
+        /// </summary>
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -79,6 +91,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK);
         }
 
+        /// <summary>
+        /// Узменение использования участником продукта (а надо ли??)
+        /// </summary>
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(PurchaseUsageShortEntry), (int)HttpStatusCode.OK)]
