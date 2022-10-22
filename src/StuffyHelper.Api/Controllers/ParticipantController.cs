@@ -18,6 +18,9 @@ namespace StuffyHelper.Api.Controllers
             _participantService = participantService;
         }
 
+        /// <summary>
+        /// Получение списка участников ивента
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(Response<ParticipantShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
@@ -38,6 +41,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, participantResponse);
         }
 
+        /// <summary>
+        /// Получение участника ивента по идентификатору
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(GetParticipantEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
@@ -53,6 +59,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, participantEntry);
         }
 
+        /// <summary>
+        /// Добавление участника
+        /// </summary>
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(ParticipantShortEntry), (int)HttpStatusCode.OK)]
@@ -67,6 +76,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, participant);
         }
 
+        /// <summary>
+        /// Удаление участника
+        /// </summary>
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -80,6 +92,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK);
         }
 
+        /// <summary>
+        /// Изменение участника ивента (нужно или нет хз)
+        /// </summary>
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(ParticipantShortEntry), (int)HttpStatusCode.OK)]
