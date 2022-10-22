@@ -24,13 +24,8 @@
             CancellationToken cancellationToken = default);
 
         Task<MediaShortEntry> StoreMediaFormFileAsync(
-            Guid eventId,
-            string fileName,
-            FileType fileType,
-            Stream requestStream,
-            MediaType mediaType,
-            string? link = null,
-            bool? isPrimal = null,
+            AddMediaEntry mediaEntry,
+            bool isPrimal = false,
             CancellationToken cancellationToken = default);
 
         Task<Uri> GetEventPrimalMediaUri(

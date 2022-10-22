@@ -7,7 +7,7 @@ namespace StuffyHelper.Core.Features.Media
     {
         public Guid Id { get; set; }
         public Guid EventId { get; set; }
-        public string FileName { get; set; }
+        public string? FileName { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
         public FileType FileType { get; set; }
         public MediaType MediaType { get; set; }
@@ -23,17 +23,17 @@ namespace StuffyHelper.Core.Features.Media
 
         public MediaEntry(
             Guid eventId,
-            string mediaUid,
+            string? fileName,
             FileType fileType, 
             MediaType mediaType,
-            string link,
+            string? link,
             bool isPrimal)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             EventId = eventId;
             FileType = fileType;
-            FileName = mediaUid;
+            FileName = fileName;
             MediaType = mediaType;
             Link = link;
             IsPrimal = isPrimal;

@@ -105,12 +105,10 @@ namespace StuffyHelper.Core.Features.Event
 
                 if (eventEntry.File != null)
                 {
+                    var addMedia = new AddMediaEntry(result.Id, eventEntry.File, MediaType.Image, null);
+
                     media = await _mediaService.StoreMediaFormFileAsync(
-                            result.Id,
-                            Path.GetFileNameWithoutExtension(eventEntry.File.FileName),
-                            FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(eventEntry.File.FileName)),
-                            eventEntry.File.OpenReadStream(),
-                            MediaType.Image,
+                            addMedia,
                             isPrimal: true,
                             cancellationToken: cancellationToken);
 
