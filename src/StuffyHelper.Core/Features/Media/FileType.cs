@@ -10,6 +10,7 @@
         Doc,
         Docx,
         Xls,
-        Xlsx
+        Xlsx,
+        Link
     }
 }

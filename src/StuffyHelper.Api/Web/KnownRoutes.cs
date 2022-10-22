@@ -89,8 +89,8 @@
         public const string RetrieveMediaPresignedUrlRoute = $"{GetMediaRouteSegment}/{PresignedUrlSegment}";
         public const string GetMediaMetadataRoute = $"{GetMediaRouteSegment}/{MetadataSegment}";
         public const string GetMediasMetadatasRoute = $"{DefaultRouteSegment}/{MediaSegment}/{MetadataSegment}";
-        public const string StoreMediaFormFileRoute = $"{GetEventsRoute}/{EventIdRouteSegment}/{MediaSegment}/{FormFileSegment}";
-        public const string StoreMediaPresignedUrlRoute = $"{GetEventsRoute}/{EventIdRouteSegment}/{MediaSegment}/{PresignedUrlSegment}";
+        public const string StoreMediaFormFileRoute = $"{DefaultRouteSegment}/{MediaSegment}/{FormFileSegment}";
+        public const string StoreMediaPresignedUrlRoute = $"{DefaultRouteSegment}/{MediaSegment}/{PresignedUrlSegment}";
         public const string DeleteMediaRoute = GetMediaRouteSegment;
 
         private const string RequestRoute = $"{DefaultRouteSegment}/{RequestSegment}";

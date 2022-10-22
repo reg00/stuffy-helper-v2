@@ -33,27 +33,18 @@ namespace StuffyHelper.Api.Controllers
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> StoreMediaFormFileAsync(
-            [FromRoute][Required] Guid eventId,
             [FromForm] AddMediaEntry media)
         {
             EnsureArg.IsNotNull(media, nameof(media));
-            EnsureArg.IsNotNull(media.File, nameof(media.File));
 
             var slide = await _mediaService.StoreMediaFormFileAsync(
-                eventId,
-                Path.GetFileNameWithoutExtension(media.File.FileName),
-                FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(media.File.FileName)),
-                media.File.OpenReadStream(),
-                media.MediaType,
-                media.Link,
-                false,
-                HttpContext.RequestAborted);
+                media,
+                cancellationToken: HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, slide);
         }
 
         [HttpGet]
-        //[DisableFormValueModelBinding]
         [RequestSizeLimit(int.MaxValue)]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
         [Produces(KnownContentTypes.MultipartFormData)]
