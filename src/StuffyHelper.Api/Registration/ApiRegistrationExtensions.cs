@@ -9,6 +9,7 @@ using StuffyHelper.Authorization.Core.Registration;
 using StuffyHelper.Authorization.EntityFrameworkCore.Registration;
 using StuffyHelper.EntityFrameworkCore.Registration;
 using StuffyHelper.Minio.Registration;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 namespace StuffyHelper.Api.Registration
@@ -73,6 +74,9 @@ namespace StuffyHelper.Api.Registration
                         new List<string>()
                     }
                 });
+
+                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
 
             services.AddMinioBlobDataStores(configuration);
