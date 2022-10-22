@@ -29,7 +29,7 @@ namespace StuffyHelper.Core.Features.Participant
         public GetParticipantEntry(
             ParticipantEntry entry,
             UserShortEntry user,
-            List<PurchaseUsageShortEntry> purchaseUsages = null)
+            List<PurchaseUsageShortEntry> purchaseUsages)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
