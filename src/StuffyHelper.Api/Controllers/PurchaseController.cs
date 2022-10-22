@@ -18,6 +18,9 @@ namespace StuffyHelper.Api.Controllers
             _purchaseService = purchaseService;
         }
 
+        /// <summary>
+        /// Получение списка покупок
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(Response<PurchaseShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
@@ -47,6 +50,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, purchaseResponse);
         }
 
+        /// <summary>
+        /// Получение данных о покупке по идентификатору
+        /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(GetPurchaseEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
@@ -62,6 +68,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, purchaseEntry);
         }
 
+        /// <summary>
+        /// Добавление покупки
+        /// </summary>
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(PurchaseShortEntry), (int)HttpStatusCode.OK)]
@@ -76,6 +85,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, purchase);
         }
 
+        /// <summary>
+        /// Удаление покупки
+        /// </summary>
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -89,6 +101,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK);
         }
 
+        /// <summary>
+        /// Изменение данных о покупке
+        /// </summary>
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(PurchaseShortEntry), (int)HttpStatusCode.OK)]

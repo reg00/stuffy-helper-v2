@@ -21,6 +21,9 @@ namespace StuffyHelper.Api.Controllers
             _mediaService = mediaService;
         }
 
+        /// <summary>
+        /// Добавление файла к ивенту
+        /// </summary>
         [HttpPost]
         [RequestSizeLimit(int.MaxValue)]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
@@ -44,6 +47,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, slide);
         }
 
+        /// <summary>
+        /// Получение файла
+        /// </summary>
         [HttpGet]
         [RequestSizeLimit(int.MaxValue)]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
@@ -65,6 +71,9 @@ namespace StuffyHelper.Api.Controllers
             return File(slide.Stream, slide.ContentType, $"{slide.FileName}{slide.Ext}");
         }
 
+        /// <summary>
+        /// Получение метаданных файла
+        /// </summary>
         [HttpGet]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(GetMediaEntry), (int)HttpStatusCode.OK)]
@@ -83,6 +92,9 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK, slide);
         }
 
+        /// <summary>
+        /// Удаление файла
+        /// </summary>
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -134,6 +146,9 @@ namespace StuffyHelper.Api.Controllers
         //    return StatusCode((int)HttpStatusCode.OK, uri.ToString());
         //}
 
+        /// <summary>
+        /// Получение списка метаданных файлов
+        /// </summary>
         [HttpGet]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(IEnumerable<GetMediaEntry>), (int)HttpStatusCode.OK)]
