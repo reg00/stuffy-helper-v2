@@ -11,7 +11,7 @@ namespace StuffyHelper.Core.Features.Shopping
         public DateTime ShoppingDate { get; set; }
         public Guid ParticipantId { get; set; }
         public Guid EventId { get; set; }
-        public string Check { get; set; }
+        public string? Check { get; set; }
         public string Description { get; set; }
         public bool IsActive { get; set; }
 
@@ -19,13 +19,12 @@ namespace StuffyHelper.Core.Features.Shopping
         public virtual ParticipantEntry Participant { get; set; }
         public virtual List<PurchaseEntry> Purchases { get; set; } = new List<PurchaseEntry>();
 
-        public void PatchFrom(UpsertShoppingEntry entry)
+        public void PatchFrom(UpdateShoppingEntry entry)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
             ShoppingDate = entry.ShoppingDate;
             ParticipantId = entry.ParticipantId;
-            EventId = entry.EventId;
             Check = entry.Check;
             Description = entry.Description;
             IsActive = entry.IsActive;
