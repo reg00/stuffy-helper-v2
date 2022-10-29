@@ -47,6 +47,8 @@
         public const string GetEventsRoute = AddEventRoute;
         public const string DeleteEventRoute = GetEventRoute;
         public const string UpdateEventRoute = GetEventRoute;
+        public const string UpdateEventPrimalMedia = $"{GetEventRoute}/photo";
+        public const string DeleteEventPrimalMedia = $"{GetEventRoute}/photo";
 
         public const string AddParticipantRoute = $"{DefaultRouteSegment}/{ParticipantsSegment}";
         public const string GetParticipantRoute = $"{AddParticipantRoute}/{ParticipantIdRouteSegment}";

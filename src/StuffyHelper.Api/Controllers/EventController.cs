@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Api.Web;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Event;
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 
 namespace StuffyHelper.Api.Controllers
@@ -52,7 +51,7 @@ namespace StuffyHelper.Api.Controllers
                                                                    eventDateStartMin, eventDateStartMax, eventDateEndMin, eventDateEndMax, userId,
                                                                    isCompleted, isActive, participantId, shoppingId, HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, eventResponse);
+            return Ok(eventResponse);
         }
 
         /// <summary>
@@ -68,9 +67,9 @@ namespace StuffyHelper.Api.Controllers
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetAsync(Guid eventId)
         {
-            var eventEntry = await _eventService.GetEventAsync(eventId, HttpContext.RequestAborted);
+            var @event = await _eventService.GetEventAsync(eventId, HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, eventEntry);
+            return Ok(@event);
         }
 
         /// <summary>
@@ -93,7 +92,7 @@ namespace StuffyHelper.Api.Controllers
                 User,
                 HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, @event);
+            return Ok(@event);
         }
 
         /// <summary>
@@ -109,7 +108,7 @@ namespace StuffyHelper.Api.Controllers
         {
             await _eventService.DeleteEventAsync(eventId, HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK);
+            return Ok();
         }
 
         /// <summary>
@@ -126,7 +125,46 @@ namespace StuffyHelper.Api.Controllers
         {
             var entry = await _eventService.UpdateEventAsync(eventId, updateEntry, HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, entry);
+            return Ok(entry);
+        }
+
+        /// <summary>
+        /// Удаление обложки ивента
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Produces(KnownContentTypes.ApplicationJson)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.DeleteEventPrimalMedia)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> DeletePrimalMediaAsync([FromRoute] Guid eventId)
+        {
+            await _eventService.DeletePrimalEventMedia(eventId, HttpContext.RequestAborted);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Обновление обложки ивента
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        [HttpPatch]
+        [Produces(KnownContentTypes.ApplicationJson)]
+        [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.UpdateEventPrimalMedia)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+        public async Task<IActionResult> PatchPrimalMediaAsync([FromRoute] Guid eventId, IFormFile file)
+        {
+            var @event = await _eventService.UpdatePrimalEventMediaAsync(eventId, file, HttpContext.RequestAborted);
+
+            return Ok(@event);
         }
     }
 }
