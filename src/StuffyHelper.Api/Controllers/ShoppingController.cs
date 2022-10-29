@@ -73,7 +73,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.AddShoppingRoute)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> PostAsync([FromBody] UpsertShoppingEntry addEntry)
+        public async Task<IActionResult> PostAsync([FromBody] AddShoppingEntry addEntry)
         {
             var shopping = await _shoppingService.AddShoppingAsync(addEntry, HttpContext.RequestAborted);
 
@@ -106,7 +106,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.UpdateShoppingRoute)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> PatchAsync(Guid shoppingId, [FromBody] UpsertShoppingEntry updateEntry)
+        public async Task<IActionResult> PatchAsync(Guid shoppingId, [FromBody] UpdateShoppingEntry updateEntry)
         {
             var entry = await _shoppingService.UpdateShoppingAsync(shoppingId, updateEntry, HttpContext.RequestAborted);
 

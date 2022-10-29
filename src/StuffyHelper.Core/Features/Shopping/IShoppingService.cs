@@ -17,10 +17,10 @@ namespace StuffyHelper.Core.Features.Shopping
             bool? isActive = null,
             CancellationToken cancellationToken = default);
 
-        Task<ShoppingShortEntry> AddShoppingAsync(UpsertShoppingEntry shopping, CancellationToken cancellationToken = default);
+        Task<ShoppingShortEntry> AddShoppingAsync(AddShoppingEntry shopping, CancellationToken cancellationToken = default);
 
         Task DeleteShoppingAsync(Guid shoppingId, CancellationToken cancellationToken = default);
 
-        Task<ShoppingShortEntry> UpdateShoppingAsync(Guid shoppingId, UpsertShoppingEntry shopping, CancellationToken cancellationToken = default);
+        Task<ShoppingShortEntry> UpdateShoppingAsync(Guid shoppingId, UpdateShoppingEntry shopping, CancellationToken cancellationToken = default);
     }
 }
