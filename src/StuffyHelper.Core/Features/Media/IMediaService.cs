@@ -1,4 +1,6 @@
-﻿namespace StuffyHelper.Core.Features.Media
+﻿using System.Text;
+
+namespace StuffyHelper.Core.Features.Media
 {
     public interface IMediaService
     {
@@ -17,6 +19,10 @@
             DateTimeOffset? createdDateStart = null,
             DateTimeOffset? createdDateEnd = null,
             MediaType? mediaType = null,
+            CancellationToken cancellationToken = default);
+
+        Task<GetMediaEntry> GetPrimalEventMedia(
+            Guid eventId,
             CancellationToken cancellationToken = default);
 
         Task DeleteMediaAsync(

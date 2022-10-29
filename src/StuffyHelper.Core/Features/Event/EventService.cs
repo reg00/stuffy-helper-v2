@@ -1,5 +1,6 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Core.Exceptions;
@@ -154,6 +155,56 @@ namespace StuffyHelper.Core.Features.Event
             var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
 
             return new EventShortEntry(result);
+        }
+
+        public async Task DeletePrimalEventMedia(Guid eventId, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
+
+            var @event = await _eventStore.GetEventAsync(eventId, cancellationToken);
+
+            if (@event is null)
+            {
+                throw new ResourceNotFoundException($"Event Id '{eventId}' not found");
+            }
+
+            var primalMedia = await _mediaService.GetPrimalEventMedia(eventId, cancellationToken);
+
+            if (primalMedia is not null)
+                await _mediaService.DeleteMediaAsync(primalMedia.Id);
+
+            @event.ImageUri = null;
+            await _eventStore.UpdateEventAsync(@event, cancellationToken);
+        }
+
+        public async Task<EventShortEntry> UpdatePrimalEventMediaAsync(Guid eventId, IFormFile file, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
+            EnsureArg.IsNotNull(file, nameof(file));
+
+            var @event = await _eventStore.GetEventAsync(eventId, cancellationToken);
+
+            if (@event is null)
+            {
+                throw new ResourceNotFoundException($"Event Id '{eventId}' not found");
+            }
+
+            var primalMedia = await _mediaService.GetPrimalEventMedia(eventId, cancellationToken);
+
+            if (primalMedia is not null)
+                await _mediaService.DeleteMediaAsync(primalMedia.Id);
+
+            var addMedia = new AddMediaEntry(eventId, file, MediaType.Image, null);
+            await _mediaService.StoreMediaFormFileAsync(
+                    addMedia,
+                    isPrimal: true,
+                    cancellationToken: cancellationToken);
+
+            var mediaUri = await _mediaService.GetEventPrimalMediaUri(eventId);
+            @event.ImageUri = mediaUri;
+            @event = await _eventStore.UpdateEventAsync(@event, cancellationToken);
+
+            return new EventShortEntry(@event);
         }
     }
 }
