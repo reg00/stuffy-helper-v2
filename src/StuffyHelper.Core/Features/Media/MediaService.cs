@@ -103,6 +103,25 @@ namespace StuffyHelper.Core.Features.Media
             return new GetMediaEntry(entry);
         }
 
+        public async Task<GetMediaEntry> GetPrimalEventMedia(Guid eventId, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
+
+            try
+            {
+                var entry = await _mediaStore.GetPrimalEventMedia(eventId, cancellationToken);
+                return new GetMediaEntry(entry);
+            }
+            catch(ResourceNotFoundException)
+            {
+                return null;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
             int offset,
             int limit,

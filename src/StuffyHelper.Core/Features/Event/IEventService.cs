@@ -1,4 +1,5 @@
-﻿using StuffyHelper.Core.Features.Common;
+﻿using Microsoft.AspNetCore.Http;
+using StuffyHelper.Core.Features.Common;
 using System.Security.Claims;
 
 namespace StuffyHelper.Core.Features.Event
@@ -33,5 +34,9 @@ namespace StuffyHelper.Core.Features.Event
         Task DeleteEventAsync(Guid eventId, CancellationToken cancellationToken = default);
 
         Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpdateEventEntry @event, CancellationToken cancellationToken = default);
+
+        Task DeletePrimalEventMedia(Guid eventId, CancellationToken cancellationToken = default);
+
+        Task<EventShortEntry> UpdatePrimalEventMediaAsync(Guid eventId, IFormFile file, CancellationToken cancellationToken = default);
     }
 }
