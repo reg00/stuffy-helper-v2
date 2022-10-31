@@ -11,8 +11,7 @@ namespace StuffyHelper.Core.Features.Purchase
         public Guid Id { get; set; }
         public string Name { get; set; }
         public double Cost { get; set; }
-        public double Weight { get; set; }
-        public int Count { get; set; }
+        public double Amount { get; set; }
         public Guid ShoppingId { get; set; }
         public Guid UnitTypeId { get; set; }
         public bool IsActive { get; set; }
@@ -29,8 +28,7 @@ namespace StuffyHelper.Core.Features.Purchase
 
             Name = entry.Name;
             Cost = entry.Cost;
-            Weight = entry.Weight;
-            Count = entry.Count;
+            Amount = entry.Amount;
             ShoppingId = entry.ShoppingId;
             IsActive = entry.IsActive;
         }
