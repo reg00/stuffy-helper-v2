@@ -8,8 +8,8 @@ namespace StuffyHelper.Core.Features.Purchase
         public string Name { get; set; }
         [Required]
         public double Cost { get; set; }
-        public double Weight { get; set; }
-        public int Count { get; set; }
+        [Required]
+        public double Amount { get; set; }
         [Required]
         public Guid ShoppingId { get; set; }
         [Required]
@@ -24,10 +24,9 @@ namespace StuffyHelper.Core.Features.Purchase
             {
                 Name = Name,
                 Cost = Cost,
-                Weight = Weight,
+                Amount = Amount,
                 ShoppingId = ShoppingId,
                 UnitTypeId = UnitTypeId,
-                Count = Count,
                 IsActive = true
             };
         }

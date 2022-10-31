@@ -31,20 +31,16 @@ namespace StuffyHelper.Core.Features.Purchase
             int offset = 0,
             int limit = 10,
             string name = null,
-            int? countMin = null,
-            int? countMax = null,
             double? costMin = null,
             double? costMax = null,
-            double? weightMin = null,
-            double? weightMax = null,
             Guid? shoppingId = null,
             IEnumerable<string> purchaseTags = null,
             Guid? unitTypeId = null,
             bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
-            var resp = await _purchaseStore.GetPurchasesAsync(offset, limit, name, countMin, countMax, costMin, costMax,
-                                                              weightMin, weightMax, shoppingId, purchaseTags, unitTypeId, isActive, cancellationToken);
+            var resp = await _purchaseStore.GetPurchasesAsync(offset, limit, name, costMin, costMax,
+                                                              shoppingId, purchaseTags, unitTypeId, isActive, cancellationToken);
 
             return new Response<PurchaseShortEntry>()
             {

@@ -13,8 +13,8 @@ namespace StuffyHelper.Core.Features.Purchase
         public string Name { get; set; }
         [Required]
         public double Cost { get; set; }
-        public double Weight { get; set; }
-        public int Count { get; set; }
+        [Required]
+        public double Amount { get; set; }
 
         public List<PurchaseTagShortEntry> PurchaseTags { get; set; }
         public UnitTypeShortEntry? UnitType { get; set; }
@@ -26,8 +26,7 @@ namespace StuffyHelper.Core.Features.Purchase
             Id = entry.Id;
             Name = entry.Name;
             Cost = entry.Cost;
-            Weight = entry.Weight;
-            Count = entry.Count;
+            Amount = entry.Amount;
             UnitType = new UnitTypeShortEntry(entry.UnitType);
             PurchaseTags = entry.PurchaseTags.Select(x => new PurchaseTagShortEntry(x)).ToList();
         }
