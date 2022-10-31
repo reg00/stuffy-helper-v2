@@ -46,12 +46,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             int offset = 0,
             int limit = 10,
             string name = null,
-            int? countMin = null,
-            int? countMax = null,
             double? costMin = null,
             double? costMax = null,
-            double? weightMin = null,
-            double? weightMax = null,
             Guid? shoppingId = null,
             IEnumerable<string> purchaseTags = null,
             Guid? unitTypeId = null,
@@ -64,12 +60,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .Include(e => e.PurchaseTags)
                     .Include(e => e.UnitType)
                     .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.ToLower().Contains(name.ToLower())) &&
-                    (countMin == null || countMin <= e.Count) &&
-                    (countMax == null || countMax >= e.Count) &&
                     (costMin == null || costMin <= e.Cost) &&
                     (costMax == null || costMax >= e.Cost) &&
-                    (weightMin == null || weightMin <= e.Weight) &&
-                    (weightMax == null || weightMax >= e.Weight) &&
                     (isActive == null || isActive == e.IsActive) &&
                     (shoppingId == null || e.ShoppingId == shoppingId) && 
                     (unitTypeId == null || e.UnitTypeId == unitTypeId) &&
