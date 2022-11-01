@@ -24,6 +24,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             {
                 var entry = await _context.Purchases
                     .Include(e => e.UnitType)
+                    .Include(e => e.PurchaseTags)
                     .FirstOrDefaultAsync(e => e.Id == purchaseId, cancellationToken);
 
                 if (entry is null)
@@ -90,6 +91,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             {
                 var entry = await _context.Purchases.AddAsync(purchase, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
+                _context.Entry(entry.Entity).Reference(x => x.UnitType).Load();
                 return entry.Entity;
             }
             catch (Exception ex)
