@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using StuffyHelper.Core.Features.PurchaseTag;
+using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.Purchase
 {
-    public class UpsertPurchaseEntry
+    public class AddPurchaseEntry
     {
         [Required]
         public string Name { get; set; }
@@ -12,11 +13,9 @@ namespace StuffyHelper.Core.Features.Purchase
         public double Amount { get; set; }
         [Required]
         public Guid ShoppingId { get; set; }
-        [Required]
-        public List<string> PurchaseTags { get; init; }
+        public List<PurchaseTagShortEntry> PurchaseTags { get; init; }
         [Required]
         public Guid UnitTypeId { get; set; }
-        public bool IsActive { get; set; }
 
         public PurchaseEntry ToCommonEntry()
         {

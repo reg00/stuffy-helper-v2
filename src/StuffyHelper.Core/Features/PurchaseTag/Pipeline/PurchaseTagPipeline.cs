@@ -14,7 +14,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag.Pipeline
 
         public async Task ProcessAsync(
             ITaggableEntry entry,
-            IEnumerable<string> tags,
+            IEnumerable<PurchaseTagShortEntry> tags,
             CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
@@ -28,13 +28,13 @@ namespace StuffyHelper.Core.Features.PurchaseTag.Pipeline
             {
                 try
                 {
-                    var existsTag = await _tagStore.GetPurchaseTagAsync(tag, cancellationToken);
+                    var existsTag = await _tagStore.GetPurchaseTagAsync(tag.Name, cancellationToken);
 
                     entry.PurchaseTags.Add(existsTag);
                 }
                 catch (ResourceNotFoundException)
                 {
-                    var newTag = await _tagStore.AddPurchaseTagAsync(new PurchaseTagEntry(tag), cancellationToken);
+                    var newTag = await _tagStore.AddPurchaseTagAsync(new PurchaseTagEntry(tag.Name), cancellationToken);
 
                     entry.PurchaseTags.Add(newTag);
                 }

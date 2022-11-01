@@ -74,7 +74,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.AddPurchaseRoute)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> PostAsync([FromBody] UpsertPurchaseEntry addEntry)
+        public async Task<IActionResult> PostAsync([FromBody] AddPurchaseEntry addEntry)
         {
             var purchase = await _purchaseService.AddPurchaseAsync(addEntry, HttpContext.RequestAborted);
 
@@ -107,7 +107,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.UpdatePurchaseRoute)]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        public async Task<IActionResult> PatchAsync(Guid purchaseId, [FromBody] UpsertPurchaseEntry updateEntry)
+        public async Task<IActionResult> PatchAsync(Guid purchaseId, [FromBody] UpdatePurchaseEntry updateEntry)
         {
             var entry = await _purchaseService.UpdatePurchaseAsync(purchaseId, updateEntry, HttpContext.RequestAborted);
 
