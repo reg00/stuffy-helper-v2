@@ -50,7 +50,7 @@ namespace StuffyHelper.Core.Features.Purchase
             };
         }
 
-        public async Task<PurchaseShortEntry> AddPurchaseAsync(UpsertPurchaseEntry purchase, CancellationToken cancellationToken = default)
+        public async Task<PurchaseShortEntry> AddPurchaseAsync(AddPurchaseEntry purchase, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchase, nameof(purchase));
 
@@ -68,7 +68,7 @@ namespace StuffyHelper.Core.Features.Purchase
             await _purchaseStore.DeletePurchaseAsync(purchaseId, cancellationToken);
         }
 
-        public async Task<PurchaseShortEntry> UpdatePurchaseAsync(Guid purchaseId, UpsertPurchaseEntry purchase, CancellationToken cancellationToken = default)
+        public async Task<PurchaseShortEntry> UpdatePurchaseAsync(Guid purchaseId, UpdatePurchaseEntry purchase, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchase, nameof(purchase));
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));

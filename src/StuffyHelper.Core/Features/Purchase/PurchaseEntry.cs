@@ -22,14 +22,13 @@ namespace StuffyHelper.Core.Features.Purchase
         public virtual List<PurchaseUsageEntry> PurchaseUsages { get; set; } = new List<PurchaseUsageEntry>();
 
 
-        public void PatchFrom(UpsertPurchaseEntry entry)
+        public void PatchFrom(UpdatePurchaseEntry entry)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
             Name = entry.Name;
             Cost = entry.Cost;
             Amount = entry.Amount;
-            ShoppingId = entry.ShoppingId;
             IsActive = entry.IsActive;
         }
     }

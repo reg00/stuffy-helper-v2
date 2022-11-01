@@ -4,7 +4,7 @@
     {
         Task ProcessAsync(
             ITaggableEntry entry,
-            IEnumerable<string> tags,
+            IEnumerable<PurchaseTagShortEntry> tags,
             CancellationToken cancellationToken = default);
     }
 }
