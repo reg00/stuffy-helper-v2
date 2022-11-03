@@ -10,6 +10,7 @@ using System.Net;
 
 namespace StuffyHelper.Api.Controllers
 {
+    [Authorize]
     public class FriendsRequestController : Controller
     {
         private readonly IFriendsRequestService _requestService;
@@ -28,8 +29,6 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetSendedRequestsRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetSendedRequestsAsync()
         {
             var requests = await _requestService.GetSendedRequestsAsync(User, HttpContext.RequestAborted);
@@ -46,8 +45,6 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetIncomingRequestsRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetIncomingRequestsAsync()
         {
             var requests = await _requestService.GetIncomingRequestsAsync(User, HttpContext.RequestAborted);
@@ -64,8 +61,6 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetRequestRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetAsync(Guid requestId)
         {
             var request = await _requestService.GetRequestAsync(requestId, HttpContext.RequestAborted);
@@ -83,8 +78,6 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AcceptRequestRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> AcceptAsync(Guid requestId)
         {
             await _requestService.AcceptRequest(requestId, HttpContext.RequestAborted);
@@ -102,8 +95,6 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(FriendsRequestShort), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddRequestRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PostAsync([Required]string userId)
         {
             var request = await _requestService.AddRequestAsync(User, userId, HttpContext.RequestAborted);
@@ -118,8 +109,6 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteRequestRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteAsync(Guid requestId)
         {
             await _requestService.DeleteRequestAsync(requestId, HttpContext.RequestAborted);

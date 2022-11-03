@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using StuffyHelper.Authorization.Core.Models;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,9 +17,9 @@ namespace StuffyHelper.Authorization.Core.Features
 
         IEnumerable<IdentityRole> GetRoles();
 
-        Task<bool> CheckUserIsAdmin(ClaimsPrincipal user);
+        Task<bool> CheckUserIsAdmin(ClaimsPrincipal user, CancellationToken cancellationToken = default);
 
-        Task<UserEntry> GetUserByToken(ClaimsPrincipal user, CancellationToken cancellationToken = default);
+        Task<UserEntry> GetAccountInfoAsync(ClaimsPrincipal user, CancellationToken cancellationToken = default);
 
         IEnumerable<UserEntry> GetUserLogins(string userName = null);
 
@@ -27,5 +28,9 @@ namespace StuffyHelper.Authorization.Core.Features
         Task<UserEntry> UpdateUser(ClaimsPrincipal user, UpdateModel model);
 
         Task<UserEntry> GetUser(string userName = null, string userId = null);
+
+        AuthenticationProperties GoogleLogin(string redirectUrl);
+
+        Task GoogleResponse();
     }
 }
