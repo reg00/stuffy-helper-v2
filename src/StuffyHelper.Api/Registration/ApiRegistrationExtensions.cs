@@ -106,8 +106,7 @@ namespace StuffyHelper.Api.Registration
         private static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddEfAuthDbServices(configuration);
-            services.AddJwtAuthentication(configuration);
-            services.AddAuthorization();
+            services.AddStuffyAuthentication(configuration);
 
             return services;
         }
@@ -118,7 +117,9 @@ namespace StuffyHelper.Api.Registration
             app.ApplicationServices.AddEfDatabaseMigration();
 
             app.UseAuthTokenChecker();
+
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             return app;

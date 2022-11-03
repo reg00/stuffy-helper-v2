@@ -11,12 +11,17 @@ using StuffyHelper.Authorization.Core.Features.Authorization;
 using StuffyHelper.Authorization.Core.Features.Friends;
 using StuffyHelper.Authorization.Core.Features.Friend;
 using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using IAuthorizationService = StuffyHelper.Authorization.Core.Features.IAuthorizationService;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Authentication.OAuth;
 
 namespace StuffyHelper.Authorization.Core.Registration
 {
     public static class JwtRegistrationExtensions
     {
-        public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddStuffyAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             EnsureArg.IsNotNull(configuration, nameof(configuration));
 
@@ -28,15 +33,8 @@ namespace StuffyHelper.Authorization.Core.Registration
 
             EnsureArg.IsNotNull(authorizationOptions, nameof(authorizationOptions));
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = "JWT_OR_COOKIE";
-                options.DefaultChallengeScheme = "JWT_OR_COOKIE";
-                //options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                //options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                //options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddCookie("Cookies", options =>
+            services.AddAuthentication()
+            .AddCookie(options =>
             {
                 options.Events = new CookieAuthenticationEvents()
                 {
@@ -50,7 +48,7 @@ namespace StuffyHelper.Authorization.Core.Registration
                 options.AccessDeniedPath = "/api/auth/login";
                 options.ExpireTimeSpan = TimeSpan.FromHours(authorizationOptions.JWT.TokenExpireInHours);
             })
-            .AddJwtBearer("Bearer", options =>
+            .AddJwtBearer(options =>
             {
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
@@ -63,18 +61,25 @@ namespace StuffyHelper.Authorization.Core.Registration
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authorizationOptions.JWT.Secret))
                 };
             })
-            .AddPolicyScheme("JWT_OR_COOKIE", "JWT_OR_COOKIE", options =>
+            .AddGoogle(options =>
             {
-                options.ForwardDefaultSelector = context =>
+                options.ClientId = authorizationOptions.Google.CLientId;
+                options.ClientSecret = authorizationOptions.Google.CLientSecret;
+                //options.CallbackPath = "/api/auth/google-callback";
+                options.Events = new OAuthEvents()
                 {
-                    // filter by auth type
-                    string authorization = context.Request.Headers[HeaderNames.Authorization];
-                    if (!string.IsNullOrEmpty(authorization) && authorization.StartsWith("Bearer "))
-                        return "Bearer";
-
-                    // otherwise always check for cookie auth
-                    return "Cookies";
                 };
+            });
+
+            services.AddAuthorization(options =>
+            {
+                var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
+                    CookieAuthenticationDefaults.AuthenticationScheme,
+                    JwtBearerDefaults.AuthenticationScheme,
+                    GoogleDefaults.AuthenticationScheme);
+
+                defaultAuthorizationPolicyBuilder = defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();
+                options.DefaultPolicy = defaultAuthorizationPolicyBuilder.Build();
             });
 
             services.AddAuthentificationServices();
