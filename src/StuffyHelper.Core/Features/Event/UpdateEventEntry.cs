@@ -1,5 +1,4 @@
-﻿using EnsureThat;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.Event
 {
@@ -13,25 +12,5 @@ namespace StuffyHelper.Core.Features.Event
         public DateTime EventDateEnd { get; set; }
         [Required]
         public bool IsCompleted { get; set; }
-        [Required]
-        public bool IsActive { get; set; }
-
-
-        public EventEntry ToCommonEntry(string userId)
-        {
-            EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
-
-            return new EventEntry()
-            {
-                Name = Name,
-                Description = Description,
-                CreatedDate = DateTime.UtcNow,
-                UserId = userId,
-                EventDateStart = EventDateStart,
-                EventDateEnd = EventDateEnd,
-                IsCompleted = IsCompleted,
-                IsActive = true
-            };
-        }
     }
 }

@@ -6,7 +6,6 @@ namespace StuffyHelper.Core.Features.Participant
     {
         [Required]
         public Guid EventId { get; set; }
-        public bool IsActive { get; set; }
         [Required]
         public string UserId { get; set; }
 

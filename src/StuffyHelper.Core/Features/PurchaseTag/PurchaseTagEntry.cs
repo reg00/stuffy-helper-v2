@@ -29,7 +29,6 @@ namespace StuffyHelper.Core.Features.PurchaseTag
             EnsureArg.IsNotNull(entry, nameof(entry));
 
             Name = entry.Name;
-            IsActive = entry.IsActive;
         }
     }
 }

@@ -27,7 +27,6 @@ namespace StuffyHelper.Core.Features.Shopping
             ParticipantId = entry.ParticipantId;
             Check = entry.Check;
             Description = entry.Description;
-            IsActive = entry.IsActive;
         }
 
     }

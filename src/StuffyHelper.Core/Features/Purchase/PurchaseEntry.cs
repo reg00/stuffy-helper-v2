@@ -29,7 +29,7 @@ namespace StuffyHelper.Core.Features.Purchase
             Name = entry.Name;
             Cost = entry.Cost;
             Amount = entry.Amount;
-            IsActive = entry.IsActive;
+            UnitTypeId = entry.UnitTypeId;
         }
     }
 }

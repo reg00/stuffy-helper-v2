@@ -22,7 +22,6 @@ namespace StuffyHelper.Core.Features.Participant
             EnsureArg.IsNotNull(entry, nameof(entry));
 
             EventId = entry.EventId;
-            IsActive = entry.IsActive;
         }
     }
 }

@@ -11,6 +11,5 @@ namespace StuffyHelper.Core.Features.Shopping
         public string? Check { get; set; }
         [Required]
         public string Description { get; set; }
-        public bool IsActive { get; set; }
     }
 }
