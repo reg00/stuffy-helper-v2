@@ -47,10 +47,9 @@ namespace StuffyHelper.Core.Features.Participant
             int limit = 10,
             Guid? eventId = null,
             string userId = null,
-            bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
-            var resp = await _participantStore.GetParticipantsAsync(offset, limit, eventId, userId, isActive, cancellationToken);
+            var resp = await _participantStore.GetParticipantsAsync(offset, limit, eventId, userId, cancellationToken);
             var participants = new List<ParticipantShortEntry>();
 
             foreach (var @Participant in resp.Data)

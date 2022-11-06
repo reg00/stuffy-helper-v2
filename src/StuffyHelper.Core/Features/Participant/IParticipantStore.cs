@@ -11,7 +11,6 @@ namespace StuffyHelper.Core.Features.Participant
             int limit = 10,
             Guid? eventId = null,
             string userId = null,
-            bool? isActive = null,
             CancellationToken cancellationToken = default);
 
         Task<ParticipantEntry> AddParticipantAsync(ParticipantEntry participant, CancellationToken cancellationToken = default);

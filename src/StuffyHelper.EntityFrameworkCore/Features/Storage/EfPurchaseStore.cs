@@ -52,7 +52,6 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             Guid? shoppingId = null,
             IEnumerable<string> purchaseTags = null,
             Guid? unitTypeId = null,
-            bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
             try
@@ -63,7 +62,6 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.ToLower().Contains(name.ToLower())) &&
                     (costMin == null || costMin <= e.Cost) &&
                     (costMax == null || costMax >= e.Cost) &&
-                    (isActive == null || isActive == e.IsActive) &&
                     (shoppingId == null || e.ShoppingId == shoppingId) && 
                     (unitTypeId == null || e.UnitTypeId == unitTypeId) &&
                     (purchaseTags == null || !purchaseTags.Any() || e.PurchaseTags.Any(tag => purchaseTags.Select(tag => tag.ToLower()).Contains(tag.Name.ToLower()))))
@@ -115,9 +113,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     throw new ResourceNotFoundException($"Purchase with Id '{purchaseId}' not found.");
                 }
 
-                purchase.IsActive = false;
-
-                _context.Purchases.Update(purchase);
+                _context.Purchases.Remove(purchase);
                 await _context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)

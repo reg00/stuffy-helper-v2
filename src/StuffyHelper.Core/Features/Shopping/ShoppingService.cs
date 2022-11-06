@@ -30,11 +30,10 @@ namespace StuffyHelper.Core.Features.Shopping
             Guid? participantId = null,
             Guid? eventId = null,
             string description = null,
-            bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
             var resp = await _shoppingStore.GetShoppingsAsync(offset, limit, shoppingDateStart, shoppingDateEnd,
-                                                               participantId, eventId, description, isActive, cancellationToken);
+                                                               participantId, eventId, description, cancellationToken);
 
             return new Response<ShoppingShortEntry>()
             {

@@ -14,8 +14,7 @@ namespace StuffyHelper.Core.Features.Participant
             return new ParticipantEntry()
             {
                 EventId = EventId,
-                UserId = UserId,
-                IsActive = true
+                UserId = UserId
             };
         }
     }
