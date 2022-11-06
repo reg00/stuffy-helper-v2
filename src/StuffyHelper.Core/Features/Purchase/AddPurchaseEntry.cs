@@ -25,8 +25,7 @@ namespace StuffyHelper.Core.Features.Purchase
                 Cost = Cost,
                 Amount = Amount,
                 ShoppingId = ShoppingId,
-                UnitTypeId = UnitTypeId,
-                IsActive = true
+                UnitTypeId = UnitTypeId
             };
         }
     }

@@ -15,7 +15,6 @@ namespace StuffyHelper.Core.Features.Purchase
             Guid? shoppingId = null,
             IEnumerable<string> purchaseTags = null,
             Guid? unitTypeId = null,
-            bool? isActive = null,
             CancellationToken cancellationToken = default);
 
         Task<PurchaseEntry> AddPurchaseAsync(PurchaseEntry purchase, CancellationToken cancellationToken = default);

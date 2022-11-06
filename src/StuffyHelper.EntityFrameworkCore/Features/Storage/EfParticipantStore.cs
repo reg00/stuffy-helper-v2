@@ -47,14 +47,12 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             int limit = 10,
             Guid? eventId = null,
             string userId = null,
-            bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
             try
             {
                 var searchedData = await _context.Participants
                     .Where(e => (string.IsNullOrWhiteSpace(userId) || e.UserId.ToLower().Equals(userId.ToLower())) &&
-                    (isActive == null || isActive == e.IsActive) &&
                     (eventId == null || e.EventId == eventId))
                     .OrderByDescending(e => e.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
@@ -110,9 +108,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     throw new ResourceNotFoundException($"Participant with Id '{participantId}' not found.");
                 }
 
-                participant.IsActive = false;
-
-                _context.Participants.Update(participant);
+                _context.Participants.Remove(participant);
                 await _context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)

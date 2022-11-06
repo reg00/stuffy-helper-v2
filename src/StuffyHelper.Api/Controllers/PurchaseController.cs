@@ -37,11 +37,10 @@ namespace StuffyHelper.Api.Controllers
             double? costMax = null,
             Guid? shoppingId = null,
             IEnumerable<string> purchaseTags = null,
-            Guid? unitTypeId = null,
-            bool? isActive = null)
+            Guid? unitTypeId = null)
         {
             var purchaseResponse = await _purchaseService.GetPurchasesAsync(offset, limit, name, costMin, costMax, shoppingId,
-                                                                            purchaseTags, unitTypeId, isActive, HttpContext.RequestAborted);
+                                                                            purchaseTags, unitTypeId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, purchaseResponse);
         }

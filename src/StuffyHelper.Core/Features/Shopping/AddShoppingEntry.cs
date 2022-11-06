@@ -21,8 +21,7 @@ namespace StuffyHelper.Core.Features.Shopping
                 ParticipantId = ParticipantId,
                 EventId = EventId,
                 ShoppingDate = ShoppingDate,
-                Description = Description,
-                IsActive = true
+                Description = Description
             };
         }
     }

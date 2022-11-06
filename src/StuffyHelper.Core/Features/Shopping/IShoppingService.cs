@@ -14,7 +14,6 @@ namespace StuffyHelper.Core.Features.Shopping
             Guid? participantId = null,
             Guid? eventId = null,
             string description = null,
-            bool? isActive = null,
             CancellationToken cancellationToken = default);
 
         Task<ShoppingShortEntry> AddShoppingAsync(AddShoppingEntry shopping, CancellationToken cancellationToken = default);

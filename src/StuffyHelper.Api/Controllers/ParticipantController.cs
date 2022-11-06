@@ -33,10 +33,9 @@ namespace StuffyHelper.Api.Controllers
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
-            string userId = null,
-            bool? isActive = null)
+            string userId = null)
         {
-            var participantResponse = await _participantService.GetParticipantsAsync(offset, limit, eventId, userId, isActive, HttpContext.RequestAborted);
+            var participantResponse = await _participantService.GetParticipantsAsync(offset, limit, eventId, userId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, participantResponse);
         }

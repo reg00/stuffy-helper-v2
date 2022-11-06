@@ -36,11 +36,10 @@ namespace StuffyHelper.Core.Features.Purchase
             Guid? shoppingId = null,
             IEnumerable<string> purchaseTags = null,
             Guid? unitTypeId = null,
-            bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
             var resp = await _purchaseStore.GetPurchasesAsync(offset, limit, name, costMin, costMax,
-                                                              shoppingId, purchaseTags, unitTypeId, isActive, cancellationToken);
+                                                              shoppingId, purchaseTags, unitTypeId, cancellationToken);
 
             return new Response<PurchaseShortEntry>()
             {

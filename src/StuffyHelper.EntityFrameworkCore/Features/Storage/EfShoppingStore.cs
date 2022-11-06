@@ -49,7 +49,6 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             Guid? participantId = null,
             Guid? eventId = null,
             string description = null,
-            bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
             try
@@ -59,7 +58,6 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     (shoppingDateEnd == null || e.ShoppingDate <= shoppingDateEnd.Value) &&
                     (participantId == null || e.ParticipantId == participantId) &&
                     (eventId == null || e.EventId == eventId) &&
-                    (isActive == null || isActive == e.IsActive) &&
                     (string.IsNullOrEmpty(description) || e.Description.ToLower().Contains(description.ToLower())))
                     .OrderByDescending(e => e.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
@@ -108,9 +106,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     throw new ResourceNotFoundException($"Shopping with Id '{shoppingId}' not found.");
                 }
 
-                Shopping.IsActive = false;
-
-                _context.Shoppings.Update(Shopping);
+                _context.Shoppings.Remove(Shopping);
                 await _context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)

@@ -14,7 +14,6 @@ namespace StuffyHelper.Core.Features.Purchase
         public double Amount { get; set; }
         public Guid ShoppingId { get; set; }
         public Guid UnitTypeId { get; set; }
-        public bool IsActive { get; set; }
 
         public virtual ShoppingEntry Shopping { get; set; }
         public virtual List<PurchaseTagEntry> PurchaseTags { get; set; } = new List<PurchaseTagEntry>();
