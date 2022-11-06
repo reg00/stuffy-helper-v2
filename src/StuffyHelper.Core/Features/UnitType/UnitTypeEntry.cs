@@ -16,7 +16,6 @@ namespace StuffyHelper.Core.Features.UnitType
             EnsureArg.IsNotNull(entry, nameof(entry));
 
             Name = entry.Name;
-            IsActive = entry.IsActive;
         }
     }
 }

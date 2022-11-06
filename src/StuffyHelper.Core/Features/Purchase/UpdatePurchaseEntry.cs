@@ -15,6 +15,5 @@ namespace StuffyHelper.Core.Features.Purchase
         public List<PurchaseTagShortEntry> PurchaseTags { get; init; }
         [Required]
         public Guid UnitTypeId { get; set; }
-        public bool IsActive { get; set; }
     }
 }

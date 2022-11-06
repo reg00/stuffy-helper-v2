@@ -6,7 +6,6 @@ namespace StuffyHelper.Core.Features.UnitType
     {
         [Required]
         public string Name { get; set; }
-        public bool IsActive { get; set; }
 
         public UnitTypeEntry ToCommonEntry()
         {
