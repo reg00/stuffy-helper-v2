@@ -30,7 +30,9 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                 if (entry is null)
                     throw new ResourceNotFoundException($"Purchase with Id '{purchaseId}' Not Found.");
 
-                return new PurchaseEntry(entry);
+                entry.PurchaseTags = entry.PurchaseTags.Where(x => x.IsActive == true).ToList();
+
+                return entry;
             }
             catch (ResourceNotFoundException ex)
             {
@@ -70,7 +72,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 return new Response<PurchaseEntry>()
                 {
-                    Data = searchedData.Skip(offset).Take(limit).Select(x => new PurchaseEntry(x)),
+                    Data = searchedData.Skip(offset).Take(limit),
                     TotalPages = (int)Math.Ceiling(searchedData.Count() / (double)limit),
                     Total = searchedData.Count()
                 };
@@ -90,7 +92,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                 var entry = await _context.Purchases.AddAsync(purchase, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
                 _context.Entry(entry.Entity).Reference(x => x.UnitType).Load();
-                return new PurchaseEntry(entry.Entity);
+                entry.Entity.PurchaseTags = entry.Entity.PurchaseTags.Where(x => x.IsActive == true).ToList();
+                return entry.Entity;
             }
             catch (Exception ex)
             {
@@ -130,7 +133,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             {
                 var entry = _context.Purchases.Update(purchase);
                 await _context.SaveChangesAsync(cancellationToken);
-                return new PurchaseEntry(entry.Entity);
+                entry.Entity.PurchaseTags = entry.Entity.PurchaseTags.Where(x => x.IsActive == true).ToList();
+                return entry.Entity;
             }
             catch (ResourceNotFoundException)
             {
