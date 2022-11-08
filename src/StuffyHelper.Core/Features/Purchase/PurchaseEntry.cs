@@ -21,28 +21,6 @@ namespace StuffyHelper.Core.Features.Purchase
         public virtual UnitTypeEntry UnitType { get; set; }
         public virtual List<PurchaseUsageEntry> PurchaseUsages { get; set; } = new List<PurchaseUsageEntry>();
 
-
-        public PurchaseEntry()
-        {
-
-        }
-
-        public PurchaseEntry(PurchaseEntry entry)
-        {
-            EnsureArg.IsNotNull(entry, nameof(entry));
-
-            Id = entry.Id;
-            Amount = entry.Amount;
-            Cost = entry.Cost;
-            Name = entry.Name;
-            ShoppingId = entry.ShoppingId;
-            UnitTypeId = entry.UnitTypeId;
-            PurchaseTags = entry.PurchaseTags.Where(x => x.IsActive == true).ToList();
-            PurchaseUsages = entry.PurchaseUsages;
-            Shopping = entry.Shopping;
-            UnitType = entry.UnitType;
-        }
-
         public void PatchFrom(UpdatePurchaseEntry entry)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
