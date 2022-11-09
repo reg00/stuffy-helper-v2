@@ -1,0 +1,52 @@
+version: '3.7'
+services:
+  api:
+    image: slavadno/stuffyhelper
+    build: .
+    ports:
+      - 7777:8080
+    environment:
+      - Authorization__ConnectionString=Server=<server>;Port=<port>;Database=<catalog>;User Id=<user>;Password=<password>;
+      - Authorization__JWT__Secret=<secret>
+      - Authorization__JWT__ValidIssuer=<issuer>
+      - Authorization__JWT__ValidAudience=<audience>
+      - EntityFramework__DbProvider=PostgreSql;
+      - EntityFramework__ConnectionString=Server=<server>;Port=<port>;Database=<catalog>;User Id=<user>;Password=<password>;
+      - MinioStore__Endpoint=<minio_endpoint>
+      - MinioStore__AccessKey=<minio_access_key>
+      - MinioStore__SecretKey=<minio_secret_key>
+      - MinioStore__NetworkTimeout=3600
+      - MinioStore__PresignedUrlExpiry=12:00:00
+      - StuffyFileWeb__StuffyFileStore__ContainerName=<container_name>
+      - EmailService__Server=<email_server>
+      - EmailService__Port=<email_port>
+      - EmailService__Account=<email_account>
+      - EmailService__Password=<email_password>
+      - EmailService__SenderEmail=<email_sender_email>
+      - EmailService__SenderName=<email_sender_password>
+    depends_on:
+      - postgres-web
+      - s3
+    restart: unless-stopped
+
+  postgres-web:
+    image: postgres:12.4-alpine
+    environment:
+        - POSTGRES_MULTIPLE_DATABASES=<catalog1, catalog2>
+        - POSTGRES_USER=<user>
+        - POSTGRES_PASSWORD=<password>
+        - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+        - ../stuffydata/postgresql/data:/var/lib/postgresql/data
+    restart: unless-stopped
+    
+  s3:
+    image: minio/minio
+    ports:
+      - <ports>
+    volumes:
+      - ../stuffydata/minio/data:/data
+    environment:
+      MINIO_ACCESS_KEY: <minio_access_key>
+      MINIO_SECRET_KEY: <minio_secret_key>
+    command: server /data
