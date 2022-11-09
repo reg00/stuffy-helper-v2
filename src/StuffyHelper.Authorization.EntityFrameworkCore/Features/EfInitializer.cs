@@ -63,6 +63,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features
                     MiddleName = "Олегович",
                     LastName = "Максимов",
                     PhoneNumber = "+79174409895",
+                    EmailConfirmed = true
                 };
 
                 _context.Users.Add(user);

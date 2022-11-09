@@ -25,6 +25,7 @@
     <ProjectReference Include="..\StuffyHelper.Authorization.Core\StuffyHelper.Authorization.Core.csproj" />
     <ProjectReference Include="..\StuffyHelper.Authorization.EntityFrameworkCore\StuffyHelper.Authorization.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\StuffyHelper.Core\StuffyHelper.Core.csproj" />
+    <ProjectReference Include="..\StuffyHelper.EmailService.Core\StuffyHelper.EmailService.Core.csproj" />
     <ProjectReference Include="..\StuffyHelper.EntityFrameworkCore\StuffyHelper.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\StuffyHelper.Minio\StuffyHelper.Minio.csproj" />
   </ItemGroup>

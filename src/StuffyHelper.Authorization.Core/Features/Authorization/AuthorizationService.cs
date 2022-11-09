@@ -36,6 +36,8 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
             var user = await _userManager.FindByNameAsync(model.Username);
 
+            if (!await _userManager.IsEmailConfirmedAsync(user))
+                throw new AuthorizationException("Вы не подтвердили свой email");
 
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
@@ -77,7 +79,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
         }
 
-        public async Task<UserEntry> Register(RegisterModel model)
+        public async Task<string> Register(RegisterModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
 
@@ -95,9 +97,8 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
             await _roleManager.CreateRolesIfNotExists();
             await identityUser.AddRoleToUser(_roleManager, _userManager, UserType.User);
-            var rolesList = await _userManager.GetRolesAsync(identityUser);
 
-            return new UserEntry(identityUser, rolesList);
+            return await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
         }
 
         public IEnumerable<IdentityRole> GetRoles() => _roleManager.Roles.ToList();
@@ -196,6 +197,32 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var rolesList = await _userManager.GetRolesAsync(user);
 
             return new UserEntry(user, rolesList);
+        }
+
+        public async Task<UserEntry> ConfirmEmail(string login, string code)
+        {
+            if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(code))
+            {
+                throw new ArgumentNullException($"Поля {nameof(login)},{nameof(code)} должны быть заполнены");
+            }
+
+            var user = await _userManager.FindByNameAsync(login);
+
+            if (user == null)
+            {
+                throw new AuthorizationResourceNotFoundException($"Пользователь с логином {login} отсутствует");
+            }
+
+            var result = await _userManager.ConfirmEmailAsync(user, code);
+
+            if (result.Succeeded)
+            {
+                var rolesList = await _userManager.GetRolesAsync(user);
+
+                return new UserEntry(user, rolesList);
+            }
+            else
+                throw new AuthorizationException("Неверный код");
         }
     }
 }
