@@ -7,6 +7,7 @@ using Newtonsoft.Json.Converters;
 using StuffyHelper.Api.Features.Middlewares;
 using StuffyHelper.Authorization.Core.Registration;
 using StuffyHelper.Authorization.EntityFrameworkCore.Registration;
+using StuffyHelper.EmailService.Core.Registration;
 using StuffyHelper.EntityFrameworkCore.Registration;
 using StuffyHelper.Minio.Registration;
 using System.Reflection;
@@ -80,6 +81,8 @@ namespace StuffyHelper.Api.Registration
             });
 
             services.AddMinioBlobDataStores(configuration);
+
+            services.AddEmailService(configuration);
 
             return services;
         }

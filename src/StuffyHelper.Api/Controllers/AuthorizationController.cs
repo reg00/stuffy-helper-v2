@@ -1,25 +1,30 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using StuffyHelper.Api.Web;
-using StuffyHelper.Authorization.Core.Models;
-using StuffyHelper.Core.Features.Common;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using StuffyHelper.Api.Web;
+using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Authorization.Core.Models.User;
+using StuffyHelper.Core.Features.Common;
+using StuffyHelper.EmailService.Core.Service;
 
 namespace StuffyHelper.Api.Controllers
 {
     public class AuthorizationController : Controller
     {
         private readonly Authorization.Core.Features.IAuthorizationService _authorizationService;
+        private readonly IEmailService _emailService;
 
-        public AuthorizationController(Authorization.Core.Features.IAuthorizationService authorizationService)
+        public AuthorizationController(
+            Authorization.Core.Features.IAuthorizationService authorizationService,
+            IEmailService emailService)
         {
             _authorizationService = authorizationService;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -39,9 +44,29 @@ namespace StuffyHelper.Api.Controllers
                 return BadRequest(new ErrorResponse(ModelState));
             }
 
-            var user = await _authorizationService.Register(model);
+            var code = await _authorizationService.Register(model);
 
-            return Ok(new GetUserEntry(user));
+            var callbackUrl = Url.Action(
+                "ConfirmEmail",
+                "Authorization",
+                new { login = model.Username, code = code },
+                protocol: HttpContext.Request.Scheme);
+
+            await _emailService.SendEmailAsync(model.Email, "Confirm your account",
+                $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
+
+            return Ok("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.EmailConfirmRoute)]
+        public async Task<IActionResult> ConfirmEmail(string login, string code)
+        {
+            var user = await _authorizationService.ConfirmEmail(login, code);
+
+            return Ok(user);
         }
 
         /// <summary>

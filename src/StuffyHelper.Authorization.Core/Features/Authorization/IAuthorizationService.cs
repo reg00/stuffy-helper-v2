@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Authorization.Core.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,7 +13,7 @@ namespace StuffyHelper.Authorization.Core.Features
 
         Task Logout(HttpContext httpContext);
 
-        Task<UserEntry> Register(RegisterModel model);
+        Task<string> Register(RegisterModel model);
 
         IEnumerable<IdentityRole> GetRoles();
 
@@ -27,5 +28,7 @@ namespace StuffyHelper.Authorization.Core.Features
         Task<UserEntry> UpdateUser(ClaimsPrincipal user, UpdateModel model);
 
         Task<UserEntry> GetUser(string userName = null, string userId = null);
+
+        Task<UserEntry> ConfirmEmail(string login, string code);
     }
 }
