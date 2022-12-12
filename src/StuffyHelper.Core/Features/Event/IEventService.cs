@@ -38,5 +38,7 @@ namespace StuffyHelper.Core.Features.Event
         Task DeletePrimalEventMedia(Guid eventId, CancellationToken cancellationToken = default);
 
         Task<EventShortEntry> UpdatePrimalEventMediaAsync(Guid eventId, IFormFile file, CancellationToken cancellationToken = default);
+
+        Task<EventShortEntry> CompleteEventAsync(Guid eventId, ClaimsPrincipal user, bool isComplete, CancellationToken cancellationToken = default);
     }
 }

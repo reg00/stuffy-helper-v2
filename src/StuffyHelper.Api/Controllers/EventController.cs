@@ -128,7 +128,7 @@ namespace StuffyHelper.Api.Controllers
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [Route(KnownRoutes.DeleteEventPrimalMedia)]
+        [Route(KnownRoutes.DeleteEventPrimalMediaRoute)]
         public async Task<IActionResult> DeletePrimalMediaAsync([FromRoute] Guid eventId)
         {
             await _eventService.DeletePrimalEventMedia(eventId, HttpContext.RequestAborted);
@@ -146,12 +146,46 @@ namespace StuffyHelper.Api.Controllers
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        [Route(KnownRoutes.UpdateEventPrimalMedia)]
+        [Route(KnownRoutes.UpdateEventPrimalMediaRoute)]
         public async Task<IActionResult> PatchPrimalMediaAsync([FromRoute] Guid eventId, IFormFile file)
         {
             var @event = await _eventService.UpdatePrimalEventMediaAsync(eventId, file, HttpContext.RequestAborted);
 
             return Ok(@event);
+        }
+
+        /// <summary>
+        /// Завершение ивента
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Produces(KnownContentTypes.ApplicationJson)]
+        [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.CompleteEventRoute)]
+        public async Task<IActionResult> CompleteEventAsync([FromRoute] Guid eventId)
+        {
+            await _eventService.CompleteEventAsync(eventId, User, true, HttpContext.RequestAborted);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Завершение ивента
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Produces(KnownContentTypes.ApplicationJson)]
+        [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.ReopenEventRoute)]
+        public async Task<IActionResult> ReopenEventAsync([FromRoute] Guid eventId)
+        {
+            await _eventService.CompleteEventAsync(eventId, User, false, HttpContext.RequestAborted);
+
+            return Ok();
         }
     }
 }

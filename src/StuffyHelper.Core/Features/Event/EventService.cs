@@ -1,6 +1,6 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Core.Exceptions;
@@ -205,6 +205,32 @@ namespace StuffyHelper.Core.Features.Event
             @event = await _eventStore.UpdateEventAsync(@event, cancellationToken);
 
             return new EventShortEntry(@event);
+        }
+
+        public async Task<EventShortEntry> CompleteEventAsync(Guid eventId, ClaimsPrincipal user, bool isComplete, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
+            EnsureArg.IsNotNull(user, nameof(user));
+
+            var isAdmin = await _authorizationService.CheckUserIsAdmin(user, cancellationToken);
+            var stuffyUser = await _authorizationService.GetUser(user.Identity.Name);
+
+            var existingEvent = await _eventStore.GetEventAsync(eventId, cancellationToken);
+
+            if (existingEvent is null)
+            {
+                throw new ResourceNotFoundException($"Event Id '{eventId}' not found");
+            }
+
+            if(!isAdmin || existingEvent.UserId != stuffyUser.Id)
+            {
+                throw new AuthorizationException($"You don't have permission to complete/uncomplete event.");
+            }
+
+            existingEvent.IsCompleted = isComplete;
+            var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
+
+            return new EventShortEntry(result);
         }
     }
 }

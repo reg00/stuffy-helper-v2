@@ -107,7 +107,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
         {
             var stuffyUser = await _userManager.FindByNameAsync(user?.Identity?.Name);
             return await _userManager.IsInRoleAsync(stuffyUser, nameof(UserType.Admin));
-        } 
+        }
 
         public async Task<UserEntry> GetUserByToken(ClaimsPrincipal user, CancellationToken cancellationToken = default)
         {
