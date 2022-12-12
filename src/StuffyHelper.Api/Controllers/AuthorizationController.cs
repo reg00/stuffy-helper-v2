@@ -14,6 +14,7 @@ using StuffyHelper.EmailService.Core.Service;
 
 namespace StuffyHelper.Api.Controllers
 {
+    [Authorize]
     public class AuthorizationController : Controller
     {
         private readonly Authorization.Core.Features.IAuthorizationService _authorizationService;
@@ -31,6 +32,7 @@ namespace StuffyHelper.Api.Controllers
         /// Регистрация пользователя
         /// </summary>
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -59,6 +61,7 @@ namespace StuffyHelper.Api.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.EmailConfirmRoute)]
@@ -73,6 +76,7 @@ namespace StuffyHelper.Api.Controllers
         /// Логин
         /// </summary>
         [HttpPost]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -100,8 +104,6 @@ namespace StuffyHelper.Api.Controllers
         /// Выход
         /// </summary>
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [Route(KnownRoutes.LogoutRoute)]
         public async Task<IActionResult> Logout()
         {
@@ -115,6 +117,7 @@ namespace StuffyHelper.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordRoute)]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
         {
@@ -138,6 +141,7 @@ namespace StuffyHelper.Api.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordConfirmRoute)]
         public IActionResult ResetPassword(string code = null)
         {
@@ -152,6 +156,7 @@ namespace StuffyHelper.Api.Controllers
         /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
+        [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordConfirmRoute)]
         public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
         {
@@ -172,25 +177,23 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(IdentityRole), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.RolesRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{nameof(UserType.Admin)}")]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = $"{nameof(UserType.Admin)}")]
-        public IActionResult GetRoles()
+        public async Task<IActionResult> GetRoles()
         {
-            return Ok(_authorizationService.GetRoles());
+            var isAdmin = await _authorizationService.CheckUserIsAdmin(User, HttpContext.RequestAborted);
+
+            return isAdmin ? Ok(_authorizationService.GetRoles()) : Unauthorized();
         }
 
         /// <summary>
         /// Проверка пользователя на администратора
         /// </summary>
         [HttpGet]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.IsAdminRoute)]
         public async Task<IActionResult> CheckUserIsAdmin()
         {
-            var isAdmin = await _authorizationService.CheckUserIsAdmin(User);
+            var isAdmin = await _authorizationService.CheckUserIsAdmin(User, HttpContext.RequestAborted);
             return Ok(isAdmin);
         }
 
@@ -198,12 +201,10 @@ namespace StuffyHelper.Api.Controllers
         /// Получение данных о пользователе
         /// </summary>
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AccountRoute)]
-        public async Task<IActionResult> GetUserByToken()
+        public async Task<IActionResult> GetAccountInfoAsync()
         {
             var user = await _authorizationService.GetUserByToken(User);
 
@@ -214,22 +215,20 @@ namespace StuffyHelper.Api.Controllers
         /// Список зарегистрированных пользователей
         /// </summary>
         [HttpGet]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = $"{nameof(UserType.Admin)}")]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme, Roles = $"{nameof(UserType.Admin)}")]
         [ProducesResponseType(typeof(IEnumerable<UserEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UserLoginsRoute)]
-        public IActionResult GetUserLogins(string userName = null)
+        public async Task<IActionResult> GetUserLogins(string userName = null)
         {
-            return Ok(_authorizationService.GetUserLogins(userName));
+            var isAdmin = await _authorizationService.CheckUserIsAdmin(User, HttpContext.RequestAborted);
+
+            return isAdmin ? Ok(_authorizationService.GetUserLogins(userName)) : Unauthorized();
         }
 
         /// <summary>
         /// Изменение данных пользователя
         /// </summary>
         [HttpPatch]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         [ProducesResponseType(typeof(UserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.EditUserRoute)]
