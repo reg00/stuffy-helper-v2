@@ -58,7 +58,6 @@ namespace StuffyHelper.Core.Features.Event
             Description = entry.Description;
             EventDateEnd = entry.EventDateEnd;
             EventDateStart = entry.EventDateStart;
-            IsCompleted = entry.IsCompleted;
         }
     }
 }

@@ -50,8 +50,10 @@
         public const string GetEventsRoute = AddEventRoute;
         public const string DeleteEventRoute = GetEventRoute;
         public const string UpdateEventRoute = GetEventRoute;
-        public const string UpdateEventPrimalMedia = $"{GetEventRoute}/photo";
-        public const string DeleteEventPrimalMedia = $"{GetEventRoute}/photo";
+        public const string UpdateEventPrimalMediaRoute = $"{GetEventRoute}/photo";
+        public const string DeleteEventPrimalMediaRoute = $"{GetEventRoute}/photo";
+        public const string CompleteEventRoute = $"{GetEventRoute}/complete";
+        public const string ReopenEventRoute = $"{GetEventRoute}/reopen";
 
         public const string AddParticipantRoute = $"{DefaultRouteSegment}/{ParticipantsSegment}";
         public const string GetParticipantRoute = $"{AddParticipantRoute}/{ParticipantIdRouteSegment}";
