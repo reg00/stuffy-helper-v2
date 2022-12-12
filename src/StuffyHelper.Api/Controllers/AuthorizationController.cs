@@ -110,6 +110,62 @@ namespace StuffyHelper.Api.Controllers
         }
 
         /// <summary>
+        /// Отправка на email ссылки на сброс пароля
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(KnownRoutes.ResetPasswordRoute)]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ErrorResponse(ModelState));
+            }
+
+            var (name, code) = await _authorizationService.ForgotPasswordAsync(model);
+
+            var callbackUrl = Url.Action(
+                "ResetPassword",
+                "Authorization",
+                new { login = name, code = code },
+                protocol: HttpContext.Request.Scheme);
+
+            await _emailService.SendEmailAsync(model.Email, "Reset password",
+                $"Для того, чтобы изменить пароль, перейдите по ссылке: {callbackUrl}. Если вы не присылали запрос на изменение пароля, проигнорируйте сообщение.");
+
+            return Ok("Инструкция по изменению пароля отправлена на почту.");
+        }
+
+        [HttpGet]
+        [Route(KnownRoutes.ResetPasswordConfirmRoute)]
+        public IActionResult ResetPassword(string code = null)
+        {
+            EnsureArg.IsNotNullOrWhiteSpace(code, nameof(code));
+
+            return Ok(code);
+        }
+
+        /// <summary>
+        /// Сброс пароля. Выполняется после того, как перейдешь по ссылке на мыле.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route(KnownRoutes.ResetPasswordConfirmRoute)]
+        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ErrorResponse(ModelState));
+            }
+
+            await _authorizationService.ResetPasswordAsync(model);
+
+            return Ok("Пароль успешно изменен");
+        }
+
+        /// <summary>
         /// Список ролей
         /// </summary>
         [HttpGet]
