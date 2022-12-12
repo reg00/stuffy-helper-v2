@@ -23,7 +23,6 @@ namespace StuffyHelper.Authorization.Core.Models.User
             MiddleName = model.MiddleName;
             LastName = model.LastName;
             UserName = model.Username;
-            Email = model.Email;
             PhoneNumber = model.Phone;
         }
     }

@@ -42,6 +42,8 @@
         public const string IsAdminRoute = $"{AuthRoute}/is-admin";
         public const string AccountRoute = $"{AuthRoute}/account";
         public const string UserLoginsRoute = $"{AuthRoute}/users";
+        public const string ResetPasswordRoute = $"{AuthRoute}/reset-password";
+        public const string ResetPasswordConfirmRoute = $"{AuthRoute}/reset-password-confirm";
 
         public const string AddEventRoute = $"{DefaultRouteSegment}/{EventsSegment}";
         public const string GetEventRoute = $"{AddEventRoute}/{EventIdRouteSegment}";

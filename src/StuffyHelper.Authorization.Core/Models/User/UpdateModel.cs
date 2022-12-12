@@ -7,11 +7,6 @@ namespace StuffyHelper.Authorization.Core.Models
         [Required(ErrorMessage = "Необходимо заполнить поле 'UserName'")]
         public string Username { get; set; }
 
-        [EmailAddress(ErrorMessage = "Неверный формат электронной почты")]
-        public string Email { get; set; }
-
-        public string? Password { get; set; }
-
         public string? FirstName { get; set; }
 
         public string? MiddleName { get; set; }

@@ -155,18 +155,10 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             EnsureArg.IsNotNull(user, nameof(user));
 
             var userToUpdate = await _userManager.FindByNameAsync(user.Identity.Name);
-
             if (userToUpdate is null)
                 throw new AuthorizationResourceNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
 
             userToUpdate.PatchFrom(model);
-
-            if (!string.IsNullOrWhiteSpace(model.Password))
-            {
-                string token = await _userManager.GeneratePasswordResetTokenAsync(userToUpdate);
-                var passwordChangeResult = await _userManager.ResetPasswordAsync(userToUpdate, token, model.Password);
-                passwordChangeResult.HandleIdentityResult();
-            }
 
             var updateUserResult = await _userManager.UpdateAsync(userToUpdate);
             var updatedUser = await _userManager.FindByIdAsync(userToUpdate.Id);
@@ -223,6 +215,38 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             }
             else
                 throw new AuthorizationException("Неверный код");
+        }
+
+        public async Task<(string name, string code)> ForgotPasswordAsync(ForgotPasswordModel model)
+        {
+            EnsureArg.IsNotNull(model, nameof(model));
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+                throw new AuthorizationException("Неправильно введен email");
+
+            var code = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            return new(user.UserName, code);
+        }
+
+        public async Task ResetPasswordAsync(ResetPasswordModel model)
+        {
+            EnsureArg.IsNotNull(model, nameof(model));
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                throw new AuthorizationResourceNotFoundException("Пользователь не найден");
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);
+            if (result.Succeeded)
+            {
+                return;
+            }
+
+            throw new AuthorizationException("Во время сброса пароля произошла ошибка");
         }
     }
 }
