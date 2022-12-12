@@ -9,6 +9,7 @@ using System.Net;
 
 namespace StuffyHelper.Api.Controllers
 {
+    [Authorize]
     public class PurchaseController : Controller
     {
         private readonly IPurchaseService _purchaseService;
@@ -27,8 +28,6 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetPurchasesRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetAsync(
             int offset = 0,
             int limit = 10,
@@ -54,8 +53,6 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetPurchaseRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetAsync(Guid purchaseId)
         {
             var purchaseEntry = await _purchaseService.GetPurchaseAsync(purchaseId, HttpContext.RequestAborted);
@@ -71,8 +68,6 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(PurchaseShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddPurchaseRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PostAsync([FromBody] AddPurchaseEntry addEntry)
         {
             var purchase = await _purchaseService.AddPurchaseAsync(addEntry, HttpContext.RequestAborted);
@@ -87,8 +82,6 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeletePurchaseRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> DeleteAsync(Guid purchaseId)
         {
             await _purchaseService.DeletePurchaseAsync(purchaseId, HttpContext.RequestAborted);
@@ -104,8 +97,6 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(PurchaseShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdatePurchaseRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PatchAsync(Guid purchaseId, [FromBody] UpdatePurchaseEntry updateEntry)
         {
             var entry = await _purchaseService.UpdatePurchaseAsync(purchaseId, updateEntry, HttpContext.RequestAborted);

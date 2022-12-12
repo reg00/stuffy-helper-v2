@@ -12,6 +12,7 @@ using System.Net;
 
 namespace StuffyHelper.Api.Controllers
 {
+    [Authorize]
     public class FriendsController : Controller
     {
         private readonly IFriendService _friendshipService;
@@ -30,8 +31,6 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetFriendsRoute)]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [Authorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
         public async Task<IActionResult> GetAsync(int limit = 20, int offset = 0)
         {
             var friends = await _friendshipService.GetFriends(User, limit, offset, HttpContext.RequestAborted);

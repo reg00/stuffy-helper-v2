@@ -109,8 +109,7 @@ namespace StuffyHelper.Api.Registration
         private static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddEfAuthDbServices(configuration);
-            services.AddJwtAuthentication(configuration);
-            services.AddAuthorization();
+            services.AddStuffyAuthentication(configuration);
 
             return services;
         }
