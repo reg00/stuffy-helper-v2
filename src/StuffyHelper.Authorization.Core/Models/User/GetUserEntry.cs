@@ -14,7 +14,7 @@
         public GetUserEntry()
         { }
 
-        public GetUserEntry(StuffyUser user, IList<string> roles = null)
+        public GetUserEntry(StuffyUser user, IList<string>? roles = null)
         {
             Id = user?.Id;
             Name = user?.UserName;

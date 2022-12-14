@@ -30,7 +30,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
 
                 return entry;
             }
-            catch (AuthorizationResourceNotFoundException ex)
+            catch (AuthorizationResourceNotFoundException)
             {
                 throw;
             }

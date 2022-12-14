@@ -30,7 +30,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 return entry;
             }
-            catch (ResourceNotFoundException ex)
+            catch (ResourceNotFoundException)
             {
                 throw;
             }
@@ -44,7 +44,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
         public async Task<Response<UnitTypeEntry>> GetUnitTypesAsync(
             int offset = 0,
             int limit = 10,
-            string name = null,
+            string? name = null,
             Guid? purchaseId = null,
             bool? isActive = null,
             CancellationToken cancellationToken = default)

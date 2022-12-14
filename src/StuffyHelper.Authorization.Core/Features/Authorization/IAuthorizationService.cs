@@ -22,13 +22,13 @@ namespace StuffyHelper.Authorization.Core.Features
 
         Task<UserEntry> GetUserByToken(ClaimsPrincipal user, CancellationToken cancellationToken = default);
 
-        IEnumerable<UserEntry> GetUserLogins(string userName = null);
+        IEnumerable<UserEntry> GetUserLogins(string? userName = null);
 
-        Task DeleteUser(string userName = null, string userId = null);
+        Task DeleteUser(string? userName = null, string? userId = null);
 
         Task<UserEntry> UpdateUser(ClaimsPrincipal user, UpdateModel model);
 
-        Task<UserEntry> GetUser(string userName = null, string userId = null);
+        Task<UserEntry> GetUser(string? userName = null, string? userId = null);
 
         Task<UserEntry> ConfirmEmail(string login, string code);
 

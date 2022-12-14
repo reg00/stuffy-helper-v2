@@ -31,11 +31,11 @@ namespace StuffyHelper.Api.Controllers
         public async Task<IActionResult> GetAsync(
             int offset = 0,
             int limit = 10,
-            string name = null,
+            string? name = null,
             double? costMin = null,
             double? costMax = null,
             Guid? shoppingId = null,
-            IEnumerable<string> purchaseTags = null,
+            IEnumerable<string>? purchaseTags = null,
             Guid? unitTypeId = null)
         {
             var purchaseResponse = await _purchaseService.GetPurchasesAsync(offset, limit, name, costMin, costMax, shoppingId,

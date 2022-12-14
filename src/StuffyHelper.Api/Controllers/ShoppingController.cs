@@ -35,7 +35,7 @@ namespace StuffyHelper.Api.Controllers
             DateTime? shoppingDateEnd = null,
             Guid? participantId = null,
             Guid? eventId = null,
-            string description = null)
+            string? description = null)
         {
             var shoppingResponse = await _shoppingService.GetShoppingsAsync(offset, limit, shoppingDateStart, shoppingDateEnd,
                                                                             participantId, eventId, description, HttpContext.RequestAborted);

@@ -32,7 +32,7 @@ namespace StuffyHelper.Api.Controllers
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
-            string userId = null)
+            string? userId = null)
         {
             var participantResponse = await _participantService.GetParticipantsAsync(offset, limit, eventId, userId, HttpContext.RequestAborted);
 

@@ -9,7 +9,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag
         Task<Response<PurchaseTagShortEntry>> GetPurchaseTagsAsync(
             int offset = 0,
             int limit = 10,
-            string name = null,
+            string? name = null,
             Guid? purchaseId = null,
             bool? isActive = null,
             CancellationToken cancellationToken = default);

@@ -13,7 +13,7 @@ namespace StuffyHelper.EntityFrameworkCore.Registration
         public static IServiceCollection AddDbStore<TDbContext>(
             this IServiceCollection services,
             IConfiguration configuration,
-            Action<NpgsqlDbContextOptionsBuilder> configurePostgreSql = null)
+            Action<NpgsqlDbContextOptionsBuilder>? configurePostgreSql = null)
             where TDbContext : DbContext
         {
             EnsureArg.IsNotNull(configuration, nameof(configuration));
