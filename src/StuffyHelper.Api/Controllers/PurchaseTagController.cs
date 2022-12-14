@@ -31,7 +31,7 @@ namespace StuffyHelper.Api.Controllers
         public async Task<IActionResult> GetAsync(
             int offset = 0,
             int limit = 10,
-            string name = null,
+            string? name = null,
             Guid? purchaseId = null,
             bool? isActive = null)
         {

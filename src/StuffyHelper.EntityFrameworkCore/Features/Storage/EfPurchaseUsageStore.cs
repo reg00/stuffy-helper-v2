@@ -30,7 +30,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 return entry;
             }
-            catch (ResourceNotFoundException ex)
+            catch (ResourceNotFoundException)
             {
                 throw;
             }

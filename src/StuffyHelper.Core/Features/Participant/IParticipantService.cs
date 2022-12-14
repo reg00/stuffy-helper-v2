@@ -10,7 +10,7 @@ namespace StuffyHelper.Core.Features.Participant
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
-            string userId = null,
+            string? userId = null,
             CancellationToken cancellationToken = default);
 
         Task<ParticipantShortEntry> AddParticipantAsync(UpsertParticipantEntry participant, CancellationToken cancellationToken = default);

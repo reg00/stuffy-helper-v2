@@ -45,7 +45,7 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
         {
             EnsureArg.IsNotNull(user, nameof(user));
 
-            var stuffyUser = await _authorizationService.GetUser(user.Identity.Name);
+            var stuffyUser = await _authorizationService.GetUser(user.Identity!.Name);
             var resp = await _requestStore.GetSendedRequestsAsync(stuffyUser.Id, cancellationToken);
             var requests = new List<FriendsRequestShort>();
 
@@ -58,7 +58,7 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
         {
             EnsureArg.IsNotNull(user, nameof(user));
 
-            var stuffyUser = await _authorizationService.GetUser(user.Identity.Name);
+            var stuffyUser = await _authorizationService.GetUser(user.Identity!.Name);
             var resp = await _requestStore.GetIncomingRequestsAsync(stuffyUser.Id, cancellationToken);
             var requests = new List<FriendsRequestShort>();
 
@@ -79,7 +79,7 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
             if (incomingUser.Id == requestUser.Id)
                 throw new AuthorizationException("Can not request yourself.");
 
-            var request = new FriendsRequest(incomingUser?.Id, requestUser.Id);
+            var request = new FriendsRequest(incomingUser.Id, requestUser.Id);
 
             var result = await _requestStore.AddRequestAsync(request, cancellationToken);
             return new FriendsRequestShort(result);

@@ -143,7 +143,7 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordConfirmRoute)]
-        public IActionResult ResetPassword(string code = null)
+        public IActionResult ResetPassword(string? code = null)
         {
             EnsureArg.IsNotNullOrWhiteSpace(code, nameof(code));
 
@@ -218,7 +218,7 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(IEnumerable<UserEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UserLoginsRoute)]
-        public async Task<IActionResult> GetUserLogins(string userName = null)
+        public async Task<IActionResult> GetUserLogins(string? userName = null)
         {
             var isAdmin = await _authorizationService.CheckUserIsAdmin(User, HttpContext.RequestAborted);
 

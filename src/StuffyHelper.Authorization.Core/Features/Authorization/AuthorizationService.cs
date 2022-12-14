@@ -123,7 +123,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             return new UserEntry(identityUser, rolesList);
         }
 
-        public IEnumerable<UserEntry> GetUserLogins(string userName = null)
+        public IEnumerable<UserEntry> GetUserLogins(string? userName = null)
         {
             var users = _userManager.Users
                 .Where(u => userName == null || u.UserName.ToLower().StartsWith(userName.ToLower()))
@@ -132,7 +132,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             return users;
         }
 
-        public async Task DeleteUser(string userName = null, string userId = null)
+        public async Task DeleteUser(string? userName = null, string? userId = null)
         {
             var error = string.Empty;
 
@@ -160,7 +160,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             EnsureArg.IsNotNull(model, nameof(model));
             EnsureArg.IsNotNull(user, nameof(user));
 
-            var userToUpdate = await _userManager.FindByNameAsync(user.Identity.Name);
+            var userToUpdate = await _userManager.FindByNameAsync(user.Identity!.Name);
             if (userToUpdate is null)
                 throw new AuthorizationResourceNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
 
@@ -174,7 +174,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             return new UserEntry(updatedUser, rolesList);
         }
 
-        public async Task<UserEntry> GetUser(string userName = null, string userId = null)
+        public async Task<UserEntry> GetUser(string? userName = null, string? userId = null)
         {
             if (string.IsNullOrWhiteSpace(userName) && string.IsNullOrWhiteSpace(userId))
                 throw new AuthorizationException("UserName or UserId required");

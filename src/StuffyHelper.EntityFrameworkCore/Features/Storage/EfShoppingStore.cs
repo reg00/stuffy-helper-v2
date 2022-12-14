@@ -30,7 +30,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 return entry;
             }
-            catch (ResourceNotFoundException ex)
+            catch (ResourceNotFoundException)
             {
                 throw;
             }
@@ -48,7 +48,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             DateTime? shoppingDateEnd = null,
             Guid? participantId = null,
             Guid? eventId = null,
-            string description = null,
+            string? description = null,
             CancellationToken cancellationToken = default)
         {
             try

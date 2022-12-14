@@ -31,7 +31,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 return entry;
             }
-            catch (ResourceNotFoundException ex)
+            catch (ResourceNotFoundException)
             {
                 throw;
             }
@@ -46,7 +46,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
-            string userId = null,
+            string? userId = null,
             CancellationToken cancellationToken = default)
         {
             try
