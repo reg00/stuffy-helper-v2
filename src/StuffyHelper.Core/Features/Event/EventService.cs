@@ -132,17 +132,51 @@ namespace StuffyHelper.Core.Features.Event
             }
         }
 
-        public async Task DeleteEventAsync(Guid eventId, CancellationToken cancellationToken = default)
+        public async Task DeleteEventAsync(Guid eventId, string currentUserName, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
+            EnsureArg.IsNotNullOrWhiteSpace(currentUserName, nameof(currentUserName));
+
+            await ValidateEventAsync(eventId, currentUserName, true, cancellationToken);
 
             await _eventStore.DeleteEventAsync(eventId, cancellationToken);
         }
 
-        public async Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpdateEventEntry @event, CancellationToken cancellationToken = default)
+        public async Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpdateEventEntry updateEvent, string currentUserName, CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotNull(@event, nameof(@event));
+            EnsureArg.IsNotNull(updateEvent, nameof(updateEvent));
+            EnsureArg.IsNotNullOrWhiteSpace(currentUserName, nameof(currentUserName));
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
+
+            var existingEvent = await ValidateEventAsync(eventId, currentUserName, true, cancellationToken);
+
+            existingEvent.PatchFrom(updateEvent);
+            var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
+
+            return new EventShortEntry(result);
+        }
+
+        public async Task DeletePrimalEventMedia(Guid eventId, string currentUserName, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
+            EnsureArg.IsNotNullOrWhiteSpace(currentUserName, nameof(currentUserName));
+
+            var existingEvent = await ValidateEventAsync(eventId, currentUserName, true, cancellationToken);
+
+            var primalMedia = await _mediaService.GetPrimalEventMedia(eventId, cancellationToken);
+
+            if (primalMedia is not null)
+                await _mediaService.DeleteMediaAsync(primalMedia.Id);
+
+            existingEvent.ImageUri = null;
+            await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
+        }
+
+        public async Task<EventShortEntry> UpdatePrimalEventMediaAsync(Guid eventId, IFormFile file, string currentUserName, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
+            EnsureArg.IsNotNullOrWhiteSpace(currentUserName, nameof(currentUserName));
+            EnsureArg.IsNotNull(file, nameof(file));
 
             var existingEvent = await _eventStore.GetEventAsync(eventId, cancellationToken);
 
@@ -151,43 +185,12 @@ namespace StuffyHelper.Core.Features.Event
                 throw new ResourceNotFoundException($"Event Id '{eventId}' not found");
             }
 
-            existingEvent.PatchFrom(@event);
-            var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
-
-            return new EventShortEntry(result);
-        }
-
-        public async Task DeletePrimalEventMedia(Guid eventId, CancellationToken cancellationToken = default)
-        {
-            EnsureArg.IsNotDefault(eventId, nameof(eventId));
-
-            var @event = await _eventStore.GetEventAsync(eventId, cancellationToken);
-
-            if (@event is null)
+            if(existingEvent.IsCompleted)
             {
-                throw new ResourceNotFoundException($"Event Id '{eventId}' not found");
+                throw new StuffyException("Cannot edit completed event");
             }
 
-            var primalMedia = await _mediaService.GetPrimalEventMedia(eventId, cancellationToken);
-
-            if (primalMedia is not null)
-                await _mediaService.DeleteMediaAsync(primalMedia.Id);
-
-            @event.ImageUri = null;
-            await _eventStore.UpdateEventAsync(@event, cancellationToken);
-        }
-
-        public async Task<EventShortEntry> UpdatePrimalEventMediaAsync(Guid eventId, IFormFile file, CancellationToken cancellationToken = default)
-        {
-            EnsureArg.IsNotDefault(eventId, nameof(eventId));
-            EnsureArg.IsNotNull(file, nameof(file));
-
-            var @event = await _eventStore.GetEventAsync(eventId, cancellationToken);
-
-            if (@event is null)
-            {
-                throw new ResourceNotFoundException($"Event Id '{eventId}' not found");
-            }
+            await CheckEventPermissionsAsync(existingEvent.UserId, currentUserName, cancellationToken);
 
             var primalMedia = await _mediaService.GetPrimalEventMedia(eventId, cancellationToken);
 
@@ -201,19 +204,33 @@ namespace StuffyHelper.Core.Features.Event
                     cancellationToken: cancellationToken);
 
             var mediaUri = await _mediaService.GetEventPrimalMediaUri(eventId);
-            @event.ImageUri = mediaUri;
-            @event = await _eventStore.UpdateEventAsync(@event, cancellationToken);
+            existingEvent.ImageUri = mediaUri;
+            existingEvent = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
 
-            return new EventShortEntry(@event);
+            return new EventShortEntry(existingEvent);
         }
 
-        public async Task<EventShortEntry> CompleteEventAsync(Guid eventId, ClaimsPrincipal user, bool isComplete, CancellationToken cancellationToken = default)
+        public async Task<EventShortEntry> CompleteEventAsync(Guid eventId, string currentUserName, bool isComplete, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
-            EnsureArg.IsNotNull(user, nameof(user));
+            EnsureArg.IsNotNullOrWhiteSpace(currentUserName, nameof(currentUserName));
 
-            var isAdmin = await _authorizationService.CheckUserIsAdmin(user, cancellationToken);
-            var stuffyUser = await _authorizationService.GetUser(user.Identity.Name);
+            var existingEvent = await ValidateEventAsync(eventId, currentUserName, false, cancellationToken);
+
+            existingEvent.IsCompleted = isComplete;
+            var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
+
+            return new EventShortEntry(result);
+        }
+
+        private async Task<EventEntry> ValidateEventAsync(
+            Guid eventId,
+            string currentUserName,
+            bool checkIsComplete = true,
+            CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
+            EnsureArg.IsNotNullOrWhiteSpace(currentUserName, nameof(currentUserName));
 
             var existingEvent = await _eventStore.GetEventAsync(eventId, cancellationToken);
 
@@ -222,15 +239,28 @@ namespace StuffyHelper.Core.Features.Event
                 throw new ResourceNotFoundException($"Event Id '{eventId}' not found");
             }
 
-            if(!isAdmin || existingEvent.UserId != stuffyUser.Id)
+            if (checkIsComplete && existingEvent.IsCompleted)
+            {
+                throw new StuffyException("Cannot edit completed event");
+            }
+
+            await CheckEventPermissionsAsync(existingEvent.UserId, currentUserName, cancellationToken);
+
+            return existingEvent;
+        }
+
+        private async Task CheckEventPermissionsAsync(string eventUserId, string currentUserName, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotNullOrWhiteSpace(eventUserId, nameof(eventUserId));
+            EnsureArg.IsNotNullOrWhiteSpace(currentUserName, nameof(currentUserName));
+
+            var isAdmin = await _authorizationService.CheckUserIsAdmin(currentUserName, cancellationToken);
+            var stuffyUser = await _authorizationService.GetUser(currentUserName);
+
+            if (!isAdmin || eventUserId != stuffyUser.Id)
             {
                 throw new AuthorizationException($"You don't have permission to complete/uncomplete event.");
             }
-
-            existingEvent.IsCompleted = isComplete;
-            var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
-
-            return new EventShortEntry(result);
         }
     }
 }

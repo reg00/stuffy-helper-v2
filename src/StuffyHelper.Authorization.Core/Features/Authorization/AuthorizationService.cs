@@ -105,7 +105,13 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
         public async Task<bool> CheckUserIsAdmin(ClaimsPrincipal user, CancellationToken cancellationToken = default)
         {
-            var stuffyUser = await _userManager.FindByNameAsync(user?.Identity?.Name);
+            var userName = user?.Identity?.Name;
+            return await CheckUserIsAdmin(userName, cancellationToken);
+        }
+
+        public async Task<bool> CheckUserIsAdmin(string userName, CancellationToken cancellationToken = default)
+        {
+            var stuffyUser = await _userManager.FindByNameAsync(userName);
             return await _userManager.IsInRoleAsync(stuffyUser, nameof(UserType.Admin));
         }
 

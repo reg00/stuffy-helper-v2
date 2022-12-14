@@ -11,15 +11,15 @@ namespace StuffyHelper.Core.Features.Event
         Task<Response<EventShortEntry>> GetEventsAsync(
             int offset = 0,
             int limit = 10,
-            string? name = null,
-            string? description = null,
+            string name = null,
+            string description = null,
             DateTime? createdDateStart = null,
             DateTime? createdDateEnd = null,
             DateTime? eventDateStartMin = null,
             DateTime? eventDateStartMax = null,
             DateTime? eventDateEndMin = null,
             DateTime? eventDateEndMax = null,
-            string? userId = null,
+            string userId = null,
             bool? isCompleted = null,
             bool? isActive = null,
             Guid? participantId = null,
@@ -27,18 +27,18 @@ namespace StuffyHelper.Core.Features.Event
             CancellationToken cancellationToken = default);
 
         Task<EventShortEntry> AddEventAsync(
-            AddEventEntry entry,
+            AddEventEntry eventEntry,
             ClaimsPrincipal user,
             CancellationToken cancellationToken = default);
 
-        Task DeleteEventAsync(Guid eventId, CancellationToken cancellationToken = default);
+        Task DeleteEventAsync(Guid eventId, string currentUserName, CancellationToken cancellationToken = default);
 
-        Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpdateEventEntry @event, CancellationToken cancellationToken = default);
+        Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpdateEventEntry updateEvent, string currentUserName, CancellationToken cancellationToken = default);
 
-        Task DeletePrimalEventMedia(Guid eventId, CancellationToken cancellationToken = default);
+        Task DeletePrimalEventMedia(Guid eventId, string currentUserName, CancellationToken cancellationToken = default);
 
-        Task<EventShortEntry> UpdatePrimalEventMediaAsync(Guid eventId, IFormFile file, CancellationToken cancellationToken = default);
+        Task<EventShortEntry> UpdatePrimalEventMediaAsync(Guid eventId, IFormFile file, string currentUserName, CancellationToken cancellationToken = default);
 
-        Task<EventShortEntry> CompleteEventAsync(Guid eventId, ClaimsPrincipal user, bool isComplete, CancellationToken cancellationToken = default);
+        Task<EventShortEntry> CompleteEventAsync(Guid eventId, string currentUserName, bool isComplete, CancellationToken cancellationToken = default);
     }
 }
