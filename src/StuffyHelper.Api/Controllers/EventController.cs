@@ -99,7 +99,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.DeleteEventRoute)]
         public async Task<IActionResult> DeleteAsync(Guid eventId)
         {
-            await _eventService.DeleteEventAsync(eventId, HttpContext.RequestAborted);
+            await _eventService.DeleteEventAsync(eventId, User?.Identity?.Name, HttpContext.RequestAborted);
 
             return Ok();
         }
@@ -114,7 +114,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.UpdateEventRoute)]
         public async Task<IActionResult> PatchAsync(Guid eventId, [FromBody] UpdateEventEntry updateEntry)
         {
-            var entry = await _eventService.UpdateEventAsync(eventId, updateEntry, HttpContext.RequestAborted);
+            var entry = await _eventService.UpdateEventAsync(eventId, updateEntry, User?.Identity?.Name, HttpContext.RequestAborted);
 
             return Ok(entry);
         }
@@ -131,7 +131,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.DeleteEventPrimalMediaRoute)]
         public async Task<IActionResult> DeletePrimalMediaAsync([FromRoute] Guid eventId)
         {
-            await _eventService.DeletePrimalEventMedia(eventId, HttpContext.RequestAborted);
+            await _eventService.DeletePrimalEventMedia(eventId, User?.Identity?.Name, HttpContext.RequestAborted);
 
             return Ok();
         }
@@ -166,7 +166,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.CompleteEventRoute)]
         public async Task<IActionResult> CompleteEventAsync([FromRoute] Guid eventId)
         {
-            await _eventService.CompleteEventAsync(eventId, User, true, HttpContext.RequestAborted);
+            await _eventService.CompleteEventAsync(eventId, User?.Identity?.Name, true, HttpContext.RequestAborted);
 
             return Ok();
         }
@@ -183,7 +183,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.ReopenEventRoute)]
         public async Task<IActionResult> ReopenEventAsync([FromRoute] Guid eventId)
         {
-            await _eventService.CompleteEventAsync(eventId, User, false, HttpContext.RequestAborted);
+            await _eventService.CompleteEventAsync(eventId, User?.Identity?.Name, false, HttpContext.RequestAborted);
 
             return Ok();
         }
