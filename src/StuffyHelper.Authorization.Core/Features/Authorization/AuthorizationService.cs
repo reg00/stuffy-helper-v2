@@ -36,7 +36,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
             var user = await _userManager.FindByNameAsync(model.Username);
 
-            if (!await _userManager.IsEmailConfirmedAsync(user))
+            if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
                 throw new AuthorizationException("Вы не подтвердили свой email");
 
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
