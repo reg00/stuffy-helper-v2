@@ -37,7 +37,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var user = await _userManager.FindByNameAsync(model.Username);
 
             if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
-                throw new AuthorizationException("Вы не подтвердили свой email");
+                throw new AuthorizationForbiddenException("Вы не подтвердили свой email");
 
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
@@ -66,10 +66,8 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
                 return token;
             }
-            else if (user is null)
-                throw new AuthorizationResourceNotFoundException($"Пользователь с логином {model.Username} отсутствует");
             else
-                throw new AuthorizationException($"Неверный пароль");
+                throw new AuthorizationResourceNotFoundException($"Неверный логин/пароль");
         }
 
         public async Task Logout(HttpContext httpContext)
@@ -93,7 +91,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var result = await _userManager.CreateAsync(identityUser, model.Password);
 
             if (!result.Succeeded)
-                throw new AuthorizationException($"Ошибка создания пользователя! Детали: {string.Join(' ', result.Errors.Select(x => x.Description))}");
+                throw new Exception($"Ошибка создания пользователя! Детали: {string.Join(' ', result.Errors.Select(x => x.Description))}");
 
             await _roleManager.CreateRolesIfNotExists();
             await identityUser.AddRoleToUser(_roleManager, _userManager, UserType.User);
@@ -137,7 +135,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var error = string.Empty;
 
             if (string.IsNullOrWhiteSpace(userName) && string.IsNullOrWhiteSpace(userId))
-                throw new AuthorizationException("UserName or UserId required");
+                throw new Exception("UserName or UserId required");
 
             StuffyUser userToDelete;
 
@@ -177,7 +175,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
         public async Task<UserEntry> GetUser(string? userName = null, string? userId = null)
         {
             if (string.IsNullOrWhiteSpace(userName) && string.IsNullOrWhiteSpace(userId))
-                throw new AuthorizationException("UserName or UserId required");
+                throw new Exception("UserName or UserId required");
 
             StuffyUser user;
 
@@ -201,7 +199,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
         {
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(code))
             {
-                throw new ArgumentNullException($"Поля {nameof(login)},{nameof(code)} должны быть заполнены");
+                throw new Exception($"Поля {nameof(login)},{nameof(code)} должны быть заполнены");
             }
 
             var user = await _userManager.FindByNameAsync(login);
@@ -220,7 +218,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
                 return new UserEntry(user, rolesList);
             }
             else
-                throw new AuthorizationException("Неверный код");
+                throw new AuthorizationForbiddenException("Неверный код");
         }
 
         public async Task<(string name, string code)> ForgotPasswordAsync(ForgotPasswordModel model)
@@ -229,7 +227,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-                throw new AuthorizationException("Неправильно введен email");
+                throw new AuthorizationForbiddenException("Неправильно введен email");
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
 
@@ -252,7 +250,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
                 return;
             }
 
-            throw new AuthorizationException("Во время сброса пароля произошла ошибка");
+            throw new Exception("Во время сброса пароля произошла ошибка");
         }
     }
 }
