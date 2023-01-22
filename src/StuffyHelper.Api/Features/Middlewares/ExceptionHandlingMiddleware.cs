@@ -82,6 +82,9 @@ namespace StuffyHelper.Api.Features.Middlewares
                 case AuthorizationResourceNotFoundException _:
                     statusCode = HttpStatusCode.NotFound;
                     break;
+                case AuthorizationForbiddenException _:
+                    statusCode = HttpStatusCode.Forbidden;
+                    break;
                 case AuthStoreException _:
                     statusCode = HttpStatusCode.InternalServerError;
                     break;

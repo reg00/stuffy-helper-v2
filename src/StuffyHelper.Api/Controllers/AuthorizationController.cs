@@ -1,6 +1,4 @@
 ﻿using EnsureThat;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +9,8 @@ using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.EmailService.Core.Service;
+using StuffyHelper.Core.Configs;
+using Microsoft.Extensions.Options;
 
 namespace StuffyHelper.Api.Controllers
 {
@@ -19,13 +19,16 @@ namespace StuffyHelper.Api.Controllers
     {
         private readonly Authorization.Core.Features.IAuthorizationService _authorizationService;
         private readonly IEmailService _emailService;
+        private readonly FrontEndConfiguration _frontEndConfiguration;
 
         public AuthorizationController(
             Authorization.Core.Features.IAuthorizationService authorizationService,
-            IEmailService emailService)
+            IEmailService emailService,
+            IOptions<FrontEndConfiguration> options)
         {
             _authorizationService = authorizationService;
             _emailService = emailService;
+            _frontEndConfiguration = options.Value;
         }
 
         /// <summary>
@@ -33,7 +36,7 @@ namespace StuffyHelper.Api.Controllers
         /// </summary>
         [HttpPost]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.RegisterRoute)]
@@ -69,7 +72,7 @@ namespace StuffyHelper.Api.Controllers
         {
             var user = await _authorizationService.ConfirmEmail(login, code);
 
-            return Ok(user);
+            return Redirect($"{_frontEndConfiguration.Endpoint.OriginalString}/register/success");
         }
 
         /// <summary>

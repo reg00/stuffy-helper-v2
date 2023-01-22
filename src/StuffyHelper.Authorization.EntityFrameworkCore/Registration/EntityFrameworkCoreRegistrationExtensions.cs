@@ -33,6 +33,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Registration
                 options.Password.RequireUppercase = true;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireDigit = true;
+                options.User.RequireUniqueEmail = true;
             })
                     .AddEntityFrameworkStores<UserDbContext>()
                     .AddDefaultTokenProviders();
