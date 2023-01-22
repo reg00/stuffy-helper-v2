@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using StuffyHelper.Core.Configs;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
@@ -13,8 +16,14 @@ namespace StuffyHelper.Core.Registration
 {
     public static class ServicesRegistrationExtensions
     {
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
+            var frontEndOptions = new FrontEndConfiguration();
+            configuration.GetSection(FrontEndConfiguration.DefaultSectionName)
+                .Bind(frontEndOptions);
+
+            services.AddSingleton(Options.Create(frontEndOptions));
+
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IParticipantService, ParticipantService>();
             services.AddScoped<IPurchaseService, PurchaseService>();
