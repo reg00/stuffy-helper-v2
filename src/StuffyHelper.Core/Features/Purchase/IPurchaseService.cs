@@ -12,7 +12,7 @@ namespace StuffyHelper.Core.Features.Purchase
             string? name = null,
             double? costMin = null,
             double? costMax = null,
-            Guid? shoppingId = null,
+            Guid? eventId = null,
             IEnumerable<string>? purchaseTags = null,
             Guid? unitTypeId = null,
             CancellationToken cancellationToken = default);

@@ -11,7 +11,6 @@
         private const string ParticipantsSegment = "participants";
         private const string PurchasesSegment = "purchases";
         private const string PurchaseUsagesSegment = "purchase-usages";
-        private const string ShoppingsSegment = "shoppings";
         private const string PurchaseTagsSegment = "purchase-tags";
         private const string UnitTypesSegment = "unit-types";
         private const string MediaSegment = "media";
@@ -26,7 +25,6 @@
         private const string ParticipantIdRouteSegment = $"{{{KnownActionParameterNames.ParticipantId}}}";
         private const string PurchaseIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseId}}}";
         private const string PurchaseUsageIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseUsageId}}}";
-        private const string ShoppingIdRouteSegment = $"{{{KnownActionParameterNames.ShoppingId}}}";
         private const string PurchaseTagIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseTagId}}}";
         private const string UnitTypeIdRouteSegment = $"{{{KnownActionParameterNames.UnitTypeId}}}";
         private const string MediaIdRouteSegment = $"{{{KnownActionParameterNames.MediaId}}}";
@@ -72,12 +70,6 @@
         public const string GetPurchaseUsagesRoute = AddPurchaseUsageRoute;
         public const string DeletePurchaseUsageRoute = GetPurchaseUsageRoute;
         public const string UpdatePurchaseUsageRoute = GetPurchaseUsageRoute;
-
-        public const string AddShoppingRoute = $"{DefaultRouteSegment}/{ShoppingsSegment}";
-        public const string GetShoppingRoute = $"{AddShoppingRoute}/{ShoppingIdRouteSegment}";
-        public const string GetShoppingsRoute = AddShoppingRoute;
-        public const string DeleteShoppingRoute = GetShoppingRoute;
-        public const string UpdateShoppingRoute = GetShoppingRoute;
 
         public const string AddPurchaseTagRoute = $"{DefaultRouteSegment}/{PurchaseTagsSegment}";
         public const string GetPurchaseTagRoute = $"{AddPurchaseTagRoute}/{PurchaseTagIdRouteSegment}";

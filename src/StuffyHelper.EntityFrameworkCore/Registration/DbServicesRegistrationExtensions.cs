@@ -6,7 +6,6 @@ using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Purchase;
 using StuffyHelper.Core.Features.PurchaseTag;
 using StuffyHelper.Core.Features.PurchaseUsage;
-using StuffyHelper.Core.Features.Shopping;
 using StuffyHelper.Core.Features.UnitType;
 using StuffyHelper.EntityFrameworkCore.Features.Schema;
 using StuffyHelper.EntityFrameworkCore.Features.Storage;
@@ -21,7 +20,6 @@ namespace StuffyHelper.EntityFrameworkCore.Registration
             services.AddScoped<IParticipantStore, EfParticipantStore>();
             services.AddScoped<IPurchaseStore, EfPurchaseStore>();
             services.AddScoped<IPurchaseUsageStore, EfPurchaseUsageStore>();
-            services.AddScoped<IShoppingStore, EfShoppingStore>();
             services.AddScoped<IPurchaseTagStore, EfPurchaseTagStore>();
             services.AddScoped<IUnitTypeStore, EfUnitTypeStore>();
             services.AddScoped<IMediaStore, EfMediaStore>();

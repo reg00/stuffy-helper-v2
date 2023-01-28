@@ -57,7 +57,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             bool? isCompleted = null,
             bool? isActive = null,
             Guid? participantId = null,
-            Guid? shoppingId = null,
+            Guid? purchaseId = null,
             CancellationToken cancellationToken = default)
         {
             try
@@ -75,7 +75,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     (isCompleted == null || isCompleted == e.IsCompleted) &&
                     (isActive == null || isActive == e.IsActive) &&
                     (participantId == null || e.Participants.Any(x => x.Id == participantId)) &&
-                    (shoppingId == null || e.Shoppings.Any(x => x.Id == shoppingId)))
+                    (purchaseId == null || e.Purchases.Any(x => x.Id == purchaseId)))
                     .OrderByDescending(e => e.CreatedDate)
                     .ToListAsync(cancellationToken);
 

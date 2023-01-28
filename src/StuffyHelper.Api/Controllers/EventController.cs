@@ -44,11 +44,11 @@ namespace StuffyHelper.Api.Controllers
             bool? isCompleted = null,
             bool? isActive = null,
             Guid? participantId = null,
-            Guid? shoppingId = null)
+            Guid? purchaseId = null)
         {
             var eventResponse = await _eventService.GetEventsAsync(offset, limit, name, description, createdDateStart, createdDateEnd,
                                                                    eventDateStartMin, eventDateStartMax, eventDateEndMin, eventDateEndMax, userId,
-                                                                   isCompleted, isActive, participantId, shoppingId, HttpContext.RequestAborted);
+                                                                   isCompleted, isActive, participantId, purchaseId, HttpContext.RequestAborted);
 
             return Ok(eventResponse);
         }

@@ -1,8 +1,8 @@
 ﻿using EnsureThat;
 using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Core.Features.Event;
+using StuffyHelper.Core.Features.Purchase;
 using StuffyHelper.Core.Features.PurchaseUsage;
-using StuffyHelper.Core.Features.Shopping;
 using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.Participant
@@ -16,13 +16,13 @@ namespace StuffyHelper.Core.Features.Participant
         public UserShortEntry? User { get; set; }
         [Required]
         public EventShortEntry? Event { get; set; }
-        public List<ShoppingShortEntry> Shoppings { get; set; }
+        public List<PurchaseShortEntry> Purchases { get; set; }
         public List<PurchaseUsageShortEntry> PurchaseUsages { get; set; }
 
 
         public GetParticipantEntry()
         {
-            Shoppings = new List<ShoppingShortEntry>();
+            Purchases = new List<PurchaseShortEntry>();
             PurchaseUsages = new List<PurchaseUsageShortEntry>();
         }
 
@@ -36,7 +36,7 @@ namespace StuffyHelper.Core.Features.Participant
             Id = entry.Id;
             User = user;
             Event = new EventShortEntry(entry.Event);
-            Shoppings = entry.Shoppings.Select(x => new ShoppingShortEntry(x)).ToList();
+            Purchases = entry.Purchases.Select(x => new PurchaseShortEntry(x)).ToList();
             PurchaseUsages = purchaseUsages;
         }
     }

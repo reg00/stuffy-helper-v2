@@ -12,7 +12,9 @@ namespace StuffyHelper.Core.Features.Purchase
         [Required]
         public double Amount { get; set; }
         [Required]
-        public Guid ShoppingId { get; set; }
+        public Guid EventId { get; set; }
+        [Required]
+        public Guid ParticipantId { get; set; }
         public List<PurchaseTagShortEntry> PurchaseTags { get; init; }
         [Required]
         public Guid UnitTypeId { get; set; }
@@ -24,8 +26,9 @@ namespace StuffyHelper.Core.Features.Purchase
                 Name = Name,
                 Cost = Cost,
                 Amount = Amount,
-                ShoppingId = ShoppingId,
-                UnitTypeId = UnitTypeId
+                EventId = EventId,
+                UnitTypeId = UnitTypeId,
+                ParticipantId = ParticipantId,
             };
         }
     }

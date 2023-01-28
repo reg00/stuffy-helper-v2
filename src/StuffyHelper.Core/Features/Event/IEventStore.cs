@@ -21,7 +21,7 @@ namespace StuffyHelper.Core.Features.Event
             bool? isCompleted = null,
             bool? isActive = null,
             Guid? participantId = null,
-            Guid? shoppingId = null,
+            Guid? purchaseId = null,
             CancellationToken cancellationToken = default);
 
         Task<EventEntry> AddEventAsync(EventEntry @event, CancellationToken cancellationToken = default);

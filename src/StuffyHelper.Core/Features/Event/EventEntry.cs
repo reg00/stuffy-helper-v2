@@ -1,7 +1,7 @@
 ﻿using EnsureThat;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
-using StuffyHelper.Core.Features.Shopping;
+using StuffyHelper.Core.Features.Purchase;
 
 namespace StuffyHelper.Core.Features.Event
 {
@@ -19,13 +19,13 @@ namespace StuffyHelper.Core.Features.Event
         public bool IsActive { get; set; }
 
         public virtual List<ParticipantEntry> Participants { get; set; } = new List<ParticipantEntry>();
-        public virtual List<ShoppingEntry> Shoppings { get; set; } = new List<ShoppingEntry>();
+        public virtual List<PurchaseEntry> Purchases { get; set; } = new List<PurchaseEntry>();
         public virtual List<MediaEntry> Medias { get; set; } = new List<MediaEntry>();
 
         public EventEntry()
         {
             Participants = new List<ParticipantEntry>();
-            Shoppings = new List<ShoppingEntry>();
+            Purchases = new List<PurchaseEntry>();
             Medias = new List<MediaEntry>();
         }
 
@@ -46,7 +46,7 @@ namespace StuffyHelper.Core.Features.Event
             IsActive = true;
 
             Participants = new List<ParticipantEntry>();
-            Shoppings = new List<ShoppingEntry>();
+            Purchases = new List<PurchaseEntry>();
             Medias = new List<MediaEntry>();
         }
 

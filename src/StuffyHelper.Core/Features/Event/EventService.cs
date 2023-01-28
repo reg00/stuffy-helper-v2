@@ -14,15 +14,18 @@ namespace StuffyHelper.Core.Features.Event
     public class EventService : IEventService
     {
         private readonly IEventStore _eventStore;
+        private readonly IParticipantService _participantService;
         private readonly IAuthorizationService _authorizationService;
         private readonly IMediaService _mediaService;
 
         public EventService(
             IEventStore eventStore,
+            IParticipantService participantService,
             IAuthorizationService authorizationService,
             IMediaService mediaService)
         {
             _eventStore = eventStore;
+            _participantService = participantService;
             _authorizationService = authorizationService;
             _mediaService = mediaService;
         }
@@ -60,12 +63,12 @@ namespace StuffyHelper.Core.Features.Event
             bool? isCompleted = null,
             bool? isActive = null,
             Guid? participantId = null,
-            Guid? shoppingId = null,
+            Guid? purchaseId = null,
             CancellationToken cancellationToken = default)
         {
             var resp = await _eventStore.GetEventsAsync(offset, limit, name, description, createdDateStart,
                                                         createdDateEnd, eventDateStartMin, eventDateStartMax, eventDateEndMin , eventDateEndMax,
-                                                        userId, isCompleted, isActive, participantId, shoppingId, cancellationToken);
+                                                        userId, isCompleted, isActive, participantId, purchaseId, cancellationToken);
             var events = new List<EventShortEntry>();
 
             foreach (var @event in resp.Data)
@@ -89,6 +92,8 @@ namespace StuffyHelper.Core.Features.Event
 
             EventEntry result = null;
             MediaShortEntry media = null;
+            ParticipantShortEntry participant = null;
+
             var identityUser = await _authorizationService.GetUser(userName: user.Identity.Name);
             var entry = new EventEntry(
                 eventEntry.Name,
@@ -118,6 +123,14 @@ namespace StuffyHelper.Core.Features.Event
                     result = await _eventStore.UpdateEventAsync(result, cancellationToken);
                 }
 
+                var addParticipant = new UpsertParticipantEntry()
+                {
+                    EventId = result.Id,
+                    UserId = entry.UserId
+                };
+
+                participant = await _participantService.AddParticipantAsync(addParticipant, cancellationToken);
+
                 return new EventShortEntry(result);
             }
             catch
@@ -126,6 +139,7 @@ namespace StuffyHelper.Core.Features.Event
                 {
                     await _eventStore.DeleteEventAsync(result.Id, cancellationToken);
                     await _mediaService.DeleteMediaAsync(media.Id, cancellationToken);
+                    await _participantService.DeleteParticipantAsync(participant.Id, cancellationToken);
                 }
 
                 throw;
