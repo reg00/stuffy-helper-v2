@@ -2,7 +2,7 @@
 using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
-using StuffyHelper.Core.Features.Shopping;
+using StuffyHelper.Core.Features.Purchase;
 using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.Event
@@ -27,7 +27,7 @@ namespace StuffyHelper.Core.Features.Event
         [Required]
         public UserShortEntry? User { get; set; }
         public List<ParticipantShortEntry> Participants { get; set; }
-        public List<ShoppingShortEntry> Shoppings { get; set; } 
+        public List<PurchaseShortEntry> Purchases { get; set; } 
         public List<MediaShortEntry> Medias { get; set; } 
 
 
@@ -35,7 +35,7 @@ namespace StuffyHelper.Core.Features.Event
         public GetEventEntry()
         {
             Participants = new List<ParticipantShortEntry>();
-            Shoppings = new List<ShoppingShortEntry>();
+            Purchases = new List<PurchaseShortEntry>();
             Medias = new List<MediaShortEntry>();
         }
 
@@ -56,7 +56,7 @@ namespace StuffyHelper.Core.Features.Event
             User = user;
             Participants = participants;
             MediaUri = entry.ImageUri;
-            Shoppings = entry.Shoppings.Select(x => new ShoppingShortEntry(x)).ToList();
+            Purchases = entry.Purchases.Select(x => new PurchaseShortEntry(x)).ToList();
             Medias = entry.Medias.Select(x => new MediaShortEntry(x)).ToList();
         }
     }

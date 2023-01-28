@@ -51,7 +51,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             string? name = null,
             double? costMin = null,
             double? costMax = null,
-            Guid? shoppingId = null,
+            Guid? eventId = null,
             IEnumerable<string>? purchaseTags = null,
             Guid? unitTypeId = null,
             CancellationToken cancellationToken = default)
@@ -64,10 +64,10 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.ToLower().Contains(name.ToLower())) &&
                     (costMin == null || costMin <= e.Cost) &&
                     (costMax == null || costMax >= e.Cost) &&
-                    (shoppingId == null || e.ShoppingId == shoppingId) && 
+                    (eventId == null || e.EventId == eventId) && 
                     (unitTypeId == null || e.UnitTypeId == unitTypeId) &&
                     (purchaseTags == null || !purchaseTags.Any() || e.PurchaseTags.Any(tag => purchaseTags.Select(tag => tag.ToLower()).Contains(tag.Name.ToLower()))))
-                    .OrderByDescending(e => e.Shopping.Event.CreatedDate)
+                    .OrderByDescending(e => e.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
 
                 return new Response<PurchaseEntry>()
