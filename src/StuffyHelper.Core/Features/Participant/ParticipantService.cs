@@ -39,7 +39,7 @@ namespace StuffyHelper.Core.Features.Participant
                 purchaseUsages.Add(new PurchaseUsageShortEntry(item, purchaseUsageUser));
             }
 
-            return new GetParticipantEntry(entry, new UserShortEntry(user), purchaseUsages);
+            return new GetParticipantEntry(entry, new GetUserEntry(user), purchaseUsages);
         }
 
         public async Task<Response<ParticipantShortEntry>> GetParticipantsAsync(

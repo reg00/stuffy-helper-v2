@@ -13,7 +13,7 @@ namespace StuffyHelper.Core.Features.Participant
         public Guid Id { get; set; }
 
         [Required]
-        public UserShortEntry? User { get; set; }
+        public GetUserEntry? User { get; set; }
         [Required]
         public EventShortEntry? Event { get; set; }
         public List<PurchaseShortEntry> Purchases { get; set; }
@@ -28,7 +28,7 @@ namespace StuffyHelper.Core.Features.Participant
 
         public GetParticipantEntry(
             ParticipantEntry entry,
-            UserShortEntry user,
+            GetUserEntry user,
             List<PurchaseUsageShortEntry> purchaseUsages)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
