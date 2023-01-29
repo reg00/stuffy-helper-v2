@@ -7,19 +7,15 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
     public class PurchaseUsageShortEntry
     {
         [Required]
-        public Guid Id { get; set; }
-        public string? UserId { get; set; }
-        public string? Name { get; set; }
-        public string? PurchaseName { get; set; }
+        public Guid PurchaseUsageId { get; set; }
+        public Guid ParticipantId { get; set; }
 
-        public PurchaseUsageShortEntry(PurchaseUsageEntry entry, UserEntry? user = null)
+        public PurchaseUsageShortEntry(PurchaseUsageEntry entry)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
-            Id = entry.Id;
-            UserId = entry.Participant?.UserId;
-            PurchaseName = entry?.Purchase?.Name;
-            Name = user?.Name;
+            PurchaseUsageId = entry.Id;
+            ParticipantId = entry.Participant.Id;
         }
     }
 }

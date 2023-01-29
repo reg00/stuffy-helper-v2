@@ -33,13 +33,7 @@ namespace StuffyHelper.Core.Features.Participant
 
             var purchaseUsages = new List<PurchaseUsageShortEntry>();
 
-            foreach (var item in entry.PurchaseUsages)
-            {
-                var purchaseUsageUser = await _authorizationService.GetUser(userId: item.Participant.UserId);
-                purchaseUsages.Add(new PurchaseUsageShortEntry(item, purchaseUsageUser));
-            }
-
-            return new GetParticipantEntry(entry, new GetUserEntry(user), purchaseUsages);
+            return new GetParticipantEntry(entry, new GetUserEntry(user), entry.PurchaseUsages.Select(x=> new PurchaseUsageShortEntry(x)));
         }
 
         public async Task<Response<ParticipantShortEntry>> GetParticipantsAsync(

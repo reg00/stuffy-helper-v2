@@ -17,7 +17,7 @@ namespace StuffyHelper.Core.Features.Participant
         [Required]
         public EventShortEntry? Event { get; set; }
         public List<PurchaseShortEntry> Purchases { get; set; }
-        public List<PurchaseUsageShortEntry> PurchaseUsages { get; set; }
+        public IEnumerable<PurchaseUsageShortEntry> PurchaseUsages { get; set; }
 
 
         public GetParticipantEntry()
@@ -29,7 +29,7 @@ namespace StuffyHelper.Core.Features.Participant
         public GetParticipantEntry(
             ParticipantEntry entry,
             GetUserEntry user,
-            List<PurchaseUsageShortEntry> purchaseUsages)
+            IEnumerable<PurchaseUsageShortEntry> purchaseUsages)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
 
