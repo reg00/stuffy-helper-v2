@@ -13,6 +13,7 @@ namespace StuffyHelper.Core.Features.Purchase
         public string Name { get; set; }
         public double Cost { get; set; }
         public double Amount { get; set; }
+
         public Guid UnitTypeId { get; set; }
         public Guid ParticipantId { get; set; }
         public Guid EventId { get; set; }
