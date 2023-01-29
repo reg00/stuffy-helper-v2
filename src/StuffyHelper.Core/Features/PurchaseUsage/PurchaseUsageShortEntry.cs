@@ -15,7 +15,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
             EnsureArg.IsNotNull(entry, nameof(entry));
 
             PurchaseUsageId = entry.Id;
-            ParticipantId = entry.Participant.Id;
+            ParticipantId = entry.ParticipantId;
         }
     }
 }
