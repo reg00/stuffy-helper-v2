@@ -1,5 +1,4 @@
 ﻿using EnsureThat;
-using StuffyHelper.Authorization.Core.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.PurchaseUsage
@@ -9,6 +8,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         [Required]
         public Guid PurchaseUsageId { get; set; }
         public Guid ParticipantId { get; set; }
+        public int Amount { get; set; }
 
         public PurchaseUsageShortEntry(PurchaseUsageEntry entry)
         {
@@ -16,6 +16,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
 
             PurchaseUsageId = entry.Id;
             ParticipantId = entry.ParticipantId;
+            Amount = entry.Amount;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using EnsureThat;
-using Microsoft.Extensions.Logging;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Extensions;
 using StuffyHelper.Core.Features.Common;

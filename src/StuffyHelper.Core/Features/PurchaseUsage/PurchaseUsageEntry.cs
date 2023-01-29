@@ -9,6 +9,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         public Guid Id { get; set; }
         public Guid ParticipantId { get; set; }
         public Guid PurchaseId { get; set; }
+        public int Amount { get; set; }
 
         public virtual ParticipantEntry Participant { get; set; }
         public virtual PurchaseEntry Purchase { get; set; }
@@ -19,6 +20,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
 
             ParticipantId = entry.ParticipantId;
             PurchaseId = entry.PurchaseId;
+            Amount = entry.Amount ?? 0;
         }
     }
 }

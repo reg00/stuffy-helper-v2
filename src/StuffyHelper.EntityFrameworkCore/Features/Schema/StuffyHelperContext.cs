@@ -111,6 +111,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
 
                 entity.Property(e => e.PurchaseId).IsRequired();
                 entity.Property(e => e.ParticipantId).IsRequired();
+                entity.Property(e => e.Amount).HasDefaultValue(1);
             });
 
             modelBuilder.Entity<PurchaseTagEntry>(entity =>

@@ -8,13 +8,15 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         public Guid PurchaseId { get; set; }
         [Required]
         public Guid ParticipantId { get; set; }
+        public int? Amount { get; set; }
 
         public PurchaseUsageEntry ToCommonEntry()
         {
             return new PurchaseUsageEntry()
             {
                 PurchaseId = PurchaseId,
-                ParticipantId = ParticipantId
+                ParticipantId = ParticipantId,
+                Amount = Amount ?? 0,
             };
         }
     }
