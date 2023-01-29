@@ -26,7 +26,7 @@ namespace StuffyHelper.Core.Features.Purchase
         public List<PurchaseTagShortEntry> PurchaseTags { get; set; }
         [Required]
         public UnitTypeShortEntry? UnitType { get; set; }
-        public List<PurchaseUsageShortEntry> PurchaseUsages { get; set; }
+        public IEnumerable<PurchaseUsageShortEntry> PurchaseUsages { get; set; }
         public ParticipantShortEntry Participant { get; set; }
 
         public GetPurchaseEntry(PurchaseEntry entry)
@@ -39,7 +39,7 @@ namespace StuffyHelper.Core.Features.Purchase
             Amount = entry.Amount;
             IsPartial = entry.IsPartial;
             Event = new EventShortEntry(entry.Event);
-            PurchaseUsages = entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x)).ToList();
+            PurchaseUsages = entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x));
             PurchaseTags = entry.PurchaseTags.Select(x => new PurchaseTagShortEntry(x)).ToList();
             Participant = new ParticipantShortEntry(entry.Owner);
             UnitType = new UnitTypeShortEntry(entry.UnitType);
