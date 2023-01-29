@@ -29,5 +29,12 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
             FileType = fileType;
             FileName = fileName;
         }
+
+        public void PatchFrom(AddAvatarEntry entry)
+        {
+            FileName = Path.GetFileNameWithoutExtension(entry.File.FileName);
+            FileType = FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(entry.File.FileName));
+            CreatedDate = DateTime.UtcNow;
+        }
     }
 }

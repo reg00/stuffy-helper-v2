@@ -18,16 +18,16 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
             _fileStore = fileStore;
         }
 
-        public async Task DeleteAvatarAsync(Guid avatarId, CancellationToken cancellationToken = default)
+        public async Task DeleteAvatarAsync(string userId, CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotDefault(avatarId, nameof(avatarId));
+            EnsureArg.IsNotNullOrEmpty(userId, nameof(userId));
 
             AvatarEntry entry = null;
 
             try
             {
                 entry = await _avatarStore.GetAvatarAsync(
-                avatarId,
+                userId,
                 cancellationToken);
             }
             catch (Exception)
@@ -66,22 +66,6 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
             return new MediaBlobEntry(stream, entry.FileName, entry.FileType);
         }
 
-        public async Task<MediaBlobEntry> GetAvatarAsync(string userId, CancellationToken cancellationToken = default)
-        {
-            EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
-
-            var entry = await _avatarStore.GetAvatarAsync(
-                userId,
-                cancellationToken);
-
-            var stream = await _fileStore.GetFileAsync(
-                AuthMinioExtensions.GetAvatarObjectName(
-                    entry.UserId, entry.FileType),
-                cancellationToken);
-
-            return new MediaBlobEntry(stream, entry.FileName, entry.FileType);
-        }
-
         public async Task<AvatarEntry> GetAvatarMetadataAsync(Guid avatarId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(avatarId, nameof(avatarId));
@@ -104,11 +88,14 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
             if (avatar.File is null)
                 throw new AuthStoreException("file cannot be null");
 
-            var entry = avatar.ToCommonEntry();
+            AvatarEntry entry = null;
 
             try
             {
-                var avatarEntry = await _avatarStore.AddAvatarAsync(
+                entry = await _avatarStore.GetAvatarAsync(avatar.UserId, cancellationToken);
+                entry.PatchFrom(avatar);
+
+                var avatarEntry = await _avatarStore.UpdateAvatarAsync(
                     entry, cancellationToken);
 
                 await _fileStore.StoreFileAsync(
@@ -119,11 +106,26 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
 
                 //return new AvatarShortEntry(entry);
 
-                return entry;
+                return avatarEntry;
             }
             catch (AuthorizationEntityAlreadyExistsException)
             {
                 throw;
+            }
+            catch (AuthorizationResourceNotFoundException)
+            {
+                entry = avatar.ToCommonEntry();
+
+                var avatarEntry = await _avatarStore.AddAvatarAsync(
+                    entry, cancellationToken);
+
+                await _fileStore.StoreFileAsync(
+                    AuthMinioExtensions.GetAvatarObjectName(
+                        avatarEntry.UserId, avatarEntry.FileType),
+                        avatar.File!.OpenReadStream(),
+                    cancellationToken);
+
+                return avatarEntry;
             }
             catch (Exception)
             {

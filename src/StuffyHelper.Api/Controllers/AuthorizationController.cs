@@ -11,6 +11,8 @@ using StuffyHelper.Core.Features.Common;
 using StuffyHelper.EmailService.Core.Service;
 using StuffyHelper.Core.Configs;
 using Microsoft.Extensions.Options;
+using System.Reactive.Subjects;
+using Microsoft.AspNetCore.Http;
 
 namespace StuffyHelper.Api.Controllers
 {
@@ -40,7 +42,7 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.RegisterRoute)]
-        public async Task<IActionResult> Register([FromForm] RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
 
@@ -235,7 +237,7 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(UserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.EditUserRoute)]
-        public async Task<IActionResult> EditUserAsync(UpdateModel updateModel)
+        public async Task<IActionResult> EditUserAsync([FromBody] UpdateModel updateModel)
         {
             EnsureArg.IsNotNull(updateModel, nameof(updateModel));
 
@@ -247,6 +249,34 @@ namespace StuffyHelper.Api.Controllers
             var user = await _authorizationService.UpdateUser(User, updateModel);
 
             return Ok(new GetUserEntry(user));
+        }
+
+        /// <summary>
+        /// Изменение аватара пользователя
+        /// </summary>
+        [HttpPost]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.AvatarRoute)]
+        public async Task<IActionResult> EditAvatarAsync(IFormFile file)
+        {
+            EnsureArg.IsNotNull(file, nameof(file));
+
+            await _authorizationService.UpdateAvatar(User, file);
+
+            return Ok();
+        }
+
+        /// <summary>
+        /// Удаление аватара пользователя
+        /// </summary>
+        [HttpDelete]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.AvatarRoute)]
+        public async Task<IActionResult> RemoveAvatarAsync()
+        {
+            await _authorizationService.RemoveAvatar(User);
+
+            return Ok();
         }
     }
 }
