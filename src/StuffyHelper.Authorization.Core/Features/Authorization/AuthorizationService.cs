@@ -3,14 +3,17 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using StuffyHelper.Authorization.Core.Configs;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Extensions;
+using StuffyHelper.Authorization.Core.Features.Avatar;
 using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Authorization.Core.Models.User;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Threading;
 
 namespace StuffyHelper.Authorization.Core.Features.Authorization
 {
@@ -19,14 +22,17 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
         private readonly UserManager<StuffyUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly AuthorizationConfiguration _authorizationConfiguration;
+        private readonly IAvatarService _avatarService;
 
         public AuthorizationService(
             UserManager<StuffyUser> userManager,
             RoleManager<IdentityRole> roleManager,
+            IAvatarService avatarService,
             IOptions<AuthorizationConfiguration> authorizationConfiguration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _avatarService = avatarService;
             _authorizationConfiguration = authorizationConfiguration.Value;
         }
 
@@ -95,6 +101,18 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
             await _roleManager.CreateRolesIfNotExists();
             await identityUser.AddRoleToUser(_roleManager, _userManager, UserType.User);
+
+            if (model.File != null)
+            {
+                var user = await _userManager.FindByNameAsync(model.Username);
+                var addAvatar = new AddAvatarEntry(user.Id, model.File);
+
+                var avatar = await _avatarService.StoreAvatarFormFileAsync(addAvatar);
+
+                var mediaUri = await _avatarService.GetAvatarUri(user.Id);
+                identityUser.ImageUri = mediaUri;
+                result = await _userManager.UpdateAsync(identityUser);
+            }
 
             return await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
         }

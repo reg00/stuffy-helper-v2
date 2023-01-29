@@ -1,8 +1,6 @@
-﻿using StuffyHelper.Core.Exceptions;
-using StuffyHelper.Core.Features.Media;
-using StuffyHelper.Core.Web;
+﻿using StuffyHelper.Minio.Features.Exceptions;
 
-namespace StuffyHelper.Core.Features.Common
+namespace StuffyHelper.Minio.Features.Common
 {
     public static class FileTypeMapper
     {
@@ -21,28 +19,28 @@ namespace StuffyHelper.Core.Features.Common
 
         private static readonly Dictionary<FileType, string> FileTypeContentTypeMap = new Dictionary<FileType, string>()
         {
-            { FileType.Jpg, KnownContentTypes.ImageJpeg },
-            { FileType.Jpeg, KnownContentTypes.ImageJpeg },
-            { FileType.Pdf, KnownContentTypes.ApplicationPdf },
-            { FileType.Png, KnownContentTypes.ImagePng },
-            { FileType.Txt, KnownContentTypes.TextPlain },
-            { FileType.Doc, KnownContentTypes.ApplicationDoc },
-            { FileType.Docx, KnownContentTypes.ApplicationDocx },
-            { FileType.Xls, KnownContentTypes.ApplicationXls },
-            { FileType.Xlsx, KnownContentTypes.ApplicationXlsx }
+            { FileType.Jpg, KnownMinioContentTypes.ImageJpeg },
+            { FileType.Jpeg, KnownMinioContentTypes.ImageJpeg },
+            { FileType.Pdf, KnownMinioContentTypes.ApplicationPdf },
+            { FileType.Png, KnownMinioContentTypes.ImagePng },
+            { FileType.Txt, KnownMinioContentTypes.TextPlain },
+            { FileType.Doc, KnownMinioContentTypes.ApplicationDoc },
+            { FileType.Docx, KnownMinioContentTypes.ApplicationDocx },
+            { FileType.Xls, KnownMinioContentTypes.ApplicationXls },
+            { FileType.Xlsx, KnownMinioContentTypes.ApplicationXlsx }
         };
 
         private static readonly Dictionary<string, string> ContentTypeExtMap = new Dictionary<string, string>()
         {
-            { KnownFileTypes.Jpg, KnownContentTypes.ImageJpeg },
-            { KnownFileTypes.Jpeg, KnownContentTypes.ImageJpeg },
-            { KnownFileTypes.Png, KnownContentTypes.ImagePng },
-            { KnownFileTypes.Pdf, KnownContentTypes.ApplicationPdf },
-            { KnownFileTypes.Txt, KnownContentTypes.TextPlain },
-            { KnownFileTypes.Doc, KnownContentTypes.ApplicationDoc },
-            { KnownFileTypes.Docx, KnownContentTypes.ApplicationDocx },
-            { KnownFileTypes.Xls, KnownContentTypes.ApplicationXls },
-            { KnownFileTypes.Xlsx, KnownContentTypes.ApplicationXlsx }
+            { KnownFileTypes.Jpg, KnownMinioContentTypes.ImageJpeg },
+            { KnownFileTypes.Jpeg, KnownMinioContentTypes.ImageJpeg },
+            { KnownFileTypes.Png, KnownMinioContentTypes.ImagePng },
+            { KnownFileTypes.Pdf, KnownMinioContentTypes.ApplicationPdf },
+            { KnownFileTypes.Txt, KnownMinioContentTypes.TextPlain },
+            { KnownFileTypes.Doc, KnownMinioContentTypes.ApplicationDoc },
+            { KnownFileTypes.Docx, KnownMinioContentTypes.ApplicationDocx },
+            { KnownFileTypes.Xls, KnownMinioContentTypes.ApplicationXls },
+            { KnownFileTypes.Xlsx, KnownMinioContentTypes.ApplicationXlsx }
         };
 
         private static readonly Dictionary<FileType, string> ExtFileTypeMap = new Dictionary<FileType, string>()

@@ -1,4 +1,4 @@
-﻿namespace StuffyHelper.Core.Features.Common
+﻿namespace StuffyHelper.Minio.Features.Common
 {
     public static class KnownFileTypes
     {

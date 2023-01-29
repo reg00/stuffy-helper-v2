@@ -11,6 +11,7 @@ using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage;
+using StuffyHelper.Authorization.Core.Features.Avatar;
 
 namespace StuffyHelper.Authorization.EntityFrameworkCore.Registration
 {
@@ -41,6 +42,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Registration
             services.AddScoped<IInitializer, EfInitializer>();
             services.AddScoped<IFriendsRequestStore, EfFriendsRequestStorage>();
             services.AddScoped<IFriendStore, EfFriendStorage>();
+            services.AddScoped<IAvatarStore, EfAvatarStore>();
 
             return services;
         }

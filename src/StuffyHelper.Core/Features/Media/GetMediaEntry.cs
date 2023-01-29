@@ -1,5 +1,6 @@
 ﻿using EnsureThat;
 using StuffyHelper.Core.Features.Event;
+using StuffyHelper.Minio.Features.Common;
 
 namespace StuffyHelper.Core.Features.Media
 {

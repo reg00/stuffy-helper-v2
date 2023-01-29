@@ -5,7 +5,7 @@ using Minio;
 using Reg00.Infrastructure.Minio.Configs;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Minio.Configs;
-using StuffyHelper.Minio.Storage;
+using StuffyHelper.Minio.Features.Storage;
 
 namespace StuffyHelper.Minio.Registration
 {

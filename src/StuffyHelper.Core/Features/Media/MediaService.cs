@@ -1,6 +1,8 @@
 ﻿using EnsureThat;
 using StuffyHelper.Core.Exceptions;
+using StuffyHelper.Core.Extensions;
 using StuffyHelper.Core.Features.Common;
+using StuffyHelper.Minio.Features.Common;
 using EntityAlreadyExistsException = StuffyHelper.Core.Exceptions.EntityAlreadyExistsException;
 
 namespace StuffyHelper.Core.Features.Media
@@ -41,9 +43,10 @@ namespace StuffyHelper.Core.Features.Media
                         cancellationToken);
 
                     await _fileStore.DeleteFilesIfExistAsync(
-                        entry.EventId.ToString(),
-                        mediaId.ToString(),
-                        entry.FileType,
+                        StuffyMinioExtensions.GetStuffyObjectName(
+                            entry.EventId.ToString(),
+                            mediaId.ToString(),
+                            entry.FileType),
                         cancellationToken);
                 }
             }
@@ -60,9 +63,10 @@ namespace StuffyHelper.Core.Features.Media
                     cancellationToken);
 
                 return await _fileStore.ObtainGetPresignedUrl(
-                    entry.EventId.ToString(),
-                    entry.Id.ToString(),
-                    entry.FileType,
+                    StuffyMinioExtensions.GetStuffyObjectName(
+                        entry.EventId.ToString(),
+                        entry.Id.ToString(),
+                        entry.FileType),
                     cancellationToken);
             }
             catch(ResourceNotFoundException)
@@ -84,9 +88,10 @@ namespace StuffyHelper.Core.Features.Media
                 cancellationToken);
 
             var stream = await _fileStore.GetFileAsync(
-                entry.EventId.ToString(),
-                mediaId.ToString(),
-                entry.FileType,
+                StuffyMinioExtensions.GetStuffyObjectName(
+                    entry.EventId.ToString(),
+                    mediaId.ToString(),
+                    entry.FileType),
                 cancellationToken);
 
             return new MediaBlobEntry(stream, entry.FileName, entry.FileType);
@@ -223,10 +228,11 @@ namespace StuffyHelper.Core.Features.Media
 
                 if(media.MediaType != MediaType.Link)
                     await _fileStore.StoreFileAsync(
-                        entry.EventId.ToString(),
-                        mediaEntry.Id.ToString(),
-                        media.File!.OpenReadStream(),
-                        entry.FileType,
+                        StuffyMinioExtensions.GetStuffyObjectName(
+                            entry.EventId.ToString(),
+                            mediaEntry.Id.ToString(),
+                            entry.FileType),
+                            media.File!.OpenReadStream(),
                         cancellationToken);
 
                 return new MediaShortEntry(entry);
@@ -243,9 +249,10 @@ namespace StuffyHelper.Core.Features.Media
 
                 if (media.MediaType != MediaType.Link)
                     await _fileStore.DeleteFilesIfExistAsync(
-                        media.EventId.ToString(),
-                        entry.Id.ToString(),
-                        entry.FileType,
+                        StuffyMinioExtensions.GetStuffyObjectName(
+                            media.EventId.ToString(),
+                            entry.Id.ToString(),
+                            entry.FileType),
                         cancellationToken: cancellationToken);
 
                 throw;
