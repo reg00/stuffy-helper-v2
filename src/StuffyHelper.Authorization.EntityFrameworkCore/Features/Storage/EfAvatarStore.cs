@@ -40,6 +40,23 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
             }
         }
 
+        public async Task<AvatarEntry> UpdateAvatarAsync(AvatarEntry avatar, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotNull(avatar, nameof(avatar));
+
+            try
+            {
+                avatar.CreatedDate = DateTime.Now;
+                var entry = _context.Avatars.Update(avatar);
+                await _context.SaveChangesAsync(cancellationToken);
+                return entry.Entity;
+            }
+            catch (Exception ex)
+            {
+                throw new AuthStoreException(ex);
+            }
+        }
+
         public async Task DeleteAvatarAsync(AvatarEntry avatar, CancellationToken cancellationToken = default)
         {
             try

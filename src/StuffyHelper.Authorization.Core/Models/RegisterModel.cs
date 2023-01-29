@@ -14,7 +14,5 @@ namespace StuffyHelper.Authorization.Core.Models
 
         [Required(ErrorMessage = "Необходимо заполнить поле пароля")]
         public string Password { get; set; }
-
-        public IFormFile? File { get; set; }
     }
 }

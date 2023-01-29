@@ -28,6 +28,10 @@ namespace StuffyHelper.Authorization.Core.Features
 
         Task<UserEntry> UpdateUser(ClaimsPrincipal user, UpdateModel model);
 
+        Task UpdateAvatar(ClaimsPrincipal user, IFormFile file);
+
+        Task RemoveAvatar(ClaimsPrincipal user);
+
         Task<UserEntry> GetUser(string? userName = null, string? userId = null);
 
         Task<UserEntry> ConfirmEmail(string login, string code);

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using StuffyHelper.Authorization.Core.Configs;
@@ -12,6 +13,7 @@ using StuffyHelper.Authorization.Core.Features.Avatar;
 using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Authorization.Core.Models.User;
 using System.IdentityModel.Tokens.Jwt;
+using System.Reflection;
 using System.Security.Claims;
 using System.Threading;
 
@@ -102,18 +104,6 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             await _roleManager.CreateRolesIfNotExists();
             await identityUser.AddRoleToUser(_roleManager, _userManager, UserType.User);
 
-            if (model.File != null)
-            {
-                var user = await _userManager.FindByNameAsync(model.Username);
-                var addAvatar = new AddAvatarEntry(user.Id, model.File);
-
-                var avatar = await _avatarService.StoreAvatarFormFileAsync(addAvatar);
-
-                var mediaUri = await _avatarService.GetAvatarUri(user.Id);
-                identityUser.ImageUri = mediaUri;
-                result = await _userManager.UpdateAsync(identityUser);
-            }
-
             return await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
         }
 
@@ -188,6 +178,43 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var rolesList = await _userManager.GetRolesAsync(updatedUser);
 
             return new UserEntry(updatedUser, rolesList);
+        }
+
+        public async Task UpdateAvatar(ClaimsPrincipal user, IFormFile file)
+        {
+            var existUser = await _userManager.FindByNameAsync(user.Identity!.Name);
+            if (existUser is null)
+                throw new AuthorizationResourceNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
+
+            if (file != null)
+            {
+                var addAvatar = new AddAvatarEntry(existUser.Id, file);
+
+                var avatar = await _avatarService.StoreAvatarFormFileAsync(addAvatar);
+
+                var mediaUri = await _avatarService.GetAvatarUri(existUser.Id);
+                existUser.ImageUri = mediaUri;
+                var result = await _userManager.UpdateAsync(existUser);
+            }
+        }
+
+        public async Task RemoveAvatar(ClaimsPrincipal user)
+        {
+            var existUser = await _userManager.FindByNameAsync(user.Identity!.Name);
+            if (existUser is null)
+                throw new AuthorizationResourceNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
+            try
+            {
+                await _avatarService.DeleteAvatarAsync(existUser.Id);
+            }
+            catch (AuthorizationResourceNotFoundException ex) 
+            { 
+
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public async Task<UserEntry> GetUser(string? userName = null, string? userId = null)
