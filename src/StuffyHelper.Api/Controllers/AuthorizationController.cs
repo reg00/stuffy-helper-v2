@@ -11,7 +11,6 @@ using StuffyHelper.Core.Features.Common;
 using StuffyHelper.EmailService.Core.Service;
 using StuffyHelper.Core.Configs;
 using Microsoft.Extensions.Options;
-using System.Reactive.Subjects;
 using Microsoft.AspNetCore.Http;
 
 namespace StuffyHelper.Api.Controllers
@@ -186,7 +185,7 @@ namespace StuffyHelper.Api.Controllers
         {
             var isAdmin = await _authorizationService.CheckUserIsAdmin(User, HttpContext.RequestAborted);
 
-            return isAdmin ? Ok(_authorizationService.GetRoles()) : Unauthorized();
+            return isAdmin ? Ok(_authorizationService.GetRoles()) : Forbid();
         }
 
         /// <summary>
@@ -225,9 +224,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.UserLoginsRoute)]
         public async Task<IActionResult> GetUserLogins(string? userName = null)
         {
-            var isAdmin = await _authorizationService.CheckUserIsAdmin(User, HttpContext.RequestAborted);
-
-            return isAdmin ? Ok(_authorizationService.GetUserLogins(userName)) : Unauthorized();
+            return Ok(_authorizationService.GetUserLogins(userName));
         }
 
         /// <summary>

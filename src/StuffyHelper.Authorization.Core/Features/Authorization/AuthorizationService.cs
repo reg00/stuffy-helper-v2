@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using StuffyHelper.Authorization.Core.Configs;
 using StuffyHelper.Authorization.Core.Exceptions;
@@ -13,9 +11,7 @@ using StuffyHelper.Authorization.Core.Features.Avatar;
 using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Authorization.Core.Models.User;
 using System.IdentityModel.Tokens.Jwt;
-using System.Reflection;
 using System.Security.Claims;
-using System.Threading;
 
 namespace StuffyHelper.Authorization.Core.Features.Authorization
 {

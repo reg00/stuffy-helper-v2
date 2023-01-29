@@ -14,6 +14,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         public ParticipantShortEntry? Participant { get; set; }
         [Required]
         public PurchaseShortEntry? Purchase { get; set; }
+        public int amount { get; set; }
 
         public GetPurchaseUsageEntry()
         {
@@ -26,6 +27,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
             EnsureArg.IsNotNull(user, nameof(user));
 
             Id = entry.Id;
+            amount = entry.Amount;
             Participant = new ParticipantShortEntry(entry.Participant, user);
             Purchase = new PurchaseShortEntry(entry.Purchase);
         }
