@@ -96,6 +96,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.EventId).IsRequired();
                 entity.Property(e => e.UnitTypeId).IsRequired();
+                entity.Property(e => e.IsPartial).IsRequired().HasDefaultValue(false);
             });
 
             modelBuilder.Entity<PurchaseUsageEntry>(entity =>

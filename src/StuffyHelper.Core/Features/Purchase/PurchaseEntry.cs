@@ -13,7 +13,7 @@ namespace StuffyHelper.Core.Features.Purchase
         public string Name { get; set; }
         public double Cost { get; set; }
         public double Amount { get; set; }
-
+        public bool IsPartial { get; set; }
         public Guid UnitTypeId { get; set; }
         public Guid ParticipantId { get; set; }
         public Guid EventId { get; set; }
@@ -32,6 +32,7 @@ namespace StuffyHelper.Core.Features.Purchase
             Name = entry.Name;
             Cost = entry.Cost;
             Amount = entry.Amount;
+            IsPartial = entry.IsPartial;
             UnitTypeId = entry.UnitTypeId;
         }
     }

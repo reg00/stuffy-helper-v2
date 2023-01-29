@@ -15,6 +15,8 @@ namespace StuffyHelper.Core.Features.Purchase
         public double Cost { get; set; }
         [Required]
         public double Amount { get; set; }
+        [Required]
+        public bool IsPartial { get; set; }
 
         public List<PurchaseTagShortEntry> PurchaseTags { get; set; }
         public UnitTypeShortEntry? UnitType { get; set; }

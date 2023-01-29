@@ -21,7 +21,7 @@ namespace StuffyHelper.Api.Controllers
         /// Получение списка покупок
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Response<PurchaseShortEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Response<GetPurchaseEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
