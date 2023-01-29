@@ -23,6 +23,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             try
             {
                 var entry = await _context.Purchases
+                    .Include(e => e.Event)
+                    .Include(e => e.PurchaseUsages)
                     .Include(e => e.UnitType)
                     .Include(e => e.PurchaseTags)
                     .FirstOrDefaultAsync(e => e.Id == purchaseId, cancellationToken);
