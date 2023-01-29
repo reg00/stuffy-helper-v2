@@ -18,7 +18,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
 
             Id = entry.Id;
             UserId = entry.Participant?.UserId;
-            PurchaseName = entry?.Purchase.Name;
+            PurchaseName = entry?.Purchase?.Name;
             Name = user?.Name;
         }
     }

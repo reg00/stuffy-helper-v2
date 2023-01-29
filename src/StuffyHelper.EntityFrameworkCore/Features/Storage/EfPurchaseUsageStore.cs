@@ -51,6 +51,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             try
             {
                 var searchedData = await _context.PurchaseUsages
+                    .Include(x => x.Purchase)
+                    .Include(x => x.Participant)
                     .Where(e => (participantId == null || participantId == e.ParticipantId) &&
                     (purchaseId == null || purchaseId == e.PurchaseId))
                     .OrderByDescending(e => e.Participant.Event.CreatedDate)

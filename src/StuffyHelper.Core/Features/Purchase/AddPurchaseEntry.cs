@@ -18,6 +18,8 @@ namespace StuffyHelper.Core.Features.Purchase
         public List<PurchaseTagShortEntry> PurchaseTags { get; init; }
         [Required]
         public Guid UnitTypeId { get; set; }
+        [Required]
+        public bool IsPartial { get; set; }
 
         public PurchaseEntry ToCommonEntry()
         {
@@ -28,6 +30,7 @@ namespace StuffyHelper.Core.Features.Purchase
                 Amount = Amount,
                 EventId = EventId,
                 UnitTypeId = UnitTypeId,
+                IsPartial = IsPartial,
                 ParticipantId = ParticipantId,
             };
         }

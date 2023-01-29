@@ -27,7 +27,7 @@ namespace StuffyHelper.Core.Features.Purchase
             return new GetPurchaseEntry(entry);
         }
 
-        public async Task<Response<PurchaseShortEntry>> GetPurchasesAsync(
+        public async Task<Response<GetPurchaseEntry>> GetPurchasesAsync(
             int offset = 0,
             int limit = 10,
             string? name = null,
@@ -41,9 +41,9 @@ namespace StuffyHelper.Core.Features.Purchase
             var resp = await _purchaseStore.GetPurchasesAsync(offset, limit, name, costMin, costMax,
                                                               eventId, purchaseTags, unitTypeId, cancellationToken);
 
-            return new Response<PurchaseShortEntry>()
+            return new Response<GetPurchaseEntry>()
             {
-                Data = resp.Data.Select(x => new PurchaseShortEntry(x)),
+                Data = resp.Data.Select(x => new GetPurchaseEntry(x)),
                 TotalPages = resp.TotalPages,
                 Total = resp.Total
             };
