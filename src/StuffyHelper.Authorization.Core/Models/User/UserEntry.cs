@@ -12,6 +12,7 @@ namespace StuffyHelper.Authorization.Core.Models
         public string? MiddleName { get; set; }
         public string? LastName { get; set; }
         public string Phone { get; set; }
+        public Uri? ImageUri { get; set; }
 
         public UserEntry()
         { }
@@ -25,6 +26,7 @@ namespace StuffyHelper.Authorization.Core.Models
             MiddleName = user.MiddleName;
             LastName = user.LastName;
             Phone = user.PhoneNumber;
+            ImageUri = user.ImageUri;
             Role = roles?.Contains(nameof(UserType.Admin)) == true ? nameof(UserType.Admin) : nameof(UserType.User);
         }
     }

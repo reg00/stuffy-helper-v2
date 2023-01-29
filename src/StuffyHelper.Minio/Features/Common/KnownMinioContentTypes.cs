@@ -1,6 +1,6 @@
-﻿namespace StuffyHelper.Core.Web
+﻿namespace StuffyHelper.Minio.Features.Common
 {
-    public static class KnownContentTypes
+    public static class KnownMinioContentTypes
     {
         public const string MultipartFormData = "multipart/form-data";
 

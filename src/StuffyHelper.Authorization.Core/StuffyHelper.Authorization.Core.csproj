@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StuffyHelper.EmailService.Core\StuffyHelper.EmailService.Core.csproj" />
+    <ProjectReference Include="..\StuffyHelper.Minio\StuffyHelper.Minio.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StuffyHelper.Authorization.Core.Configs;
-using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Features.Authorization;
 using StuffyHelper.Authorization.Core.Features.Friends;
 using StuffyHelper.Authorization.Core.Features.Friend;
@@ -13,6 +12,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using IAuthorizationService = StuffyHelper.Authorization.Core.Features.IAuthorizationService;
+using StuffyHelper.Authorization.Core.Features.Avatar;
 
 namespace StuffyHelper.Authorization.Core.Registration
 {
@@ -79,6 +79,7 @@ namespace StuffyHelper.Authorization.Core.Registration
             services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<IFriendsRequestService, FriendsRequestService>();
             services.AddScoped<IFriendService, FriendService>();
+            services.AddScoped<IAvatarService, AvatarService>();
 
             return services;
         }

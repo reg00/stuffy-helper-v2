@@ -1,13 +1,10 @@
 ﻿using EnsureThat;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Api.Web;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Media;
-using System.ComponentModel.DataAnnotations;
 using System.Net;
 
 namespace StuffyHelper.Api.Controllers

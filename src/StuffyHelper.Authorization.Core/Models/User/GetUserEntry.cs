@@ -10,6 +10,7 @@
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Phone { get; set; }
+        public Uri? ImageUri { get; set; }
 
         public GetUserEntry()
         { }
@@ -23,6 +24,7 @@
             MiddleName = user?.MiddleName;
             LastName = user?.LastName;
             Phone = user?.PhoneNumber;
+            ImageUri = user?.ImageUri;
             Role = roles?.Contains(nameof(UserType.Admin)) == true ? nameof(UserType.Admin) : nameof(UserType.User);
         }
 
@@ -35,6 +37,7 @@
             MiddleName = user?.MiddleName;
             LastName = user?.LastName;
             Phone = user?.Phone;
+            ImageUri = user?.ImageUri;
             Role = user.Role;
         }
     }

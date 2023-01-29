@@ -1,7 +1,6 @@
 ﻿using EnsureThat;
-using StuffyHelper.Core.Features.Common;
 
-namespace StuffyHelper.Core.Features.Media
+namespace StuffyHelper.Minio.Features.Common
 {
     public class MediaBlobEntry
     {

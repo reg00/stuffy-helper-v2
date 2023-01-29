@@ -7,6 +7,7 @@ using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
+using StuffyHelper.Minio.Features.Common;
 using System.Security.Claims;
 
 namespace StuffyHelper.Core.Features.Event

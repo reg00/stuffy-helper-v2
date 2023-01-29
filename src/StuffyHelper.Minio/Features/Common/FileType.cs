@@ -1,4 +1,4 @@
-﻿namespace StuffyHelper.Core.Features.Media
+﻿namespace StuffyHelper.Minio.Features.Common
 {
     public enum FileType
     {

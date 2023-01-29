@@ -1,4 +1,4 @@
-﻿namespace StuffyHelper.Core.Exceptions
+﻿namespace StuffyHelper.Minio.Features.Exceptions
 {
     public class FileTypeNotSupportedException : Exception
     {

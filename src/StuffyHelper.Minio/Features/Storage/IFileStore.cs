@@ -1,38 +1,26 @@
-﻿using StuffyHelper.Core.Features.Media;
-
-namespace StuffyHelper.Core.Features.Common
+﻿namespace StuffyHelper.Core.Features.Common
 {
     public interface IFileStore
     {
         Task DeleteFilesIfExistAsync(
-            string eventId,
-            string fileId,
-            FileType fileType,
+            string objectName,
             CancellationToken cancellationToken = default);
 
         Task<Stream> GetFileAsync(
-            string eventId,
-            string fileId,
-            FileType fileType,
+            string objectName,
             CancellationToken cancellationToken = default);
 
         Task StoreFileAsync(
-            string eventId,
-            string fileId,
+            string objectName,
             Stream stream,
-            FileType fileType,
             CancellationToken cancellationToken = default);
 
         Task<Uri> ObtainGetPresignedUrl(
-            string eventId,
-            string fileId,
-            FileType fileType,
+            string objectName,
             CancellationToken cancellationToken = default);
 
         Task<Uri> ObtainPutPresignedUrl(
-            string eventId,
-            string fileId,
-            FileType fileType,
+            string objectName,
             CancellationToken cancellationToken = default);
     }
 }

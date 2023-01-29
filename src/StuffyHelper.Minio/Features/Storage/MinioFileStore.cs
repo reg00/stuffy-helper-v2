@@ -4,13 +4,11 @@ using Minio;
 using Reg00.Infrastructure.Minio.Configs;
 using Reg00.Infrastructure.Minio.Extensions;
 using Reg00.Infrastructure.Minio.Features.Client;
-using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Minio.Configs;
-using System.Text;
+using StuffyHelper.Minio.Features.Exceptions;
 
-namespace StuffyHelper.Minio.Storage
+namespace StuffyHelper.Minio.Features.Storage
 {
     public class MinioFileStore : IFileStore
     {
@@ -54,15 +52,10 @@ namespace StuffyHelper.Minio.Storage
         }
 
         public async Task DeleteFilesIfExistAsync(
-            string eventId,
-            string fileId,
-            FileType fileType,
+            string objectName,
             CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotEmptyOrWhiteSpace(eventId, nameof(eventId));
-            EnsureArg.IsNotEmptyOrWhiteSpace(fileId, nameof(fileId));
-
-            var objectName = GetObjectName(eventId, fileId, fileType);
+            EnsureArg.IsNotEmptyOrWhiteSpace(objectName, nameof(objectName));
 
             try
             {
@@ -70,20 +63,15 @@ namespace StuffyHelper.Minio.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new StuffyMinioException(ex);
             }
         }
 
         public async Task<Stream> GetFileAsync(
-            string eventId,
-            string fileId,
-            FileType fileType,
+            string objectName,
             CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotEmptyOrWhiteSpace(eventId, nameof(eventId));
-            EnsureArg.IsNotEmptyOrWhiteSpace(fileId, nameof(fileId));
-
-            var objectName = GetObjectName(eventId, fileId, fileType);
+            EnsureArg.IsNotEmptyOrWhiteSpace(objectName, nameof(objectName));
 
             try
             {
@@ -91,22 +79,17 @@ namespace StuffyHelper.Minio.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new StuffyMinioException(ex);
             }
         }
 
         public async Task StoreFileAsync(
-            string eventId,
-            string fileId,
+            string objectName,
             Stream stream,
-            FileType fileType,
             CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotEmptyOrWhiteSpace(eventId, nameof(eventId));
-            EnsureArg.IsNotEmptyOrWhiteSpace(fileId, nameof(fileId));
+            EnsureArg.IsNotEmptyOrWhiteSpace(objectName, nameof(objectName));
             EnsureArg.IsNotNull(stream, nameof(stream));
-
-            var objectName = GetObjectName(eventId, fileId, fileType);
 
             try
             {
@@ -117,33 +100,15 @@ namespace StuffyHelper.Minio.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new StuffyMinioException(ex);
             }
         }
 
-        private static string GetObjectName(
-            string eventId,
-            string fileId,
-            FileType fileType)
-        {
-            var sb = new StringBuilder();
-
-            sb.Append($"{eventId}/");
-            sb.Append($"{fileId}.{fileType.ToString().ToLowerInvariant()}");
-
-            return sb.ToString().TrimEnd('/');
-        }
-
         public async Task<Uri> ObtainGetPresignedUrl(
-            string eventId,
-            string fileId,
-            FileType fileType,
+            string objectName,
             CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotNullOrWhiteSpace(eventId, nameof(eventId));
-            EnsureArg.IsNotNullOrWhiteSpace(fileId, nameof(fileId));
-
-            var objectName = GetObjectName(eventId, fileId, fileType);
+            EnsureArg.IsNotNullOrWhiteSpace(objectName, nameof(objectName));
 
             try
             {
@@ -152,20 +117,15 @@ namespace StuffyHelper.Minio.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new StuffyMinioException(ex);
             }
         }
 
         public Task<Uri> ObtainPutPresignedUrl(
-            string eventId,
-            string fileId,
-            FileType fileType,
+            string objectName,
             CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotNullOrWhiteSpace(eventId, nameof(eventId));
-            EnsureArg.IsNotNullOrWhiteSpace(fileId, nameof(fileId));
-
-            var objectName = GetObjectName(eventId, fileId, fileType);
+            EnsureArg.IsNotNullOrWhiteSpace(objectName, nameof(objectName));
 
             try
             {
@@ -174,7 +134,7 @@ namespace StuffyHelper.Minio.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new StuffyMinioException(ex);
             }
         }
     }

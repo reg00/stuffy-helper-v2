@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using StuffyHelper.Authorization.Core.Features.Friends;
 using StuffyHelper.Authorization.Core.Features.Friend;
 using StuffyHelper.Authorization.Core.Models.User;
+using StuffyHelper.Authorization.Core.Features.Avatar;
 
 namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema
 {
@@ -14,6 +15,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema
 
         public virtual DbSet<FriendEntry> Friends { get; set; }
         public virtual DbSet<FriendsRequest> FriendsRequests { get; set; }
+        public virtual DbSet<AvatarEntry> Avatars { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,6 +43,17 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema
 
                 entity.Property(e => e.UserIdFrom).IsRequired();
                 entity.Property(e => e.UserIdTo).IsRequired();
+            });
+
+            modelBuilder.Entity<AvatarEntry>(entity =>
+            {
+                entity.ToTable("avatars");
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.UserId).IsUnique();
+
+                entity.HasOne(e => e.User).WithOne(e => e.Avatar).HasForeignKey<AvatarEntry>(e => e.UserId);
+
+                entity.Property(e => e.UserId).IsRequired();
             });
 
             base.OnModelCreating(modelBuilder);

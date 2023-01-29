@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using StuffyHelper.Minio.Features.Common;
 
 namespace StuffyHelper.Core.Features.Media
 {
