@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 
@@ -66,7 +67,7 @@ namespace StuffyHelper.Core.Features.UnitType
 
             if (existingUnitType is null)
             {
-                throw new ResourceNotFoundException($"UnitType Id '{unitTypeId}' not found");
+                throw new EntityNotFoundException($"UnitType Id '{unitTypeId}' not found");
             }
 
             existingUnitType.PatchFrom(unitType);

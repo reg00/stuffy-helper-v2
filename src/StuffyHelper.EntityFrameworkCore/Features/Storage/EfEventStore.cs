@@ -1,6 +1,7 @@
 ﻿using EnsureThat;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Event;
@@ -27,17 +28,17 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .FirstOrDefaultAsync(e => e.Id == eventId, cancellationToken);
 
                 if (entry is null)
-                    throw new ResourceNotFoundException($"Event with Id '{eventId}' Not Found.");
+                    throw new EntityNotFoundException($"Event with Id '{eventId}' Not Found.");
 
                 return entry;
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
 
         }
@@ -88,7 +89,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -108,11 +109,11 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
                     throw new EntityAlreadyExistsException($"Event with name '{@event.Name}' and event date '{@event.EventDateStart}' already exists", ex);
 
-                else throw new DataStoreException(ex);
+                else throw new DbStoreException(ex);
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -128,7 +129,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 if (@event is null)
                 {
-                    throw new ResourceNotFoundException($"Event with Id '{eventId}' not found.");
+                    throw new EntityNotFoundException($"Event with Id '{eventId}' not found.");
                 }
 
                 @event.IsActive = false;
@@ -138,7 +139,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -157,15 +158,15 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
                     throw new EntityAlreadyExistsException($"Event with name '{@event.Name}' and event date '{@event.EventDateStart}' already exists", ex);
 
-                else throw new DataStoreException(ex);
+                else throw new DbStoreException(ex);
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
     }

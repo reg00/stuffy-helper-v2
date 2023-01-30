@@ -1,6 +1,7 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Configs;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Models;
@@ -82,7 +83,7 @@ namespace StuffyHelper.Authorization.Core.Extensions
                 var errors = string.Join(' ', identityResult.Errors.Select(y => y.Description));
 
                 if (identityResult.Errors.Any(x => x.Code == "DuplicateUserName"))
-                    throw new AuthorizationEntityAlreadyExistsException(errors);
+                    throw new EntityAlreadyExistsException(errors);
 
                 throw new AuthorizationException($"Ошибка обновления пользователя!. Детали: {errors}");
             }

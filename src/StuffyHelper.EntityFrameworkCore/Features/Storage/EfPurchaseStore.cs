@@ -1,5 +1,6 @@
 ﻿using EnsureThat;
 using Microsoft.EntityFrameworkCore;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Purchase;
@@ -30,19 +31,19 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .FirstOrDefaultAsync(e => e.Id == purchaseId, cancellationToken);
 
                 if (entry is null)
-                    throw new ResourceNotFoundException($"Purchase with Id '{purchaseId}' Not Found.");
+                    throw new EntityNotFoundException($"Purchase with Id '{purchaseId}' Not Found.");
 
                 entry.PurchaseTags = entry.PurchaseTags.Where(x => x.IsActive == true).ToList();
 
                 return entry;
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
 
         }
@@ -81,7 +82,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -99,7 +100,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -115,7 +116,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 if (purchase is null)
                 {
-                    throw new ResourceNotFoundException($"Purchase with Id '{purchaseId}' not found.");
+                    throw new EntityNotFoundException($"Purchase with Id '{purchaseId}' not found.");
                 }
 
                 _context.Purchases.Remove(purchase);
@@ -123,7 +124,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -138,13 +139,13 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                 entry.Entity.PurchaseTags = entry.Entity.PurchaseTags.Where(x => x.IsActive == true).ToList();
                 return entry.Entity;
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
     }

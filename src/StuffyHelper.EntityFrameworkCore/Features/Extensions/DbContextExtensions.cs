@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.EntityFrameworkCore.Configs;
-using StuffyHelper.EntityFrameworkCore.Features.Exceptions;
 
 namespace StuffyHelper.EntityFrameworkCore.Features.Extensions
 {

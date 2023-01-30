@@ -1,9 +1,8 @@
 ﻿using EnsureThat;
-using StuffyHelper.Core.Exceptions;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Core.Extensions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Minio.Features.Common;
-using EntityAlreadyExistsException = StuffyHelper.Core.Exceptions.EntityAlreadyExistsException;
 
 namespace StuffyHelper.Core.Features.Media
 {
@@ -69,7 +68,7 @@ namespace StuffyHelper.Core.Features.Media
                         entry.FileType),
                     cancellationToken);
             }
-            catch(ResourceNotFoundException)
+            catch(EntityNotFoundException)
             {
                 return null;
             }
@@ -117,7 +116,7 @@ namespace StuffyHelper.Core.Features.Media
                 var entry = await _mediaStore.GetPrimalEventMedia(eventId, cancellationToken);
                 return new GetMediaEntry(entry);
             }
-            catch(ResourceNotFoundException)
+            catch(EntityNotFoundException)
             {
                 return null;
             }
@@ -142,7 +141,7 @@ namespace StuffyHelper.Core.Features.Media
                 offset, limit, eventId, createdDateStart, createdDateEnd, mediaType, cancellationToken))
                 .Select(s => new MediaShortEntry(s));
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 return new List<MediaShortEntry>();
             }
@@ -186,7 +185,7 @@ namespace StuffyHelper.Core.Features.Media
         //    {
         //        throw;
         //    }
-        //    catch (ResourceNotFoundException)
+        //    catch (EntityNotFoundException)
         //    {
         //        throw;
         //    }
@@ -215,9 +214,9 @@ namespace StuffyHelper.Core.Features.Media
             EnsureArg.IsNotDefault(media.EventId, nameof(media.EventId));
 
             if (media.MediaType == MediaType.Link && string.IsNullOrWhiteSpace(media.Link))
-                throw new StuffyException("link cannot be null");
+                throw new ArgumentNullException("link cannot be null");
             else if (media.MediaType != MediaType.Link && media.File is null)
-                throw new StuffyException("file cannot be null");
+                throw new ArgumentNullException("file cannot be null");
 
             var entry = media.ToCommonEntry(isPrimal);
 

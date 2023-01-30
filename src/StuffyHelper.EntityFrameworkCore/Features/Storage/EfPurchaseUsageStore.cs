@@ -1,5 +1,6 @@
 ﻿using EnsureThat;
 using Microsoft.EntityFrameworkCore;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.PurchaseUsage;
@@ -26,17 +27,17 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .FirstOrDefaultAsync(e => e.Id == purchaseUsageId, cancellationToken);
 
                 if (entry is null)
-                    throw new ResourceNotFoundException($"PurchaseUsage with Id '{purchaseUsageId}' Not Found.");
+                    throw new EntityNotFoundException($"PurchaseUsage with Id '{purchaseUsageId}' Not Found.");
 
                 return entry;
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
 
         }
@@ -67,7 +68,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -83,7 +84,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -99,7 +100,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 if (PurchaseUsage is null)
                 {
-                    throw new ResourceNotFoundException($"PurchaseUsage with Id '{purchaseUsageId}' not found.");
+                    throw new EntityNotFoundException($"PurchaseUsage with Id '{purchaseUsageId}' not found.");
                 }
 
                 //PurchaseUsage.IsActive = false;
@@ -109,7 +110,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -123,13 +124,13 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                 await _context.SaveChangesAsync(cancellationToken);
                 return entry.Entity;
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
     }

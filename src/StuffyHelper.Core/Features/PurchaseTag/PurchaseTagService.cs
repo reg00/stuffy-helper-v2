@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 
@@ -66,7 +67,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag
 
             if (existingPurchaseTag is null)
             {
-                throw new ResourceNotFoundException($"PurchaseTag Id '{purchaseTagId}' not found");
+                throw new EntityNotFoundException($"PurchaseTag Id '{purchaseTagId}' not found");
             }
 
             existingPurchaseTag.PatchFrom(purchaseTag);

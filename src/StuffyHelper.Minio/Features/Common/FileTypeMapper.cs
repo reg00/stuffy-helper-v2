@@ -64,7 +64,7 @@ namespace StuffyHelper.Minio.Features.Common
             }
             else
             {
-                throw new FileTypeNotSupportedException($"File type {ext} is not supported.");
+                throw new NotSupportedException($"File type {ext} is not supported.");
             }
         }
 
@@ -76,7 +76,7 @@ namespace StuffyHelper.Minio.Features.Common
             }
             else
             {
-                throw new FileTypeNotSupportedException($"File type {fileType} is not supported.");
+                throw new NotSupportedException($"File type {fileType} is not supported.");
             }
         }
 
@@ -88,7 +88,7 @@ namespace StuffyHelper.Minio.Features.Common
             }
             else
             {
-                throw new FileTypeNotSupportedException($"File type {ext} is not supported.");
+                throw new NotSupportedException($"File type {ext} is not supported.");
             }
         }
 
@@ -100,7 +100,7 @@ namespace StuffyHelper.Minio.Features.Common
             }
             else
             {
-                throw new FileTypeNotSupportedException($"File type {fileType} is not supported.");
+                throw new NotSupportedException($"File type {fileType} is not supported.");
             }
         }
 
@@ -111,11 +111,11 @@ namespace StuffyHelper.Minio.Features.Common
                 if (result == FileType.Jpeg || result == FileType.Jpg || result == FileType.Png)
                     return true;
 
-                throw new FileTypeNotSupportedException($"File must be an image.");
+                throw new NotSupportedException($"File must be an image.");
             }
             else
             {
-                throw new FileTypeNotSupportedException($"File type {ext} is not supported.");
+                throw new NotSupportedException($"File type {ext} is not supported.");
             }
         }
     }
