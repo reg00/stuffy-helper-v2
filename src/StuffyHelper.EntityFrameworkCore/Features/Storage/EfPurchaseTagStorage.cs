@@ -1,5 +1,6 @@
 ﻿using EnsureThat;
 using Microsoft.EntityFrameworkCore;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.PurchaseTag;
@@ -26,17 +27,17 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .FirstOrDefaultAsync(e => e.Id == purchaseTagId, cancellationToken);
 
                 if (entry is null)
-                    throw new ResourceNotFoundException($"PurchaseTag with Id '{purchaseTagId}' Not Found.");
+                    throw new EntityNotFoundException($"PurchaseTag with Id '{purchaseTagId}' Not Found.");
 
                 return entry;
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -49,18 +50,18 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 if (tag is null)
                 {
-                    throw new ResourceNotFoundException($"Purchase tag with name: {name} not found.");
+                    throw new EntityNotFoundException($"Purchase tag with name: {name} not found.");
                 }
 
                 return tag;
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -90,7 +91,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -106,7 +107,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -122,7 +123,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 if (purchaseTag is null)
                 {
-                    throw new ResourceNotFoundException($"PurchaseTag with Id '{purchaseTagId}' not found.");
+                    throw new EntityNotFoundException($"PurchaseTag with Id '{purchaseTagId}' not found.");
                 }
 
                 purchaseTag.IsActive = false;
@@ -132,7 +133,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -146,13 +147,13 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                 await _context.SaveChangesAsync(cancellationToken);
                 return entry.Entity;
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
     }

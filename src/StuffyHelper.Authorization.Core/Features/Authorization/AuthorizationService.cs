@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Configs;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Extensions;
@@ -41,7 +42,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var user = await _userManager.FindByNameAsync(model.Username);
 
             if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
-                throw new AuthorizationForbiddenException("Вы не подтвердили свой email");
+                throw new ForbiddenException("Вы не подтвердили свой email");
 
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
@@ -71,7 +72,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
                 return token;
             }
             else
-                throw new AuthorizationResourceNotFoundException($"Неверный логин/пароль");
+                throw new EntityNotFoundException($"Неверный логин/пароль");
         }
 
         public async Task Logout(HttpContext httpContext)
@@ -88,7 +89,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var userExists = await _userManager.FindByNameAsync(model.Username);
 
             if (userExists != null)
-                throw new AuthorizationEntityAlreadyExistsException($"Пользователь с логином {model.Username} уже существует");
+                throw new EntityAlreadyExistsException($"Пользователь с логином {model.Username} уже существует");
 
             StuffyUser identityUser = model.InitializeUser();
 
@@ -149,7 +150,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
                 userToDelete = await _userManager.FindByIdAsync(userId);
 
             if (userToDelete is null)
-                throw new AuthorizationResourceNotFoundException($"Пользователь с логином {userName} отсутствует");
+                throw new EntityNotFoundException($"Пользователь с логином {userName} отсутствует");
 
             var rolesList = await _userManager.GetRolesAsync(userToDelete);
 
@@ -164,7 +165,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
             var userToUpdate = await _userManager.FindByNameAsync(user.Identity!.Name);
             if (userToUpdate is null)
-                throw new AuthorizationResourceNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
+                throw new EntityNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
 
             userToUpdate.PatchFrom(model);
 
@@ -180,7 +181,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
         {
             var existUser = await _userManager.FindByNameAsync(user.Identity!.Name);
             if (existUser is null)
-                throw new AuthorizationResourceNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
+                throw new EntityNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
 
             if (file != null)
             {
@@ -198,12 +199,12 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
         {
             var existUser = await _userManager.FindByNameAsync(user.Identity!.Name);
             if (existUser is null)
-                throw new AuthorizationResourceNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
+                throw new EntityNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
             try
             {
                 await _avatarService.DeleteAvatarAsync(existUser.Id);
             }
-            catch (AuthorizationResourceNotFoundException ex) 
+            catch (EntityNotFoundException ex) 
             { 
 
             }
@@ -228,7 +229,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             if (user == null)
             {
                 var error = string.IsNullOrWhiteSpace(userName) ? $"Пользователь с идентификатором {userId} отсутствует" : $"Пользователь с логином {userName} отсутствует";
-                throw new AuthorizationResourceNotFoundException(error);
+                throw new EntityNotFoundException(error);
             }
 
             var rolesList = await _userManager.GetRolesAsync(user);
@@ -247,7 +248,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
             if (user == null)
             {
-                throw new AuthorizationResourceNotFoundException($"Пользователь с логином {login} отсутствует");
+                throw new EntityNotFoundException($"Пользователь с логином {login} отсутствует");
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, code);
@@ -259,7 +260,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
                 return new UserEntry(user, rolesList);
             }
             else
-                throw new AuthorizationForbiddenException("Неверный код");
+                throw new ForbiddenException("Неверный код");
         }
 
         public async Task<(string name, string code)> ForgotPasswordAsync(ForgotPasswordModel model)
@@ -268,7 +269,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-                throw new AuthorizationForbiddenException("Неправильно введен email");
+                throw new ForbiddenException("Неправильно введен email");
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
 
@@ -282,7 +283,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                throw new AuthorizationResourceNotFoundException("Пользователь не найден");
+                throw new EntityNotFoundException("Пользователь не найден");
             }
 
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);

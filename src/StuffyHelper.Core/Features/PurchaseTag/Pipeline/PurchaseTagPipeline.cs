@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Core.Exceptions;
 
 namespace StuffyHelper.Core.Features.PurchaseTag.Pipeline
@@ -32,7 +33,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag.Pipeline
 
                     entry.PurchaseTags.Add(existsTag);
                 }
-                catch (ResourceNotFoundException)
+                catch (EntityNotFoundException)
                 {
                     var newTag = await _tagStore.AddPurchaseTagAsync(new PurchaseTagEntry(tag.Name), cancellationToken);
 

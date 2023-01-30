@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Core.Exceptions;
@@ -88,7 +89,7 @@ namespace StuffyHelper.Core.Features.Participant
 
             if (existingParticipant is null)
             {
-                throw new ResourceNotFoundException($"Participant Id '{participantId}' not found");
+                throw new EntityNotFoundException($"Participant Id '{participantId}' not found");
             }
 
             existingParticipant.PatchFrom(participant);

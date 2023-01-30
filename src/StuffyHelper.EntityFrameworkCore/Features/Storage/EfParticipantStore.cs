@@ -1,6 +1,7 @@
 ﻿using EnsureThat;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Participant;
@@ -27,17 +28,17 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .FirstOrDefaultAsync(e => e.Id == participantId, cancellationToken);
 
                 if (entry is null)
-                    throw new ResourceNotFoundException($"Participant with Id '{participantId}' Not Found.");
+                    throw new EntityNotFoundException($"Participant with Id '{participantId}' Not Found.");
 
                 return entry;
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
 
         }
@@ -66,7 +67,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -85,11 +86,11 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
                     throw new EntityAlreadyExistsException($"Participant with userId '{participant.UserId}' and eventId '{participant.EventId}' already exists", ex);
 
-                else throw new DataStoreException(ex);
+                else throw new DbStoreException(ex);
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -105,7 +106,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 if (participant is null)
                 {
-                    throw new ResourceNotFoundException($"Participant with Id '{participantId}' not found.");
+                    throw new EntityNotFoundException($"Participant with Id '{participantId}' not found.");
                 }
 
                 _context.Participants.Remove(participant);
@@ -113,7 +114,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -132,15 +133,15 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
                     throw new EntityAlreadyExistsException($"Participant with userId '{participant.UserId}' and eventId '{participant.EventId}' already exists", ex);
 
-                else throw new DataStoreException(ex);
+                else throw new DbStoreException(ex);
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
     }

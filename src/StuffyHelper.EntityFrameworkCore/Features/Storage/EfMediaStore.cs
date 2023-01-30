@@ -1,6 +1,7 @@
 ﻿using EnsureThat;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.EntityFrameworkCore.Features.Schema;
@@ -32,11 +33,11 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
                     throw new EntityAlreadyExistsException($"Media with id '{media.Id}' and event name '{media.Event!.Name}' already exists", ex);
 
-                else throw new DataStoreException(ex);
+                else throw new DbStoreException(ex);
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -49,7 +50,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -64,18 +65,18 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 if (media is null)
                 {
-                    throw new ResourceNotFoundException($"Media with id: {mediaId} not found.");
+                    throw new EntityNotFoundException($"Media with id: {mediaId} not found.");
                 }
 
                 return media;
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -102,7 +103,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -117,18 +118,18 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
                 if (media is null)
                 {
-                    throw new ResourceNotFoundException($"Media with id: {eventId} not found.");
+                    throw new EntityNotFoundException($"Media with id: {eventId} not found.");
                 }
 
                 return media;
             }
-            catch (ResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new DataStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
     }

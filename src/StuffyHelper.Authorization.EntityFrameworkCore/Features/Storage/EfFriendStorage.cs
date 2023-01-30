@@ -1,6 +1,7 @@
 ﻿using EnsureThat;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Features.Friends;
 using StuffyHelper.Authorization.Core.Models;
@@ -31,7 +32,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new AuthorizationEntityAlreadyExistsException($"Request already exists", ex);
+                    throw new EntityAlreadyExistsException($"Request already exists", ex);
 
                 else throw new AuthorizationException(ex.Message);
             }
@@ -53,7 +54,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
 
                 if (friendship is null)
                 {
-                    throw new AuthorizationResourceNotFoundException($"Friendship with Id '{friendshipId}' not found.");
+                    throw new EntityNotFoundException($"Friendship with Id '{friendshipId}' not found.");
                 }
 
 

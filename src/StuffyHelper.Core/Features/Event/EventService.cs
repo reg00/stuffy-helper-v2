@@ -1,5 +1,6 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Http;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models.User;
@@ -197,7 +198,7 @@ namespace StuffyHelper.Core.Features.Event
 
             if (existingEvent is null)
             {
-                throw new ResourceNotFoundException($"Event Id '{eventId}' not found");
+                throw new EntityNotFoundException($"Event Id '{eventId}' not found");
             }
 
             if(existingEvent.IsCompleted)
@@ -251,7 +252,7 @@ namespace StuffyHelper.Core.Features.Event
 
             if (existingEvent is null)
             {
-                throw new ResourceNotFoundException($"Event Id '{eventId}' not found");
+                throw new EntityNotFoundException($"Event Id '{eventId}' not found");
             }
 
             if (checkIsComplete && existingEvent.IsCompleted)

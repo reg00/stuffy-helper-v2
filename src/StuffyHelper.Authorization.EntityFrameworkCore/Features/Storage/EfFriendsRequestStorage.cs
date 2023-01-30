@@ -1,6 +1,7 @@
 ﻿using EnsureThat;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Features.Friend;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema;
@@ -26,11 +27,11 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
                     .FirstOrDefaultAsync(e => e.Id == requestId, cancellationToken);
 
                 if (entry is null)
-                    throw new AuthorizationResourceNotFoundException($"Friend request with Id '{requestId}' Not Found.");
+                    throw new EntityNotFoundException($"Friend request with Id '{requestId}' Not Found.");
 
                 return entry;
             }
-            catch (AuthorizationResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
@@ -89,7 +90,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new AuthorizationEntityAlreadyExistsException($"Request already exists", ex);
+                    throw new EntityAlreadyExistsException($"Request already exists", ex);
 
                 else throw new AuthorizationException(ex.Message);
             }
@@ -111,7 +112,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
 
                 if (request is null)
                 {
-                    throw new AuthorizationResourceNotFoundException($"Request with Id '{requestId}' not found.");
+                    throw new EntityNotFoundException($"Request with Id '{requestId}' not found.");
                 }
 
                 _context.FriendsRequests.Remove(request);
@@ -135,7 +136,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
 
                 if (request is null)
                 {
-                    throw new AuthorizationResourceNotFoundException($"Request with Id '{requestId}' not found.");
+                    throw new EntityNotFoundException($"Request with Id '{requestId}' not found.");
                 }
 
                 request.IsComfirmed = true;

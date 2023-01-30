@@ -1,6 +1,7 @@
 ﻿using EnsureThat;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Features.Avatar;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema;
@@ -30,13 +31,13 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new AuthorizationEntityAlreadyExistsException($"User {avatar.UserId} already have avatar", ex);
+                    throw new EntityAlreadyExistsException($"User {avatar.UserId} already have avatar", ex);
 
-                else throw new AuthStoreException(ex);
+                else throw new DbStoreException(ex);
             }
             catch (Exception ex)
             {
-                throw new AuthStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -52,7 +53,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new AuthStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -65,7 +66,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
             }
             catch (Exception ex)
             {
-                throw new AuthStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -80,18 +81,18 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
 
                 if (avatar is null)
                 {
-                    throw new AuthorizationResourceNotFoundException($"Avatar with id: {avatarId} not found.");
+                    throw new EntityNotFoundException($"Avatar with id: {avatarId} not found.");
                 }
 
                 return avatar;
             }
-            catch (AuthorizationResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new AuthStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -106,18 +107,18 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
 
                 if (avatar is null)
                 {
-                    throw new AuthorizationResourceNotFoundException($"Avatar not found.");
+                    throw new EntityNotFoundException($"Avatar not found.");
                 }
 
                 return avatar;
             }
-            catch (AuthorizationResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 throw;
             }
             catch (Exception ex)
             {
-                throw new AuthStoreException(ex);
+                throw new DbStoreException(ex);
             }
         }
     }

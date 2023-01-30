@@ -1,4 +1,6 @@
 ﻿using EnsureThat;
+using Reg00.Infrastructure.Errors;
+using Reg00.Infrastructure.Extensions;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Extensions;
 using StuffyHelper.Core.Features.Common;
@@ -85,7 +87,10 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
             EnsureArg.IsNotNullOrWhiteSpace(avatar.UserId, nameof(avatar.UserId));
 
             if (avatar.File is null)
-                throw new AuthStoreException("file cannot be null");
+                throw new ArgumentNullException("file cannot be null");
+
+            if (!FormFileExtensions.IsImage(avatar.File))
+                throw new Reg00.Infrastructure.Errors.NotSupportedException("Is not valid image");
 
             AvatarEntry entry = null;
 
@@ -107,11 +112,11 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
 
                 return avatarEntry;
             }
-            catch (AuthorizationEntityAlreadyExistsException)
+            catch (EntityAlreadyExistsException)
             {
                 throw;
             }
-            catch (AuthorizationResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 entry = avatar.ToCommonEntry();
 
@@ -155,7 +160,7 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
                     AuthMinioExtensions.GetAvatarObjectName(userId, entry.FileType),
                     cancellationToken);
             }
-            catch (AuthorizationResourceNotFoundException)
+            catch (EntityNotFoundException)
             {
                 return null;
             }

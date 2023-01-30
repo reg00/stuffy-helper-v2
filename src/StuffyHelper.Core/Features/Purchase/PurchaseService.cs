@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.PurchaseTag.Pipeline;
@@ -76,7 +77,7 @@ namespace StuffyHelper.Core.Features.Purchase
 
             if (existingPurchase is null)
             {
-                throw new ResourceNotFoundException($"Purchase Id '{purchaseId}' not found");
+                throw new EntityNotFoundException($"Purchase Id '{purchaseId}' not found");
             }
 
             existingPurchase.PatchFrom(purchase);

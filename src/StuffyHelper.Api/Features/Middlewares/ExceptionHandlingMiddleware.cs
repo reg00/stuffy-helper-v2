@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
@@ -75,21 +76,21 @@ namespace StuffyHelper.Api.Features.Middlewares
             switch (exception)
             {
                 case ValidationException _:
-                case NotSupportedException _:
+                case System.NotSupportedException _:
+                case Reg00.Infrastructure.Errors.NotSupportedException _:
                     statusCode = HttpStatusCode.BadRequest;
                     break;
-                case ResourceNotFoundException _:
-                case AuthorizationResourceNotFoundException _:
+                case EntityNotFoundException _:
                     statusCode = HttpStatusCode.NotFound;
                     break;
-                case AuthorizationForbiddenException _:
+                case ForbiddenException _:
                     statusCode = HttpStatusCode.Forbidden;
                     break;
-                case AuthStoreException _:
+                case DbStoreException _:
+                case StuffyException _:
                     statusCode = HttpStatusCode.InternalServerError;
                     break;
                 case EntityAlreadyExistsException _:
-                case AuthorizationEntityAlreadyExistsException _:
                     statusCode = HttpStatusCode.Conflict;
                     break;
                 case UnauthorizedAccessException _:
