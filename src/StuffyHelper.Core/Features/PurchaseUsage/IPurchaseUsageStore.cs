@@ -9,6 +9,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         Task<Response<PurchaseUsageEntry>> GetPurchaseUsagesAsync(
             int offset = 0,
             int limit = 10,
+            Guid? eventId = null,
             Guid? participantId = null,
             Guid? purchaseId = null,
             CancellationToken cancellationToken = default);

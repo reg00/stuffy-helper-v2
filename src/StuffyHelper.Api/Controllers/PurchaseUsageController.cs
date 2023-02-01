@@ -29,10 +29,11 @@ namespace StuffyHelper.Api.Controllers
         public async Task<IActionResult> GetAsync(
             int offset = 0,
             int limit = 10,
+            Guid? eventId = null,
             Guid? participantId = null,
             Guid? purchaseId = null)
         {
-            var purchaseUsageResponse = await _PurchaseUsageService.GetPurchaseUsagesAsync(offset, limit, participantId, purchaseId, HttpContext.RequestAborted);
+            var purchaseUsageResponse = await _PurchaseUsageService.GetPurchaseUsagesAsync(offset, limit, eventId, participantId, purchaseId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, purchaseUsageResponse);
         }
