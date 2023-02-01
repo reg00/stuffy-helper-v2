@@ -27,7 +27,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
             return new GetPurchaseUsageEntry(entry, new UserShortEntry(user));
         }
 
-        public async Task<Response<GetPurchaseUsageEntry>> GetPurchaseUsagesAsync(
+        public async Task<Response<PurchaseUsageShortEntry>> GetPurchaseUsagesAsync(
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
@@ -37,16 +37,9 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         {
             var resp = await _purchaseUsageStore.GetPurchaseUsagesAsync(offset, limit, eventId, participantId, purchaseId, cancellationToken);
 
-            var purchaseUsages = new List<GetPurchaseUsageEntry>();
-            foreach (var pu in resp.Data)
+            return new Response<PurchaseUsageShortEntry>()
             {
-                var user = await _authorizationService.GetUser(userId: pu.Participant.UserId);
-                purchaseUsages.Add(new GetPurchaseUsageEntry(pu, new UserShortEntry(user)));
-            }
-
-            return new Response<GetPurchaseUsageEntry>()
-            {
-                Data = purchaseUsages,
+                Data = resp.Data.Select(x => new PurchaseUsageShortEntry(x)),
                 TotalPages = resp.TotalPages,
                 Total = resp.Total
             };
