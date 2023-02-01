@@ -45,6 +45,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
         public async Task<Response<PurchaseUsageEntry>> GetPurchaseUsagesAsync(
             int offset = 0,
             int limit = 10,
+            Guid? eventId = null,
             Guid? participantId = null,
             Guid? purchaseId = null,
             CancellationToken cancellationToken = default)
@@ -55,7 +56,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .Include(x => x.Purchase)
                     .Include(x => x.Participant)
                     .Where(e => (participantId == null || participantId == e.ParticipantId) &&
-                    (purchaseId == null || purchaseId == e.PurchaseId))
+                    (purchaseId == null || purchaseId == e.PurchaseId) &&
+                    (eventId == null || eventId == e.Purchase.EventId))
                     .OrderByDescending(e => e.Participant.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
 

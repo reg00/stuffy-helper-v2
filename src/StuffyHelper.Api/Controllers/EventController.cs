@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Api.Web;
+using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Event;
 using System.Net;
+using IAuthorizationService = StuffyHelper.Authorization.Core.Features.IAuthorizationService;
 
 namespace StuffyHelper.Api.Controllers
 {
@@ -12,10 +14,14 @@ namespace StuffyHelper.Api.Controllers
     public class EventController : Controller
     {
         private readonly IEventService _eventService;
+        private readonly IAuthorizationService _authorizationService;
 
-        public EventController(IEventService eventService)
+        public EventController(
+            IEventService eventService,
+            IAuthorizationService authorizationService)
         {
             _eventService = eventService;
+            _authorizationService = authorizationService;
         }
 
         /// <summary>
@@ -44,6 +50,8 @@ namespace StuffyHelper.Api.Controllers
             Guid? participantId = null,
             Guid? purchaseId = null)
         {
+            var user = await _authorizationService.GetUserByToken(User, HttpContext.RequestAborted);
+
             var eventResponse = await _eventService.GetEventsAsync(offset, limit, name, description, createdDateStart, createdDateEnd,
                                                                    eventDateStartMin, eventDateStartMax, eventDateEndMin, eventDateEndMax, userId,
                                                                    isCompleted, isActive, participantId, purchaseId, HttpContext.RequestAborted);

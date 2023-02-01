@@ -30,11 +30,12 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         public async Task<Response<GetPurchaseUsageEntry>> GetPurchaseUsagesAsync(
             int offset = 0,
             int limit = 10,
+            Guid? eventId = null,
             Guid? participantId = null,
             Guid? purchaseId = null,
             CancellationToken cancellationToken = default)
         {
-            var resp = await _purchaseUsageStore.GetPurchaseUsagesAsync(offset, limit, participantId, purchaseId, cancellationToken);
+            var resp = await _purchaseUsageStore.GetPurchaseUsagesAsync(offset, limit, eventId, participantId, purchaseId, cancellationToken);
 
             var purchaseUsages = new List<GetPurchaseUsageEntry>();
             foreach (var pu in resp.Data)
