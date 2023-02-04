@@ -6,7 +6,7 @@ namespace StuffyHelper.Core.Features.Event
 {
     public interface IEventService
     {
-        Task<GetEventEntry> GetEventAsync(Guid eventId, CancellationToken cancellationToken);
+        Task<GetEventEntry> GetEventAsync(Guid eventId, string? userId = null, CancellationToken cancellationToken = default);
 
         Task<Response<EventShortEntry>> GetEventsAsync(
             int offset = 0,
@@ -31,14 +31,14 @@ namespace StuffyHelper.Core.Features.Event
             ClaimsPrincipal user,
             CancellationToken cancellationToken = default);
 
-        Task DeleteEventAsync(Guid eventId, string currentUserName, CancellationToken cancellationToken = default);
+        Task DeleteEventAsync(Guid eventId, string? userId, CancellationToken cancellationToken = default);
 
-        Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpdateEventEntry updateEvent, string currentUserName, CancellationToken cancellationToken = default);
+        Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpdateEventEntry updateEvent, string? userId, CancellationToken cancellationToken = default);
 
-        Task DeletePrimalEventMedia(Guid eventId, string currentUserName, CancellationToken cancellationToken = default);
+        Task DeletePrimalEventMedia(Guid eventId, string? userId, CancellationToken cancellationToken = default);
 
-        Task<EventShortEntry> UpdatePrimalEventMediaAsync(Guid eventId, IFormFile file, string currentUserName, CancellationToken cancellationToken = default);
+        Task<EventShortEntry> UpdatePrimalEventMediaAsync(Guid eventId, IFormFile file, string? userId, CancellationToken cancellationToken = default);
 
-        Task<EventShortEntry> CompleteEventAsync(Guid eventId, string currentUserName, bool isComplete, CancellationToken cancellationToken = default);
+        Task<EventShortEntry> CompleteEventAsync(Guid eventId, string? userId, bool isComplete, CancellationToken cancellationToken = default);
     }
 }

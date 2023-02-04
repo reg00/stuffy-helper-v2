@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Features.Avatar;
 using StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema;
 

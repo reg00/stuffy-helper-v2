@@ -1,6 +1,5 @@
 ﻿using EnsureThat;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Core.Exceptions;
 
 namespace StuffyHelper.Core.Features.PurchaseTag.Pipeline
 {

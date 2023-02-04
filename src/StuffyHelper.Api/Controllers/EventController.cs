@@ -2,11 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Api.Web;
-using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Event;
 using System.Net;
-using IAuthorizationService = StuffyHelper.Authorization.Core.Features.IAuthorizationService;
 
 namespace StuffyHelper.Api.Controllers
 {
@@ -14,14 +12,14 @@ namespace StuffyHelper.Api.Controllers
     public class EventController : Controller
     {
         private readonly IEventService _eventService;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IPermissionService _permissionService;
 
         public EventController(
             IEventService eventService,
-            IAuthorizationService authorizationService)
+            IPermissionService permissionService)
         {
             _eventService = eventService;
-            _authorizationService = authorizationService;
+            _permissionService = permissionService;
         }
 
         /// <summary>
@@ -50,7 +48,7 @@ namespace StuffyHelper.Api.Controllers
             Guid? participantId = null,
             Guid? purchaseId = null)
         {
-            var user = await _authorizationService.GetUserByToken(User, HttpContext.RequestAborted);
+            userId = await _permissionService.GetUserId(User, userId, HttpContext.RequestAborted);
 
             var eventResponse = await _eventService.GetEventsAsync(offset, limit, name, description, createdDateStart, createdDateEnd,
                                                                    eventDateStartMin, eventDateStartMax, eventDateEndMin, eventDateEndMax, userId,
@@ -70,7 +68,9 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.GetEventRoute)]
         public async Task<IActionResult> GetAsync(Guid eventId)
         {
-            var @event = await _eventService.GetEventAsync(eventId, HttpContext.RequestAborted);
+            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+
+            var @event = await _eventService.GetEventAsync(eventId, userId, HttpContext.RequestAborted);
 
             return Ok(@event);
         }
@@ -105,7 +105,9 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.DeleteEventRoute)]
         public async Task<IActionResult> DeleteAsync(Guid eventId)
         {
-            await _eventService.DeleteEventAsync(eventId, User.Identity?.Name, HttpContext.RequestAborted);
+            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+
+            await _eventService.DeleteEventAsync(eventId, userId, HttpContext.RequestAborted);
 
             return Ok();
         }
@@ -120,7 +122,9 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.UpdateEventRoute)]
         public async Task<IActionResult> PatchAsync(Guid eventId, [FromBody] UpdateEventEntry updateEntry)
         {
-            var entry = await _eventService.UpdateEventAsync(eventId, updateEntry, User.Identity?.Name, HttpContext.RequestAborted);
+            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+
+            var entry = await _eventService.UpdateEventAsync(eventId, updateEntry, userId, HttpContext.RequestAborted);
 
             return Ok(entry);
         }
@@ -137,7 +141,9 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.DeleteEventPrimalMediaRoute)]
         public async Task<IActionResult> DeletePrimalMediaAsync([FromRoute] Guid eventId)
         {
-            await _eventService.DeletePrimalEventMedia(eventId, User.Identity?.Name, HttpContext.RequestAborted);
+            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+
+            await _eventService.DeletePrimalEventMedia(eventId, userId, HttpContext.RequestAborted);
 
             return Ok();
         }
@@ -155,7 +161,9 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.UpdateEventPrimalMediaRoute)]
         public async Task<IActionResult> PatchPrimalMediaAsync([FromRoute] Guid eventId, IFormFile file)
         {
-            var @event = await _eventService.UpdatePrimalEventMediaAsync(eventId, file, User.Identity?.Name, HttpContext.RequestAborted);
+            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+
+            var @event = await _eventService.UpdatePrimalEventMediaAsync(eventId, file, userId, HttpContext.RequestAborted);
 
             return Ok(@event);
         }
@@ -172,7 +180,9 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.CompleteEventRoute)]
         public async Task<IActionResult> CompleteEventAsync([FromRoute] Guid eventId)
         {
-            await _eventService.CompleteEventAsync(eventId, User.Identity?.Name, true, HttpContext.RequestAborted);
+            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+
+            await _eventService.CompleteEventAsync(eventId, userId, true, HttpContext.RequestAborted);
 
             return Ok();
         }
@@ -189,7 +199,9 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.ReopenEventRoute)]
         public async Task<IActionResult> ReopenEventAsync([FromRoute] Guid eventId)
         {
-            await _eventService.CompleteEventAsync(eventId, User.Identity?.Name, false, HttpContext.RequestAborted);
+            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+
+            await _eventService.CompleteEventAsync(eventId, userId, false, HttpContext.RequestAborted);
 
             return Ok();
         }
