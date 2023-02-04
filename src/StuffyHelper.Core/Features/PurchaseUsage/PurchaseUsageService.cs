@@ -2,7 +2,6 @@
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models.User;
-using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 
 namespace StuffyHelper.Core.Features.PurchaseUsage

@@ -1,6 +1,4 @@
-﻿using StuffyHelper.Minio.Features.Exceptions;
-
-namespace StuffyHelper.Minio.Features.Common
+﻿namespace StuffyHelper.Minio.Features.Common
 {
     public static class FileTypeMapper
     {

@@ -4,7 +4,7 @@ namespace StuffyHelper.Core.Features.Event
 {
     public interface IEventStore
     {
-        Task<EventEntry> GetEventAsync(Guid eventId, CancellationToken cancellationToken);
+        Task<EventEntry> GetEventAsync(Guid eventId, string? userId = null, CancellationToken cancellationToken = default);
 
         Task<Response<EventEntry>> GetEventsAsync(
             int offset = 0,

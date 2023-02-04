@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.EntityFrameworkCore.Features.Schema;
@@ -18,14 +17,17 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             _context = context;
         }
 
-        public async Task<EventEntry> GetEventAsync(Guid eventId, CancellationToken cancellationToken)
+        public async Task<EventEntry> GetEventAsync(Guid eventId, string? userId = null, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             try
             {
                 var entry = await _context.Events
-                    .FirstOrDefaultAsync(e => e.Id == eventId, cancellationToken);
+                    .FirstOrDefaultAsync(e => 
+                    ((e.Id == eventId) &&
+                    (string.IsNullOrWhiteSpace(userId) || e.Participants.Any(x => x.UserId == userId))),
+                    cancellationToken);
 
                 if (entry is null)
                     throw new EntityNotFoundException($"Event with Id '{eventId}' Not Found.");
@@ -72,7 +74,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     (eventDateStartMax == null || eventDateStartMax.Value <= e.EventDateStart) &&
                     (eventDateEndMin == null || eventDateEndMin.Value >= e.EventDateEnd) &&
                     (eventDateEndMax == null || eventDateEndMax.Value <= e.EventDateEnd) &&
-                    (string.IsNullOrWhiteSpace(userId) || e.UserId.ToLower() == userId.ToLower()) &&
+                    //(string.IsNullOrWhiteSpace(userId) || e.UserId.ToLower() == userId.ToLower()) &&
+                    (string.IsNullOrWhiteSpace(userId) || e.Participants.Any(x => x.UserId == userId)) &&
                     (isCompleted == null || isCompleted == e.IsCompleted) &&
                     (isActive == null || isActive == e.IsActive) &&
                     (participantId == null || e.Participants.Any(x => x.Id == participantId)) &&

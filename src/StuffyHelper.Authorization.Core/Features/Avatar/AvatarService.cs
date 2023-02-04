@@ -1,7 +1,6 @@
 ﻿using EnsureThat;
 using Reg00.Infrastructure.Errors;
 using Reg00.Infrastructure.Extensions;
-using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Extensions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Minio.Features.Common;
