@@ -7,6 +7,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
     {
         [Required]
         public Guid PurchaseUsageId { get; set; }
+        public Guid PurchaseId { get; set; }
         public Guid ParticipantId { get; set; }
         public int Amount { get; set; }
 
@@ -16,6 +17,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
 
             PurchaseUsageId = entry.Id;
             ParticipantId = entry.ParticipantId;
+            PurchaseId = entry.PurchaseId;
             Amount = entry.Amount;
         }
     }
