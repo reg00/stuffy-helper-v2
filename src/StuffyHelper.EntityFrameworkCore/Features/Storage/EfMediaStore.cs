@@ -22,7 +22,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
             try
             {
-                media.CreatedDate = DateTime.Now;
+                media.CreatedDate = DateTime.UtcNow;
                 var entry = await _context.Medias.AddAsync(media, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
                 return entry.Entity;

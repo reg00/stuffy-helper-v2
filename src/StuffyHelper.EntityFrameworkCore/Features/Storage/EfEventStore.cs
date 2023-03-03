@@ -102,7 +102,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
             try
             {
-                @event.CreatedDate = DateTime.Now;
+                @event.CreatedDate = DateTime.UtcNow;
                 var entry = await _context.Events.AddAsync(@event, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
                 return entry.Entity;

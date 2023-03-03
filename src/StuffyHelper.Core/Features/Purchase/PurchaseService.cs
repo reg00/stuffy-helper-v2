@@ -36,10 +36,11 @@ namespace StuffyHelper.Core.Features.Purchase
             Guid? eventId = null,
             IEnumerable<string>? purchaseTags = null,
             Guid? unitTypeId = null,
+            bool? isComplete = null,
             CancellationToken cancellationToken = default)
         {
             var resp = await _purchaseStore.GetPurchasesAsync(offset, limit, name, costMin, costMax,
-                                                              eventId, purchaseTags, unitTypeId, cancellationToken);
+                                                              eventId, purchaseTags, unitTypeId, isComplete, cancellationToken);
 
             return new Response<GetPurchaseEntry>()
             {
@@ -65,6 +66,13 @@ namespace StuffyHelper.Core.Features.Purchase
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
 
             await _purchaseStore.DeletePurchaseAsync(purchaseId, cancellationToken);
+        }
+
+        public async Task CompletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
+
+            await _purchaseStore.CompletePurchaseAsync(purchaseId, cancellationToken);
         }
 
         public async Task<PurchaseShortEntry> UpdatePurchaseAsync(Guid purchaseId, UpdatePurchaseEntry purchase, CancellationToken cancellationToken = default)

@@ -32,6 +32,7 @@ namespace StuffyHelper.Core.Features.Purchase
                 UnitTypeId = UnitTypeId,
                 IsPartial = IsPartial,
                 ParticipantId = ParticipantId,
+                CreatedDate = DateTime.UtcNow,
             };
         }
     }
