@@ -19,6 +19,7 @@
         private const string MetadataSegment = "metadata";
         private const string RequestSegment = "requests";
         private const string FriendsSegment = "friends";
+        private const string DebtsSegment = "debts";
 
 
         private const string EventIdRouteSegment = $"{{{KnownActionParameterNames.EventId}}}";
@@ -53,6 +54,7 @@
         public const string DeleteEventPrimalMediaRoute = $"{GetEventRoute}/photo";
         public const string CompleteEventRoute = $"{GetEventRoute}/complete";
         public const string ReopenEventRoute = $"{GetEventRoute}/reopen";
+        public const string CheckoutEventRoute = $"{GetEventRoute}/checkout";
 
         public const string AddParticipantRoute = $"{DefaultRouteSegment}/{ParticipantsSegment}";
         public const string GetParticipantRoute = $"{AddParticipantRoute}/{ParticipantIdRouteSegment}";
@@ -103,5 +105,7 @@
         public const string UpdateRequestRoute = GetRequestRoute;
 
         public const string GetFriendsRoute = $"{DefaultRouteSegment}/{FriendsSegment}";
+
+        public const string GetDebtsRoute = $"{DefaultRouteSegment}/{DebtsSegment}";
     }
 }

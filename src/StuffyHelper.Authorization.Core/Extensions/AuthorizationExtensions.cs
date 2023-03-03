@@ -21,7 +21,7 @@ namespace StuffyHelper.Authorization.Core.Extensions
             var token = new JwtSecurityToken(
                 issuer: authorizationConfiguration.JWT.ValidIssuer,
                 audience: authorizationConfiguration.JWT.ValidAudience,
-                expires: DateTime.Now.AddHours(authorizationConfiguration.JWT.TokenExpireInHours),
+                expires: DateTime.UtcNow.AddHours(authorizationConfiguration.JWT.TokenExpireInHours),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
                 );

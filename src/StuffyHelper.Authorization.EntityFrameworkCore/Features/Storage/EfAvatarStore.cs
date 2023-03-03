@@ -22,7 +22,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
 
             try
             {
-                avatar.CreatedDate = DateTime.Now;
+                avatar.CreatedDate = DateTime.UtcNow;
                 var entry = await _context.Avatars.AddAsync(avatar, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
                 return entry.Entity;

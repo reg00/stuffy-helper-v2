@@ -1,6 +1,5 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Http;
-using Org.BouncyCastle.Bcpg;
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Features;
@@ -72,14 +71,10 @@ namespace StuffyHelper.Core.Features.Event
             var resp = await _eventStore.GetEventsAsync(offset, limit, name, description, createdDateStart,
                                                         createdDateEnd, eventDateStartMin, eventDateStartMax, eventDateEndMin , eventDateEndMax,
                                                         userId, isCompleted, isActive, participantId, purchaseId, cancellationToken);
-            var events = new List<EventShortEntry>();
-
-            foreach (var @event in resp.Data)
-                events.Add(new EventShortEntry(@event));
-
+            
             return new Response<EventShortEntry>()
             {
-                Data = events,
+                Data = resp.Data.Select(x => new EventShortEntry(x)),
                 TotalPages = resp.TotalPages,
                 Total = resp.Total
             };

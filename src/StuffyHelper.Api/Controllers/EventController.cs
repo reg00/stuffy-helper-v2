@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Api.Web;
 using StuffyHelper.Core.Features.Common;
+using StuffyHelper.Core.Features.Debt;
 using StuffyHelper.Core.Features.Event;
 using System.Net;
 
@@ -12,13 +13,16 @@ namespace StuffyHelper.Api.Controllers
     public class EventController : Controller
     {
         private readonly IEventService _eventService;
+        private readonly IDebtService _debtService;
         private readonly IPermissionService _permissionService;
 
         public EventController(
             IEventService eventService,
+            IDebtService debtService,
             IPermissionService permissionService)
         {
             _eventService = eventService;
+            _debtService = debtService;
             _permissionService = permissionService;
         }
 
@@ -205,5 +209,24 @@ namespace StuffyHelper.Api.Controllers
 
             return Ok();
         }
+
+        /// <summary>
+        /// Расчет долгов по ивенту
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Produces(KnownContentTypes.ApplicationJson)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.CheckoutEventRoute)]
+        public async Task<IActionResult> CheckoutEventAsync([FromRoute] Guid eventId)
+        {
+            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+
+            await _debtService.CheckoutEvent(eventId, userId, HttpContext.RequestAborted);
+
+            return Ok();
+        }
+
     }
 }

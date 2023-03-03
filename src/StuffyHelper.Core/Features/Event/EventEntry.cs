@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using StuffyHelper.Core.Features.Debt;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Purchase;
@@ -21,12 +22,14 @@ namespace StuffyHelper.Core.Features.Event
         public virtual List<ParticipantEntry> Participants { get; set; } = new List<ParticipantEntry>();
         public virtual List<PurchaseEntry> Purchases { get; set; } = new List<PurchaseEntry>();
         public virtual List<MediaEntry> Medias { get; set; } = new List<MediaEntry>();
+        public virtual List<DebtEntry> Debts { get; set; } = new List<DebtEntry>();
 
         public EventEntry()
         {
             Participants = new List<ParticipantEntry>();
             Purchases = new List<PurchaseEntry>();
             Medias = new List<MediaEntry>();
+            Debts = new List<DebtEntry>();
         }
 
         public EventEntry(
@@ -48,6 +51,7 @@ namespace StuffyHelper.Core.Features.Event
             Participants = new List<ParticipantEntry>();
             Purchases = new List<PurchaseEntry>();
             Medias = new List<MediaEntry>();
+            Debts = new List<DebtEntry>();
         }
 
         public void PatchFrom(UpdateEventEntry entry)

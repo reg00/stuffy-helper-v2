@@ -31,7 +31,6 @@ namespace StuffyHelper.Core.Features.Event
         public List<MediaShortEntry> Medias { get; set; } 
 
 
-
         public GetEventEntry()
         {
             Participants = new List<ParticipantShortEntry>();

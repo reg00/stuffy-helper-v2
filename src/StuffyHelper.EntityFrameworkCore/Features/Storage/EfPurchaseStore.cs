@@ -56,6 +56,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             Guid? eventId = null,
             IEnumerable<string>? purchaseTags = null,
             Guid? unitTypeId = null,
+            bool? isComplete = null,
             CancellationToken cancellationToken = default)
         {
             try
@@ -68,6 +69,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     (costMax == null || costMax >= e.Cost) &&
                     (eventId == null || e.EventId == eventId) && 
                     (unitTypeId == null || e.UnitTypeId == unitTypeId) &&
+                    (isComplete == null || e.IsComplete == isComplete) &&
                     (purchaseTags == null || !purchaseTags.Any() || e.PurchaseTags.Any(tag => purchaseTags.Select(tag => tag.ToLower()).Contains(tag.Name.ToLower()))))
                     .OrderByDescending(e => e.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
@@ -119,6 +121,31 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                 }
 
                 _context.Purchases.Remove(purchase);
+                await _context.SaveChangesAsync(cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                throw new DbStoreException(ex);
+            }
+        }
+
+        public async Task CompletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default)
+        {
+            EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
+
+            try
+            {
+                var purchase = await _context.Purchases
+                    .FirstOrDefaultAsync(
+                    s => s.Id == purchaseId, cancellationToken);
+
+                if (purchase is null)
+                {
+                    throw new EntityNotFoundException($"Purchase with Id '{purchaseId}' not found.");
+                }
+
+                purchase.IsComplete = true;
+                _context.Purchases.Update(purchase);
                 await _context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)

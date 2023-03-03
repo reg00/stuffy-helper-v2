@@ -18,6 +18,7 @@ namespace StuffyHelper.Core.Features.Purchase
         public Guid ParticipantId { get; set; }
         public Guid EventId { get; set; }
         public DateTime CreatedDate { get; set; }
+        public bool IsComplete { get; set; }
 
         public virtual List<PurchaseTagEntry> PurchaseTags { get; set; } = new List<PurchaseTagEntry>();
         public virtual UnitTypeEntry UnitType { get; set; }

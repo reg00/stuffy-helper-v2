@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using StuffyHelper.Core.Features.Debt;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
@@ -34,6 +35,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
         public virtual DbSet<PurchaseTagEntry> PurchaseTags { get; set; }
         public virtual DbSet<UnitTypeEntry> UnitTypes { get; set; }
         public virtual DbSet<MediaEntry> Medias { get; set; }
+        public virtual DbSet<DebtEntry> Debts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -97,6 +99,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.Property(e => e.EventId).IsRequired();
                 entity.Property(e => e.UnitTypeId).IsRequired();
                 entity.Property(e => e.IsPartial).IsRequired().HasDefaultValue(false);
+                entity.Property(e => e.IsComplete).IsRequired().HasDefaultValue(false);
             });
 
             modelBuilder.Entity<PurchaseUsageEntry>(entity =>
@@ -145,6 +148,20 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
 
                 entity.Property(e => e.EventId).IsRequired();
                 entity.Property(e => e.MediaType).IsRequired();
+            });
+
+            modelBuilder.Entity<DebtEntry>(entity =>
+            {
+                entity.ToTable("debts");
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(e => e.Event).WithMany(e => e.Debts).HasForeignKey(e => e.EventId);
+
+                entity.Property(e => e.BorrowerId).IsRequired();
+                entity.Property(e => e.DebtorId).IsRequired();
+                entity.Property(e => e.IsComfirmed).HasDefaultValue(false);
+                entity.Property(e => e.IsSent).HasDefaultValue(false);
+                entity.Property(e => e.Amount).IsRequired();
             });
 
             OnModelCreatingPartial(modelBuilder);
