@@ -99,17 +99,27 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
         }
 
-        public async Task<IEnumerable<DebtEntry>> GetDebtsByUserAsync(
+        public async Task<Response<DebtEntry>> GetDebtsByUserAsync(
            string userId,
+           int offset = 0,
+           int limit = 10,
            CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
 
             try
             {
-                return await _context.Debts
+                var searchedData = await _context.Debts
                     .Where(e => e.DebtorId == userId || e.BorrowerId == userId)
+                    .OrderByDescending(e => e.CreatedDate)
                     .ToListAsync(cancellationToken);
+
+                return new Response<DebtEntry>()
+                {
+                    Data = searchedData.Skip(offset).Take(limit),
+                    TotalPages = (int)Math.Ceiling(searchedData.Count() / (double)limit),
+                    Total = searchedData.Count()
+                };
             }
             catch (Exception ex)
             {

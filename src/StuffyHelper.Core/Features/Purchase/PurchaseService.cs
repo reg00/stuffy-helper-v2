@@ -1,5 +1,6 @@
 ﻿using EnsureThat;
 using Reg00.Infrastructure.Errors;
+using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.PurchaseTag.Pipeline;
 
@@ -65,6 +66,8 @@ namespace StuffyHelper.Core.Features.Purchase
         {
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
 
+            await ValidatePurchase(purchaseId, cancellationToken);
+
             await _purchaseStore.DeletePurchaseAsync(purchaseId, cancellationToken);
         }
 
@@ -80,6 +83,17 @@ namespace StuffyHelper.Core.Features.Purchase
             EnsureArg.IsNotNull(purchase, nameof(purchase));
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
 
+            var existingPurchase = await ValidatePurchase(purchaseId, cancellationToken);
+
+            existingPurchase.PatchFrom(purchase);
+            await _purchaseTagPipeline.ProcessAsync(existingPurchase, purchase.PurchaseTags, cancellationToken);
+            var result = await _purchaseStore.UpdatePurchaseAsync(existingPurchase, cancellationToken);
+
+            return new PurchaseShortEntry(result);
+        }
+
+        private async Task<PurchaseEntry> ValidatePurchase(Guid purchaseId, CancellationToken cancellationToken = default)
+        {
             var existingPurchase = await _purchaseStore.GetPurchaseAsync(purchaseId, cancellationToken);
 
             if (existingPurchase is null)
@@ -87,11 +101,12 @@ namespace StuffyHelper.Core.Features.Purchase
                 throw new EntityNotFoundException($"Purchase Id '{purchaseId}' not found");
             }
 
-            existingPurchase.PatchFrom(purchase);
-            await _purchaseTagPipeline.ProcessAsync(existingPurchase, purchase.PurchaseTags, cancellationToken);
-            var result = await _purchaseStore.UpdatePurchaseAsync(existingPurchase, cancellationToken);
+            if (existingPurchase.IsComplete)
+            {
+                throw new StuffyException("Cannot edit completed purchase");
+            }
 
-            return new PurchaseShortEntry(result);
+            return existingPurchase;
         }
     }
 }
