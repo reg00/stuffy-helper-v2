@@ -20,6 +20,8 @@ namespace StuffyHelper.Core.Features.Purchase
         public double Amount { get; set; }
         [Required]
         public bool IsPartial { get; set; }
+        [Required]
+        public bool IsComplete { get; set; }
 
         [Required]
         public EventShortEntry? Event { get; set; }
@@ -38,6 +40,7 @@ namespace StuffyHelper.Core.Features.Purchase
             Cost = entry.Cost;
             Amount = entry.Amount;
             IsPartial = entry.IsPartial;
+            IsComplete = entry.IsComplete;
             Event = new EventShortEntry(entry.Event);
             PurchaseUsages = entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x));
             PurchaseTags = entry.PurchaseTags.Select(x => new PurchaseTagShortEntry(x)).ToList();

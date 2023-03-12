@@ -31,11 +31,11 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetDebtsRoute)]
-        public async Task<IActionResult> GetDebtsAsync()
+        public async Task<IActionResult> GetDebtsAsync(int offset = 0, int limit = 10)
         {
             var user = await _authorizationService.GetUserByToken(User, HttpContext.RequestAborted);
 
-            var debtsResponce = await _debtService.GetDebtsByUserAsync(user.Id, HttpContext.RequestAborted);
+            var debtsResponce = await _debtService.GetDebtsByUserAsync(user.Id, offset, limit, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, debtsResponce);
         }

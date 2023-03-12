@@ -17,8 +17,10 @@ namespace StuffyHelper.Core.Features.Debt
             bool? isConfirmed = null,
             CancellationToken cancellationToken = default);
 
-        Task<IEnumerable<DebtEntry>> GetDebtsByUserAsync(
+        Task<Response<DebtEntry>> GetDebtsByUserAsync(
             string userId,
+            int offset = 0,
+            int limit = 10,
             CancellationToken cancellationToken = default);
 
         Task<DebtEntry> AddDebtAsync(DebtEntry debt, CancellationToken cancellationToken = default);

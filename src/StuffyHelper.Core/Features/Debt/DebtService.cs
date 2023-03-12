@@ -67,16 +67,18 @@ namespace StuffyHelper.Core.Features.Debt
             };
         }
 
-        public async Task<IEnumerable<GetDebtEntry>> GetDebtsByUserAsync(
+        public async Task<Response<GetDebtEntry>> GetDebtsByUserAsync(
             string userId,
+            int offset = 0,
+            int limit = 10,
             CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(userId, nameof(userId));
 
             var debts = new List<GetDebtEntry>();
-            var dbDebts = await _debtStore.GetDebtsByUserAsync(userId, cancellationToken);
+            var resp = await _debtStore.GetDebtsByUserAsync(userId, offset, limit, cancellationToken);
 
-            foreach (var dbDebt in dbDebts)
+            foreach (var dbDebt in resp.Data)
             {
                 var borrower = await _authorizationService.GetUser(userId: dbDebt.BorrowerId);
                 var debtor = await _authorizationService.GetUser(userId: dbDebt.DebtorId);
@@ -84,7 +86,12 @@ namespace StuffyHelper.Core.Features.Debt
                 debts.Add(new GetDebtEntry(dbDebt, borrower, debtor));
             }
 
-            return debts;
+            return new Response<GetDebtEntry>()
+            {
+                Data = debts,
+                TotalPages = resp.TotalPages,
+                Total = resp.Total
+            };
         }
 
         //public async Task<GetDebtEntry> AddDebtAsync(DebtEntry debt, CancellationToken cancellationToken = default)
