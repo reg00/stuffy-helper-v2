@@ -240,7 +240,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
         {
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(code))
             {
-                throw new Exception($"Поля {nameof(login)},{nameof(code)} должны быть заполнены");
+                throw new ArgumentNullException($"Поля {nameof(login)},{nameof(code)} должны быть заполнены");
             }
 
             var user = await _userManager.FindByNameAsync(login);

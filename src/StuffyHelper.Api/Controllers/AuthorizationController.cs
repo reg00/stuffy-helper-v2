@@ -38,7 +38,6 @@ namespace StuffyHelper.Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.RegisterRoute)]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
@@ -66,12 +65,12 @@ namespace StuffyHelper.Api.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.EmailConfirmRoute)]
         public async Task<IActionResult> ConfirmEmail(string login, string code)
         {
-            var user = await _authorizationService.ConfirmEmail(login, code);
+            await _authorizationService.ConfirmEmail(login, code);
 
             return Redirect($"{_frontEndConfiguration.Endpoint.OriginalString}/register/success");
         }
@@ -125,6 +124,8 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.ResetPasswordRoute)]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
         {
+            EnsureArg.IsNotNull(model, nameof(model));
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(new ErrorResponse(ModelState));
@@ -135,7 +136,7 @@ namespace StuffyHelper.Api.Controllers
             var callbackUrl = Url.Action(
                 "ResetPassword",
                 "Authorization",
-                new { login = name, code = code },
+                new { login = name, code },
                 protocol: HttpContext.Request.Scheme);
 
             await _emailService.SendEmailAsync(model.Email, "Reset password",
@@ -147,7 +148,7 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordConfirmRoute)]
-        public IActionResult ResetPassword(string? code = null)
+        public IActionResult ResetPassword(string code)
         {
             EnsureArg.IsNotNullOrWhiteSpace(code, nameof(code));
 
@@ -164,6 +165,8 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.ResetPasswordConfirmRoute)]
         public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
         {
+            EnsureArg.IsNotNull(model, nameof(model));
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(new ErrorResponse(ModelState));
@@ -179,7 +182,7 @@ namespace StuffyHelper.Api.Controllers
         /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(IdentityRole), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Forbidden)]
         [Route(KnownRoutes.RolesRoute)]
         public async Task<IActionResult> GetRoles()
         {
