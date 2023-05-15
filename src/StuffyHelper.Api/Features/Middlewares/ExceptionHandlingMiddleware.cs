@@ -78,6 +78,7 @@ namespace StuffyHelper.Api.Features.Middlewares
                 case ValidationException _:
                 case System.NotSupportedException _:
                 case Reg00.Infrastructure.Errors.NotSupportedException _:
+                case ArgumentNullException _:
                     statusCode = HttpStatusCode.BadRequest;
                     break;
                 case EntityNotFoundException _:
