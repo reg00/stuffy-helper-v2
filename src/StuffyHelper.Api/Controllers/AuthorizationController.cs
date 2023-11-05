@@ -54,7 +54,7 @@ namespace StuffyHelper.Api.Controllers
             var callbackUrl = Url.Action(
                 "ConfirmEmail",
                 "Authorization",
-                new { login = model.Username, code = code },
+                new { login = model.Username, code },
                 protocol: HttpContext.Request.Scheme);
 
             await _emailService.SendEmailAsync(model.Email, "Confirm your account",
