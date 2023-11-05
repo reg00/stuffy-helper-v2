@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Minio", "src\S
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.EmailService.Core", "src\StuffyHelper.EmailService.Core\StuffyHelper.EmailService.Core.csproj", "{4FB3FB89-73D9-4557-8ADF-4FD17FC06557}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Tests", "src\StuffyHelper.Tests\StuffyHelper.Tests.csproj", "{EFC7DF3E-7204-4EC3-B456-DFD02249C7FE}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,10 +57,6 @@ Global
 		{4FB3FB89-73D9-4557-8ADF-4FD17FC06557}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4FB3FB89-73D9-4557-8ADF-4FD17FC06557}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4FB3FB89-73D9-4557-8ADF-4FD17FC06557}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFC7DF3E-7204-4EC3-B456-DFD02249C7FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFC7DF3E-7204-4EC3-B456-DFD02249C7FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFC7DF3E-7204-4EC3-B456-DFD02249C7FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFC7DF3E-7204-4EC3-B456-DFD02249C7FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
