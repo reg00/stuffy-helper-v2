@@ -21,7 +21,7 @@ namespace StuffyHelper.Core.Features.Media
         {
             EnsureArg.IsNotDefault(mediaId, nameof(mediaId));
 
-            MediaEntry entry = null;
+            MediaEntry? entry = null;
 
             try
             {
@@ -51,7 +51,7 @@ namespace StuffyHelper.Core.Features.Media
             }
         }
 
-        public async Task<Uri> GetEventPrimalMediaUri(Guid eventId, CancellationToken cancellationToken = default)
+        public async Task<Uri?> GetEventPrimalMediaUri(Guid eventId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
@@ -107,7 +107,7 @@ namespace StuffyHelper.Core.Features.Media
             return new GetMediaEntry(entry);
         }
 
-        public async Task<GetMediaEntry> GetPrimalEventMedia(Guid eventId, CancellationToken cancellationToken = default)
+        public async Task<GetMediaEntry?> GetPrimalEventMedia(Guid eventId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 

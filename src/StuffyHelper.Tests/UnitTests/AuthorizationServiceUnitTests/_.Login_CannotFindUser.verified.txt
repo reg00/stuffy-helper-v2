@@ -1,0 +1,4 @@
+﻿{
+  Type: EntityNotFoundException,
+  Message: Неверный логин/пароль
+}

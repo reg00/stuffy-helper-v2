@@ -98,12 +98,20 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features
                 }
 
                 var userRole = _context.Roles.FirstOrDefault(x => x.Name == nameof(UserType.User));
-                _context.UserRoles.Add(new IdentityUserRole<string> { RoleId = userRole.Id, UserId = user.Id });
-                _context.SaveChanges();
+
+                if (userRole != null)
+                {
+                    _context.UserRoles.Add(new IdentityUserRole<string> { RoleId = userRole.Id, UserId = user.Id });
+                    _context.SaveChanges();
+                }
 
                 var adminRole = _context.Roles.FirstOrDefault(x => x.Name == nameof(UserType.Admin));
-                _context.UserRoles.Add(new IdentityUserRole<string> { RoleId = adminRole.Id, UserId = user.Id });
-                _context.SaveChanges();
+
+                if (adminRole != null)
+                {
+                    _context.UserRoles.Add(new IdentityUserRole<string> { RoleId = adminRole.Id, UserId = user.Id });
+                    _context.SaveChanges();
+                }
 
                 _logger.LogInformation($"User with name '{user.UserName}' succesfully added");
 

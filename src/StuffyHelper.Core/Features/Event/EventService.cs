@@ -88,11 +88,16 @@ namespace StuffyHelper.Core.Features.Event
             EnsureArg.IsNotNull(user, nameof(user));
             EnsureArg.IsNotNull(eventEntry, nameof(eventEntry));
 
-            EventEntry result = null;
-            MediaShortEntry media = null;
-            ParticipantShortEntry participant = null;
+            EventEntry? result = null;
+            MediaShortEntry? media = null;
+            ParticipantShortEntry? participant = null;
 
-            var identityUser = await _authorizationService.GetUser(userName: user.Identity.Name);
+            var userName = user?.Identity?.Name;
+
+            if (userName == null)
+                throw new AuthorizationException("Authorization error");
+
+            var identityUser = await _authorizationService.GetUser(userName: userName);
             var entry = new EventEntry(
                 eventEntry.Name,
                 eventEntry.Description,
@@ -109,7 +114,7 @@ namespace StuffyHelper.Core.Features.Event
 
                 if (eventEntry.File != null)
                 {
-                    var addMedia = new AddMediaEntry(result.Id, eventEntry.File, MediaType.Image, null);
+                    var addMedia = new AddMediaEntry(result.Id, eventEntry.File, MediaType.Image, string.Empty);
 
                     media = await _mediaService.StoreMediaFormFileAsync(
                             addMedia,
@@ -135,9 +140,14 @@ namespace StuffyHelper.Core.Features.Event
             {
                 if(eventEntry.File != null)
                 {
-                    await _eventStore.DeleteEventAsync(result.Id, cancellationToken);
-                    await _mediaService.DeleteMediaAsync(media.Id, cancellationToken);
-                    await _participantService.DeleteParticipantAsync(participant.Id, cancellationToken);
+                    if(result != null)
+                        await _eventStore.DeleteEventAsync(result.Id, cancellationToken);
+                    
+                    if(media != null)
+                        await _mediaService.DeleteMediaAsync(media.Id, cancellationToken);
+
+                    if(participant != null)
+                        await _participantService.DeleteParticipantAsync(participant.Id, cancellationToken);
                 }
 
                 throw;
@@ -205,7 +215,7 @@ namespace StuffyHelper.Core.Features.Event
             if (primalMedia is not null)
                 await _mediaService.DeleteMediaAsync(primalMedia.Id);
 
-            var addMedia = new AddMediaEntry(eventId, file, MediaType.Image, null);
+            var addMedia = new AddMediaEntry(eventId, file, MediaType.Image, string.Empty);
             await _mediaService.StoreMediaFormFileAsync(
                     addMedia,
                     isPrimal: true,

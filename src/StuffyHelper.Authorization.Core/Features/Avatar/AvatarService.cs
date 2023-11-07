@@ -22,7 +22,7 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
         {
             EnsureArg.IsNotNullOrEmpty(userId, nameof(userId));
 
-            AvatarEntry entry = null;
+            AvatarEntry? entry = null;
 
             try
             {
@@ -74,7 +74,6 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
                 avatarId,
                 cancellationToken);
 
-            //return new GetAvatarEntry(entry);
             return entry;
         }
 
@@ -84,14 +83,12 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
         {
             EnsureArg.IsNotNull(avatar, nameof(avatar));
             EnsureArg.IsNotNullOrWhiteSpace(avatar.UserId, nameof(avatar.UserId));
-
-            if (avatar.File is null)
-                throw new ArgumentNullException("file cannot be null");
+            EnsureArg.IsNotNull(avatar.File, nameof(avatar.File));
 
             if (!FormFileExtensions.IsImage(avatar.File))
                 throw new Reg00.Infrastructure.Errors.NotSupportedException("Is not valid image");
 
-            AvatarEntry entry = null;
+            AvatarEntry? entry = null;
 
             try
             {
@@ -132,20 +129,23 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
             }
             catch (Exception)
             {
-                await _avatarStore.DeleteAvatarAsync(
-                    entry,
-                    cancellationToken);
+                if (entry != null)
+                {
+                    await _avatarStore.DeleteAvatarAsync(
+                        entry,
+                        cancellationToken);
 
-                await _fileStore.DeleteFilesIfExistAsync(
-                    AuthMinioExtensions.GetAvatarObjectName(
-                        avatar.UserId, entry.FileType),
-                    cancellationToken: cancellationToken);
+                    await _fileStore.DeleteFilesIfExistAsync(
+                        AuthMinioExtensions.GetAvatarObjectName(
+                            avatar.UserId, entry.FileType),
+                        cancellationToken: cancellationToken);
+                }
 
                 throw;
             }
         }
 
-        public async Task<Uri> GetAvatarUri(string userId, CancellationToken cancellationToken = default)
+        public async Task<Uri?> GetAvatarUri(string userId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
 

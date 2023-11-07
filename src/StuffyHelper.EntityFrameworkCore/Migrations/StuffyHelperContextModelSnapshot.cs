@@ -90,6 +90,7 @@ namespace StuffyHelper.EntityFrameworkCore.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("EventDateEnd")
@@ -138,6 +139,7 @@ namespace StuffyHelper.EntityFrameworkCore.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("FileName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("FileType")
@@ -147,6 +149,7 @@ namespace StuffyHelper.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("Link")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("MediaType")

@@ -1,0 +1,4 @@
+﻿{
+  Type: ForbiddenException,
+  Message: Вы не подтвердили свой email
+}

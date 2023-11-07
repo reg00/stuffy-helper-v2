@@ -1,0 +1,4 @@
+﻿{
+  Type: Exception,
+  Message: Ошибка создания пользователя! Детали: error 1 error 2
+}

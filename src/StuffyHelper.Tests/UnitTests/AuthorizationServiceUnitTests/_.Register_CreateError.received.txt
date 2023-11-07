@@ -1,0 +1,4 @@
+﻿{
+  Type: EntityAlreadyExistsException,
+  Message: Пользователь с логином TTTest уже существует
+}

@@ -164,6 +164,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FileName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("FileType")
@@ -253,12 +254,14 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("FirstName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("ImageUri")
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
@@ -268,6 +271,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("MiddleName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("NormalizedEmail")

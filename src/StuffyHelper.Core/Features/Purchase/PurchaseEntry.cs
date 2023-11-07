@@ -10,7 +10,7 @@ namespace StuffyHelper.Core.Features.Purchase
     public class PurchaseEntry : ITaggableEntry
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public double Cost { get; set; }
         public double Amount { get; set; }
         public bool IsPartial { get; set; }
@@ -21,10 +21,10 @@ namespace StuffyHelper.Core.Features.Purchase
         public bool IsComplete { get; set; }
 
         public virtual List<PurchaseTagEntry> PurchaseTags { get; set; } = new List<PurchaseTagEntry>();
-        public virtual UnitTypeEntry UnitType { get; set; }
+        public virtual UnitTypeEntry UnitType { get; set; } = new();
         public virtual List<PurchaseUsageEntry> PurchaseUsages { get; set; } = new List<PurchaseUsageEntry>();
-        public virtual EventEntry Event { get; set; }
-        public virtual ParticipantEntry Owner { get; set; }
+        public virtual EventEntry Event { get; set; } = new();
+        public virtual ParticipantEntry Owner { get; set; } = new();
 
         public void PatchFrom(UpdatePurchaseEntry entry)
         {

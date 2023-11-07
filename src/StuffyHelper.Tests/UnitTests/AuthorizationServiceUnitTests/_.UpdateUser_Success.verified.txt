@@ -1,0 +1,9 @@
+﻿{
+  Id: Guid_1,
+  Name: test,
+  Role: Admin,
+  FirstName: Оттест,
+  MiddleName: Оттестович,
+  LastName: Оттестов,
+  Phone: 1234567899
+}

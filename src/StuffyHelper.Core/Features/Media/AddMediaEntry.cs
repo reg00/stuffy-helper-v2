@@ -11,7 +11,7 @@ namespace StuffyHelper.Core.Features.Media
         public IFormFile? File { get; set; }
         [Required]
         public MediaType MediaType { get; set; }
-        public string? Link { get; set; }
+        public string Link { get; set; } = string.Empty;
 
         public AddMediaEntry()
         {
@@ -22,7 +22,7 @@ namespace StuffyHelper.Core.Features.Media
             Guid eventId,
             IFormFile? file,
             MediaType mediaType,
-            string? link)
+            string link)
         {
             EventId = eventId;
             File = file;
@@ -34,7 +34,7 @@ namespace StuffyHelper.Core.Features.Media
         {
             return new MediaEntry(
                 EventId,
-                File is not null ? Path.GetFileNameWithoutExtension(File.FileName) : null,
+                File is not null ? Path.GetFileNameWithoutExtension(File.FileName) : string.Empty,
                 File is not null ? FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(File.FileName)) : FileType.Link,
                 MediaType,
                 Link,

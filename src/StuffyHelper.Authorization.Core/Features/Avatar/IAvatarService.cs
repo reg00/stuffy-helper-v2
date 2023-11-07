@@ -8,7 +8,7 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
 
         Task<MediaBlobEntry> GetAvatarAsync(Guid avatarId, CancellationToken cancellationToken = default);
 
-        Task<Uri> GetAvatarUri(string userId, CancellationToken cancellationToken = default);
+        Task<Uri?> GetAvatarUri(string userId, CancellationToken cancellationToken = default);
 
         Task<AvatarEntry> GetAvatarMetadataAsync(Guid avatarId, CancellationToken cancellationToken = default);
 

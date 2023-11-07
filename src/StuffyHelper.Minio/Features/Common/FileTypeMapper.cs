@@ -68,7 +68,7 @@
 
         public static string MapContentTypeFromFileType(FileType fileType)
         {
-            if (FileTypeContentTypeMap.TryGetValue(fileType, out string result))
+            if (FileTypeContentTypeMap.TryGetValue(fileType, out var result))
             {
                 return result;
             }
@@ -80,7 +80,7 @@
 
         public static string MapContentTypeFromExt(string ext)
         {
-            if (ContentTypeExtMap.TryGetValue(ext, out string result))
+            if (ContentTypeExtMap.TryGetValue(ext, out var result))
             {
                 return result;
             }
@@ -92,7 +92,7 @@
 
         public static string MapExtFromFileType(FileType fileType)
         {
-            if (ExtFileTypeMap.TryGetValue(fileType, out string result))
+            if (ExtFileTypeMap.TryGetValue(fileType, out var result))
             {
                 return result;
             }

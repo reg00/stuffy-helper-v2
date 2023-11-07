@@ -225,7 +225,7 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(IEnumerable<UserEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UserLoginsRoute)]
-        public async Task<IActionResult> GetUserLogins(string? userName = null)
+        public IActionResult GetUserLogins(string? userName = null)
         {
             return Ok(_authorizationService.GetUserLogins(userName));
         }

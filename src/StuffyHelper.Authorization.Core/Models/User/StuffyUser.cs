@@ -8,9 +8,9 @@ namespace StuffyHelper.Authorization.Core.Models.User
 {
     public class StuffyUser : IdentityUser
     {
-        public string? FirstName { get; set; }
-        public string? MiddleName { get; set; }
-        public string? LastName { get; set; }
+        public string FirstName { get; set; } = string.Empty;
+        public string MiddleName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
         public Uri? ImageUri { get; set; }
 
         public virtual List<FriendsRequest> IncomingRequests { get; set; } = new List<FriendsRequest>();

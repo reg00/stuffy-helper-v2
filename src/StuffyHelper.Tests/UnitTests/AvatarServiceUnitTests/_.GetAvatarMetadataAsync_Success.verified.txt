@@ -1,0 +1,17 @@
+﻿{
+  Id: Guid_1,
+  UserId: testuser,
+  FileName: testfile,
+  User: {
+    FirstName: ,
+    MiddleName: ,
+    LastName: ,
+    Id: Guid_2,
+    EmailConfirmed: false,
+    SecurityStamp: Guid_3,
+    ConcurrencyStamp: Guid_4,
+    PhoneNumberConfirmed: false,
+    TwoFactorEnabled: false,
+    LockoutEnabled: false
+  }
+}

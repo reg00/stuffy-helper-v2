@@ -1,0 +1,4 @@
+﻿{
+  Type: AuthorizationException,
+  Message: Authorization error
+}

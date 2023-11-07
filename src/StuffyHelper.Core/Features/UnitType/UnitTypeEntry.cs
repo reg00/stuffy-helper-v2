@@ -6,7 +6,7 @@ namespace StuffyHelper.Core.Features.UnitType
     public class UnitTypeEntry
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public bool IsActive { get; set; }
 
         public virtual List<PurchaseEntry> Purchases { get; set; } = new List<PurchaseEntry>();

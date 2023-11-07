@@ -13,7 +13,7 @@ namespace StuffyHelper.Core.Features.Purchase
         [Required]
         public Guid Id { get; set; }
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         [Required]
         public double Cost { get; set; }
         [Required]
