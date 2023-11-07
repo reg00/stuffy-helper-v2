@@ -29,16 +29,15 @@ namespace StuffyHelper.Authorization.Core.Extensions
             return token;
         }
 
-        public static async Task<JwtSecurityToken> CreateToken(this StuffyUser user, UserManager<StuffyUser> _userManager, AuthorizationConfiguration authorizationConfiguration)
+        public static JwtSecurityToken CreateToken(this StuffyUser user, IEnumerable<string> roles, AuthorizationConfiguration authorizationConfiguration)
         {
-            var userRoles = await _userManager.GetRolesAsync(user);
             var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
-            foreach (var userRole in userRoles)
+            foreach (var userRole in roles)
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
 
             return authClaims.GetToken(authorizationConfiguration);

@@ -8,14 +8,14 @@ namespace StuffyHelper.Core.Features.Media
     {
         public Guid Id { get; set; }
         public Guid EventId { get; set; }
-        public string? FileName { get; set; }
+        public string FileName { get; set; } = string.Empty;
         public DateTimeOffset CreatedDate { get; set; }
         public FileType FileType { get; set; }
         public MediaType MediaType { get; set; }
-        public string? Link { get; set; }
+        public string Link { get; set; } = string.Empty;
         public bool IsPrimal { get; set; }
 
-        public virtual EventEntry? Event { get; set; }
+        public virtual EventEntry Event { get; set; } = new();
 
         public MediaEntry()
         {
@@ -24,10 +24,10 @@ namespace StuffyHelper.Core.Features.Media
 
         public MediaEntry(
             Guid eventId,
-            string? fileName,
+            string fileName,
             FileType fileType, 
             MediaType mediaType,
-            string? link,
+            string link,
             bool isPrimal)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));

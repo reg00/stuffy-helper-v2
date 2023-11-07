@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Configs;
+using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Extensions;
 using StuffyHelper.Authorization.Core.Features.Avatar;
 using StuffyHelper.Authorization.Core.Models;
@@ -45,8 +46,8 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                var token = await user.CreateToken(_userManager, _authorizationConfiguration);
                 var roles = await _userManager.GetRolesAsync(user);
+                var token = user.CreateToken(roles, _authorizationConfiguration);
 
                 var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.UserName));
@@ -108,18 +109,22 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
         public async Task<bool> CheckUserIsAdmin(ClaimsPrincipal user, CancellationToken cancellationToken = default)
         {
             var userName = user?.Identity?.Name;
-            return await CheckUserIsAdmin(userName, cancellationToken);
-        }
 
-        public async Task<bool> CheckUserIsAdmin(string userName, CancellationToken cancellationToken = default)
-        {
+            if (userName == null)
+                throw new AuthorizationException("Authorization error");
+
             var stuffyUser = await _userManager.FindByNameAsync(userName);
             return await _userManager.IsInRoleAsync(stuffyUser, nameof(UserType.Admin));
         }
 
         public async Task<UserEntry> GetUserByToken(ClaimsPrincipal user, CancellationToken cancellationToken = default)
         {
-            var identityUser = await _userManager.FindByNameAsync(user?.Identity?.Name);
+            var userName = user?.Identity?.Name;
+
+            if (userName == null)
+                throw new AuthorizationException("Authorization error");
+
+            var identityUser = await _userManager.FindByNameAsync(userName);
             var rolesList = await _userManager.GetRolesAsync(identityUser);
 
             return new UserEntry(identityUser, rolesList);
@@ -136,8 +141,6 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
         public async Task DeleteUser(string? userName = null, string? userId = null)
         {
-            var error = string.Empty;
-
             if (string.IsNullOrWhiteSpace(userName) && string.IsNullOrWhiteSpace(userId))
                 throw new Exception("UserName or UserId required");
 
@@ -162,9 +165,14 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             EnsureArg.IsNotNull(model, nameof(model));
             EnsureArg.IsNotNull(user, nameof(user));
 
-            var userToUpdate = await _userManager.FindByNameAsync(user.Identity!.Name);
+            var userName = user?.Identity?.Name;
+
+            if (userName == null)
+                throw new AuthorizationException("Authorization error");
+
+            var userToUpdate = await _userManager.FindByNameAsync(userName);
             if (userToUpdate is null)
-                throw new EntityNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
+                throw new EntityNotFoundException($"Пользователь с логином {userName} отсутствует");
 
             userToUpdate.PatchFrom(model);
 
@@ -178,32 +186,42 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
 
         public async Task UpdateAvatar(ClaimsPrincipal user, IFormFile file)
         {
-            var existUser = await _userManager.FindByNameAsync(user.Identity!.Name);
+            var userName = user?.Identity?.Name;
+
+            if (userName == null)
+                throw new AuthorizationException("Authorization error");
+
+            var existUser = await _userManager.FindByNameAsync(userName);
             if (existUser is null)
-                throw new EntityNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
+                throw new EntityNotFoundException($"Пользователь с логином {userName} отсутствует");
 
             if (file != null)
             {
                 var addAvatar = new AddAvatarEntry(existUser.Id, file);
 
-                var avatar = await _avatarService.StoreAvatarFormFileAsync(addAvatar);
+                await _avatarService.StoreAvatarFormFileAsync(addAvatar);
 
                 var mediaUri = await _avatarService.GetAvatarUri(existUser.Id);
                 existUser.ImageUri = mediaUri;
-                var result = await _userManager.UpdateAsync(existUser);
+                await _userManager.UpdateAsync(existUser);
             }
         }
 
         public async Task RemoveAvatar(ClaimsPrincipal user)
         {
-            var existUser = await _userManager.FindByNameAsync(user.Identity!.Name);
+            var userName = user?.Identity?.Name;
+
+            if (userName == null)
+                throw new AuthorizationException("Authorization error");
+
+            var existUser = await _userManager.FindByNameAsync(userName);
             if (existUser is null)
-                throw new EntityNotFoundException($"Пользователь с логином {user.Identity.Name} отсутствует");
+                throw new EntityNotFoundException($"Пользователь с логином {userName} отсутствует");
             try
             {
                 await _avatarService.DeleteAvatarAsync(existUser.Id);
             }
-            catch (EntityNotFoundException ex) 
+            catch (EntityNotFoundException)
             { 
 
             }

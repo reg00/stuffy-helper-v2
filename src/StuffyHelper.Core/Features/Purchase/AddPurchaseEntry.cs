@@ -6,7 +6,7 @@ namespace StuffyHelper.Core.Features.Purchase
     public class AddPurchaseEntry
     {
         [Required]
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         [Required]
         public double Cost { get; set; }
         [Required]
@@ -15,7 +15,7 @@ namespace StuffyHelper.Core.Features.Purchase
         public Guid EventId { get; set; }
         [Required]
         public Guid ParticipantId { get; set; }
-        public List<PurchaseTagShortEntry> PurchaseTags { get; init; }
+        public List<PurchaseTagShortEntry> PurchaseTags { get; init; } = new List<PurchaseTagShortEntry>();
         [Required]
         public Guid UnitTypeId { get; set; }
         [Required]

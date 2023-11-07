@@ -9,12 +9,12 @@ namespace StuffyHelper.Core.Features.Event
     public class EventEntry
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string? Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime EventDateStart { get; set; }
         public DateTime? EventDateEnd { get; set; }
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
         public Uri? ImageUri { get; set; }
         public bool IsCompleted { get; set; }
         public bool IsActive { get; set; }
@@ -34,7 +34,7 @@ namespace StuffyHelper.Core.Features.Event
 
         public EventEntry(
             string name,
-            string? description,
+            string description,
             DateTime eventDateStart,
             DateTime? eventDateEnd,
             string userId)

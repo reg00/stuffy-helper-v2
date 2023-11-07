@@ -32,7 +32,7 @@ namespace StuffyHelper.Authorization.Core.Features.Friends
             if (stuffyUser.Id == friend.Id)
                 throw new AuthorizationException("Can not request yourself.");
 
-            var request = new FriendEntry(stuffyUser?.Id, friend.Id);
+            var request = new FriendEntry(stuffyUser.Id, friend.Id);
 
             var result = await _friendshipStore.AddFriendAsync(request, cancellationToken);
             return new FriendShortEntry(result);
@@ -49,7 +49,12 @@ namespace StuffyHelper.Authorization.Core.Features.Friends
         {
             EnsureArg.IsNotNull(user, nameof(user));
 
-            var stuffyUser = await _authorizationService.GetUser(user.Identity.Name);
+            var userName = user?.Identity?.Name;
+
+            if (userName == null)
+                throw new AuthorizationException("Authorization error");
+
+            var stuffyUser = await _authorizationService.GetUser(userName);
             var response = await _friendshipStore.GetFriends(stuffyUser.Id, limit, offset, cancellationToken);
 
             return new AuthResponse<UserShortEntry>()

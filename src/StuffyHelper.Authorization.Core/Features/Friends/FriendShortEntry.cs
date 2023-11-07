@@ -6,10 +6,10 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
     public class FriendShortEntry
     {
         public Guid Id { get; set; }
-        public string UserId { get; set; }
-        public string FriendId { get; set; }
-        public string UserName { get; set; }
-        public string FriendName { get; set; }
+        public string UserId { get; set; } = string.Empty;
+        public string FriendId { get; set; } = string.Empty;
+        public string UserName { get; set; } = string.Empty;
+        public string FriendName { get; set; } = string.Empty;
 
         public FriendShortEntry(FriendEntry friendship)
         {

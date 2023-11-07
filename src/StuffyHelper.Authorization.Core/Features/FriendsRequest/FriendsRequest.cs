@@ -8,13 +8,13 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
     {
         public Guid Id { get; set; }
         public bool IsComfirmed { get; set; }
-        public string UserIdFrom { get; set; }
-        public string UserIdTo { get; set; }
+        public string UserIdFrom { get; set; } = string.Empty;
+        public string UserIdTo { get; set; } = string.Empty;
 
         [ForeignKey("UserIdFrom")]
-        public virtual StuffyUser UserFrom { get; set; }
+        public virtual StuffyUser UserFrom { get; set; } = new();
         [ForeignKey("UserIdTo")]
-        public virtual StuffyUser UserTo { get; set; }
+        public virtual StuffyUser UserTo { get; set; } = new();
 
         public FriendsRequest(string userIdFrom, string userIdTo)
         {

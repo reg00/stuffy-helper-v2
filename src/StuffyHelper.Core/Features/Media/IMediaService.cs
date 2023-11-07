@@ -21,7 +21,7 @@ namespace StuffyHelper.Core.Features.Media
             MediaType? mediaType = null,
             CancellationToken cancellationToken = default);
 
-        Task<GetMediaEntry> GetPrimalEventMedia(
+        Task<GetMediaEntry?> GetPrimalEventMedia(
             Guid eventId,
             CancellationToken cancellationToken = default);
 
@@ -34,7 +34,7 @@ namespace StuffyHelper.Core.Features.Media
             bool isPrimal = false,
             CancellationToken cancellationToken = default);
 
-        Task<Uri> GetEventPrimalMediaUri(
+        Task<Uri?> GetEventPrimalMediaUri(
             Guid eventId,
             CancellationToken cancellationToken = default);
 

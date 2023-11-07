@@ -1,0 +1,4 @@
+﻿{
+  Type: ForbiddenException,
+  Message: Неверный код
+}

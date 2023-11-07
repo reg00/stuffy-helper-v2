@@ -45,9 +45,13 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
         {
             EnsureArg.IsNotNull(user, nameof(user));
 
-            var stuffyUser = await _authorizationService.GetUser(user.Identity!.Name);
+            var userName = user?.Identity?.Name;
+
+            if (userName == null)
+                throw new AuthorizationException("Authorization error");
+
+            var stuffyUser = await _authorizationService.GetUser(userName);
             var resp = await _requestStore.GetSendedRequestsAsync(stuffyUser.Id, cancellationToken);
-            var requests = new List<FriendsRequestShort>();
 
             return resp.Select(x => new FriendsRequestShort(x));
         }
@@ -58,9 +62,13 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
         {
             EnsureArg.IsNotNull(user, nameof(user));
 
-            var stuffyUser = await _authorizationService.GetUser(user.Identity!.Name);
+            var userName = user?.Identity?.Name;
+
+            if (userName == null)
+                throw new AuthorizationException("Authorization error");
+
+            var stuffyUser = await _authorizationService.GetUser(userName);
             var resp = await _requestStore.GetIncomingRequestsAsync(stuffyUser.Id, cancellationToken);
-            var requests = new List<FriendsRequestShort>();
 
             return resp.Select(x => new FriendsRequestShort(x));
         }
@@ -73,7 +81,12 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
             EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
             EnsureArg.IsNotNull(user, nameof(user));
 
-            var incomingUser = await _authorizationService.GetUser(user?.Identity?.Name);
+            var userName = user?.Identity?.Name;
+
+            if (userName == null)
+                throw new AuthorizationException("Authorization error");
+
+            var incomingUser = await _authorizationService.GetUser(userName);
             var requestUser = await _authorizationService.GetUser(userId: userId);
 
             if (incomingUser.Id == requestUser.Id)

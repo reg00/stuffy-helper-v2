@@ -37,6 +37,7 @@ namespace StuffyHelper.Authorization.Core.Registration
                 {
                     OnRedirectToLogin = async (context) =>
                     {
+                        await Task.CompletedTask;
                         //context.HttpContext.Response.Redirect("api/auth/login");
                     }
                 };

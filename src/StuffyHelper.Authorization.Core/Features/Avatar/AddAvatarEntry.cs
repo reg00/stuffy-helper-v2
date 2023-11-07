@@ -1,16 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using EnsureThat;
+using Microsoft.AspNetCore.Http;
 using StuffyHelper.Minio.Features.Common;
 
 namespace StuffyHelper.Authorization.Core.Features.Avatar
 {
     public class AddAvatarEntry
     {
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
         public IFormFile? File { get; set; }
 
         public AddAvatarEntry()
         {
-
+            File = null;
         }
 
         public AddAvatarEntry(
@@ -23,10 +24,12 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
 
         public AvatarEntry ToCommonEntry()
         {
+            EnsureArg.IsNotNull(File, nameof(File));
+
             return new AvatarEntry(
             UserId,
-            File is not null ? Path.GetFileNameWithoutExtension(File.FileName) : null,
-            File is not null ? FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(File.FileName)) : FileType.Link);
+            Path.GetFileNameWithoutExtension(File.FileName),
+            FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(File.FileName)));
         }
     }
 }

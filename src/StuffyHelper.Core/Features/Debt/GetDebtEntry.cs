@@ -16,10 +16,6 @@ namespace StuffyHelper.Core.Features.Debt
         public UserShortEntry Borrower { get; set; }
         public UserShortEntry Debtor { get; set; }
 
-        public GetDebtEntry()
-        {
-        }
-
         public GetDebtEntry(
             DebtEntry entry,
             UserEntry borrower,

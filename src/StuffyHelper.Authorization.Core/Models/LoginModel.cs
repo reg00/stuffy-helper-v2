@@ -5,9 +5,9 @@ namespace StuffyHelper.Authorization.Core.Models
     public class LoginModel
     {
         [Required(ErrorMessage = "Необходимо заполнить логин")]
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Необходимо заполнить пароль")]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
     }
 }

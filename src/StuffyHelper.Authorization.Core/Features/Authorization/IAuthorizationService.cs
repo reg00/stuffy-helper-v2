@@ -18,8 +18,6 @@ namespace StuffyHelper.Authorization.Core.Features
 
         Task<bool> CheckUserIsAdmin(ClaimsPrincipal user, CancellationToken cancellationToken = default);
 
-        Task<bool> CheckUserIsAdmin(string userName, CancellationToken cancellationToken = default);
-
         Task<UserEntry> GetUserByToken(ClaimsPrincipal user, CancellationToken cancellationToken = default);
 
         IEnumerable<UserEntry> GetUserLogins(string? userName = null);

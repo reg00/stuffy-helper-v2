@@ -3,6 +3,6 @@
     public class FrontEndConfiguration
     {
         public const string DefaultSectionName = "Frontend";
-        public Uri Endpoint { get; set; }
+        public Uri Endpoint { get; set; } = new Uri("about:blank");
     }
 }

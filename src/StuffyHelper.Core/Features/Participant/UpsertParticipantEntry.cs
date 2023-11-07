@@ -7,7 +7,7 @@ namespace StuffyHelper.Core.Features.Participant
         [Required]
         public Guid EventId { get; set; }
         [Required]
-        public string UserId { get; set; }
+        public string UserId { get; set; } = string.Empty;
 
         public ParticipantEntry ToCommonEntry()
         {

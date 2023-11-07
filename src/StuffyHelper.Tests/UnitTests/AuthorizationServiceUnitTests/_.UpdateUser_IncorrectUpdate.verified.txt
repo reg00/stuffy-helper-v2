@@ -1,0 +1,4 @@
+﻿{
+  Type: AuthorizationException,
+  Message: Ошибка обновления пользователя!. Детали: error 1 error 2
+}

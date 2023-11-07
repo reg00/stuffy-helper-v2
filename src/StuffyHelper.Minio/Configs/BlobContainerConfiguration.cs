@@ -2,6 +2,6 @@
 {
     public class BlobContainerConfiguration
     {
-        public string? ContainerName { get; set; }
+        public string ContainerName { get; set; } = string.Empty;
     }
 }

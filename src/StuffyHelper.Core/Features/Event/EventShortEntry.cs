@@ -8,8 +8,8 @@ namespace StuffyHelper.Core.Features.Event
         [Required]
         public Guid Id { get; set; }
         [Required]
-        public string Name { get; set; }
-        public string? Description { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         [Required]
         public DateTime? EventDateStart { get; set; }
         [Required]

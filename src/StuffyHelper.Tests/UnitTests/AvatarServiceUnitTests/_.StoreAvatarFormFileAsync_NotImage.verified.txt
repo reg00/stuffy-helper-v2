@@ -1,0 +1,4 @@
+﻿{
+  Type: NotSupportedException,
+  Message: Is not valid image
+}

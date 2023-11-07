@@ -6,7 +6,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag
     public class PurchaseTagEntry
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public bool IsActive { get; set; }
 
         public virtual List<PurchaseEntry> Purchases { get; set; } = new List<PurchaseEntry>();
