@@ -599,7 +599,7 @@ namespace StuffyHelper.Tests.UnitTests
                new Mock<IAvatarService>().Object,
                new Mock<IOptions<AuthorizationConfiguration>>().Object);
 
-            await ThrowsTask(async () => await authService.GetUser(string.Empty, string.Empty), VerifySettings);
+            await ThrowsTask(async () => await authService.GetUserByName(string.Empty), VerifySettings);
         }
 
         [Fact]
@@ -611,7 +611,7 @@ namespace StuffyHelper.Tests.UnitTests
                new Mock<IAvatarService>().Object,
                new Mock<IOptions<AuthorizationConfiguration>>().Object);
 
-            await ThrowsTask(async () => await authService.GetUser("test", string.Empty), VerifySettings);
+            await ThrowsTask(async () => await authService.GetUserByName("test"), VerifySettings);
         }
 
         [Fact]
@@ -627,7 +627,7 @@ namespace StuffyHelper.Tests.UnitTests
                new Mock<IAvatarService>().Object,
                new Mock<IOptions<AuthorizationConfiguration>>().Object);
 
-            await authService.GetUser("test", string.Empty);
+            await authService.GetUserByName("test");
         }
 
         [Fact]

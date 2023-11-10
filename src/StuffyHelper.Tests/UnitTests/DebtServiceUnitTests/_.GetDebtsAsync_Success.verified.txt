@@ -1,0 +1,44 @@
+﻿{
+  Data: [
+    {
+      Amount: 1.0,
+      IsSent: false,
+      IsComfirmed: false,
+      Event: {
+        Name: test,
+        Description: test,
+        EventDateStart: Date_MinValue,
+        IsCompleted: false
+      },
+      Borrower: {
+        Id: 123,
+        Name: test
+      },
+      Debtor: {
+        Id: 321,
+        Name: 
+      }
+    },
+    {
+      Amount: 2.0,
+      IsSent: false,
+      IsComfirmed: false,
+      Event: {
+        Name: test 2,
+        Description: test 2,
+        EventDateStart: Date_MinValue,
+        IsCompleted: false
+      },
+      Borrower: {
+        Id: 321,
+        Name: 
+      },
+      Debtor: {
+        Id: 123,
+        Name: test
+      }
+    }
+  ],
+  TotalPages: 1,
+  Total: 2
+}

@@ -231,21 +231,32 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             }
         }
 
-        public async Task<UserEntry> GetUser(string? userName = null, string? userId = null)
+        public async Task<UserEntry> GetUserByName(string userName)
         {
-            if (string.IsNullOrWhiteSpace(userName) && string.IsNullOrWhiteSpace(userId))
-                throw new Exception("UserName or UserId required");
+            EnsureArg.IsNotEmptyOrWhiteSpace(userName, nameof(userName));
 
-            StuffyUser user;
-
-            if (!string.IsNullOrWhiteSpace(userName))
-                user = await _userManager.FindByNameAsync(userName);
-            else
-                user = await _userManager.FindByIdAsync(userId);
+            var user = await _userManager.FindByNameAsync(userName);
 
             if (user == null)
             {
-                var error = string.IsNullOrWhiteSpace(userName) ? $"Пользователь с идентификатором {userId} отсутствует" : $"Пользователь с логином {userName} отсутствует";
+                var error = $"Пользователь с логином {userName} отсутствует";
+                throw new EntityNotFoundException(error);
+            }
+
+            var rolesList = await _userManager.GetRolesAsync(user);
+
+            return new UserEntry(user, rolesList);
+        }
+
+        public async Task<UserEntry> GetUserById(string userId)
+        {
+            EnsureArg.IsNotEmptyOrWhiteSpace(userId, nameof(userId));
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                var error = $"Пользователь с идентификатором {userId} отсутствует";
                 throw new EntityNotFoundException(error);
             }
 

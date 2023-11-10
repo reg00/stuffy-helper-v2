@@ -29,7 +29,7 @@ namespace StuffyHelper.Core.Features.Participant
             EnsureArg.IsNotDefault(participantId, nameof(participantId));
 
             var entry = await _participantStore.GetParticipantAsync(participantId, cancellationToken);
-            var user = await _authorizationService.GetUser(userId: entry.UserId);
+            var user = await _authorizationService.GetUserById(entry.UserId);
 
             var purchaseUsages = new List<PurchaseUsageShortEntry>();
 
@@ -46,10 +46,10 @@ namespace StuffyHelper.Core.Features.Participant
             var resp = await _participantStore.GetParticipantsAsync(offset, limit, eventId, userId, cancellationToken);
             var participants = new List<ParticipantShortEntry>();
 
-            foreach (var @Participant in resp.Data)
+            foreach (var participant in resp.Data)
             {
-                var user = await _authorizationService.GetUser(userId: @Participant.UserId);
-                participants.Add(new ParticipantShortEntry(@Participant, new UserShortEntry(user)));
+                var user = await _authorizationService.GetUserById(participant.UserId);
+                participants.Add(new ParticipantShortEntry(participant, new UserShortEntry(user)));
             }
 
             return new Response<ParticipantShortEntry>()
@@ -64,7 +64,7 @@ namespace StuffyHelper.Core.Features.Participant
         {
             EnsureArg.IsNotNull(participant, nameof(participant));
 
-            var user = await _authorizationService.GetUser(userId: participant.UserId);
+            var user = await _authorizationService.GetUserById(participant.UserId);
             var entry = participant.ToCommonEntry();
             var result = await _participantStore.AddParticipantAsync(entry, cancellationToken);
 
@@ -83,7 +83,7 @@ namespace StuffyHelper.Core.Features.Participant
             EnsureArg.IsNotNull(participant, nameof(participant));
             EnsureArg.IsNotDefault(participantId, nameof(participantId));
 
-            var user = await _authorizationService.GetUser(userId: participant.UserId);
+            var user = await _authorizationService.GetUserById(participant.UserId);
             var existingParticipant = await _participantStore.GetParticipantAsync(participantId, cancellationToken);
 
             if (existingParticipant is null)

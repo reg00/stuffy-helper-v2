@@ -37,13 +37,13 @@ namespace StuffyHelper.Core.Features.Event
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             var entry = await _eventStore.GetEventAsync(eventId, userId, cancellationToken);
-            var user = await _authorizationService.GetUser(userId: entry.UserId);
+            var user = await _authorizationService.GetUserById(entry.UserId);
 
             var participants = new List<ParticipantShortEntry>();
 
             foreach (var item in entry.Participants)
             {
-                var participantUser = await _authorizationService.GetUser(userId: item.UserId);
+                var participantUser = await _authorizationService.GetUserById(item.UserId);
                 participants.Add(new ParticipantShortEntry(item, new UserShortEntry(participantUser)));
             }
 
@@ -97,7 +97,7 @@ namespace StuffyHelper.Core.Features.Event
             if (userName == null)
                 throw new AuthorizationException("Authorization error");
 
-            var identityUser = await _authorizationService.GetUser(userName: userName);
+            var identityUser = await _authorizationService.GetUserByName(userName);
             var entry = new EventEntry(
                 eventEntry.Name,
                 eventEntry.Description,
@@ -268,8 +268,9 @@ namespace StuffyHelper.Core.Features.Event
         private async Task CheckEventPermissionsAsync(string eventUserId, string? userId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNullOrWhiteSpace(eventUserId, nameof(eventUserId));
+            EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
 
-            var stuffyUser = await _authorizationService.GetUser(userId);
+            var stuffyUser = await _authorizationService.GetUserById(userId);
 
             if (!string.IsNullOrWhiteSpace(userId) || eventUserId != stuffyUser.Id)
             {

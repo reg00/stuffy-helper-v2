@@ -108,7 +108,7 @@ namespace StuffyHelper.Tests.UnitTests
 
             var authorizationServiceMoq = new Mock<IAuthorizationService>();
             authorizationServiceMoq.Setup(x =>
-            x.GetUser(It.IsAny<string>(), It.IsAny<string>()))
+            x.GetUserByName(It.IsAny<string>()))
                 .ReturnsAsync(user);
 
             var requestStoreMoq = new Mock<IFriendsRequestStore>();
@@ -156,7 +156,7 @@ namespace StuffyHelper.Tests.UnitTests
 
             var authorizationServiceMoq = new Mock<IAuthorizationService>();
             authorizationServiceMoq.Setup(x =>
-            x.GetUser(It.IsAny<string>(), It.IsAny<string>()))
+            x.GetUserByName(It.IsAny<string>()))
                 .ReturnsAsync(user);
 
             var requestStoreMoq = new Mock<IFriendsRequestStore>();

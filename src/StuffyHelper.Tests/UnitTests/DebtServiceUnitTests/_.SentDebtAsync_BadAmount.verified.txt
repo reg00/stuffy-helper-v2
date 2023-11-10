@@ -1,0 +1,8 @@
+﻿{
+  Type: ArgumentOutOfRangeException,
+  Message:
+Value '0' is not greater than limit '0'. (Parameter 'amount')
+Actual value was 0.,
+  ActualValue: 0.0,
+  ParamName: amount
+}

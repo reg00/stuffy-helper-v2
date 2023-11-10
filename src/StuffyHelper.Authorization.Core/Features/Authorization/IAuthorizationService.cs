@@ -30,7 +30,9 @@ namespace StuffyHelper.Authorization.Core.Features
 
         Task RemoveAvatar(ClaimsPrincipal user);
 
-        Task<UserEntry> GetUser(string? userName = null, string? userId = null);
+        Task<UserEntry> GetUserByName(string userName);
+
+        Task<UserEntry> GetUserById(string userId);
 
         Task<UserEntry> ConfirmEmail(string login, string code);
 

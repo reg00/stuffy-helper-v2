@@ -50,7 +50,7 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
             if (userName == null)
                 throw new AuthorizationException("Authorization error");
 
-            var stuffyUser = await _authorizationService.GetUser(userName);
+            var stuffyUser = await _authorizationService.GetUserByName(userName);
             var resp = await _requestStore.GetSendedRequestsAsync(stuffyUser.Id, cancellationToken);
 
             return resp.Select(x => new FriendsRequestShort(x));
@@ -67,7 +67,7 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
             if (userName == null)
                 throw new AuthorizationException("Authorization error");
 
-            var stuffyUser = await _authorizationService.GetUser(userName);
+            var stuffyUser = await _authorizationService.GetUserByName(userName);
             var resp = await _requestStore.GetIncomingRequestsAsync(stuffyUser.Id, cancellationToken);
 
             return resp.Select(x => new FriendsRequestShort(x));
@@ -86,8 +86,8 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
             if (userName == null)
                 throw new AuthorizationException("Authorization error");
 
-            var incomingUser = await _authorizationService.GetUser(userName);
-            var requestUser = await _authorizationService.GetUser(userId: userId);
+            var incomingUser = await _authorizationService.GetUserByName(userName);
+            var requestUser = await _authorizationService.GetUserById(userId);
 
             if (incomingUser.Id == requestUser.Id)
                 throw new AuthorizationException("Can not request yourself.");

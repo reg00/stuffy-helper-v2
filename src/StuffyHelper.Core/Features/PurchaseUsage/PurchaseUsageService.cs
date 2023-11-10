@@ -21,7 +21,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
             EnsureArg.IsNotDefault(purchaseUsageId, nameof(purchaseUsageId));
 
             var entry = await _purchaseUsageStore.GetPurchaseUsageAsync(purchaseUsageId, cancellationToken);
-            var user = await _authorizationService.GetUser(userId: entry.Participant.UserId);
+            var user = await _authorizationService.GetUserById(entry.Participant.UserId);
 
             return new GetPurchaseUsageEntry(entry, new UserShortEntry(user));
         }
