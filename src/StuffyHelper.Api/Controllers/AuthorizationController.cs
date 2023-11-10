@@ -98,7 +98,7 @@ namespace StuffyHelper.Api.Controllers
             Response.Headers.Add("token", new JwtSecurityTokenHandler().WriteToken(token));
             Response.Headers.Add("expiration", token.ValidTo.ToString());
 
-            var user = await _authorizationService.GetUser(model.Username);
+            var user = await _authorizationService.GetUserByName(model.Username);
 
             return Ok(new GetUserEntry(user));
         }

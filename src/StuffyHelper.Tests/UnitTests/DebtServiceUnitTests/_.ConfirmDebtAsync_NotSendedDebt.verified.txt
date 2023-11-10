@@ -1,0 +1,4 @@
+﻿{
+  Type: EntityNotFoundException,
+  Message: Debt Id '76a258e7-a85d-44b3-b48f-40c4891ebaa0' not found
+}

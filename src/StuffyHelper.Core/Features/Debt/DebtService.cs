@@ -32,8 +32,8 @@ namespace StuffyHelper.Core.Features.Debt
             EnsureArg.IsNotDefault(debtId, nameof(debtId));
 
             var entry = await _debtStore.GetDebtAsync(debtId, cancellationToken);
-            var borrower = await _authorizationService.GetUser(userId: entry.BorrowerId);
-            var debtor = await _authorizationService.GetUser(userId: entry.DebtorId);
+            var borrower = await _authorizationService.GetUserById(entry.BorrowerId);
+            var debtor = await _authorizationService.GetUserById(entry.DebtorId);
 
             return new GetDebtEntry(entry, borrower, debtor);
         }
@@ -53,8 +53,8 @@ namespace StuffyHelper.Core.Features.Debt
 
             foreach (var debt in resp.Data)
             {
-                var borrower = await _authorizationService.GetUser(userId: debt.BorrowerId);
-                var debtor = await _authorizationService.GetUser(userId: debt.DebtorId);
+                var borrower = await _authorizationService.GetUserById(debt.BorrowerId);
+                var debtor = await _authorizationService.GetUserById(debt.DebtorId);
 
                 debts.Add(new GetDebtEntry(debt, borrower, debtor));
             }
@@ -80,8 +80,8 @@ namespace StuffyHelper.Core.Features.Debt
 
             foreach (var dbDebt in resp.Data)
             {
-                var borrower = await _authorizationService.GetUser(userId: dbDebt.BorrowerId);
-                var debtor = await _authorizationService.GetUser(userId: dbDebt.DebtorId);
+                var borrower = await _authorizationService.GetUserById(dbDebt.BorrowerId);
+                var debtor = await _authorizationService.GetUserById(dbDebt.DebtorId);
 
                 debts.Add(new GetDebtEntry(dbDebt, borrower, debtor));
             }
@@ -115,6 +115,7 @@ namespace StuffyHelper.Core.Features.Debt
         public async Task<GetDebtEntry> SentDebtAsync(Guid debtId, double amount, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(debtId, nameof(debtId));
+            EnsureArg.IsGt<double>(amount, 0, nameof(amount));
 
             var debt = await _debtStore.GetDebtAsync(debtId, cancellationToken);
 
@@ -127,8 +128,8 @@ namespace StuffyHelper.Core.Features.Debt
             debt.Paid = amount;
 
             var result = await _debtStore.UpdateDebtAsync(debt, cancellationToken);
-            var borrower = await _authorizationService.GetUser(userId: result.BorrowerId);
-            var debtor = await _authorizationService.GetUser(userId: result.DebtorId);
+            var borrower = await _authorizationService.GetUserById(result.BorrowerId);
+            var debtor = await _authorizationService.GetUserById(result.DebtorId);
 
             return new GetDebtEntry(result, borrower, debtor);
         }
@@ -148,8 +149,8 @@ namespace StuffyHelper.Core.Features.Debt
             debt.IsComfirmed = true;
 
             var result = await _debtStore.UpdateDebtAsync(debt, cancellationToken);
-            var borrower = await _authorizationService.GetUser(userId: result.BorrowerId);
-            var debtor = await _authorizationService.GetUser(userId: result.DebtorId);
+            var borrower = await _authorizationService.GetUserById(result.BorrowerId);
+            var debtor = await _authorizationService.GetUserById(result.DebtorId);
 
             return new GetDebtEntry(result, borrower, debtor);
         }

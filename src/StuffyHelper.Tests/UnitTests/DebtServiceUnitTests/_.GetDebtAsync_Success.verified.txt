@@ -1,0 +1,20 @@
+﻿{
+  Id: Guid_1,
+  Amount: 1.0,
+  IsSent: true,
+  IsComfirmed: false,
+  Event: {
+    Name: ,
+    Description: ,
+    EventDateStart: Date_MinValue,
+    IsCompleted: false
+  },
+  Borrower: {
+    Id: 123,
+    Name: test
+  },
+  Debtor: {
+    Id: 321,
+    Name: 
+  }
+}
