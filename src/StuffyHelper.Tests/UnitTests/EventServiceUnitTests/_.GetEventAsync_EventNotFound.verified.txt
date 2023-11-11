@@ -1,0 +1,4 @@
+﻿{
+  Type: EntityNotFoundException,
+  Message: Event with Id '90c0fde5-5357-4274-9142-8c5eec2ee3b1' Not Found.
+}

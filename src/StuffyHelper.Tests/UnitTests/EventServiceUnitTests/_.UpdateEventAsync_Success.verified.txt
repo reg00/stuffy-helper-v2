@@ -1,0 +1,7 @@
+﻿{
+  Id: Guid_1,
+  Name: name updated,
+  Description: description updated,
+  EventDateStart: Date_MinValue,
+  IsCompleted: false
+}

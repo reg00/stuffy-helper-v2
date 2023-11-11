@@ -1,0 +1,7 @@
+﻿{
+  Id: Guid_1,
+  Name: test,
+  Description: test,
+  EventDateStart: Date_MinValue,
+  IsCompleted: true
+}

@@ -23,6 +23,24 @@ namespace StuffyHelper.Tests.UnitTests.Common
             file.Setup(x =>
             x.ContentType)
                 .Returns("application/pdf");
+            file.Setup(x => x.FileName)
+                .Returns("test.pdf");
+
+            return new()
+            {
+                UserId = "test",
+                File = file.Object
+            };
+        }
+
+        public static AddAvatarEntry GetImageAddAvatarEntry()
+        {
+            var file = new Mock<IFormFile>();
+            file.Setup(x =>
+            x.ContentType)
+                .Returns("image/jpg");
+            file.Setup(x => x.FileName)
+                .Returns("test.jpg");
 
             return new()
             {
