@@ -1,0 +1,20 @@
+﻿{
+  Data: [
+    {
+      Id: Guid_1,
+      Name: ,
+      Description: ,
+      EventDateStart: Date_MinValue,
+      IsCompleted: false
+    },
+    {
+      Id: Guid_2,
+      Name: ,
+      Description: ,
+      EventDateStart: Date_MinValue,
+      IsCompleted: false
+    }
+  ],
+  TotalPages: 1,
+  Total: 2
+}

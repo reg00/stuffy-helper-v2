@@ -1,0 +1,4 @@
+﻿{
+  Type: NotSupportedException,
+  Message: File must be an image.
+}

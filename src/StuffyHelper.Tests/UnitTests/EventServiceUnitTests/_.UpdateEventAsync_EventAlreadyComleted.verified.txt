@@ -1,0 +1,4 @@
+﻿{
+  Type: StuffyException,
+  Message: Cannot edit completed event
+}

@@ -289,7 +289,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task CheckoutEvent_Success()
         {
-            var eventEntry = DebtServiceUnitTestConstants.GetCorrectEventEntry();
+            var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
 
             var eventStoreMoq = new Mock<IEventStore>();
             eventStoreMoq.Setup(x =>

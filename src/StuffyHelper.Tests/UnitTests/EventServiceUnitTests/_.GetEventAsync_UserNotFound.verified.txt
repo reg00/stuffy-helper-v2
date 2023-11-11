@@ -1,0 +1,4 @@
+﻿{
+  Type: EntityNotFoundException,
+  Message: User with Id '123' not found
+}

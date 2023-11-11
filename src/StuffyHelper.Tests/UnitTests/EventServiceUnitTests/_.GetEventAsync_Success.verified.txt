@@ -1,0 +1,22 @@
+﻿{
+  Id: Guid_1,
+  Name: test,
+  Description: test,
+  IsCompleted: true,
+  User: {
+    Id: 123,
+    Name: test
+  },
+  Purchases: [
+    {
+      Name: test,
+      Cost: 1.0,
+      Amount: 1.0,
+      IsPartial: true,
+      IsComplete: false,
+      UnitType: {
+        Name: 
+      }
+    }
+  ]
+}

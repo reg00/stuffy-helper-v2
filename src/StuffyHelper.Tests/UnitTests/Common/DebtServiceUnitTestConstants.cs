@@ -1,8 +1,5 @@
 ﻿using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Debt;
-using StuffyHelper.Core.Features.Event;
-using StuffyHelper.Core.Features.Purchase;
-using StuffyHelper.Core.Features.PurchaseUsage;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {
@@ -81,51 +78,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 },
                 Total = 2,
                 TotalPages = 1
-            };
-        }
-
-        public static EventEntry GetCorrectEventEntry()
-        {
-            return new()
-            {
-                IsActive = true,
-                Description = "test",
-                Id = Guid.NewGuid(),
-                IsCompleted = true,
-                Name = "test",
-                UserId = "123",
-                Purchases = new List<PurchaseEntry>()
-                {
-                    new()
-                    {
-                        Amount = 1,
-                        Cost = 1,
-                        IsPartial = true,
-                        EventId = Guid.NewGuid(),
-                        Name = "test",
-                        IsComplete = false,
-                        ParticipantId = Guid.NewGuid(),
-                        PurchaseUsages = new List<PurchaseUsageEntry>()
-                        {
-                            new()
-                            {
-                                Amount = 1,
-                                Id = Guid.NewGuid(),
-                                ParticipantId= Guid.NewGuid(),
-                                PurchaseId = Guid.NewGuid(),
-                                Participant = new()
-                                {
-                                    UserId = "666"
-                                }
-                            }
-                        },
-                        Owner = new()
-                        {
-                            UserId = "555"
-                        },
-
-                    }
-                }
             };
         }
     }
