@@ -55,10 +55,10 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features
                 StuffyUser user = new()
                 {
                     Id = Guid.NewGuid().ToString(),
-                    Email = "admin@rcud-rt.ru",
+                    Email = "admin@mail.ru",
                     UserName = "admin",
                     NormalizedUserName = "ADMIN",
-                    NormalizedEmail = "ADMIN@RCUD-RT.RU",
+                    NormalizedEmail = "ADMIN@MAIL.RU",
                     FirstName = "Вячеслав",
                     MiddleName = "Олегович",
                     LastName = "Максимов",
