@@ -21,6 +21,13 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<StuffyUser>(entity =>
+            {
+                entity.Property(x => x.FirstName).IsRequired(false);
+                entity.Property(x => x.MiddleName).IsRequired(false);
+                entity.Property(x => x.LastName).IsRequired(false);
+            });
+
             modelBuilder.Entity<FriendEntry>(entity =>
             {
                 entity.ToTable("friends");
