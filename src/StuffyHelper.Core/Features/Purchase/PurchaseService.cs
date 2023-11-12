@@ -75,6 +75,8 @@ namespace StuffyHelper.Core.Features.Purchase
         {
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
 
+            await ValidatePurchase(purchaseId, cancellationToken);
+
             await _purchaseStore.CompletePurchaseAsync(purchaseId, cancellationToken);
         }
 

@@ -1,0 +1,14 @@
+﻿{
+  Data: [
+    {
+      Id: Guid_1,
+      Name: test
+    },
+    {
+      Id: Guid_2,
+      Name: test
+    }
+  ],
+  TotalPages: 1,
+  Total: 2
+}

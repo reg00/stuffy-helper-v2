@@ -3,7 +3,6 @@ using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.PurchaseUsage;
 
 namespace StuffyHelper.Core.Features.Participant
@@ -12,16 +11,13 @@ namespace StuffyHelper.Core.Features.Participant
     {
         private readonly IParticipantStore _participantStore;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IMediaService _mediaService;
 
         public ParticipantService(
             IParticipantStore participantStore,
-            IAuthorizationService authorizationService,
-            IMediaService mediaService)
+            IAuthorizationService authorizationService)
         {
             _participantStore = participantStore;
             _authorizationService = authorizationService;
-            _mediaService = mediaService;
         }
 
         public async Task<GetParticipantEntry> GetParticipantAsync(Guid participantId, CancellationToken cancellationToken)
@@ -30,8 +26,6 @@ namespace StuffyHelper.Core.Features.Participant
 
             var entry = await _participantStore.GetParticipantAsync(participantId, cancellationToken);
             var user = await _authorizationService.GetUserById(entry.UserId);
-
-            var purchaseUsages = new List<PurchaseUsageShortEntry>();
 
             return new GetParticipantEntry(entry, new GetUserEntry(user), entry.PurchaseUsages.Select(x=> new PurchaseUsageShortEntry(x)));
         }
@@ -83,13 +77,14 @@ namespace StuffyHelper.Core.Features.Participant
             EnsureArg.IsNotNull(participant, nameof(participant));
             EnsureArg.IsNotDefault(participantId, nameof(participantId));
 
-            var user = await _authorizationService.GetUserById(participant.UserId);
             var existingParticipant = await _participantStore.GetParticipantAsync(participantId, cancellationToken);
 
             if (existingParticipant is null)
             {
                 throw new EntityNotFoundException($"Participant Id '{participantId}' not found");
             }
+
+            var user = await _authorizationService.GetUserById(participant.UserId);
 
             existingParticipant.PatchFrom(participant);
             var result = await _participantStore.UpdateParticipantAsync(existingParticipant, cancellationToken);

@@ -1,0 +1,5 @@
+﻿{
+  FileName: test.jpg,
+  ContentType: image/jpeg,
+  Ext: .jpg
+}
