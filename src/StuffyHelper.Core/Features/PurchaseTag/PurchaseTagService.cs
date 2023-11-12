@@ -6,18 +6,18 @@ namespace StuffyHelper.Core.Features.PurchaseTag
 {
     public class PurchaseTagService : IPurchaseTagService
     {
-        private readonly IPurchaseTagStore _PurchaseTagStore;
+        private readonly IPurchaseTagStore _purchaseTagStore;
 
         public PurchaseTagService(IPurchaseTagStore PurchaseTagStore)
         {
-            _PurchaseTagStore = PurchaseTagStore;
+            _purchaseTagStore = PurchaseTagStore;
         }
 
         public async Task<GetPurchaseTagEntry> GetPurchaseTagAsync(Guid purchaseTagId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(purchaseTagId, nameof(purchaseTagId));
 
-            var entry = await _PurchaseTagStore.GetPurchaseTagAsync(purchaseTagId, cancellationToken);
+            var entry = await _purchaseTagStore.GetPurchaseTagAsync(purchaseTagId, cancellationToken);
 
             return new GetPurchaseTagEntry(entry);
         }
@@ -30,7 +30,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag
             bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
-            var resp = await _PurchaseTagStore.GetPurchaseTagsAsync(offset, limit, name, purchaseId, isActive, cancellationToken);
+            var resp = await _purchaseTagStore.GetPurchaseTagsAsync(offset, limit, name, purchaseId, isActive, cancellationToken);
 
             return new Response<PurchaseTagShortEntry>()
             {
@@ -45,7 +45,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag
             EnsureArg.IsNotNull(purchaseTag, nameof(purchaseTag));
 
             var entry = purchaseTag.ToCommonEntry();
-            var result = await _PurchaseTagStore.AddPurchaseTagAsync(entry, cancellationToken);
+            var result = await _purchaseTagStore.AddPurchaseTagAsync(entry, cancellationToken);
 
             return new PurchaseTagShortEntry(result);
         }
@@ -54,7 +54,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag
         {
             EnsureArg.IsNotDefault(purchaseTagId, nameof(purchaseTagId));
 
-            await _PurchaseTagStore.DeletePurchaseTagAsync(purchaseTagId, cancellationToken);
+            await _purchaseTagStore.DeletePurchaseTagAsync(purchaseTagId, cancellationToken);
         }
 
         public async Task<PurchaseTagShortEntry> UpdatePurchaseTagAsync(Guid purchaseTagId, UpsertPurchaseTagEntry purchaseTag, CancellationToken cancellationToken = default)
@@ -62,7 +62,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag
             EnsureArg.IsNotNull(purchaseTag, nameof(purchaseTag));
             EnsureArg.IsNotDefault(purchaseTagId, nameof(purchaseTagId));
 
-            var existingPurchaseTag = await _PurchaseTagStore.GetPurchaseTagAsync(purchaseTagId, cancellationToken);
+            var existingPurchaseTag = await _purchaseTagStore.GetPurchaseTagAsync(purchaseTagId, cancellationToken);
 
             if (existingPurchaseTag is null)
             {
@@ -70,7 +70,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag
             }
 
             existingPurchaseTag.PatchFrom(purchaseTag);
-            var result = await _PurchaseTagStore.UpdatePurchaseTagAsync(existingPurchaseTag, cancellationToken);
+            var result = await _purchaseTagStore.UpdatePurchaseTagAsync(existingPurchaseTag, cancellationToken);
 
             return new PurchaseTagShortEntry(result);
         }
