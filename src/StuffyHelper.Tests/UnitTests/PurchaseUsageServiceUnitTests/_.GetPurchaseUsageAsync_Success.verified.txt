@@ -1,0 +1,15 @@
+﻿{
+  Id: Guid_1,
+  Participant: {
+    Name: test
+  },
+  Purchase: {
+    Name: ,
+    IsPartial: false,
+    IsComplete: false,
+    UnitType: {
+      Name: 
+    }
+  },
+  Amount: 1
+}
