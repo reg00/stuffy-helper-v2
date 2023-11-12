@@ -12,7 +12,7 @@ using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.UnitType;
 using StuffyHelper.EntityFrameworkCore.Configs;
 
-
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace StuffyHelper.EntityFrameworkCore.Features.Schema
 {
     public partial class StuffyHelperContext : DbContext
@@ -21,9 +21,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
 
         private readonly EntityFrameworkConfiguration _configuration;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         public StuffyHelperContext(IOptions<EntityFrameworkConfiguration> configuration)
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             EnsureArg.IsNotNull(configuration, nameof(configuration));
 
@@ -69,6 +67,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.Property(e => e.EventDateStart).IsRequired();
                 entity.Property(e => e.UserId).IsRequired();
                 entity.Property(e => e.IsCompleted).HasDefaultValue(false);
+                entity.Property(e => e.ImageUri).IsRequired(false);
+                entity.Property(e => e.EventDateEnd).IsRequired(false);
             });
 
             modelBuilder.Entity<ParticipantEntry>(entity =>
@@ -150,6 +150,8 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
 
                 entity.Property(e => e.EventId).IsRequired();
                 entity.Property(e => e.MediaType).IsRequired();
+                entity.Property(e => e.Link).IsRequired(false);
+                entity.Property(e => e.FileName).IsRequired(false);
             });
 
             modelBuilder.Entity<DebtEntry>(entity =>
