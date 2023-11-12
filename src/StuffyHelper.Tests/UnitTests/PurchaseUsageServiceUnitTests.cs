@@ -3,6 +3,7 @@ using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Tests.UnitTests.Common;
 
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 namespace StuffyHelper.Tests.UnitTests
 {
     public class PurchaseUsageServiceUnitTests : UnitTestsBase
