@@ -68,6 +68,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.Property(e => e.UserId).IsRequired();
                 entity.Property(e => e.IsCompleted).HasDefaultValue(false);
                 entity.Property(e => e.ImageUri).IsRequired(false);
+                entity.Property(e => e.Description).IsRequired(false);
                 entity.Property(e => e.EventDateEnd).IsRequired(false);
             });
 
