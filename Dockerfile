@@ -28,6 +28,9 @@ COPY src/StuffyHelper.Minio/StuffyHelper.Minio.csproj \
 COPY src/StuffyHelper.EmailService.Core/StuffyHelper.EmailService.Core.csproj \
      src/StuffyHelper.EmailService.Core/StuffyHelper.EmailService.Core.csproj
 
+COPY src/StuffyHelper.Tests/StuffyHelper.Tests.csproj \
+     src/StuffyHelper.Tests/StuffyHelper.Tests.csproj
+
 RUN dotnet restore src/StuffyHelper.Hosting/StuffyHelper.Hosting.csproj
 
 RUN dotnet restore src/StuffyHelper.Api/StuffyHelper.Api.csproj
@@ -43,6 +46,8 @@ RUN dotnet restore src/StuffyHelper.Authorization.EntityFrameworkCore/StuffyHelp
 RUN dotnet restore src/StuffyHelper.Minio/StuffyHelper.Minio.csproj
 
 RUN dotnet restore src/StuffyHelper.EmailService.Core/StuffyHelper.EmailService.Core.csproj
+
+RUN dotnet restore src/StuffyHelper.Tests/StuffyHelper.Tests.csproj
 
 COPY ./ ./
 
