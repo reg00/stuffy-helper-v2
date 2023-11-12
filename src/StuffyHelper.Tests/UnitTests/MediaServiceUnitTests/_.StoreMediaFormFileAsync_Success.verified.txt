@@ -1,0 +1,6 @@
+﻿{
+  FileType: Link,
+  FileName: ,
+  MediaType: Link,
+  Link: test
+}

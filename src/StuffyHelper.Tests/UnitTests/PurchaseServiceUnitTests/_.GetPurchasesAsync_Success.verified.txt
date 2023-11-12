@@ -1,0 +1,48 @@
+﻿{
+  Data: [
+    {
+      Id: Guid_1,
+      Name: Test,
+      Cost: 1.0,
+      Amount: 1.0,
+      IsPartial: true,
+      IsComplete: true,
+      Event: {
+        Name: ,
+        Description: ,
+        EventDateStart: Date_MinValue,
+        IsCompleted: false
+      },
+      UnitType: {
+        Name: 
+      },
+      PurchaseUsages: [],
+      Participant: {
+        Name: 
+      }
+    },
+    {
+      Id: Guid_2,
+      Name: Test 2,
+      Cost: 5.0,
+      Amount: 5.0,
+      IsPartial: true,
+      IsComplete: true,
+      Event: {
+        Name: ,
+        Description: ,
+        EventDateStart: Date_MinValue,
+        IsCompleted: false
+      },
+      UnitType: {
+        Name: 
+      },
+      PurchaseUsages: [],
+      Participant: {
+        Name: 
+      }
+    }
+  ],
+  TotalPages: 1,
+  Total: 2
+}

@@ -1,0 +1,20 @@
+﻿{
+  Id: Guid_1,
+  User: {
+    Id: 123,
+    Name: test,
+    Email: ,
+    Role: ,
+    FirstName: Тест,
+    MiddleName: Тестович,
+    LastName: Тестов,
+    Phone: 
+  },
+  Event: {
+    Name: ,
+    Description: ,
+    EventDateStart: Date_MinValue,
+    IsCompleted: false
+  },
+  PurchaseUsages: []
+}

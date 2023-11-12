@@ -1,0 +1,11 @@
+﻿{
+  Id: Guid_1,
+  FileName: test.jpg,
+  Link: ,
+  Event: {
+    Name: ,
+    Description: ,
+    EventDateStart: Date_MinValue,
+    IsCompleted: false
+  }
+}
