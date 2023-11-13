@@ -82,19 +82,19 @@ namespace StuffyHelper.Api.Controllers
             return StatusCode((int)HttpStatusCode.OK);
         }
 
-        /// <summary>
-        /// Изменение участника ивента (нужно или нет хз)
-        /// </summary>
-        [HttpPatch]
-        [Produces(KnownContentTypes.ApplicationJson)]
-        [ProducesResponseType(typeof(ParticipantShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        [Route(KnownRoutes.UpdateParticipantRoute)]
-        public async Task<IActionResult> PatchAsync(Guid participantId, [FromBody] UpsertParticipantEntry updateEntry)
-        {
-            var entry = await _participantService.UpdateParticipantAsync(participantId, updateEntry, HttpContext.RequestAborted);
+        // <summary>
+        // Изменение участника ивента (нужно или нет хз)
+        // </summary>
+        //[HttpPatch]
+        //[Produces(KnownContentTypes.ApplicationJson)]
+        //[ProducesResponseType(typeof(ParticipantShortEntry), (int)HttpStatusCode.OK)]
+        //[ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        //[Route(KnownRoutes.UpdateParticipantRoute)]
+        //public async Task<IActionResult> PatchAsync(Guid participantId, [FromBody] UpsertParticipantEntry updateEntry)
+        //{
+        //    var entry = await _participantService.UpdateParticipantAsync(participantId, updateEntry, HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, entry);
-        }
+        //    return StatusCode((int)HttpStatusCode.OK, entry);
+        //}
     }
 }

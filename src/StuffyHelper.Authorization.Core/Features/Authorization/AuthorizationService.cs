@@ -130,11 +130,11 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             return new UserEntry(identityUser, rolesList);
         }
 
-        public IEnumerable<UserEntry> GetUserLogins(string? userName = null)
+        public IEnumerable<UserShortEntry> GetUserLogins(string? userName = null)
         {
             var users = _userManager.Users
                 .Where(u => userName == null || u.UserName.ToLower().StartsWith(userName.ToLower()))
-                .Select(u => new UserEntry() { Id = u.Id, Name = u.UserName }).ToList();
+                .Select(u => new UserShortEntry() { Id = u.Id, Name = u.UserName, ImageUri = u.ImageUri }).ToList();
 
             return users;
         }

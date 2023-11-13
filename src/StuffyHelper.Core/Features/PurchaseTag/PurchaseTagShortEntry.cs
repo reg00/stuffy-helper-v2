@@ -10,6 +10,11 @@ namespace StuffyHelper.Core.Features.PurchaseTag
         [Required]
         public string Name { get; set; } = string.Empty;
 
+        public PurchaseTagShortEntry()
+        {
+            
+        }
+
         public PurchaseTagShortEntry(PurchaseTagEntry entry)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));

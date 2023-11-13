@@ -15,7 +15,7 @@ namespace StuffyHelper.Core.Features.Media
         public string Link { get; set; } = string.Empty;
         public bool IsPrimal { get; set; }
 
-        public virtual EventEntry Event { get; set; } = new();
+        public virtual EventEntry Event { get; set; }
 
         public MediaEntry()
         {

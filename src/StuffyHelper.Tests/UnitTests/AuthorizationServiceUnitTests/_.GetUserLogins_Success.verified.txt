@@ -1,32 +1,14 @@
 ﻿[
   {
     Id: Guid_1,
-    Name: user1,
-    Email: ,
-    Role: ,
-    FirstName: ,
-    MiddleName: ,
-    LastName: ,
-    Phone: 
+    Name: user1
   },
   {
     Id: Guid_2,
-    Name: user2,
-    Email: ,
-    Role: ,
-    FirstName: ,
-    MiddleName: ,
-    LastName: ,
-    Phone: 
+    Name: user2
   },
   {
     Id: Guid_3,
-    Name: user3,
-    Email: ,
-    Role: ,
-    FirstName: ,
-    MiddleName: ,
-    LastName: ,
-    Phone: 
+    Name: user3
   }
 ]

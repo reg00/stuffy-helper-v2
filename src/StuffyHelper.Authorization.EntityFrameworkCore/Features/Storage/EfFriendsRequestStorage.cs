@@ -24,6 +24,8 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
             try
             {
                 var entry = await _context.FriendsRequests
+                    .Include(x => x.UserTo)
+                    .Include(x => x.UserFrom)
                     .FirstOrDefaultAsync(e => e.Id == requestId, cancellationToken);
 
                 if (entry is null)
@@ -50,6 +52,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
             try
             {
                 return await _context.FriendsRequests
+                    .Include(x => x.UserTo)
                     .Where(e => e.UserIdFrom == userId)
                     .ToListAsync(cancellationToken);
             }
@@ -68,6 +71,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
             try
             {
                 return await _context.FriendsRequests
+                    .Include(x => x.UserFrom)
                     .Where(e => e.UserIdTo == userId)
                     .ToListAsync(cancellationToken);
             }

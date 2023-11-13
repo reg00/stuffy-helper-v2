@@ -16,7 +16,6 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
 
         public AvatarEntry()
         {
-            User = new();
         }
 
         public AvatarEntry(
@@ -29,7 +28,6 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
             UserId = userId;
             FileType = fileType;
             FileName = fileName;
-            User = new();
         }
 
         public void PatchFrom(AddAvatarEntry entry)

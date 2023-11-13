@@ -15,7 +15,7 @@ namespace StuffyHelper.Core.Features.Purchase
         public Guid EventId { get; set; }
         [Required]
         public Guid ParticipantId { get; set; }
-        public List<PurchaseTagShortEntry> PurchaseTags { get; init; } = new List<PurchaseTagShortEntry>();
+        public List<PurchaseTagShortEntry> PurchaseTags { get; set; } = new List<PurchaseTagShortEntry>();
         [Required]
         public Guid UnitTypeId { get; set; }
         [Required]

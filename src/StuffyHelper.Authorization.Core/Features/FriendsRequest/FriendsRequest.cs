@@ -12,9 +12,9 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
         public string UserIdTo { get; set; } = string.Empty;
 
         [ForeignKey("UserIdFrom")]
-        public virtual StuffyUser UserFrom { get; set; } = new();
+        public virtual StuffyUser UserFrom { get; set; }
         [ForeignKey("UserIdTo")]
-        public virtual StuffyUser UserTo { get; set; } = new();
+        public virtual StuffyUser UserTo { get; set; }
 
         public FriendsRequest(string userIdFrom, string userIdTo)
         {
