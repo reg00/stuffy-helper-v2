@@ -21,10 +21,10 @@ namespace StuffyHelper.Core.Features.Purchase
         public bool IsComplete { get; set; }
 
         public virtual List<PurchaseTagEntry> PurchaseTags { get; set; } = new List<PurchaseTagEntry>();
-        public virtual UnitTypeEntry UnitType { get; set; } = new();
+        public virtual UnitTypeEntry UnitType { get; set; }
         public virtual List<PurchaseUsageEntry> PurchaseUsages { get; set; } = new List<PurchaseUsageEntry>();
-        public virtual EventEntry Event { get; set; } = new();
-        public virtual ParticipantEntry Owner { get; set; } = new();
+        public virtual EventEntry Event { get; set; }
+        public virtual ParticipantEntry Owner { get; set; }
 
         public void PatchFrom(UpdatePurchaseEntry entry)
         {

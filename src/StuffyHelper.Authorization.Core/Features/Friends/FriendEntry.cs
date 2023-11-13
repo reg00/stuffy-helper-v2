@@ -15,8 +15,8 @@ namespace StuffyHelper.Authorization.Core.Features.Friends
         [Required]
         public DateTime FriendsSince { get; set; }
 
-        public virtual StuffyUser User { get; set; } = new();
-        public virtual StuffyUser Friend { get; set; } = new();
+        public virtual StuffyUser User { get; set; }
+        public virtual StuffyUser Friend { get; set; }
 
         public FriendEntry(string userId, string friendId)
         {

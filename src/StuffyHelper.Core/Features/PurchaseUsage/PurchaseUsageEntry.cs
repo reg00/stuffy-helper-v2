@@ -11,8 +11,8 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         public Guid PurchaseId { get; set; }
         public int Amount { get; set; }
 
-        public virtual ParticipantEntry Participant { get; set; } = new();
-        public virtual PurchaseEntry Purchase { get; set; } = new();
+        public virtual ParticipantEntry Participant { get; set; }
+        public virtual PurchaseEntry Purchase { get; set; }
 
         public void PatchFrom(UpsertPurchaseUsageEntry entry)
         {
