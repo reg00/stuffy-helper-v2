@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Features.Friend;
 using StuffyHelper.Authorization.Core.Models;
@@ -52,7 +53,7 @@ namespace StuffyHelper.Authorization.Core.Features.Friends
             var userName = user?.Identity?.Name;
 
             if (userName == null)
-                throw new AuthorizationException("Authorization error");
+                throw new ForbiddenException("Authorization error");
 
             var stuffyUser = await _authorizationService.GetUserByName(userName);
             var response = await _friendshipStore.GetFriends(stuffyUser.Id, limit, offset, cancellationToken);

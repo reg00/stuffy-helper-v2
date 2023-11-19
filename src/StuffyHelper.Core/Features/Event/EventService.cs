@@ -95,7 +95,7 @@ namespace StuffyHelper.Core.Features.Event
             var userName = user?.Identity?.Name;
 
             if (userName == null)
-                throw new AuthorizationException("Authorization error");
+                throw new ForbiddenException("Authorization error");
 
             var identityUser = await _authorizationService.GetUserByName(userName);
             var entry = new EventEntry(
