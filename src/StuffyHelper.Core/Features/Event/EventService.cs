@@ -88,10 +88,6 @@ namespace StuffyHelper.Core.Features.Event
             EnsureArg.IsNotNull(user, nameof(user));
             EnsureArg.IsNotNull(eventEntry, nameof(eventEntry));
 
-            EventEntry? result = null;
-            MediaShortEntry? media = null;
-            ParticipantShortEntry? participant = null;
-
             var userName = user?.Identity?.Name;
 
             if (userName == null)
@@ -105,26 +101,9 @@ namespace StuffyHelper.Core.Features.Event
                 eventEntry.EventDateEnd,
                 identityUser.Id);
 
-            if(eventEntry.File != null)
-                FileTypeMapper.ValidateExtIsImage(Path.GetExtension(eventEntry.File.FileName));
-
             try
             {
-                result = await _eventStore.AddEventAsync(entry, cancellationToken);
-
-                if (eventEntry.File != null)
-                {
-                    var addMedia = new AddMediaEntry(result.Id, eventEntry.File, MediaType.Image, string.Empty);
-
-                    media = await _mediaService.StoreMediaFormFileAsync(
-                            addMedia,
-                            isPrimal: true,
-                            cancellationToken: cancellationToken);
-
-                    var mediaUri = await _mediaService.GetEventPrimalMediaUri(result.Id);
-                    result.ImageUri = mediaUri;
-                    result = await _eventStore.UpdateEventAsync(result, cancellationToken);
-                }
+                var result = await _eventStore.AddEventAsync(entry, cancellationToken);
 
                 var addParticipant = new UpsertParticipantEntry()
                 {
@@ -132,24 +111,12 @@ namespace StuffyHelper.Core.Features.Event
                     UserId = entry.UserId
                 };
 
-                participant = await _participantService.AddParticipantAsync(addParticipant, cancellationToken);
+                await _participantService.AddParticipantAsync(addParticipant, cancellationToken);
 
                 return new EventShortEntry(result);
             }
             catch
             {
-                if(eventEntry.File != null)
-                {
-                    if(result != null)
-                        await _eventStore.DeleteEventAsync(result.Id, cancellationToken);
-                    
-                    if(media != null)
-                        await _mediaService.DeleteMediaAsync(media.Id, cancellationToken);
-
-                    if(participant != null)
-                        await _participantService.DeleteParticipantAsync(participant.Id, cancellationToken);
-                }
-
                 throw;
             }
         }

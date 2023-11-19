@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Core.Features.Event
 {
@@ -9,7 +8,6 @@ namespace StuffyHelper.Core.Features.Event
         public string Name { get; set; } = string.Empty;
         [Required]
         public DateTime EventDateStart { get; set; }
-        public IFormFile? File { get; set; }
         public string Description { get; set; } = string.Empty;
         public DateTime? EventDateEnd { get; set; }
     }

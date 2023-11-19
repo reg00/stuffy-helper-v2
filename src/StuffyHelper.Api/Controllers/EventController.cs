@@ -83,14 +83,10 @@ namespace StuffyHelper.Api.Controllers
         /// Добавление ивента
         /// </summary>
         [HttpPost]
-        [Consumes(KnownContentTypes.MultipartFormData)]
-        [RequestSizeLimit(int.MaxValue)]
-        [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
         [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddEventRoute)]
-        public async Task<IActionResult> PostAsync(
-             [FromForm] AddEventEntry entry)
+        public async Task<IActionResult> PostAsync([FromBody] AddEventEntry entry)
         {
             var @event = await _eventService.AddEventAsync(
                 entry,

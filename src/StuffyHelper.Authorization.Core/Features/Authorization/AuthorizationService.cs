@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Configs;
-using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Extensions;
 using StuffyHelper.Authorization.Core.Features.Avatar;
 using StuffyHelper.Authorization.Core.Models;
