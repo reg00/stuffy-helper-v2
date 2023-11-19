@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StuffyHelper.EntityFrameworkCore.Features.Schema;
@@ -11,9 +12,10 @@ using StuffyHelper.EntityFrameworkCore.Features.Schema;
 namespace StuffyHelper.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(StuffyHelperContext))]
-    partial class StuffyHelperContextModelSnapshot : ModelSnapshot
+    [Migration("20231119114030_fixAmount")]
+    partial class fixAmount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -304,44 +306,6 @@ namespace StuffyHelper.EntityFrameworkCore.Migrations
                         .IsUnique();
 
                     b.ToTable("unit-types", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("7142d1aa-53b1-416c-80b8-18b5d3ba33ab"),
-                            IsActive = true,
-                            Name = "Шт."
-                        },
-                        new
-                        {
-                            Id = new Guid("32939f8e-3818-4753-8d1b-4ba8ab7783f9"),
-                            IsActive = true,
-                            Name = "Кг."
-                        },
-                        new
-                        {
-                            Id = new Guid("f73043eb-9e20-4934-845a-7722557f164e"),
-                            IsActive = true,
-                            Name = "Гр."
-                        },
-                        new
-                        {
-                            Id = new Guid("6700cac9-f36e-4697-a6fe-27fdbaebd267"),
-                            IsActive = true,
-                            Name = "Л."
-                        },
-                        new
-                        {
-                            Id = new Guid("320053b6-110a-4358-9289-21e64d718b60"),
-                            IsActive = true,
-                            Name = "Мл."
-                        },
-                        new
-                        {
-                            Id = new Guid("eda2a0fe-539c-471d-9941-e0ce8982e923"),
-                            IsActive = true,
-                            Name = "Уп."
-                        });
                 });
 
             modelBuilder.Entity("PurchaseEntryPurchaseTagEntry", b =>

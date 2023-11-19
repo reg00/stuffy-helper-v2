@@ -11,6 +11,7 @@ using StuffyHelper.Core.Features.PurchaseTag;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.UnitType;
 using StuffyHelper.EntityFrameworkCore.Configs;
+using StuffyHelper.EntityFrameworkCore.Features.Common;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace StuffyHelper.EntityFrameworkCore.Features.Schema
@@ -101,6 +102,14 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.EventId).IsRequired();
                 entity.Property(e => e.UnitTypeId).IsRequired();
+                entity.Property(e => e.Amount).IsRequired()
+                    .HasAnnotation("Range", new[] {0.01, double.MaxValue})
+                    .HasPrecision(18, 2)
+                    .HasConversion(v => Math.Ceiling(v * 100) / 100, v => v);
+                entity.Property(e => e.Cost).IsRequired()
+                    .HasAnnotation("Range", new[] { 0.01, double.MaxValue})
+                    .HasPrecision(18, 2)
+                    .HasConversion(v => Math.Ceiling(v * 100) / 100, v => v);
                 entity.Property(e => e.IsPartial).IsRequired().HasDefaultValue(false);
                 entity.Property(e => e.IsComplete).IsRequired().HasDefaultValue(false);
             });
@@ -117,7 +126,10 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
 
                 entity.Property(e => e.PurchaseId).IsRequired();
                 entity.Property(e => e.ParticipantId).IsRequired();
-                entity.Property(e => e.Amount).HasDefaultValue(1);
+                entity.Property(e => e.Amount).IsRequired()
+                    .HasPrecision(18, 2)
+                    .HasConversion(v => Math.Ceiling(v * 100)/ 100, v => v)
+                    .HasAnnotation("Range", new[] { 0.01, double.MaxValue });
             });
 
             modelBuilder.Entity<PurchaseTagEntry>(entity =>
@@ -169,7 +181,14 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.Property(e => e.Amount).IsRequired();
             });
 
+            SeedData(modelBuilder);
+
             OnModelCreatingPartial(modelBuilder);
+        }
+
+        private void SeedData(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UnitTypeEntry>().HasData(SeedHelper.GetSeedUnitTypes());
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
