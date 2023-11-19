@@ -14,7 +14,7 @@ namespace StuffyHelper.Core.Features.Debt
         public bool IsComfirmed { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
 
-        public virtual EventEntry Event { get; set; } = new EventEntry();
+        public virtual EventEntry Event { get; set; }
 
         public DebtEntry()
         {
