@@ -133,7 +133,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
         public IEnumerable<UserShortEntry> GetUserLogins(string? userName = null)
         {
             var users = _userManager.Users
-                .Where(u => userName == null || u.UserName.ToLower().StartsWith(userName.ToLower()))
+                .Where(u => userName == null || u.UserName.ToLower().StartsWith(userName.ToLower()) && u.EmailConfirmed == true)
                 .Select(u => new UserShortEntry() { Id = u.Id, Name = u.UserName, ImageUri = u.ImageUri }).ToList();
 
             return users;
