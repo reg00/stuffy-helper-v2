@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StuffyHelper.Core.Features.PurchaseUsage
 {
@@ -8,7 +9,10 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         public Guid PurchaseId { get; set; }
         [Required]
         public Guid ParticipantId { get; set; }
-        public int? Amount { get; set; }
+        [Required]
+        [Column(TypeName = "decimal(18,2)")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Значение должно быть больше 0")]
+        public double Amount { get; set; }
 
         public PurchaseUsageEntry ToCommonEntry()
         {
@@ -16,7 +20,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
             {
                 PurchaseId = PurchaseId,
                 ParticipantId = ParticipantId,
-                Amount = Amount ?? 0,
+                Amount = Amount,
             };
         }
     }
