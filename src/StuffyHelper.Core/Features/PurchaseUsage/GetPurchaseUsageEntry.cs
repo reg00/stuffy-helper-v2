@@ -14,7 +14,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         public ParticipantShortEntry? Participant { get; set; }
         [Required]
         public PurchaseShortEntry? Purchase { get; set; }
-        public int Amount { get; set; }
+        public double Amount { get; set; }
 
         public GetPurchaseUsageEntry()
         {

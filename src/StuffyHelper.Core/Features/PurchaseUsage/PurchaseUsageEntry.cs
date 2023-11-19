@@ -9,7 +9,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
         public Guid Id { get; set; }
         public Guid ParticipantId { get; set; }
         public Guid PurchaseId { get; set; }
-        public int Amount { get; set; }
+        public double Amount { get; set; }
 
         public virtual ParticipantEntry Participant { get; set; }
         public virtual PurchaseEntry Purchase { get; set; }
