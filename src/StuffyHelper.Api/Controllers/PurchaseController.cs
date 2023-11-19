@@ -69,6 +69,11 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.AddPurchaseRoute)]
         public async Task<IActionResult> PostAsync([FromBody] AddPurchaseEntry addEntry)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ErrorResponse(ModelState));
+            }
+
             var purchase = await _purchaseService.AddPurchaseAsync(addEntry, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, purchase);
@@ -98,6 +103,11 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.UpdatePurchaseRoute)]
         public async Task<IActionResult> PatchAsync(Guid purchaseId, [FromBody] UpdatePurchaseEntry updateEntry)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new ErrorResponse(ModelState));
+            }
+
             var entry = await _purchaseService.UpdatePurchaseAsync(purchaseId, updateEntry, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, entry);

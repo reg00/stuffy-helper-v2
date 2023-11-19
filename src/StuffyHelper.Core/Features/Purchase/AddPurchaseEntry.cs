@@ -1,5 +1,6 @@
 ﻿using StuffyHelper.Core.Features.PurchaseTag;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StuffyHelper.Core.Features.Purchase
 {
@@ -8,8 +9,12 @@ namespace StuffyHelper.Core.Features.Purchase
         [Required]
         public string Name { get; set; } = string.Empty;
         [Required]
+        [Column(TypeName = "decimal(18,2)")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Значение должно быть больше 0")]
         public double Cost { get; set; }
         [Required]
+        [Column(TypeName = "decimal(18,2)")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Значение должно быть больше 0")]
         public double Amount { get; set; }
         [Required]
         public Guid EventId { get; set; }
