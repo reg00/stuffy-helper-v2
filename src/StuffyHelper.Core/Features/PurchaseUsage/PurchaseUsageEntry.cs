@@ -20,7 +20,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
 
             ParticipantId = entry.ParticipantId;
             PurchaseId = entry.PurchaseId;
-            Amount = entry.Amount ?? 0;
+            Amount = entry.Amount;
         }
     }
 }
