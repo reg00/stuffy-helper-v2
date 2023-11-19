@@ -111,7 +111,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var userName = user?.Identity?.Name;
 
             if (userName == null)
-                throw new AuthorizationException("Authorization error");
+                throw new ForbiddenException("Authorization error");
 
             var stuffyUser = await _userManager.FindByNameAsync(userName);
             return await _userManager.IsInRoleAsync(stuffyUser, nameof(UserType.Admin));
@@ -122,7 +122,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var userName = user?.Identity?.Name;
 
             if (userName == null)
-                throw new AuthorizationException("Authorization error");
+                throw new ForbiddenException("Authorization error");
 
             var identityUser = await _userManager.FindByNameAsync(userName);
             var rolesList = await _userManager.GetRolesAsync(identityUser);
@@ -168,7 +168,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var userName = user?.Identity?.Name;
 
             if (userName == null)
-                throw new AuthorizationException("Authorization error");
+                throw new ForbiddenException("Authorization error");
 
             var userToUpdate = await _userManager.FindByNameAsync(userName);
             if (userToUpdate is null)
@@ -189,7 +189,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var userName = user?.Identity?.Name;
 
             if (userName == null)
-                throw new AuthorizationException("Authorization error");
+                throw new ForbiddenException("Authorization error");
 
             var existUser = await _userManager.FindByNameAsync(userName);
             if (existUser is null)
@@ -212,7 +212,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
             var userName = user?.Identity?.Name;
 
             if (userName == null)
-                throw new AuthorizationException("Authorization error");
+                throw new ForbiddenException("Authorization error");
 
             var existUser = await _userManager.FindByNameAsync(userName);
             if (existUser is null)

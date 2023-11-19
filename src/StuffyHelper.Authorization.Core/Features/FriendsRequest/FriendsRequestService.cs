@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Exceptions;
 using StuffyHelper.Authorization.Core.Features.Friends;
 using System.Security.Claims;
@@ -48,7 +49,7 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
             var userName = user?.Identity?.Name;
 
             if (userName == null)
-                throw new AuthorizationException("Authorization error");
+                throw new ForbiddenException("Authorization error");
 
             var stuffyUser = await _authorizationService.GetUserByName(userName);
             var resp = await _requestStore.GetSendedRequestsAsync(stuffyUser.Id, cancellationToken);
@@ -65,7 +66,7 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
             var userName = user?.Identity?.Name;
 
             if (userName == null)
-                throw new AuthorizationException("Authorization error");
+                throw new ForbiddenException("Authorization error");
 
             var stuffyUser = await _authorizationService.GetUserByName(userName);
             var resp = await _requestStore.GetIncomingRequestsAsync(stuffyUser.Id, cancellationToken);
@@ -84,7 +85,7 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
             var userName = user?.Identity?.Name;
 
             if (userName == null)
-                throw new AuthorizationException("Authorization error");
+                throw new ForbiddenException("Authorization error");
 
             var incomingUser = await _authorizationService.GetUserByName(userName);
             var requestUser = await _authorizationService.GetUserById(userId);
