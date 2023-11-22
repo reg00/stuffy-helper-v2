@@ -219,9 +219,6 @@ namespace StuffyHelper.Api.Controllers
         {
             var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
 
-            if(string.IsNullOrWhiteSpace(userId))
-                throw new ArgumentNullException(nameof(userId));
-
             await _debtService.CheckoutEvent(eventId, userId, HttpContext.RequestAborted);
 
             return Ok();
