@@ -5,7 +5,7 @@
         private const string DefaultRouteSegment = "api";
 
         private const string AuthRoute = $"{DefaultRouteSegment}/{AuthRouteSegment}";
-        
+
         private const string AuthRouteSegment = "auth";
         private const string EventsSegment = "events";
         private const string ParticipantsSegment = "participants";

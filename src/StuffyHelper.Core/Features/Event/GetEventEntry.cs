@@ -27,8 +27,8 @@ namespace StuffyHelper.Core.Features.Event
         [Required]
         public UserShortEntry? User { get; set; }
         public List<ParticipantShortEntry> Participants { get; set; }
-        public List<PurchaseShortEntry> Purchases { get; set; } 
-        public List<MediaShortEntry> Medias { get; set; } 
+        public List<PurchaseShortEntry> Purchases { get; set; }
+        public List<MediaShortEntry> Medias { get; set; }
 
 
         public GetEventEntry()

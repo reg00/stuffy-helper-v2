@@ -27,7 +27,7 @@ namespace StuffyHelper.Core.Features.Participant
             var entry = await _participantStore.GetParticipantAsync(participantId, cancellationToken);
             var user = await _authorizationService.GetUserById(entry.UserId);
 
-            return new GetParticipantEntry(entry, new GetUserEntry(user), entry.PurchaseUsages.Select(x=> new PurchaseUsageShortEntry(x)));
+            return new GetParticipantEntry(entry, new GetUserEntry(user), entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x)));
         }
 
         public async Task<Response<ParticipantShortEntry>> GetParticipantsAsync(

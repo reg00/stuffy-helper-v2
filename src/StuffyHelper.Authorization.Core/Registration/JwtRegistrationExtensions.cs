@@ -1,18 +1,18 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StuffyHelper.Authorization.Core.Configs;
 using StuffyHelper.Authorization.Core.Features.Authorization;
-using StuffyHelper.Authorization.Core.Features.Friends;
-using StuffyHelper.Authorization.Core.Features.Friend;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using IAuthorizationService = StuffyHelper.Authorization.Core.Features.IAuthorizationService;
 using StuffyHelper.Authorization.Core.Features.Avatar;
+using StuffyHelper.Authorization.Core.Features.Friend;
+using StuffyHelper.Authorization.Core.Features.Friends;
+using System.Text;
+using IAuthorizationService = StuffyHelper.Authorization.Core.Features.IAuthorizationService;
 
 namespace StuffyHelper.Authorization.Core.Registration
 {

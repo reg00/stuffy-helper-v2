@@ -68,7 +68,7 @@ namespace StuffyHelper.Core.Features.Media
                         entry.FileType),
                     cancellationToken);
             }
-            catch(EntityNotFoundException)
+            catch (EntityNotFoundException)
             {
                 return null;
             }
@@ -116,7 +116,7 @@ namespace StuffyHelper.Core.Features.Media
                 var entry = await _mediaStore.GetPrimalEventMedia(eventId, cancellationToken);
                 return new GetMediaEntry(entry);
             }
-            catch(EntityNotFoundException)
+            catch (EntityNotFoundException)
             {
                 return null;
             }
@@ -225,7 +225,7 @@ namespace StuffyHelper.Core.Features.Media
                 var mediaEntry = await _mediaStore.AddMediaAsync(
                     entry, cancellationToken);
 
-                if(media.MediaType != MediaType.Link)
+                if (media.MediaType != MediaType.Link)
                     await _fileStore.StoreFileAsync(
                         StuffyMinioExtensions.GetStuffyObjectName(
                             entry.EventId.ToString(),

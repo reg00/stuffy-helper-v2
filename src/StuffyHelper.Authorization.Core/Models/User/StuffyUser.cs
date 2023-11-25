@@ -1,8 +1,8 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Identity;
-using StuffyHelper.Authorization.Core.Features.Friends;
-using StuffyHelper.Authorization.Core.Features.Friend;
 using StuffyHelper.Authorization.Core.Features.Avatar;
+using StuffyHelper.Authorization.Core.Features.Friend;
+using StuffyHelper.Authorization.Core.Features.Friends;
 
 namespace StuffyHelper.Authorization.Core.Models.User
 {

@@ -93,7 +93,7 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(FriendsRequestShort), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddRequestRoute)]
-        public async Task<IActionResult> PostAsync([Required]string userId)
+        public async Task<IActionResult> PostAsync([Required] string userId)
         {
             var request = await _requestService.AddRequestAsync(User, userId, HttpContext.RequestAborted);
 

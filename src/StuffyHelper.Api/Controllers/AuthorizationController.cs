@@ -1,17 +1,17 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
-using System.Net;
+using Microsoft.Extensions.Options;
 using StuffyHelper.Api.Web;
 using StuffyHelper.Authorization.Core.Models;
 using StuffyHelper.Authorization.Core.Models.User;
+using StuffyHelper.Core.Configs;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.EmailService.Core.Service;
-using StuffyHelper.Core.Configs;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.Http;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net;
 
 namespace StuffyHelper.Api.Controllers
 {
@@ -94,7 +94,7 @@ namespace StuffyHelper.Api.Controllers
             }
 
             var token = await _authorizationService.Login(model, HttpContext);
-            
+
             Response.Headers.Add("token", new JwtSecurityTokenHandler().WriteToken(token));
             Response.Headers.Add("expiration", token.ValidTo.ToString());
 

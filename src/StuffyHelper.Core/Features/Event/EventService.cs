@@ -69,9 +69,9 @@ namespace StuffyHelper.Core.Features.Event
             CancellationToken cancellationToken = default)
         {
             var resp = await _eventStore.GetEventsAsync(offset, limit, name, description, createdDateStart,
-                                                        createdDateEnd, eventDateStartMin, eventDateStartMax, eventDateEndMin , eventDateEndMax,
+                                                        createdDateEnd, eventDateStartMin, eventDateStartMax, eventDateEndMin, eventDateEndMax,
                                                         userId, isCompleted, isActive, participantId, purchaseId, cancellationToken);
-            
+
             return new Response<EventShortEntry>()
             {
                 Data = resp.Data.Select(x => new EventShortEntry(x)),

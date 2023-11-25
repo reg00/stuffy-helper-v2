@@ -221,7 +221,7 @@ namespace StuffyHelper.Authorization.Core.Features.Authorization
                 await _avatarService.DeleteAvatarAsync(existUser.Id);
             }
             catch (EntityNotFoundException)
-            { 
+            {
 
             }
             catch

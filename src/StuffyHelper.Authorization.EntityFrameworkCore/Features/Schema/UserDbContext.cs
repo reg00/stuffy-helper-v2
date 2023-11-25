@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using StuffyHelper.Authorization.Core.Features.Friends;
-using StuffyHelper.Authorization.Core.Features.Friend;
-using StuffyHelper.Authorization.Core.Models.User;
 using StuffyHelper.Authorization.Core.Features.Avatar;
+using StuffyHelper.Authorization.Core.Features.Friend;
+using StuffyHelper.Authorization.Core.Features.Friends;
+using StuffyHelper.Authorization.Core.Models.User;
 
 namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Schema
 {

@@ -25,7 +25,7 @@ namespace StuffyHelper.Core.Features.Media
         public MediaEntry(
             Guid eventId,
             string fileName,
-            FileType fileType, 
+            FileType fileType,
             MediaType mediaType,
             string link,
             bool isPrimal)

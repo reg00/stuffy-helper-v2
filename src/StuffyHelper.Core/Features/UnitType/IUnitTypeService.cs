@@ -19,5 +19,5 @@ namespace StuffyHelper.Core.Features.UnitType
         Task DeleteUnitTypeAsync(Guid unitTypeId, CancellationToken cancellationToken = default);
 
         Task<UnitTypeShortEntry> UpdateUnitTypeAsync(Guid unitTypeId, UpsertUnitTypeEntry unitType, CancellationToken cancellationToken = default);
-}
+    }
 }

@@ -11,7 +11,7 @@ namespace StuffyHelper.Tests.UnitTests
     {
         public MediaServiceUnitTests() : base()
         {
-            
+
         }
 
         [Fact]

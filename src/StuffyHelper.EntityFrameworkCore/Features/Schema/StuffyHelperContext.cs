@@ -103,11 +103,11 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.Property(e => e.EventId).IsRequired();
                 entity.Property(e => e.UnitTypeId).IsRequired();
                 entity.Property(e => e.Amount).IsRequired()
-                    .HasAnnotation("Range", new[] {0.01, double.MaxValue})
+                    .HasAnnotation("Range", new[] { 0.01, double.MaxValue })
                     .HasPrecision(18, 2)
                     .HasConversion(v => Math.Ceiling(v * 100) / 100, v => v);
                 entity.Property(e => e.Cost).IsRequired()
-                    .HasAnnotation("Range", new[] { 0.01, double.MaxValue})
+                    .HasAnnotation("Range", new[] { 0.01, double.MaxValue })
                     .HasPrecision(18, 2)
                     .HasConversion(v => Math.Ceiling(v * 100) / 100, v => v);
                 entity.Property(e => e.IsPartial).IsRequired().HasDefaultValue(false);
@@ -128,7 +128,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.Property(e => e.ParticipantId).IsRequired();
                 entity.Property(e => e.Amount).IsRequired()
                     .HasPrecision(18, 2)
-                    .HasConversion(v => Math.Ceiling(v * 100)/ 100, v => v)
+                    .HasConversion(v => Math.Ceiling(v * 100) / 100, v => v)
                     .HasAnnotation("Range", new[] { 0.01, double.MaxValue });
             });
 

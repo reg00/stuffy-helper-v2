@@ -67,7 +67,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.ToLower().Contains(name.ToLower())) &&
                     (costMin == null || costMin <= e.Cost) &&
                     (costMax == null || costMax >= e.Cost) &&
-                    (eventId == null || e.EventId == eventId) && 
+                    (eventId == null || e.EventId == eventId) &&
                     (unitTypeId == null || e.UnitTypeId == unitTypeId) &&
                     (isComplete == null || e.IsComplete == isComplete) &&
                     (purchaseTags == null || !purchaseTags.Any() || e.PurchaseTags.Any(tag => purchaseTags.Select(tag => tag.ToLower()).Contains(tag.Name.ToLower()))))
