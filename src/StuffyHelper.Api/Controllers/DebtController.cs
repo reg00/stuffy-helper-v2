@@ -39,7 +39,7 @@ namespace StuffyHelper.Api.Controllers
 
             return StatusCode((int)HttpStatusCode.OK, debtsResponce);
         }
-        
+
         /// <summary>
         /// Оплатить долг
         /// </summary>

@@ -78,7 +78,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             try
             {
                 var searchedData = await _context.Debts
-                    .Where(e => 
+                    .Where(e =>
                     (string.IsNullOrWhiteSpace(borrowerId) || e.BorrowerId == borrowerId) &&
                     (string.IsNullOrWhiteSpace(debtorId) || e.DebtorId == debtorId) &&
                     (isSent == null || isSent == e.IsSent) &&

@@ -202,7 +202,7 @@ namespace StuffyHelper.Core.Features.Debt
                     continue;
 
                 // Если сумма долга < 0, меняем местами должника и заемщика
-                if(debt.Amount < 0)
+                if (debt.Amount < 0)
                 {
                     debt.Amount *= -1;
                     var temp = debt.BorrowerId;
@@ -212,7 +212,7 @@ namespace StuffyHelper.Core.Features.Debt
 
                 var existsDebt = await _debtStore.GetDebtAsync(debt.BorrowerId, debt.DebtorId, debt.EventId, cancellationToken);
 
-                if(existsDebt != null)
+                if (existsDebt != null)
                 {
                     existsDebt.Amount += debt.Amount;
                     existsDebt.IsComfirmed = false;

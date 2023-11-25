@@ -37,7 +37,7 @@ namespace StuffyHelper.Api.Registration
                 {
                     options.UseDateOnlyTimeOnlyStringConverters();
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                 });
+                });
 
             services.AddControllers()
                 .AddNewtonsoftJson(options =>

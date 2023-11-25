@@ -18,7 +18,7 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features.Storage
             _context = context;
         }
 
-        
+
         public async Task<FriendEntry> AddFriendAsync(FriendEntry friendEntry, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(friendEntry, nameof(friendEntry));

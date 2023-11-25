@@ -1,6 +1,5 @@
 ﻿using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Participant;
-using StuffyHelper.Core.Features.PurchaseUsage;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {

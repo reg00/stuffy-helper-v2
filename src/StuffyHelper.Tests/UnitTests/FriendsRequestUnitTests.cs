@@ -12,7 +12,7 @@ namespace StuffyHelper.Tests.UnitTests
     {
         public FriendsRequestUnitTests() : base()
         {
-            
+
         }
 
         [Fact]

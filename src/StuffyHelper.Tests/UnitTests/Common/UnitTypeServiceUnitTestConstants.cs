@@ -22,7 +22,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 Name = "Test",
             };
         }
-        
+
         public static UpsertUnitTypeEntry GetCorrectUpdateUnitTypeEntry()
         {
             return new()

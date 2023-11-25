@@ -15,7 +15,7 @@ namespace StuffyHelper.Tests.UnitTests
     {
         public EventServiceUnitTests() : base()
         {
-            
+
         }
 
         [Fact]
@@ -249,7 +249,7 @@ namespace StuffyHelper.Tests.UnitTests
 
             await eventService.DeleteEventAsync(eventEntry.Id, null, CancellationToken);
 
-            eventStoreMoq.Verify(x => x.DeleteEventAsync(eventEntry.Id, CancellationToken), Times.Once()); 
+            eventStoreMoq.Verify(x => x.DeleteEventAsync(eventEntry.Id, CancellationToken), Times.Once());
         }
 
         [Fact]

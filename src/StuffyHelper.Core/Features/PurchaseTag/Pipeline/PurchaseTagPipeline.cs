@@ -3,7 +3,7 @@ using Reg00.Infrastructure.Errors;
 
 namespace StuffyHelper.Core.Features.PurchaseTag.Pipeline
 {
-    public class PurchaseTagPipeline: IPurchaseTagPipeline
+    public class PurchaseTagPipeline : IPurchaseTagPipeline
     {
         private readonly IPurchaseTagStore _tagStore;
 

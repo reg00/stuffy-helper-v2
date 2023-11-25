@@ -24,7 +24,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             try
             {
                 var entry = await _context.Events
-                    .FirstOrDefaultAsync(e => 
+                    .FirstOrDefaultAsync(e =>
                     ((e.Id == eventId) &&
                     (string.IsNullOrWhiteSpace(userId) || e.Participants.Any(x => x.UserId == userId))),
                     cancellationToken);

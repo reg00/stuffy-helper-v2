@@ -37,7 +37,7 @@ namespace StuffyHelper.Api.Features.Middlewares
         }
 
         public async Task Invoke(HttpContext context)
-         {
+        {
             EnsureArg.IsNotNull(context, nameof(context));
 
             try

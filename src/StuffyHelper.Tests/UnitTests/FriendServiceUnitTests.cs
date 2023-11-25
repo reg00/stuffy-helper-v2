@@ -11,7 +11,7 @@ namespace StuffyHelper.Tests.UnitTests
     {
         public FriendServiceUnitTests() : base()
         {
-            
+
         }
 
         [Fact]
@@ -75,7 +75,7 @@ namespace StuffyHelper.Tests.UnitTests
                 new Mock<IFriendStore>().Object,
                 new Mock<IAuthorizationService>().Object);
 
-            await ThrowsTask(async () => await friendService.GetFriends(null,  cancellationToken: CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await friendService.GetFriends(null, cancellationToken: CancellationToken), VerifySettings);
         }
 
         [Fact]

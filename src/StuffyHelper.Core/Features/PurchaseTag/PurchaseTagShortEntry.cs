@@ -12,7 +12,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag
 
         public PurchaseTagShortEntry()
         {
-            
+
         }
 
         public PurchaseTagShortEntry(PurchaseTagEntry entry)

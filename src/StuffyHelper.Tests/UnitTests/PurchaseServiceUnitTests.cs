@@ -213,7 +213,7 @@ namespace StuffyHelper.Tests.UnitTests
             purchaseStoreMoq.Setup(x =>
             x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
                 .ReturnsAsync(purchase);
-            purchaseStoreMoq.Setup(x => 
+            purchaseStoreMoq.Setup(x =>
             x.GetPurchaseAsync(purchase.Id, CancellationToken))
                 .ReturnsAsync(purchase);
 

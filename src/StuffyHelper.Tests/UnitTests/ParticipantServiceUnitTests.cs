@@ -10,7 +10,7 @@ namespace StuffyHelper.Tests.UnitTests
     {
         public ParticipantServiceUnitTests() : base()
         {
-            
+
         }
 
         [Fact]

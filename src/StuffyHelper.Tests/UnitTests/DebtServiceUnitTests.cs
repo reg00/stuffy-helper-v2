@@ -11,7 +11,7 @@ namespace StuffyHelper.Tests.UnitTests
     {
         public DebtServiceUnitTests() : base()
         {
-            
+
         }
 
         [Fact]

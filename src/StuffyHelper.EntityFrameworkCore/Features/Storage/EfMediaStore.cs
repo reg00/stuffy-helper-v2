@@ -59,7 +59,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             {
                 var media = await _context.Medias
                     .Include(e => e.Event)
-                    .FirstOrDefaultAsync(e=> e.Id == mediaId,
+                    .FirstOrDefaultAsync(e => e.Id == mediaId,
                     cancellationToken);
 
                 if (media is null)
@@ -92,10 +92,10 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             {
                 return await _context.Medias
                     .Include(e => e.Event)
-                    .Where(e => 
+                    .Where(e =>
                     (eventId == null || e.EventId == eventId) &&
                     (createdDateStart == null || e.CreatedDate >= createdDateStart) &&
-                    (createdDateEnd == null || e.CreatedDate <= createdDateEnd) && 
+                    (createdDateEnd == null || e.CreatedDate <= createdDateEnd) &&
                     (mediaType == null || e.MediaType == mediaType))
                     .Skip(offset).Take(limit)
                     .ToListAsync(cancellationToken);
