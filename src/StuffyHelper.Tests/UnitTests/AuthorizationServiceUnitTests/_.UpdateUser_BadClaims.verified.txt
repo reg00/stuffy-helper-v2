@@ -1,4 +1,4 @@
 ﻿{
-  Type: AuthorizationException,
+  Type: ForbiddenException,
   Message: Authorization error
 }

@@ -19,6 +19,14 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 Data = new List<FriendEntry>()
                 {
                     new FriendEntry("123", "321")
+                    {
+                        Friend = new ()
+                        {
+                            Id = "321",
+                            UserName = "Тестов Тест Тестович",
+                            ImageUri = new Uri("about:blank")
+                        }
+                    }
                 }
             };
         }

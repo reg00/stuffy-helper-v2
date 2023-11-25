@@ -16,7 +16,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 Id = Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"),
                 IsComfirmed = false,
                 IsSent = true,
-                Paid = 1
+                Event = EventServiceUnitTestConstants.GetCorrectEventEntry(),
             };
         }
 
@@ -30,8 +30,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 EventId = Guid.NewGuid(),
                 Id = Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"),
                 IsComfirmed = false,
-                IsSent = false,
-                Paid = 1
+                IsSent = false
             };
         }
 

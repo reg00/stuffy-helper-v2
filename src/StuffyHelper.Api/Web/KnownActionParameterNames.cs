@@ -10,5 +10,6 @@
         internal const string UnitTypeId = "unitTypeId";
         internal const string MediaId = "mediaId";
         internal const string RequestId = "requestId";
+        internal const string DebtId = "debtId";
     }
 }

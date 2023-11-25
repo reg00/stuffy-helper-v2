@@ -8,37 +8,43 @@
       IsPartial: true,
       IsComplete: true,
       Event: {
-        Name: ,
-        Description: ,
+        Id: Guid_2,
+        Name: test,
+        Description: test,
         EventDateStart: Date_MinValue,
-        IsCompleted: false
+        IsCompleted: true
       },
       UnitType: {
-        Name: 
+        Id: Guid_3,
+        Name: Test
       },
       PurchaseUsages: [],
       Participant: {
+        Id: Guid_4,
         Name: 
       }
     },
     {
-      Id: Guid_2,
+      Id: Guid_5,
       Name: Test 2,
       Cost: 5.0,
       Amount: 5.0,
       IsPartial: true,
       IsComplete: true,
       Event: {
-        Name: ,
-        Description: ,
+        Id: Guid_6,
+        Name: test,
+        Description: test,
         EventDateStart: Date_MinValue,
-        IsCompleted: false
+        IsCompleted: true
       },
       UnitType: {
-        Name: 
+        Id: Guid_7,
+        Name: Test
       },
       PurchaseUsages: [],
       Participant: {
+        Id: Guid_8,
         Name: 
       }
     }

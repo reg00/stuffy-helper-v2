@@ -39,5 +39,43 @@ namespace StuffyHelper.Api.Controllers
 
             return StatusCode((int)HttpStatusCode.OK, debtsResponce);
         }
+        
+        /// <summary>
+        /// Оплатить долг
+        /// </summary>
+        /// <param name="debtId">Id пользователя - должника</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [Route(KnownRoutes.SendDebtRoute)]
+        public async Task<IActionResult> SendDebtAsync([FromRoute] Guid debtId)
+        {
+            var user = await _authorizationService.GetUserByToken(User, HttpContext.RequestAborted);
+
+            await _debtService.SendDebtAsync(user.Id, debtId, HttpContext.RequestAborted);
+
+            return Ok("Succeccfully send debt");
+        }
+
+        /// <summary>
+        /// Оплатить долг
+        /// </summary>
+        /// <param name="debtId">Id пользователя - должника</param>
+        /// <returns></returns>
+        [HttpPost]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [Route(KnownRoutes.ConfirmDebtRoute)]
+        public async Task<IActionResult> ConfirmDebtAsync([FromRoute] Guid debtId)
+        {
+            var user = await _authorizationService.GetUserByToken(User, HttpContext.RequestAborted);
+
+            await _debtService.ConfirmDebtAsync(user.Id, debtId, HttpContext.RequestAborted);
+
+            return Ok("Succeccfully confirm debt");
+        }
     }
 }

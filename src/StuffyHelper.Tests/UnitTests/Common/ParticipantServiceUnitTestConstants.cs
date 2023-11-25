@@ -1,5 +1,6 @@
 ﻿using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Participant;
+using StuffyHelper.Core.Features.PurchaseUsage;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {
@@ -11,7 +12,8 @@ namespace StuffyHelper.Tests.UnitTests.Common
             {
                 EventId = Guid.NewGuid(),
                 Id = Guid.NewGuid(),
-                UserId = "123"
+                UserId = "123",
+                Event = EventServiceUnitTestConstants.GetCorrectEventEntry(),
             };
         }
 

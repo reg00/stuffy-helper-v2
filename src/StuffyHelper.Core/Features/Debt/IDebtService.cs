@@ -25,10 +25,10 @@ namespace StuffyHelper.Core.Features.Debt
 
         //Task DeleteDebtAsync(Guid debtId, CancellationToken cancellationToken = default);
 
-        Task<GetDebtEntry> SentDebtAsync(Guid debtId, double amount, CancellationToken cancellationToken = default);
+        Task<GetDebtEntry> SendDebtAsync(string userId, Guid debtId, CancellationToken cancellationToken = default);
 
-        Task<GetDebtEntry> ConfirmDebtAsync(Guid debtId, CancellationToken cancellationToken = default);
+        Task<GetDebtEntry> ConfirmDebtAsync(string userId, Guid debtId, CancellationToken cancellationToken = default);
 
-        Task CheckoutEvent(Guid eventId, string userId, CancellationToken cancellationToken = default);
+        Task CheckoutEvent(Guid eventId, string? userId, CancellationToken cancellationToken = default);
     }
 }

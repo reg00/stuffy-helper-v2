@@ -6,6 +6,7 @@
   IsPartial: false,
   IsComplete: false,
   UnitType: {
-    Name: 
+    Id: Guid_2,
+    Name: Test
   }
 }

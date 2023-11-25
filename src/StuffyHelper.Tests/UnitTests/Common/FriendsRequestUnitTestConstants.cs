@@ -6,7 +6,11 @@ namespace StuffyHelper.Tests.UnitTests.Common
     {
         public static FriendsRequest GetCorrectRequest()
         {
-            return new("123", "321");
+            return new("123", "321")
+            {
+                UserFrom = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUsers().First(),
+                UserTo = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUsers().Last(),
+            };
         }
 
         public static IEnumerable<FriendsRequest> GetCorrectRequests()
