@@ -64,7 +64,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
                         {
                             UserId = "555"
                         },
-
+                        UnitType = UnitTypeServiceUnitTestConstants.GetCorrectUnitTypeEntry()
                     }
                 }
             };

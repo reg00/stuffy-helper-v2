@@ -6,16 +6,19 @@
   IsPartial: true,
   IsComplete: true,
   Event: {
-    Name: ,
-    Description: ,
+    Id: Guid_2,
+    Name: test,
+    Description: test,
     EventDateStart: Date_MinValue,
-    IsCompleted: false
+    IsCompleted: true
   },
   UnitType: {
-    Name: 
+    Id: Guid_3,
+    Name: Test
   },
   PurchaseUsages: [],
   Participant: {
+    Id: Guid_4,
     Name: 
   }
 }

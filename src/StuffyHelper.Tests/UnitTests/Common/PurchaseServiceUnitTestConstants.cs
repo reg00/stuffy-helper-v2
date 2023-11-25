@@ -18,6 +18,9 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 Name = "Test",
                 ParticipantId = Guid.NewGuid(),
                 UnitTypeId = Guid.NewGuid(),
+                Event = EventServiceUnitTestConstants.GetCorrectEventEntry(),
+                UnitType = UnitTypeServiceUnitTestConstants.GetCorrectUnitTypeEntry(),
+                Owner = ParticipantServiceUnitTestConstants.GetCorrectParticipantEntry(),
             };
         }
 
@@ -66,6 +69,9 @@ namespace StuffyHelper.Tests.UnitTests.Common
                         Name = "Test",
                         ParticipantId = Guid.NewGuid(),
                         UnitTypeId = Guid.NewGuid(),
+                        Event = EventServiceUnitTestConstants.GetCorrectEventEntry(),
+                        UnitType = UnitTypeServiceUnitTestConstants.GetCorrectUnitTypeEntry(),
+                        Owner = ParticipantServiceUnitTestConstants.GetCorrectParticipantEntry(),
                     },
                     new()
                     {
@@ -78,6 +84,9 @@ namespace StuffyHelper.Tests.UnitTests.Common
                         Name = "Test 2",
                         ParticipantId = Guid.NewGuid(),
                         UnitTypeId = Guid.NewGuid(),
+                        Event = EventServiceUnitTestConstants.GetCorrectEventEntry(),
+                        UnitType = UnitTypeServiceUnitTestConstants.GetCorrectUnitTypeEntry(),
+                        Owner = ParticipantServiceUnitTestConstants.GetCorrectParticipantEntry(),
                     }
                 }
             };

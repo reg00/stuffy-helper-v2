@@ -4,12 +4,16 @@
     Name: test
   },
   Purchase: {
-    Name: ,
-    IsPartial: false,
-    IsComplete: false,
+    Id: Guid_2,
+    Name: Test,
+    Cost: 1.0,
+    Amount: 1.0,
+    IsPartial: true,
+    IsComplete: true,
     UnitType: {
-      Name: 
+      Id: Guid_3,
+      Name: Test
     }
   },
-  Amount: 1
+  Amount: 1.0
 }

@@ -2,5 +2,5 @@
   PurchaseUsageId: Guid_1,
   PurchaseId: Guid_2,
   ParticipantId: Guid_3,
-  Amount: 6
+  Amount: 6.0
 }

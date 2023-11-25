@@ -13,7 +13,8 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 FileName = "test.jpg",
                 FileType = Minio.Features.Common.FileType.Jpg,
                 IsPrimal = true,
-                MediaType = MediaType.Image
+                MediaType = MediaType.Image,
+                Event = EventServiceUnitTestConstants.GetCorrectEventEntry()
             };
         }
 

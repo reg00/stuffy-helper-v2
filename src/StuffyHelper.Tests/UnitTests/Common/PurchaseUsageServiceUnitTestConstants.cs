@@ -17,6 +17,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
                     UserId = "123"
                 },
                 PurchaseId = Guid.NewGuid(),
+                Purchase = PurchaseServiceUnitTestConstants.GetCorrectPurchaseEntry(),
             };
         }
 

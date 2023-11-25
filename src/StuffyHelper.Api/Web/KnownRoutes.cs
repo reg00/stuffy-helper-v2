@@ -30,6 +30,7 @@
         private const string UnitTypeIdRouteSegment = $"{{{KnownActionParameterNames.UnitTypeId}}}";
         private const string MediaIdRouteSegment = $"{{{KnownActionParameterNames.MediaId}}}";
         private const string RequestIdRouteSegment = $"{{{KnownActionParameterNames.RequestId}}}";
+        private const string DebtIdRouteSegment = $"{{{KnownActionParameterNames.DebtId}}}";
 
 
         public const string RegisterRoute = $"{AuthRoute}/register";
@@ -107,5 +108,7 @@
         public const string GetFriendsRoute = $"{DefaultRouteSegment}/{FriendsSegment}";
 
         public const string GetDebtsRoute = $"{DefaultRouteSegment}/{DebtsSegment}";
+        public const string SendDebtRoute = $"{GetDebtsRoute}/{DebtIdRouteSegment}/send";
+        public const string ConfirmDebtRoute = $"{GetDebtsRoute}/{DebtIdRouteSegment}/confirm";
     }
 }

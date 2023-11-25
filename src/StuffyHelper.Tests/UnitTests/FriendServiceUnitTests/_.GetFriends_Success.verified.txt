@@ -1,7 +1,9 @@
 ﻿{
   Data: [
     {
-      Id: Guid_1
+      Id: 321,
+      Name: Тестов Тест Тестович,
+      ImageUri: about:blank
     }
   ],
   TotalPages: 1,

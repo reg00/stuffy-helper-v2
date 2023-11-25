@@ -9,7 +9,6 @@ namespace StuffyHelper.Core.Features.Debt
         public string BorrowerId { get; set; } = string.Empty;
         public string DebtorId { get; set; } = string.Empty;
         public double Amount { get; set; }
-        public double Paid { get; set; }
         public bool IsSent { get; set; }
         public bool IsComfirmed { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
@@ -21,7 +20,6 @@ namespace StuffyHelper.Core.Features.Debt
             IsSent = false;
             IsComfirmed = false;
             CreatedDate = DateTime.UtcNow;
-            Paid = 0;
         }
 
         public DebtEntry(
@@ -37,7 +35,6 @@ namespace StuffyHelper.Core.Features.Debt
             IsSent = false;
             IsComfirmed = false;
             CreatedDate = DateTime.UtcNow;
-            Paid = 0;
         }
     }
 }

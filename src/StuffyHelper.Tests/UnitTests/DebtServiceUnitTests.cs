@@ -128,7 +128,7 @@ namespace StuffyHelper.Tests.UnitTests
                 new Mock<IAuthorizationService>().Object,
                 new Mock<IPurchaseService>().Object);
 
-            await ThrowsTask(async () => await debtService.SentDebtAsync(Guid.Empty, 0, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.SendDebtAsync(string.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -140,7 +140,7 @@ namespace StuffyHelper.Tests.UnitTests
                 new Mock<IAuthorizationService>().Object,
                 new Mock<IPurchaseService>().Object);
 
-            await ThrowsTask(async () => await debtService.SentDebtAsync(Guid.NewGuid(), 0, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.SendDebtAsync(string.Empty, Guid.NewGuid(), CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -152,7 +152,7 @@ namespace StuffyHelper.Tests.UnitTests
                 new Mock<IAuthorizationService>().Object,
                 new Mock<IPurchaseService>().Object);
 
-            await ThrowsTask(async () => await debtService.SentDebtAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), 1, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.SendDebtAsync("123", Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -182,7 +182,7 @@ namespace StuffyHelper.Tests.UnitTests
                 authorizationServiceMoq.Object,
                 new Mock<IPurchaseService>().Object);
 
-            var result = await debtService.SentDebtAsync(debtEntry.Id, 1, CancellationToken);
+            var result = await debtService.SendDebtAsync("123", debtEntry.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -196,7 +196,7 @@ namespace StuffyHelper.Tests.UnitTests
                new Mock<IAuthorizationService>().Object,
                new Mock<IPurchaseService>().Object);
 
-            await ThrowsTask(async () => await debtService.ConfirmDebtAsync(Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.ConfirmDebtAsync(string.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -208,7 +208,7 @@ namespace StuffyHelper.Tests.UnitTests
                 new Mock<IAuthorizationService>().Object,
                 new Mock<IPurchaseService>().Object);
 
-            await ThrowsTask(async () => await debtService.SentDebtAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), 1, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.SendDebtAsync("123", Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -227,7 +227,7 @@ namespace StuffyHelper.Tests.UnitTests
                 new Mock<IAuthorizationService>().Object,
                 new Mock<IPurchaseService>().Object);
 
-            await ThrowsTask(async () => await debtService.ConfirmDebtAsync(debtEntry.Id, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.ConfirmDebtAsync("123", debtEntry.Id, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -257,7 +257,7 @@ namespace StuffyHelper.Tests.UnitTests
                 authorizationServiceMoq.Object,
                 new Mock<IPurchaseService>().Object);
 
-            var result = await debtService.ConfirmDebtAsync(debtEntry.Id, CancellationToken);
+            var result = await debtService.ConfirmDebtAsync("321", debtEntry.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }

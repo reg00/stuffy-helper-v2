@@ -4,10 +4,11 @@
   IsSent: true,
   IsComfirmed: false,
   Event: {
-    Name: ,
-    Description: ,
+    Id: Guid_2,
+    Name: test,
+    Description: test,
     EventDateStart: Date_MinValue,
-    IsCompleted: false
+    IsCompleted: true
   },
   Borrower: {
     Id: 123,

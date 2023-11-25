@@ -112,20 +112,17 @@ namespace StuffyHelper.Core.Features.Debt
         //    await _debtStore.DeleteDebtAsync(debtId, cancellationToken);
         //}
 
-        public async Task<GetDebtEntry> SentDebtAsync(Guid debtId, double amount, CancellationToken cancellationToken = default)
+        public async Task<GetDebtEntry> SendDebtAsync(string userId, Guid debtId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(debtId, nameof(debtId));
-            EnsureArg.IsGt<double>(amount, 0, nameof(amount));
+            EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
 
             var debt = await _debtStore.GetDebtAsync(debtId, cancellationToken);
 
-            if (debt is null)
-            {
+            if (debt is null || debt.BorrowerId != userId)
                 throw new EntityNotFoundException($"Debt Id '{debtId}' not found");
-            }
 
             debt.IsSent = true;
-            debt.Paid = amount;
 
             var result = await _debtStore.UpdateDebtAsync(debt, cancellationToken);
             var borrower = await _authorizationService.GetUserById(result.BorrowerId);
@@ -134,13 +131,14 @@ namespace StuffyHelper.Core.Features.Debt
             return new GetDebtEntry(result, borrower, debtor);
         }
 
-        public async Task<GetDebtEntry> ConfirmDebtAsync(Guid debtId, CancellationToken cancellationToken = default)
+        public async Task<GetDebtEntry> ConfirmDebtAsync(string userId, Guid debtId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(debtId, nameof(debtId));
+            EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
 
             var debt = await _debtStore.GetDebtAsync(debtId, cancellationToken);
 
-            if (debt is null)
+            if (debt is null || debt.DebtorId != userId)
                 throw new EntityNotFoundException($"Debt Id '{debtId}' not found");
 
             if (!debt.IsSent)
@@ -155,7 +153,7 @@ namespace StuffyHelper.Core.Features.Debt
             return new GetDebtEntry(result, borrower, debtor);
         }
 
-        public async Task CheckoutEvent(Guid eventId, string userId, CancellationToken cancellationToken = default)
+        public async Task CheckoutEvent(Guid eventId, string? userId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 

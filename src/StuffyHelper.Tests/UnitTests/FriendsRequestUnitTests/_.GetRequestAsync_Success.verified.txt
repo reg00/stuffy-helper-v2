@@ -1,4 +1,6 @@
 ﻿{
   UserIdFrom: 123,
-  UserIdTo: 321
+  UserIdTo: 321,
+  UserNameFrom: user1,
+  UserNameTo: user3
 }
