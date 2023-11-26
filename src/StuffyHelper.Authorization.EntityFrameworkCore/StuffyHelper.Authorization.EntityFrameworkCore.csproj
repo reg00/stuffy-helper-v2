@@ -16,7 +16,7 @@
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.6" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
-    <PackageReference Include="Reg00.Infrastructure" Version="1.0.0" />
+    <PackageReference Include="Reg00.Infrastructure" Version="1.0.1" />
   </ItemGroup>
 
   <ItemGroup>
