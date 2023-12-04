@@ -69,6 +69,7 @@ namespace StuffyHelper.EntityFrameworkCore.Migrations
                 principalTable: "checkouts",
                 principalColumn: "Id");
 
+            migrationBuilder.Sql("CREATE EXTENSION pgcrypto;");
             migrationBuilder.Sql("INSERT INTO checkouts(\"Id\", \"EventId\", \"CreatedDate\") SELECT gen_random_uuid(), d.\"EventId\", timezone('utc', now()) FROM debts d GROUP BY d.\"EventId\";");
             migrationBuilder.Sql("UPDATE debts SET \"CheckoutId\" = c.\"Id\" FROM checkouts c WHERE debts.\"EventId\" = c.\"EventId\";");
             migrationBuilder.Sql("UPDATE \"purchase-usage\" SET \"CheckoutId\" = c.\"Id\" FROM checkouts c INNER JOIN purchase pc ON pc.\"EventId\" = c.\"EventId\" AND pc.\"IsComplete\" = true WHERE \"purchase-usage\".\"PurchaseId\" = pc.\"Id\";");

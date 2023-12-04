@@ -127,7 +127,7 @@ namespace StuffyHelper.Core.Features.Debt
 
             var debt = await _debtStore.GetDebtAsync(debtId, cancellationToken);
 
-            if (debt is null || debt.BorrowerId != userId)
+            if (debt is null || debt.DebtorId != userId)
                 throw new EntityNotFoundException($"Debt Id '{debtId}' not found");
 
             debt.IsSent = true;
@@ -146,7 +146,7 @@ namespace StuffyHelper.Core.Features.Debt
 
             var debt = await _debtStore.GetDebtAsync(debtId, cancellationToken);
 
-            if (debt is null || debt.DebtorId != userId)
+            if (debt is null || debt.BorrowerId != userId)
                 throw new EntityNotFoundException($"Debt Id '{debtId}' not found");
 
             if (!debt.IsSent)
