@@ -12,6 +12,7 @@ namespace StuffyHelper.Core.Features.Event
         public string Description { get; set; } = string.Empty;
         [Required]
         public DateTime? EventDateStart { get; set; }
+        public DateTime? EventDateEnd { get; set;}
         [Required]
         public bool IsCompleted { get; set; }
         public Uri? ImageUri { get; set; }
@@ -24,6 +25,7 @@ namespace StuffyHelper.Core.Features.Event
             Name = entry.Name;
             Description = entry.Description;
             EventDateStart = entry.EventDateStart;
+            EventDateEnd = entry.EventDateEnd;
             IsCompleted = entry.IsCompleted;
             ImageUri = entry.ImageUri;
         }

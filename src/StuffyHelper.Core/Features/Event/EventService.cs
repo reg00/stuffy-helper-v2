@@ -88,6 +88,9 @@ namespace StuffyHelper.Core.Features.Event
             EnsureArg.IsNotNull(user, nameof(user));
             EnsureArg.IsNotNull(eventEntry, nameof(eventEntry));
 
+            if (eventEntry.EventDateEnd != null && eventEntry.EventDateEnd < eventEntry.EventDateStart)
+                throw new BadRequestException("End date must be later than start date.");
+
             var userName = user?.Identity?.Name;
 
             if (userName == null)
