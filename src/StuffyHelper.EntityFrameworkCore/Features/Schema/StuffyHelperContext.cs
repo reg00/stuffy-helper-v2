@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using StuffyHelper.Core.Features.Checkout;
 using StuffyHelper.Core.Features.Debt;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Media;
@@ -37,6 +38,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
         public virtual DbSet<UnitTypeEntry> UnitTypes { get; set; }
         public virtual DbSet<MediaEntry> Medias { get; set; }
         public virtual DbSet<DebtEntry> Debts { get; set; }
+        public virtual DbSet<CheckoutEntry> Checkouts { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -61,6 +63,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.HasMany(e => e.Purchases).WithOne(x => x.Event).HasForeignKey(e => e.EventId);
                 entity.HasMany(e => e.Participants).WithOne(x => x.Event).HasForeignKey(e => e.EventId);
                 entity.HasMany(e => e.Medias).WithOne(x => x.Event).HasForeignKey(e => e.EventId);
+                entity.HasMany(e => e.Checkouts).WithOne(x => x.Event).HasForeignKey(e => e.EventId);
 
                 entity.HasIndex(e => new { e.Name, e.EventDateStart }).IsUnique();
 
@@ -121,9 +124,11 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
 
                 entity.HasOne(e => e.Purchase).WithMany(e => e.PurchaseUsages).HasForeignKey(e => e.PurchaseId);
                 entity.HasOne(e => e.Participant).WithMany(e => e.PurchaseUsages).HasForeignKey(e => e.ParticipantId);
+                entity.HasOne(e => e.Checkout).WithMany(e => e.PurchaseUsages).HasForeignKey(e => e.CheckoutId);
 
                 entity.HasIndex(e => new { e.ParticipantId, e.PurchaseId }).IsUnique();
 
+                entity.Property(e => e.CheckoutId).IsRequired(false);
                 entity.Property(e => e.PurchaseId).IsRequired();
                 entity.Property(e => e.ParticipantId).IsRequired();
                 entity.Property(e => e.Amount).IsRequired()
@@ -148,7 +153,6 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.HasKey(e => e.Id);
 
                 entity.HasMany(e => e.Purchases).WithOne(e => e.UnitType).HasForeignKey(e => e.UnitTypeId);
-
                 entity.HasIndex(e => e.Name).IsUnique();
 
                 entity.Property(e => e.Name).IsRequired();
@@ -173,12 +177,28 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.HasKey(e => e.Id);
 
                 entity.HasOne(e => e.Event).WithMany(e => e.Debts).HasForeignKey(e => e.EventId);
+                entity.HasOne(e => e.Checkout).WithMany(e => e.Debts).HasForeignKey(e => e.CheckoutId);
 
                 entity.Property(e => e.BorrowerId).IsRequired();
                 entity.Property(e => e.DebtorId).IsRequired();
                 entity.Property(e => e.IsComfirmed).HasDefaultValue(false);
                 entity.Property(e => e.IsSent).HasDefaultValue(false);
                 entity.Property(e => e.Amount).IsRequired();
+                entity.Property(e => e.CheckoutId).IsRequired(false);
+            });
+
+            modelBuilder.Entity<CheckoutEntry>(entity =>
+            {
+                entity.ToTable("checkouts");
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(e => e.Event).WithMany(e => e.Checkouts).HasForeignKey(e => e.EventId);
+                entity.HasMany(e => e.PurchaseUsages).WithOne(e => e.Checkout).HasForeignKey(e => e.CheckoutId);
+                entity.HasMany(e => e.Debts).WithOne(e => e.Checkout).HasForeignKey(e => e.CheckoutId);
+
+                entity.HasIndex(e => e.EventId);
+
+                entity.Property(e => e.EventId).IsRequired();
             });
 
             SeedData(modelBuilder);

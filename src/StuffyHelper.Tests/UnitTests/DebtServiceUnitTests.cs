@@ -1,8 +1,10 @@
 ﻿using Moq;
 using StuffyHelper.Authorization.Core.Features;
+using StuffyHelper.Core.Features.Checkout;
 using StuffyHelper.Core.Features.Debt;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Purchase;
+using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Tests.UnitTests.Common;
 
 namespace StuffyHelper.Tests.UnitTests
@@ -20,6 +22,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
                 new Mock<IDebtStore>().Object,
                 new Mock<IEventStore>().Object,
+                new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
                 new Mock<IAuthorizationService>().Object,
                 new Mock<IPurchaseService>().Object);
 
@@ -47,6 +51,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
                 debtStore.Object,
                 new Mock<IEventStore>().Object,
+                new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
                 authorizationServiceMoq.Object,
                 new Mock<IPurchaseService>().Object);
 
@@ -75,6 +81,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
                 debtStore.Object,
                 new Mock<IEventStore>().Object,
+                new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
                 new Mock<IAuthorizationService>().Object,
                 new Mock<IPurchaseService>().Object);
 
@@ -111,6 +119,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
                 debtStore.Object,
                 new Mock<IEventStore>().Object,
+                new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
                 authorizationServiceMoq.Object,
                 new Mock<IPurchaseService>().Object);
 
@@ -125,6 +135,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
                 new Mock<IDebtStore>().Object,
                 new Mock<IEventStore>().Object,
+                new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
                 new Mock<IAuthorizationService>().Object,
                 new Mock<IPurchaseService>().Object);
 
@@ -137,6 +149,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
                 new Mock<IDebtStore>().Object,
                 new Mock<IEventStore>().Object,
+                new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
                 new Mock<IAuthorizationService>().Object,
                 new Mock<IPurchaseService>().Object);
 
@@ -149,6 +163,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
                 new Mock<IDebtStore>().Object,
                 new Mock<IEventStore>().Object,
+                new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
                 new Mock<IAuthorizationService>().Object,
                 new Mock<IPurchaseService>().Object);
 
@@ -179,6 +195,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
                 debtStore.Object,
                 new Mock<IEventStore>().Object,
+                new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
                 authorizationServiceMoq.Object,
                 new Mock<IPurchaseService>().Object);
 
@@ -193,6 +211,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
                new Mock<IDebtStore>().Object,
                new Mock<IEventStore>().Object,
+               new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
                new Mock<IAuthorizationService>().Object,
                new Mock<IPurchaseService>().Object);
 
@@ -205,6 +225,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
                 new Mock<IDebtStore>().Object,
                 new Mock<IEventStore>().Object,
+                new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
                 new Mock<IAuthorizationService>().Object,
                 new Mock<IPurchaseService>().Object);
 
@@ -224,6 +246,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
                 new Mock<IDebtStore>().Object,
                 new Mock<IEventStore>().Object,
+                new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
                 new Mock<IAuthorizationService>().Object,
                 new Mock<IPurchaseService>().Object);
 
@@ -254,6 +278,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
                 debtStore.Object,
                 new Mock<IEventStore>().Object,
+                new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
                 authorizationServiceMoq.Object,
                 new Mock<IPurchaseService>().Object);
 
@@ -268,6 +294,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
               new Mock<IDebtStore>().Object,
               new Mock<IEventStore>().Object,
+              new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
               new Mock<IAuthorizationService>().Object,
               new Mock<IPurchaseService>().Object);
 
@@ -280,6 +308,8 @@ namespace StuffyHelper.Tests.UnitTests
             var debtService = new DebtService(
               new Mock<IDebtStore>().Object,
               new Mock<IEventStore>().Object,
+              new Mock<ICheckoutStore>().Object,
+                new Mock<IPurchaseUsageStore>().Object,
               new Mock<IAuthorizationService>().Object,
               new Mock<IPurchaseService>().Object);
 
@@ -296,9 +326,19 @@ namespace StuffyHelper.Tests.UnitTests
             x.GetEventAsync(eventEntry.Id, eventEntry.UserId, CancellationToken))
                 .ReturnsAsync(eventEntry);
 
+            var checkoutStoreMoq = new Mock<ICheckoutStore>();
+            checkoutStoreMoq.Setup(x =>
+            x.AddCheckoutAsync(It.IsAny<CheckoutEntry>(), CancellationToken))
+                .ReturnsAsync(new CheckoutEntry()
+                {
+                    EventId = eventEntry.Id,
+                });
+
             var debtService = new DebtService(
               new Mock<IDebtStore>().Object,
               eventStoreMoq.Object,
+              checkoutStoreMoq.Object,
+              new Mock<IPurchaseUsageStore>().Object,
               new Mock<IAuthorizationService>().Object,
               new Mock<IPurchaseService>().Object);
 
