@@ -2,9 +2,11 @@
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Core.Exceptions;
+using StuffyHelper.Core.Features.Checkout;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Purchase;
+using StuffyHelper.Core.Features.PurchaseUsage;
 
 namespace StuffyHelper.Core.Features.Debt
 {
@@ -12,17 +14,23 @@ namespace StuffyHelper.Core.Features.Debt
     {
         private readonly IDebtStore _debtStore;
         private readonly IEventStore _eventStore;
+        private readonly ICheckoutStore _checkoutStore;
+        private readonly IPurchaseUsageStore _purchaseUsageStore;
         private readonly IAuthorizationService _authorizationService;
         private readonly IPurchaseService _purchaseService;
 
         public DebtService(
             IDebtStore debtStore,
             IEventStore eventStore,
+            ICheckoutStore checkoutStore,
+            IPurchaseUsageStore purchaseUsageStore,
             IAuthorizationService authorizationService,
             IPurchaseService purchaseService)
         {
             _debtStore = debtStore;
             _eventStore = eventStore;
+            _checkoutStore = checkoutStore;
+            _purchaseUsageStore = purchaseUsageStore;
             _authorizationService = authorizationService;
             _purchaseService = purchaseService;
         }
@@ -165,6 +173,8 @@ namespace StuffyHelper.Core.Features.Debt
                 throw new EntityNotFoundException($"Event Id '{eventId}' not found");
             }
 
+            var checkout = await _checkoutStore.AddCheckoutAsync(new CheckoutEntry(eventId), cancellationToken);
+
             foreach (var purchase in @event.Purchases.Where(x => x.IsComplete == false))
             {
                 foreach (var usage in purchase.PurchaseUsages)
@@ -187,9 +197,14 @@ namespace StuffyHelper.Core.Features.Debt
                             Amount = purchase.IsPartial ? purchase.Cost * usage.Amount : (purchase.Amount * purchase.Cost) / purchase.PurchaseUsages.Count,
                             BorrowerId = purchase.Owner.UserId,
                             DebtorId = usage.Participant.UserId,
+                            CheckoutId = checkout.Id,
                             EventId = eventId,
                         });
                     }
+
+                    usage.CheckoutId = checkout.Id;
+
+                    await _purchaseUsageStore.UpdatePurchaseUsageAsync(usage, cancellationToken);
                 }
 
                 await _purchaseService.CompletePurchaseAsync(purchase.Id, cancellationToken);
@@ -205,9 +220,10 @@ namespace StuffyHelper.Core.Features.Debt
                 if (debt.Amount < 0)
                 {
                     debt.Amount *= -1;
-                    var temp = debt.BorrowerId;
-                    debt.BorrowerId = debt.DebtorId;
-                    debt.DebtorId = temp;
+                    (debt.BorrowerId, debt.DebtorId) = (debt.DebtorId, debt.BorrowerId);
+                    //var temp = debt.BorrowerId;
+                    //debt.BorrowerId = debt.DebtorId;
+                    //debt.DebtorId = temp;
                 }
 
                 var existsDebt = await _debtStore.GetDebtAsync(debt.BorrowerId, debt.DebtorId, debt.EventId, cancellationToken);
@@ -217,6 +233,7 @@ namespace StuffyHelper.Core.Features.Debt
                     existsDebt.Amount += debt.Amount;
                     existsDebt.IsComfirmed = false;
                     existsDebt.IsSent = false;
+                    existsDebt.CheckoutId = debt.CheckoutId;
 
                     await _debtStore.UpdateDebtAsync(existsDebt, cancellationToken);
                 }

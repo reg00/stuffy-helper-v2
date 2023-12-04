@@ -1,4 +1,5 @@
 ﻿using EnsureThat;
+using StuffyHelper.Core.Features.Checkout;
 using StuffyHelper.Core.Features.Debt;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
@@ -19,6 +20,7 @@ namespace StuffyHelper.Core.Features.Event
         public bool IsCompleted { get; set; }
         public bool IsActive { get; set; }
 
+        public virtual List<CheckoutEntry> Checkouts { get; set; } = new List<CheckoutEntry>();
         public virtual List<ParticipantEntry> Participants { get; set; } = new List<ParticipantEntry>();
         public virtual List<PurchaseEntry> Purchases { get; set; } = new List<PurchaseEntry>();
         public virtual List<MediaEntry> Medias { get; set; } = new List<MediaEntry>();
@@ -26,10 +28,6 @@ namespace StuffyHelper.Core.Features.Event
 
         public EventEntry()
         {
-            Participants = new List<ParticipantEntry>();
-            Purchases = new List<PurchaseEntry>();
-            Medias = new List<MediaEntry>();
-            Debts = new List<DebtEntry>();
         }
 
         public EventEntry(
@@ -47,11 +45,6 @@ namespace StuffyHelper.Core.Features.Event
             CreatedDate = DateTime.UtcNow;
             IsCompleted = false;
             IsActive = true;
-
-            Participants = new List<ParticipantEntry>();
-            Purchases = new List<PurchaseEntry>();
-            Medias = new List<MediaEntry>();
-            Debts = new List<DebtEntry>();
         }
 
         public void PatchFrom(UpdateEventEntry entry)

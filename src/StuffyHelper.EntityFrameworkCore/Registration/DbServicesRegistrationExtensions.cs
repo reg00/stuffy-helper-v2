@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using StuffyHelper.Core.Features.Checkout;
 using StuffyHelper.Core.Features.Debt;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Media;
@@ -25,6 +26,7 @@ namespace StuffyHelper.EntityFrameworkCore.Registration
             services.AddScoped<IUnitTypeStore, EfUnitTypeStore>();
             services.AddScoped<IMediaStore, EfMediaStore>();
             services.AddScoped<IDebtStore, EfDebtStore>();
+            services.AddScoped<ICheckoutStore, EfCheckoutStore>();
 
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
