@@ -8,7 +8,7 @@ services:
       - 80:80
       - 443:443
     networks:
-      - app_network
+      - app-network
     depends_on:
       - backend
       - frontend
@@ -21,7 +21,7 @@ services:
       - 8080:80
     restart: unless-stopped
     networks:
-      - app_network
+      - app-network
       
   backend:
     image: slavadno/stuffyhelper
@@ -53,7 +53,7 @@ services:
       - s3
     restart: unless-stopped
     networks:
-      - app_network
+      - app-network
       
   postgres-web:
     image: postgres:12.4-alpine
@@ -66,7 +66,7 @@ services:
         - ../stuffydata/postgresql/data:/var/lib/postgresql/data
     restart: unless-stopped
     networks:
-      - app_network
+      - app-network
     
   s3:
     image: minio/minio
@@ -79,8 +79,8 @@ services:
       MINIO_SECRET_KEY: ${MINIO_SECRET}
     command: server /data
     networks:
-      - app_network
+      - app-network
 
 networks:
-  app_network:
+  app-network:
     driver: bridge
