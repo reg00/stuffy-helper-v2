@@ -77,6 +77,6 @@ services:
     command: server /data
 
   networks:
-  dnet:
-    name: dnet
-    driver: bridge
+    dnet:
+      name: dnet
+      driver: bridge
