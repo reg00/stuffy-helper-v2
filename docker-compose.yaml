@@ -16,6 +16,7 @@ services:
       - NGINX_PORT=80
 
   frontend:
+    container_name: frontend
     image: salmasov/stuffy-helper-frontend
     ports:
       - 8080:80
@@ -24,6 +25,7 @@ services:
       - app-network
       
   backend:
+    container_name: backend
     image: slavadno/stuffyhelper
     build: .
     ports:
