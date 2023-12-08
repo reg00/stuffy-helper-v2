@@ -21,8 +21,7 @@ jobs:
           password: ${{secrets.REMOTE_SERVER_PASSWORD}}
           port: ${{secrets.REMOTE_SERVER_PORT}}
           script: |
-            ls -a
-            cd /repo/stuffy-helper-v2
+            cd repo/stuffy-helper-v2
             git pull origin main
 
       - name: Run project
@@ -33,7 +32,7 @@ jobs:
           password: ${{secrets.REMOTE_SERVER_PASSWORD}}
           port: ${{secrets.REMOTE_SERVER_PORT}}
           script: |
-            cd /repo/stuffy-helper-v2
+            cd repo/stuffy-helper-v2
             docker-compose down
             docker image prune -a
             export AUTH_CONN_STR=${{secrets.AUTH_CONN_STR}}
