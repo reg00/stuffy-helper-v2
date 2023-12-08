@@ -74,7 +74,7 @@ ENV LC_ALL ru_RU.UTF-8
 WORKDIR /app
 COPY --from=build .build .
 
-ENV ASPNETCORE_URLS=http://+:8080
-EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:7777
+EXPOSE 7777
 
 ENTRYPOINT ["dotnet", "StuffyHelper.Hosting.dll"]
