@@ -147,7 +147,7 @@ namespace StuffyHelper.Core.Features.Debt
             var debt = await _debtStore.GetDebtAsync(debtId, cancellationToken);
 
             if (debt is null || debt.DebtorId != userId)
-                throw new EntityNotFoundException($"Debt Id '{debtId}' not found");
+                throw new EntityNotFoundException($"Debt Id '{debtId}' not found!");
 
             if (!debt.IsSent)
                 throw new StuffyException("Cannot confirm not sented debt");
