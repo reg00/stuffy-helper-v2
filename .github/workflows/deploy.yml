@@ -1,0 +1,59 @@
+name: Update and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Update project on remote server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.REMOTE_SERVER_HOST}}
+          username: ${{secrets.REMOTE_SERVER_USERNAME}}
+          password: ${{secrets.REMOTE_SERVER_PASSWORD}}
+          port: ${{secrets.REMOTE_SERVER_PORT}}
+          script: |
+            cd /repo/stuffy-helper-v2
+            git pull origin main
+
+      - name: Run project
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.REMOTE_SERVER_HOST}}
+          username: ${{secrets.REMOTE_SERVER_USERNAME}}
+          password: ${{secrets.REMOTE_SERVER_PASSWORD}}
+          port: ${{secrets.REMOTE_SERVER_PORT}}
+          script: |
+            cd /repo/stuffy-helper-v2
+            docker-compose down
+            docker image prune -a
+            export AUTH_CONN_STR=${{secrets.AUTH_CONN_STR}}
+            export AUTH_JWT_SECRET=${{secrets.AUTH_JWT_SECRET}}
+            export AUTH_JWT_ISSUER=${{secrets.AUTH_JWT_ISSUER}}
+            export AUTH_JWT_AUDIENCE=${{secrets.AUTH_JWT_AUDIENCE}}
+            export EF_PROVIDER=${{secrets.EF_PROVIDER}}
+            export EF_CONN_STR=${{secrets.EF_CONN_STR}}
+            export MINIO_ENDPOINT=${{secrets.MINIO_ENDPOINT}}
+            export MINIO_ACCESS=${{secrets.MINIO_ACCESS}}
+            export MINIO_SECRET=${{secrets.MINIO_SECRET}}
+            export FILE_CONTAINER_NAME=${{secrets.FILE_CONTAINER_NAME}}
+            export EMAIL_SERVER=${{secrets.EMAIL_SERVER}}
+            export EMAIL_PORT=${{secrets.EMAIL_PORT}}
+            export EMAIL_ACCOUNT=${{secrets.EMAIL_ACCOUNT}}
+            export EMAIL_PASSWORD=${{secrets.EMAIL_PASSWORD}}
+            export EMAIL_SENDER_EMAIL=${{secrets.EMAIL_SENDER_EMAIL}}
+            export EMAIL_SENDER_NAME=${{secrets.EMAIL_SENDER_NAME}}
+            export FRONTEND_ENDPOINT=${{secrets.FRONTEND_ENDPOINT}}
+            export POSTGRES_USER=${{secrets.POSTGRES_USER}}
+            export POSTGRES_PASSWORD=${{secrets.POSTGRES_PASSWORD}}
+            export POSTGRES_MULTIPLE_DATABASES=${{secrets.POSTGRES_MULTIPLE_DATABASES}}
+            docker-compose build
+            docker-compose up -d
