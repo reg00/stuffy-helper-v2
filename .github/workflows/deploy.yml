@@ -25,27 +25,6 @@ jobs:
             git pull origin main
 
       - name: Run project
-        env:
-          AUTH_CONN_STR: ${{secrets.AUTH_CONN_STR}}
-          AUTH_JWT_SECRET: ${{secrets.AUTH_JWT_SECRET}}
-          AUTH_JWT_ISSUER: ${{secrets.AUTH_JWT_ISSUER}}
-          AUTH_JWT_AUDIENCE: ${{secrets.AUTH_JWT_AUDIENCE}}
-          EF_PROVIDER: ${{secrets.EF_PROVIDER}}
-          EF_CONN_STR: ${{secrets.EF_CONN_STR}}
-          MINIO_ENDPOINT: ${{secrets.MINIO_ENDPOINT}}
-          MINIO_ACCESS: ${{secrets.MINIO_ACCESS}}
-          MINIO_SECRET: ${{secrets.MINIO_SECRET}}
-          FILE_CONTAINER_NAME: ${{secrets.FILE_CONTAINER_NAME}}
-          EMAIL_SERVER: ${{secrets.EMAIL_SERVER}}
-          EMAIL_PORT: ${{secrets.EMAIL_PORT}}
-          EMAIL_ACCOUNT: ${{secrets.EMAIL_ACCOUNT}}
-          EMAIL_PASSWORD: ${{secrets.EMAIL_PASSWORD}}
-          EMAIL_SENDER_EMAIL: ${{secrets.EMAIL_SENDER_EMAIL}}
-          EMAIL_SENDER_NAME: ${{secrets.EMAIL_SENDER_NAME}}
-          FRONTEND_ENDPOINT: ${{secrets.FRONTEND_ENDPOINT}}
-          POSTGRES_USER: ${{secrets.POSTGRES_USER}}
-          POSTGRES_PASSWORD: ${{secrets.POSTGRES_PASSWORD}}
-          POSTGRES_MULTIPLE_DATABASES: ${{secrets.POSTGRES_MULTIPLE_DATABASES}}
         uses: appleboy/ssh-action@master
         with:
           host: ${{secrets.REMOTE_SERVER_HOST}}
