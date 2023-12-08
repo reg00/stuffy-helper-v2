@@ -6,24 +6,25 @@ services:
     ports:
       - 7777:8080
     environment:
-      - Authorization__ConnectionString=Server=<server>;Port=<port>;Database=<catalog>;User Id=<user>;Password=<password>;
-      - Authorization__JWT__Secret=<secret>
-      - Authorization__JWT__ValidIssuer=<issuer>
-      - Authorization__JWT__ValidAudience=<audience>
-      - EntityFramework__DbProvider=PostgreSql;
-      - EntityFramework__ConnectionString=Server=<server>;Port=<port>;Database=<catalog>;User Id=<user>;Password=<password>;
-      - MinioStore__Endpoint=<minio_endpoint>
-      - MinioStore__AccessKey=<minio_access_key>
-      - MinioStore__SecretKey=<minio_secret_key>
+      - Authorization__ConnectionString=${AUTH_CONN_STR}
+      - Authorization__JWT__Secret==${AUTH_JWT_SECRET}
+      - Authorization__JWT__ValidIssuer=${AUTH_JWT_ISSUER}
+      - Authorization__JWT__ValidAudience=${AUTH_JWT_AUDIENCE}
+      - EntityFramework__DbProvider=${EF_PROVIDER}
+      - EntityFramework__ConnectionString=${EF_CONN_STR}
+      - MinioStore__Endpoint=${MINIO_ENDPOINT}
+      - MinioStore__AccessKey=${MINIO_ACCESS}
+      - MinioStore__SecretKey=${MINIO_SECRET}
       - MinioStore__NetworkTimeout=3600
       - MinioStore__PresignedUrlExpiry=12:00:00
-      - StuffyFileWeb__StuffyFileStore__ContainerName=<container_name>
-      - EmailService__Server=<email_server>
-      - EmailService__Port=<email_port>
-      - EmailService__Account=<email_account>
-      - EmailService__Password=<email_password>
-      - EmailService__SenderEmail=<email_sender_email>
-      - EmailService__SenderName=<email_sender_password>
+      - StuffyFileWeb__StuffyFileStore__ContainerName=${FILE_CONTAINER_NAME}
+      - EmailService__Server=${EMAIL_SERVER}
+      - EmailService__Port=${EMAIL_PORT}
+      - EmailService__Account=${EMAIL_ACCOUNT}
+      - EmailService__Password=${EMAIL_PASSWORD}
+      - EmailService__SenderEmail=${EMAIL_SENDER_EMAIL}
+      - EmailService__SenderName=${EMAIL_SENDER_NAME}
+      - Frontend__Endpoint=${FRONTEND_ENDPOINT}
     depends_on:
       - postgres-web
       - s3
@@ -32,9 +33,9 @@ services:
   postgres-web:
     image: postgres:12.4-alpine
     environment:
-        - POSTGRES_MULTIPLE_DATABASES=<catalog1, catalog2>
-        - POSTGRES_USER=<user>
-        - POSTGRES_PASSWORD=<password>
+        - POSTGRES_MULTIPLE_DATABASES=${POSTGRES_MULTIPLE_DATABASES}
+        - POSTGRES_USER=${POSTGRES_USER}
+        - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
         - PGDATA=/var/lib/postgresql/data/pgdata
     volumes:
         - ../stuffydata/postgresql/data:/var/lib/postgresql/data
@@ -47,6 +48,6 @@ services:
     volumes:
       - ../stuffydata/minio/data:/data
     environment:
-      MINIO_ACCESS_KEY: <minio_access_key>
-      MINIO_SECRET_KEY: <minio_secret_key>
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS}
+      MINIO_SECRET_KEY: ${MINIO_SECRET}
     command: server /data
