@@ -12,7 +12,8 @@ services:
       - "80:80"
       - "443:443"
     networks:
-      dnet:
+      - frontend
+      - backend
 
   frontend:
     image: salmasov/stuffy-helper-frontend
@@ -20,7 +21,8 @@ services:
       - 8080:80
     restart: unless-stopped
     networks:
-      dnet:
+      - frontend
+      - backend
       
   api:
     image: slavadno/stuffyhelper
@@ -52,7 +54,8 @@ services:
       - s3
     restart: unless-stopped
     networks:
-      dnet:
+      - frontend
+      - backend
 
   postgres-web:
     image: postgres:12.4-alpine
@@ -64,6 +67,8 @@ services:
     volumes:
         - ../stuffydata/postgresql/data:/var/lib/postgresql/data
     restart: unless-stopped
+    networks:
+      - backend
     
   s3:
     image: minio/minio
@@ -75,8 +80,11 @@ services:
       MINIO_ACCESS_KEY: ${MINIO_ACCESS}
       MINIO_SECRET_KEY: ${MINIO_SECRET}
     command: server /data
+    networks:
+      - backend
 
-  networks:
-    dnet:
-      name: dnet
-      driver: bridge
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
