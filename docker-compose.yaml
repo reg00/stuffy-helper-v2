@@ -3,17 +3,25 @@ services:
   nginx:
     image: nginx
     volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./conf/conf.d:/etc/nginx/conf.d
+      - ./conf/ssl:/etc/nginx/ssl
+      - ./well-known:/usr/share/nginx/html
+      - /opt/letsencrypt:/etc/letsencrypt
     ports:
       - "80:80"
       - "443:443"
+    networks:
+      dnet:
 
   frontend:
     image: salmasov/stuffy-helper-frontend
     ports:
       - 8080:80
     restart: unless-stopped
-
+    networks:
+      dnet:
+      
   api:
     image: slavadno/stuffyhelper
     build: .
@@ -43,6 +51,8 @@ services:
       - postgres-web
       - s3
     restart: unless-stopped
+    networks:
+      dnet:
 
   postgres-web:
     image: postgres:12.4-alpine
@@ -65,3 +75,8 @@ services:
       MINIO_ACCESS_KEY: ${MINIO_ACCESS}
       MINIO_SECRET_KEY: ${MINIO_SECRET}
     command: server /data
+
+  networks:
+  dnet:
+    name: dnet
+    driver: bridge
