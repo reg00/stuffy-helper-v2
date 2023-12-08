@@ -1,5 +1,19 @@
 version: '3.7'
 services:
+  nginx:
+    image: nginx
+    volumes:
+      - ../nginx.conf:/etc/nginx/nginx.conf
+    ports:
+      - "80:80"
+      - "443:443"
+
+  frontend:
+    image: salmasov/stuffy-helper-frontend
+  ports:
+    - 8080:80
+  restart: unless-stopped
+
   api:
     image: slavadno/stuffyhelper
     build: .
