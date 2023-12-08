@@ -4,16 +4,16 @@ services:
     image: nginx
     volumes:
       - ./conf/nginx.conf:/etc/nginx/nginx.conf
-      - ./conf/conf.d:/etc/nginx/conf.d
-      - ./conf/ssl:/etc/nginx/ssl
-      - ./well-known:/usr/share/nginx/html
-      - /opt/letsencrypt:/etc/letsencrypt
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
     networks:
-      - frontend
+      - app_network
+    depends_on:
       - backend
+      - frontend
+    environment:
+      - NGINX_PORT=80
 
   frontend:
     image: salmasov/stuffy-helper-frontend
@@ -21,14 +21,13 @@ services:
       - 8080:80
     restart: unless-stopped
     networks:
-      - frontend
-      - backend
+      - app_network
       
-  api:
+  backend:
     image: slavadno/stuffyhelper
     build: .
     ports:
-      - 7777:8080
+      - 7777:7777
     environment:
       - Authorization__ConnectionString=${AUTH_CONN_STR}
       - Authorization__JWT__Secret==${AUTH_JWT_SECRET}
@@ -54,9 +53,8 @@ services:
       - s3
     restart: unless-stopped
     networks:
-      - frontend
-      - backend
-
+      - app_network
+      
   postgres-web:
     image: postgres:12.4-alpine
     environment:
@@ -81,10 +79,8 @@ services:
       MINIO_SECRET_KEY: ${MINIO_SECRET}
     command: server /data
     networks:
-      - backend
+      - app_network
 
 networks:
-  frontend:
-    driver: bridge
-  backend:
+  app_network:
     driver: bridge
