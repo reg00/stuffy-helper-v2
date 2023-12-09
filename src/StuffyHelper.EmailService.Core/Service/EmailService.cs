@@ -15,7 +15,7 @@ namespace StuffyHelper.EmailService.Core.Service
 
         public async Task SendEmailAsync(string email, string login, string message)
         {
-            await _emailService.SendAsync(email, login, message);
+            await _emailService.SendAsync(email, login, message, true);
         }
     }
 }

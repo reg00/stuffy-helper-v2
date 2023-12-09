@@ -50,15 +50,25 @@ namespace StuffyHelper.Api.Controllers
             }
 
             var code = await _authorizationService.Register(model);
-
-            var callbackUrl = Url.Action(
+            try
+            {
+                var callbackUrl = Url.Action(
                 "ConfirmEmail",
                 "Authorization",
                 new { login = model.Username, code },
-                protocol: HttpContext.Request.Scheme);
+                protocol: HttpContext.Request.Scheme,
+                _frontEndConfiguration.Endpoint.OriginalString);
 
-            await _emailService.SendEmailAsync(model.Email, "Confirm your account",
-                $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
+                await _emailService.SendEmailAsync(model.Email, "Confirm your account",
+                    $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
+
+            }
+            catch (Exception)
+            {
+                await _authorizationService.DeleteUser(model.Username);
+
+                throw;
+            }
 
             return Ok("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
         }
@@ -72,7 +82,7 @@ namespace StuffyHelper.Api.Controllers
         {
             await _authorizationService.ConfirmEmail(login, code);
 
-            return Redirect($"{_frontEndConfiguration.Endpoint.OriginalString}/register/success");
+            return Redirect("~/sign-up/success");
         }
 
         /// <summary>
@@ -136,11 +146,12 @@ namespace StuffyHelper.Api.Controllers
             var callbackUrl = Url.Action(
                 "ResetPassword",
                 "Authorization",
-                new { login = name, code },
-                protocol: HttpContext.Request.Scheme);
+                new { email = model.Email, code },
+                protocol: HttpContext.Request.Scheme,
+                _frontEndConfiguration.Endpoint.OriginalString);
 
             await _emailService.SendEmailAsync(model.Email, "Reset password",
-                $"Для того, чтобы изменить пароль, перейдите по ссылке: {callbackUrl}. Если вы не присылали запрос на изменение пароля, проигнорируйте сообщение.");
+                $"Для того, чтобы изменить пароль, перейдите по ссылке: <a href='{callbackUrl}'>link</a>. Если вы не присылали запрос на изменение пароля, проигнорируйте сообщение.");
 
             return Ok("Инструкция по изменению пароля отправлена на почту.");
         }
@@ -148,11 +159,12 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordConfirmRoute)]
-        public IActionResult ResetPassword(string code)
+        public IActionResult ResetPassword(string email, string code)
         {
             EnsureArg.IsNotNullOrWhiteSpace(code, nameof(code));
+            EnsureArg.IsNotNullOrWhiteSpace(email, nameof(email));
 
-            return Ok(code);
+            return Redirect($"~password-reset/confirm?email={email}&code={code}");
         }
 
         /// <summary>
