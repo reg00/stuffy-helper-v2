@@ -43,16 +43,16 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
         }
 
-        public async Task<DebtEntry?> GetDebtAsync(string borrowerId, string debtorId, Guid eventId, CancellationToken cancellationToken = default)
+        public async Task<DebtEntry?> GetDebtAsync(string lenderId, string debtorId, Guid eventId, CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotNullOrWhiteSpace(borrowerId, nameof(borrowerId));
+            EnsureArg.IsNotNullOrWhiteSpace(lenderId, nameof(lenderId));
             EnsureArg.IsNotNullOrWhiteSpace(debtorId, nameof(debtorId));
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             try
             {
                 return await _context.Debts
-                    .FirstOrDefaultAsync(e => e.BorrowerId == borrowerId && e.DebtorId == debtorId && e.EventId == eventId,
+                    .FirstOrDefaultAsync(e => e.LenderId == lenderId && e.DebtorId == debtorId && e.EventId == eventId,
                     cancellationToken);
             }
             catch (EntityNotFoundException)
@@ -69,7 +69,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
         public async Task<Response<DebtEntry>> GetDebtsAsync(
             int offset = 0,
             int limit = 10,
-            string? borrowerId = null,
+            string? lenderId = null,
             string? debtorId = null,
             bool? isSent = null,
             bool? isConfirmed = null,
@@ -79,7 +79,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             {
                 var searchedData = await _context.Debts
                     .Where(e =>
-                    (string.IsNullOrWhiteSpace(borrowerId) || e.BorrowerId == borrowerId) &&
+                    (string.IsNullOrWhiteSpace(lenderId) || e.LenderId == lenderId) &&
                     (string.IsNullOrWhiteSpace(debtorId) || e.DebtorId == debtorId) &&
                     (isSent == null || isSent == e.IsSent) &&
                     (isConfirmed == null || isConfirmed == e.IsComfirmed))
@@ -110,7 +110,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             try
             {
                 var searchedData = await _context.Debts
-                    .Where(e => e.DebtorId == userId || e.BorrowerId == userId)
+                    .Where(e => e.DebtorId == userId || e.LenderId == userId)
                     .OrderByDescending(e => e.CreatedDate)
                     .ToListAsync(cancellationToken);
 

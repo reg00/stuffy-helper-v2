@@ -200,7 +200,7 @@ namespace StuffyHelper.Tests.UnitTests
                 authorizationServiceMoq.Object,
                 new Mock<IPurchaseService>().Object);
 
-            var result = await debtService.SendDebtAsync("123", debtEntry.Id, CancellationToken);
+            var result = await debtService.SendDebtAsync("321", debtEntry.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -244,7 +244,7 @@ namespace StuffyHelper.Tests.UnitTests
                 .ReturnsAsync(debtEntry);
 
             var debtService = new DebtService(
-                new Mock<IDebtStore>().Object,
+                debtStore.Object,
                 new Mock<IEventStore>().Object,
                 new Mock<ICheckoutStore>().Object,
                 new Mock<IPurchaseUsageStore>().Object,
@@ -283,7 +283,7 @@ namespace StuffyHelper.Tests.UnitTests
                 authorizationServiceMoq.Object,
                 new Mock<IPurchaseService>().Object);
 
-            var result = await debtService.ConfirmDebtAsync("321", debtEntry.Id, CancellationToken);
+            var result = await debtService.ConfirmDebtAsync("123", debtEntry.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }

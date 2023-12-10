@@ -10,7 +10,7 @@
     EventDateStart: Date_MinValue,
     IsCompleted: true
   },
-  Borrower: {
+  Lender: {
     Id: 123,
     Name: test
   },

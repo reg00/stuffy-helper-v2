@@ -10,7 +10,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
             return new()
             {
                 Amount = 1,
-                BorrowerId = "123",
+                LenderId = "123",
                 DebtorId = "321",
                 EventId = Guid.NewGuid(),
                 Id = Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"),
@@ -25,7 +25,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
             return new()
             {
                 Amount = 1,
-                BorrowerId = "123",
+                LenderId = "123",
                 DebtorId = "321",
                 EventId = Guid.NewGuid(),
                 Id = Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"),
@@ -53,7 +53,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
                     new()
                     {
                         Amount = 1,
-                        BorrowerId = "123",
+                        LenderId = "123",
                         DebtorId = "321",
                         Event = new ()
                         {
@@ -65,7 +65,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
                     new()
                     {
                         Amount = 2,
-                        BorrowerId = "321",
+                        LenderId = "321",
                         DebtorId = "123",
                         Event = new ()
                         {

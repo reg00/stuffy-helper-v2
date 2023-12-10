@@ -105,7 +105,7 @@ namespace StuffyHelper.Core.Features.Purchase
 
             if (existingPurchase.IsComplete)
             {
-                throw new StuffyException("Cannot edit completed purchase");
+                throw new BadRequestException("Cannot edit completed purchase");
             }
 
             return existingPurchase;

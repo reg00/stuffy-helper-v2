@@ -33,7 +33,7 @@ namespace StuffyHelper.Core.Features.Purchase
             Amount = entry.Amount;
             IsPartial = entry.IsPartial;
             IsComplete = entry.IsComplete;
-            UnitType = new UnitTypeShortEntry(entry.UnitType);
+            UnitType = entry.UnitType == null ? null : new UnitTypeShortEntry(entry.UnitType);
             PurchaseTags = entry.PurchaseTags.Select(x => new PurchaseTagShortEntry(x)).ToList();
         }
     }

@@ -8,7 +8,7 @@ namespace StuffyHelper.Core.Features.Debt
         public Guid Id { get; set; }
         public Guid EventId { get; set; }
         public Guid? CheckoutId { get; set; }
-        public string BorrowerId { get; set; } = string.Empty;
+        public string LenderId { get; set; } = string.Empty;
         public string DebtorId { get; set; } = string.Empty;
         public double Amount { get; set; }
         public bool IsSent { get; set; }
@@ -27,12 +27,12 @@ namespace StuffyHelper.Core.Features.Debt
 
         public DebtEntry(
             Guid eventId,
-            string borrowerId,
+            string lenderId,
             string debtorId,
             double amount)
         {
             EventId = eventId;
-            BorrowerId = borrowerId;
+            LenderId = lenderId;
             DebtorId = debtorId;
             Amount = amount;
             IsSent = false;
