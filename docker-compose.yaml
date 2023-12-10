@@ -17,7 +17,7 @@ services:
 
   frontend:
     container_name: frontend
-    image: salmasov/stuffy-helper-frontend
+    image: salmasov/stuffy-helper-frontend:latest
     ports:
       - 8080:80
     restart: unless-stopped
