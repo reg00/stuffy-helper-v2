@@ -1,4 +1,4 @@
 ﻿{
-  Type: StuffyException,
+  Type: BadRequestException,
   Message: Cannot edit completed event
 }

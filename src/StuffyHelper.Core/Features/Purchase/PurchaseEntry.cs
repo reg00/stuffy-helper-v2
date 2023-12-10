@@ -14,14 +14,14 @@ namespace StuffyHelper.Core.Features.Purchase
         public double Cost { get; set; }
         public double Amount { get; set; }
         public bool IsPartial { get; set; }
-        public Guid UnitTypeId { get; set; }
+        public Guid? UnitTypeId { get; set; }
         public Guid ParticipantId { get; set; }
         public Guid EventId { get; set; }
         public DateTime CreatedDate { get; set; }
         public bool IsComplete { get; set; }
 
         public virtual List<PurchaseTagEntry> PurchaseTags { get; set; } = new List<PurchaseTagEntry>();
-        public virtual UnitTypeEntry UnitType { get; set; }
+        public virtual UnitTypeEntry? UnitType { get; set; }
         public virtual List<PurchaseUsageEntry> PurchaseUsages { get; set; } = new List<PurchaseUsageEntry>();
         public virtual EventEntry Event { get; set; }
         public virtual ParticipantEntry Owner { get; set; }

@@ -45,7 +45,7 @@ namespace StuffyHelper.Core.Features.Purchase
             PurchaseUsages = entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x));
             PurchaseTags = entry.PurchaseTags.Select(x => new PurchaseTagShortEntry(x)).ToList();
             Participant = new ParticipantShortEntry(entry.Owner);
-            UnitType = new UnitTypeShortEntry(entry.UnitType);
+            UnitType = entry.UnitType == null ? null : new UnitTypeShortEntry(entry.UnitType);
         }
     }
 }

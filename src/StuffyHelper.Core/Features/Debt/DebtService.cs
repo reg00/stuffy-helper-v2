@@ -40,31 +40,31 @@ namespace StuffyHelper.Core.Features.Debt
             EnsureArg.IsNotDefault(debtId, nameof(debtId));
 
             var entry = await _debtStore.GetDebtAsync(debtId, cancellationToken);
-            var borrower = await _authorizationService.GetUserById(entry.BorrowerId);
+            var lender = await _authorizationService.GetUserById(entry.LenderId);
             var debtor = await _authorizationService.GetUserById(entry.DebtorId);
 
-            return new GetDebtEntry(entry, borrower, debtor);
+            return new GetDebtEntry(entry, lender, debtor);
         }
 
         public async Task<Response<GetDebtEntry>> GetDebtsAsync(
             int offset = 0,
             int limit = 10,
-            string? borrowerId = null,
+            string? lenderId = null,
             string? debtorId = null,
             bool? isSent = null,
             bool? isConfirmed = null,
             CancellationToken cancellationToken = default)
         {
-            var resp = await _debtStore.GetDebtsAsync(offset, limit, borrowerId, debtorId, isSent, isConfirmed, cancellationToken);
+            var resp = await _debtStore.GetDebtsAsync(offset, limit, lenderId, debtorId, isSent, isConfirmed, cancellationToken);
 
             var debts = new List<GetDebtEntry>();
 
             foreach (var debt in resp.Data)
             {
-                var borrower = await _authorizationService.GetUserById(debt.BorrowerId);
+                var lender = await _authorizationService.GetUserById(debt.LenderId);
                 var debtor = await _authorizationService.GetUserById(debt.DebtorId);
 
-                debts.Add(new GetDebtEntry(debt, borrower, debtor));
+                debts.Add(new GetDebtEntry(debt, lender, debtor));
             }
 
             return new Response<GetDebtEntry>()
@@ -88,10 +88,10 @@ namespace StuffyHelper.Core.Features.Debt
 
             foreach (var dbDebt in resp.Data)
             {
-                var borrower = await _authorizationService.GetUserById(dbDebt.BorrowerId);
+                var lender = await _authorizationService.GetUserById(dbDebt.LenderId);
                 var debtor = await _authorizationService.GetUserById(dbDebt.DebtorId);
 
-                debts.Add(new GetDebtEntry(dbDebt, borrower, debtor));
+                debts.Add(new GetDebtEntry(dbDebt, lender, debtor));
             }
 
             return new Response<GetDebtEntry>()
@@ -107,10 +107,10 @@ namespace StuffyHelper.Core.Features.Debt
         //    EnsureArg.IsNotNull(debt, nameof(debt));
 
         //    var result = await _debtStore.AddDebtAsync(debt, cancellationToken);
-        //    var borrower = await _authorizationService.GetUser(userId: result.BorrowerId);
+        //    var lender = await _authorizationService.GetUser(userId: result.LenderId);
         //    var debtor = await _authorizationService.GetUser(userId: result.DebtorId);
 
-        //    return new GetDebtEntry(result, borrower, debtor);
+        //    return new GetDebtEntry(result, lender, debtor);
         //}
 
         //public async Task DeleteDebtAsync(Guid debtId, CancellationToken cancellationToken = default)
@@ -127,16 +127,16 @@ namespace StuffyHelper.Core.Features.Debt
 
             var debt = await _debtStore.GetDebtAsync(debtId, cancellationToken);
 
-            if (debt is null || debt.BorrowerId != userId)
+            if (debt is null || debt.DebtorId != userId)
                 throw new EntityNotFoundException($"Debt Id '{debtId}' not found");
 
             debt.IsSent = true;
 
             var result = await _debtStore.UpdateDebtAsync(debt, cancellationToken);
-            var borrower = await _authorizationService.GetUserById(result.BorrowerId);
+            var lender = await _authorizationService.GetUserById(result.LenderId);
             var debtor = await _authorizationService.GetUserById(result.DebtorId);
 
-            return new GetDebtEntry(result, borrower, debtor);
+            return new GetDebtEntry(result, lender, debtor);
         }
 
         public async Task<GetDebtEntry> ConfirmDebtAsync(string userId, Guid debtId, CancellationToken cancellationToken = default)
@@ -146,19 +146,19 @@ namespace StuffyHelper.Core.Features.Debt
 
             var debt = await _debtStore.GetDebtAsync(debtId, cancellationToken);
 
-            if (debt is null || debt.DebtorId != userId)
+            if (debt is null || debt.LenderId != userId)
                 throw new EntityNotFoundException($"Debt Id '{debtId}' not found!");
 
             if (!debt.IsSent)
-                throw new StuffyException("Cannot confirm not sented debt");
+                throw new BadRequestException("Cannot confirm not sented debt");
 
             debt.IsComfirmed = true;
 
             var result = await _debtStore.UpdateDebtAsync(debt, cancellationToken);
-            var borrower = await _authorizationService.GetUserById(result.BorrowerId);
+            var lender = await _authorizationService.GetUserById(result.LenderId);
             var debtor = await _authorizationService.GetUserById(result.DebtorId);
 
-            return new GetDebtEntry(result, borrower, debtor);
+            return new GetDebtEntry(result, lender, debtor);
         }
 
         public async Task CheckoutEvent(Guid eventId, string? userId, CancellationToken cancellationToken = default)
@@ -183,19 +183,19 @@ namespace StuffyHelper.Core.Features.Debt
                     if (purchase.Owner.UserId == usage.Participant.UserId)
                         continue;
 
-                    var debt = debts.FirstOrDefault(x => x.BorrowerId == purchase.Owner.UserId && x.DebtorId == usage.Participant.UserId ||
-                                                         x.DebtorId == purchase.Owner.UserId && x.BorrowerId == usage.Participant.UserId);
+                    var debt = debts.FirstOrDefault(x => x.LenderId == purchase.Owner.UserId && x.DebtorId == usage.Participant.UserId ||
+                                                         x.DebtorId == purchase.Owner.UserId && x.LenderId == usage.Participant.UserId);
 
                     if (debt != null)
                     {
-                        debt.Amount += debt.BorrowerId == purchase.Owner.UserId ? usage.Amount : -usage.Amount;
+                        debt.Amount += debt.LenderId == purchase.Owner.UserId ? usage.Amount : -usage.Amount;
                     }
                     else
                     {
                         debts.Add(new DebtEntry()
                         {
                             Amount = purchase.IsPartial ? purchase.Cost * usage.Amount : (purchase.Amount * purchase.Cost) / purchase.PurchaseUsages.Count,
-                            BorrowerId = purchase.Owner.UserId,
+                            LenderId = purchase.Owner.UserId,
                             DebtorId = usage.Participant.UserId,
                             CheckoutId = checkout.Id,
                             EventId = eventId,
@@ -220,13 +220,13 @@ namespace StuffyHelper.Core.Features.Debt
                 if (debt.Amount < 0)
                 {
                     debt.Amount *= -1;
-                    (debt.BorrowerId, debt.DebtorId) = (debt.DebtorId, debt.BorrowerId);
-                    //var temp = debt.BorrowerId;
-                    //debt.BorrowerId = debt.DebtorId;
+                    (debt.LenderId, debt.DebtorId) = (debt.DebtorId, debt.LenderId);
+                    //var temp = debt.LenderId;
+                    //debt.LenderId = debt.DebtorId;
                     //debt.DebtorId = temp;
                 }
 
-                var existsDebt = await _debtStore.GetDebtAsync(debt.BorrowerId, debt.DebtorId, debt.EventId, cancellationToken);
+                var existsDebt = await _debtStore.GetDebtAsync(debt.LenderId, debt.DebtorId, debt.EventId, cancellationToken);
 
                 if (existsDebt != null)
                 {

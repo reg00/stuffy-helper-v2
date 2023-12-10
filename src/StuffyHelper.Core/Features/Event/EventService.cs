@@ -210,7 +210,7 @@ namespace StuffyHelper.Core.Features.Event
 
             if (checkIsComplete && existingEvent.IsCompleted)
             {
-                throw new StuffyException("Cannot edit completed event");
+                throw new BadRequestException("Cannot edit completed event");
             }
 
             await CheckEventPermissionsAsync(existingEvent.UserId, userId);

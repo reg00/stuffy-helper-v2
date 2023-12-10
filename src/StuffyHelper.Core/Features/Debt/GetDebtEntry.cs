@@ -13,16 +13,16 @@ namespace StuffyHelper.Core.Features.Debt
         public bool IsComfirmed { get; set; }
 
         public EventShortEntry Event { get; set; }
-        public UserShortEntry Borrower { get; set; }
+        public UserShortEntry Lender { get; set; }
         public UserShortEntry Debtor { get; set; }
 
         public GetDebtEntry(
             DebtEntry entry,
-            UserEntry borrower,
+            UserEntry lender,
             UserEntry debtor)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
-            EnsureArg.IsNotNull(borrower, nameof(borrower));
+            EnsureArg.IsNotNull(lender, nameof(lender));
             EnsureArg.IsNotNull(debtor, nameof(debtor));
 
             Id = entry.Id;
@@ -30,7 +30,7 @@ namespace StuffyHelper.Core.Features.Debt
             IsSent = entry.IsSent;
             IsComfirmed = entry.IsComfirmed;
             Event = new EventShortEntry(entry.Event);
-            Borrower = new UserShortEntry(borrower);
+            Lender = new UserShortEntry(lender);
             Debtor = new UserShortEntry(debtor);
         }
     }

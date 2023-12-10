@@ -9,7 +9,7 @@ namespace StuffyHelper.Core.Features.Debt
         Task<Response<GetDebtEntry>> GetDebtsAsync(
             int offset = 0,
             int limit = 10,
-            string? borrowerId = null,
+            string? lenderId = null,
             string? debtorId = null,
             bool? isSent = null,
             bool? isConfirmed = null,

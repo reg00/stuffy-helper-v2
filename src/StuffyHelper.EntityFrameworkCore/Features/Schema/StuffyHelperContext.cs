@@ -104,7 +104,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
 
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.EventId).IsRequired();
-                entity.Property(e => e.UnitTypeId).IsRequired();
+                entity.Property(e => e.UnitTypeId).IsRequired(false);
                 entity.Property(e => e.Amount).IsRequired()
                     .HasAnnotation("Range", new[] { 0.01, double.MaxValue })
                     .HasPrecision(18, 2)
@@ -179,7 +179,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Schema
                 entity.HasOne(e => e.Event).WithMany(e => e.Debts).HasForeignKey(e => e.EventId);
                 entity.HasOne(e => e.Checkout).WithMany(e => e.Debts).HasForeignKey(e => e.CheckoutId);
 
-                entity.Property(e => e.BorrowerId).IsRequired();
+                entity.Property(e => e.LenderId).IsRequired();
                 entity.Property(e => e.DebtorId).IsRequired();
                 entity.Property(e => e.IsComfirmed).HasDefaultValue(false);
                 entity.Property(e => e.IsSent).HasDefaultValue(false);
