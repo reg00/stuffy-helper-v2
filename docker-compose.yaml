@@ -57,6 +57,18 @@ services:
     networks:
       - app-network
       
+  check-finder:
+    container_name: check-finder
+    image: romqsqd/check-finder:latest
+    ports:
+      - 5062:5062
+    environment:
+      - ProverkaChecka__Endpoint=${CHECK_SERVICE_ENDPOINT}
+      - ProverkaChecka__Token=${CHECK_SERVICE_TOKEN}
+    restart: unless-stopped
+    networks:
+      - app-network
+     
   postgres-web:
     image: postgres:12.4-alpine
     environment:
