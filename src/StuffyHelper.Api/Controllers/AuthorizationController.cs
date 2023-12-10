@@ -60,7 +60,7 @@ namespace StuffyHelper.Api.Controllers
                 _frontEndConfiguration.Endpoint.OriginalString);
 
                 await _emailService.SendEmailAsync(model.Email, "Confirm your account",
-                    $"Подтвердите регистрацию, перейдя по ссылке: <a href='{callbackUrl}'>link</a>");
+                    $"Подтвердите регистрацию, перейдя по <a href='{callbackUrl}'>ссылке</a>.");
 
             }
             catch (Exception)
@@ -151,7 +151,7 @@ namespace StuffyHelper.Api.Controllers
                 _frontEndConfiguration.Endpoint.OriginalString);
 
             await _emailService.SendEmailAsync(model.Email, "Reset password",
-                $"Для того, чтобы изменить пароль, перейдите по ссылке: <a href='{callbackUrl}'>link</a>. Если вы не присылали запрос на изменение пароля, проигнорируйте сообщение.");
+                $"Для того, чтобы изменить пароль, перейдите по этой: <a href='{callbackUrl}'>ссылке</a>. Если вы не присылали запрос на изменение пароля, проигнорируйте сообщение.");
 
             return Ok("Инструкция по изменению пароля отправлена на почту.");
         }
