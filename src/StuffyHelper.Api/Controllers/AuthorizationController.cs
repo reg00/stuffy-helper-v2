@@ -164,7 +164,7 @@ namespace StuffyHelper.Api.Controllers
             EnsureArg.IsNotNullOrWhiteSpace(code, nameof(code));
             EnsureArg.IsNotNullOrWhiteSpace(email, nameof(email));
 
-            return Redirect($"~password-reset/confirm?email={email}&code={code}");
+            return Redirect($"~/password-reset/confirm?email={email}&code={code}");
         }
 
         /// <summary>
