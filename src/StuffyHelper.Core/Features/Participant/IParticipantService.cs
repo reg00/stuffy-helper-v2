@@ -15,7 +15,7 @@ namespace StuffyHelper.Core.Features.Participant
 
         Task<ParticipantShortEntry> AddParticipantAsync(UpsertParticipantEntry participant, CancellationToken cancellationToken = default);
 
-        Task DeleteParticipantAsync(Guid participantId, CancellationToken cancellationToken = default);
+        Task DeleteParticipantAsync(string userId, Guid participantId, CancellationToken cancellationToken = default);
 
         Task<ParticipantShortEntry> UpdateParticipantAsync(Guid participantId, UpsertParticipantEntry participant, CancellationToken cancellationToken = default);
     }
