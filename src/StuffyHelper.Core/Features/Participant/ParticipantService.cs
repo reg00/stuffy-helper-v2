@@ -2,6 +2,7 @@
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Core.Features;
 using StuffyHelper.Authorization.Core.Models.User;
+using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.PurchaseUsage;
 
@@ -65,11 +66,27 @@ namespace StuffyHelper.Core.Features.Participant
             return new ParticipantShortEntry(result, new UserShortEntry(user));
         }
 
-        public async Task DeleteParticipantAsync(Guid participantId, CancellationToken cancellationToken = default)
+        public async Task DeleteParticipantAsync(string userId, Guid participantId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(participantId, nameof(participantId));
+            EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
 
-            await _participantStore.DeleteParticipantAsync(participantId, cancellationToken);
+            var participant = await _participantStore.GetParticipantAsync(participantId, cancellationToken);
+
+            if (participant is null)
+                throw new EntityNotFoundException($"Participant with Id '{participantId}' not found.");
+
+            if (userId != participant.Event.UserId && participant.UserId != userId)
+                throw new ForbiddenException("Cannot delete participant if you are not an owner of event");
+
+            var owner = participant.Event.Participants.FirstOrDefault(x => x.UserId == userId);
+            if (participantId == owner!.Id)
+                throw new BadRequestException("Cannot remove yourself");
+
+            if (participant.Event.Participants.Count == 1)
+                throw new BadRequestException("Cannot remove last participant from event");
+
+            await _participantStore.DeleteParticipantAsync(participant, cancellationToken);
         }
 
         public async Task<ParticipantShortEntry> UpdateParticipantAsync(Guid participantId, UpsertParticipantEntry participant, CancellationToken cancellationToken = default)

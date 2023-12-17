@@ -11,10 +11,12 @@ namespace StuffyHelper.Api.Controllers
     public class ParticipantController : Controller
     {
         private readonly IParticipantService _participantService;
+        private readonly IPermissionService _permissionService;
 
-        public ParticipantController(IParticipantService participantService)
+        public ParticipantController(IParticipantService participantService, IPermissionService permissionService)
         {
             _participantService = participantService;
+            _permissionService = permissionService;
         }
 
         /// <summary>
@@ -77,7 +79,9 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.DeleteParticipantRoute)]
         public async Task<IActionResult> DeleteAsync(Guid participantId)
         {
-            await _participantService.DeleteParticipantAsync(participantId, HttpContext.RequestAborted);
+            var userId = await _permissionService.GetUserId(User, HttpContext.RequestAborted);
+
+            await _participantService.DeleteParticipantAsync(userId, participantId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK);
         }

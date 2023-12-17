@@ -93,21 +93,12 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
         }
 
-        public async Task DeleteParticipantAsync(Guid participantId, CancellationToken cancellationToken = default)
+        public async Task DeleteParticipantAsync(ParticipantEntry participant, CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotDefault(participantId, nameof(participantId));
+            EnsureArg.IsNotNull(participant, nameof(participant));
 
             try
             {
-                var participant = await _context.Participants
-                    .FirstOrDefaultAsync(
-                    s => s.Id == participantId, cancellationToken);
-
-                if (participant is null)
-                {
-                    throw new EntityNotFoundException($"Participant with Id '{participantId}' not found.");
-                }
-
                 _context.Participants.Remove(participant);
                 await _context.SaveChangesAsync(cancellationToken);
             }

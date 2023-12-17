@@ -15,5 +15,9 @@ namespace StuffyHelper.Core.Features.Common
             ClaimsPrincipal user,
             string? userId = null,
             CancellationToken cancellationToken = default);
+
+        Task<string> GetUserId(
+            ClaimsPrincipal user,
+            CancellationToken cancellationToken = default);
     }
 }

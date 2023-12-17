@@ -28,5 +28,13 @@ namespace StuffyHelper.Core.Features.Common
                 return currentUser.Id;
             }
         }
+
+        public async Task<string> GetUserId(
+            ClaimsPrincipal user,
+            CancellationToken cancellationToken = default)
+        {
+            var currentUser = await _authorizationService.GetUserByToken(user, cancellationToken);
+            return currentUser.Id;
+        }
     }
 }
