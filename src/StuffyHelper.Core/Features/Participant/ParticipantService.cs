@@ -76,15 +76,25 @@ namespace StuffyHelper.Core.Features.Participant
             if (participant is null)
                 throw new EntityNotFoundException($"Participant with Id '{participantId}' not found.");
 
+            // Нельзя удалить если ивент завершен
+            if (participant.Event.IsCompleted)
+                throw new BadRequestException("Cannot delete participant from completed event");
+
+            // Нельзя удалить владельца ивента
+            if (participant.UserId == participant.Event.UserId)
+                throw new BadRequestException("Cannot remove event owner");
+
+            // Нельзя удалить участника (кроме себя), если ты не владелец ивента
             if (userId != participant.Event.UserId && participant.UserId != userId)
                 throw new ForbiddenException("Cannot delete participant if you are not an owner of event");
+            
+            // Нельзя удалить участника, если у него есть рассчитанные покупки
+            if(participant.Purchases.Any(x => x.IsComplete == true))
+                throw new BadRequestException("Cannot remove participant with completed purchases");
 
-            var owner = participant.Event.Participants.FirstOrDefault(x => x.UserId == userId);
-            if (participantId == owner!.Id)
-                throw new BadRequestException("Cannot remove yourself");
-
-            if (participant.Event.Participants.Count == 1)
-                throw new BadRequestException("Cannot remove last participant from event");
+            // Нельзя удалить участника, если у него есть долги
+            if(participant.Event.Debts.Any(x => x.DebtorId == participant.UserId || x.LenderId == participant.UserId))
+                throw new BadRequestException("Cannot remove participant with debts");
 
             await _participantStore.DeleteParticipantAsync(participant, cancellationToken);
         }
