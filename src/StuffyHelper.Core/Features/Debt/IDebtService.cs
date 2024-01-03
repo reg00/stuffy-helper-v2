@@ -6,7 +6,7 @@ namespace StuffyHelper.Core.Features.Debt
     {
         Task<GetDebtEntry> GetDebtAsync(Guid debtId, CancellationToken cancellationToken);
 
-        Task<Response<GetDebtEntry>> GetDebtsAsync(
+        Task<PagedData<GetDebtEntry>> GetDebtsAsync(
             int offset = 0,
             int limit = 10,
             string? lenderId = null,
@@ -15,7 +15,7 @@ namespace StuffyHelper.Core.Features.Debt
             bool? isConfirmed = null,
             CancellationToken cancellationToken = default);
 
-        Task<Response<GetDebtEntry>> GetDebtsByUserAsync(
+        Task<PagedData<GetDebtEntry>> GetDebtsByUserAsync(
             string userId,
             int offset = 0,
             int limit = 10,

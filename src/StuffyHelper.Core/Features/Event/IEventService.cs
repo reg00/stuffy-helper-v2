@@ -8,7 +8,7 @@ namespace StuffyHelper.Core.Features.Event
     {
         Task<GetEventEntry> GetEventAsync(Guid eventId, string? userId = null, CancellationToken cancellationToken = default);
 
-        Task<Response<EventShortEntry>> GetEventsAsync(
+        Task<PagedData<EventShortEntry>> GetEventsAsync(
             int offset = 0,
             int limit = 10,
             string? name = null,

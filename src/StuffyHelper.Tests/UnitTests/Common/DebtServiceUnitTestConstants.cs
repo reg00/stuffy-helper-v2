@@ -34,7 +34,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
             };
         }
 
-        public static Response<DebtEntry> GetEmptyDebstResponse()
+        public static PagedData<DebtEntry> GetEmptyDebstResponse()
         {
             return new()
             {
@@ -44,7 +44,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
             };
         }
 
-        public static Response<DebtEntry> GetCorrectDebstResponse()
+        public static PagedData<DebtEntry> GetCorrectDebstResponse()
         {
             return new()
             {

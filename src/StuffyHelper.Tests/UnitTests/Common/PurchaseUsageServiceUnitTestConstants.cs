@@ -41,7 +41,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
             };
         }
 
-        public static Response<PurchaseUsageEntry> GetCorrectPurchaseUsageResponse()
+        public static PagedData<PurchaseUsageEntry> GetCorrectPurchaseUsageResponse()
         {
             return new()
             {

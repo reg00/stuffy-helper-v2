@@ -50,7 +50,7 @@ namespace StuffyHelper.Core.Features.Event
             return new GetEventEntry(entry, new UserShortEntry(user), participants);
         }
 
-        public async Task<Response<EventShortEntry>> GetEventsAsync(
+        public async Task<PagedData<EventShortEntry>> GetEventsAsync(
             int offset = 0,
             int limit = 10,
             string? name = null,
@@ -72,7 +72,7 @@ namespace StuffyHelper.Core.Features.Event
                                                         createdDateEnd, eventDateStartMin, eventDateStartMax, eventDateEndMin, eventDateEndMax,
                                                         userId, isCompleted, isActive, participantId, purchaseId, cancellationToken);
 
-            return new Response<EventShortEntry>()
+            return new PagedData<EventShortEntry>()
             {
                 Data = resp.Data.Select(x => new EventShortEntry(x)),
                 TotalPages = resp.TotalPages,

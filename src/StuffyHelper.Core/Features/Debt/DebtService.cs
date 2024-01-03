@@ -46,7 +46,7 @@ namespace StuffyHelper.Core.Features.Debt
             return new GetDebtEntry(entry, lender, debtor);
         }
 
-        public async Task<Response<GetDebtEntry>> GetDebtsAsync(
+        public async Task<PagedData<GetDebtEntry>> GetDebtsAsync(
             int offset = 0,
             int limit = 10,
             string? lenderId = null,
@@ -67,7 +67,7 @@ namespace StuffyHelper.Core.Features.Debt
                 debts.Add(new GetDebtEntry(debt, lender, debtor));
             }
 
-            return new Response<GetDebtEntry>()
+            return new PagedData<GetDebtEntry>()
             {
                 Data = debts,
                 TotalPages = resp.TotalPages,
@@ -75,7 +75,7 @@ namespace StuffyHelper.Core.Features.Debt
             };
         }
 
-        public async Task<Response<GetDebtEntry>> GetDebtsByUserAsync(
+        public async Task<PagedData<GetDebtEntry>> GetDebtsByUserAsync(
             string userId,
             int offset = 0,
             int limit = 10,
@@ -94,7 +94,7 @@ namespace StuffyHelper.Core.Features.Debt
                 debts.Add(new GetDebtEntry(dbDebt, lender, debtor));
             }
 
-            return new Response<GetDebtEntry>()
+            return new PagedData<GetDebtEntry>()
             {
                 Data = debts,
                 TotalPages = resp.TotalPages,

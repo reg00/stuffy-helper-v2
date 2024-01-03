@@ -31,7 +31,7 @@ namespace StuffyHelper.Core.Features.Participant
             return new GetParticipantEntry(entry, new GetUserEntry(user), entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x)));
         }
 
-        public async Task<Response<ParticipantShortEntry>> GetParticipantsAsync(
+        public async Task<PagedData<ParticipantShortEntry>> GetParticipantsAsync(
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
@@ -47,7 +47,7 @@ namespace StuffyHelper.Core.Features.Participant
                 participants.Add(new ParticipantShortEntry(participant, new UserShortEntry(user)));
             }
 
-            return new Response<ParticipantShortEntry>()
+            return new PagedData<ParticipantShortEntry>()
             {
                 Data = participants,
                 TotalPages = resp.TotalPages,

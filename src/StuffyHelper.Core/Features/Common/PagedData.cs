@@ -1,6 +1,6 @@
 ﻿namespace StuffyHelper.Core.Features.Common
 {
-    public class Response<T>
+    public class PagedData<T>
     {
         public IEnumerable<T> Data { get; set; } = Enumerable.Empty<T>();
         public int TotalPages { get; set; }

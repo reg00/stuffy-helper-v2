@@ -66,7 +66,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
         }
 
-        public async Task<Response<DebtEntry>> GetDebtsAsync(
+        public async Task<PagedData<DebtEntry>> GetDebtsAsync(
             int offset = 0,
             int limit = 10,
             string? lenderId = null,
@@ -86,7 +86,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .OrderByDescending(e => e.CreatedDate)
                     .ToListAsync(cancellationToken);
 
-                return new Response<DebtEntry>()
+                return new PagedData<DebtEntry>()
                 {
                     Data = searchedData.Skip(offset).Take(limit),
                     TotalPages = (int)Math.Ceiling(searchedData.Count() / (double)limit),
@@ -99,7 +99,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
         }
 
-        public async Task<Response<DebtEntry>> GetDebtsByUserAsync(
+        public async Task<PagedData<DebtEntry>> GetDebtsByUserAsync(
            string userId,
            int offset = 0,
            int limit = 10,
@@ -114,7 +114,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .OrderByDescending(e => e.CreatedDate)
                     .ToListAsync(cancellationToken);
 
-                return new Response<DebtEntry>()
+                return new PagedData<DebtEntry>()
                 {
                     Data = searchedData.Skip(offset).Take(limit),
                     TotalPages = (int)Math.Ceiling(searchedData.Count() / (double)limit),

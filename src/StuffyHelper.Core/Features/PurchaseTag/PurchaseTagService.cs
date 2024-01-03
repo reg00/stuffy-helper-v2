@@ -22,7 +22,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag
             return new GetPurchaseTagEntry(entry);
         }
 
-        public async Task<Response<PurchaseTagShortEntry>> GetPurchaseTagsAsync(
+        public async Task<PagedData<PurchaseTagShortEntry>> GetPurchaseTagsAsync(
             int offset = 0,
             int limit = 10,
             string? name = null,
@@ -32,7 +32,7 @@ namespace StuffyHelper.Core.Features.PurchaseTag
         {
             var resp = await _purchaseTagStore.GetPurchaseTagsAsync(offset, limit, name, purchaseId, isActive, cancellationToken);
 
-            return new Response<PurchaseTagShortEntry>()
+            return new PagedData<PurchaseTagShortEntry>()
             {
                 Data = resp.Data.Select(x => new PurchaseTagShortEntry(x)),
                 TotalPages = resp.TotalPages,

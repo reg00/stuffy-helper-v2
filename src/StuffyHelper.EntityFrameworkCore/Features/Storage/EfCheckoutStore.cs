@@ -42,7 +42,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
             }
         }
 
-        public async Task<Response<CheckoutEntry>> GetCheckoutsByEventIdAsync(Guid eventId, CancellationToken cancellationToken = default)
+        public async Task<PagedData<CheckoutEntry>> GetCheckoutsByEventIdAsync(Guid eventId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
@@ -53,7 +53,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .OrderByDescending(e => e.CreatedDate)
                     .ToListAsync(cancellationToken);
 
-                return new Response<CheckoutEntry>()
+                return new PagedData<CheckoutEntry>()
                 {
                     Data = searchedData,
                     TotalPages = 1,

@@ -31,9 +31,9 @@ namespace StuffyHelper.Tests.UnitTests.Common
             };
         }
 
-        public static Response<PurchaseTagEntry> GetCorrectPurchaseTagResponse()
+        public static PagedData<PurchaseTagEntry> GetCorrectPurchaseTagResponse()
         {
-            return new Response<PurchaseTagEntry>()
+            return new PagedData<PurchaseTagEntry>()
             {
                 Total = 2,
                 TotalPages = 1,

@@ -70,7 +70,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
             };
         }
 
-        public static Response<EventEntry> GetCorrectEventsResponse()
+        public static PagedData<EventEntry> GetCorrectEventsResponse()
         {
             return new()
             {

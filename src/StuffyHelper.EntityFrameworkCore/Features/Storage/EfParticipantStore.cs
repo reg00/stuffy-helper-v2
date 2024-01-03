@@ -42,7 +42,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
         }
 
-        public async Task<Response<ParticipantEntry>> GetParticipantsAsync(
+        public async Task<PagedData<ParticipantEntry>> GetParticipantsAsync(
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
@@ -57,7 +57,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .OrderByDescending(e => e.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
 
-                return new Response<ParticipantEntry>()
+                return new PagedData<ParticipantEntry>()
                 {
                     Data = searchedData.Skip(offset).Take(limit),
                     TotalPages = (int)Math.Ceiling(searchedData.Count() / (double)limit),
