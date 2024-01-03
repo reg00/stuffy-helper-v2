@@ -25,7 +25,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
             };
         }
 
-        public static Response<ParticipantEntry> GetCorrectParticipantResponse()
+        public static PagedData<ParticipantEntry> GetCorrectParticipantResponse()
         {
             return new()
             {

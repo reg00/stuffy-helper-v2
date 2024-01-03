@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StuffyHelper.Api.Features.Models.Request.UnitType;
 using StuffyHelper.Api.Web;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.UnitType;
@@ -8,7 +10,7 @@ using System.Net;
 namespace StuffyHelper.Api.Controllers
 {
     [Authorize]
-    public class UnitTypeController : Controller
+    public class UnitTypeController : ApiControllerBase
     {
         private readonly IUnitTypeService _unitTypeService;
 
@@ -21,21 +23,21 @@ namespace StuffyHelper.Api.Controllers
         /// Получение списка единиц измерения
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Response<UnitTypeShortEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(PagedData<UnitTypeShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetUnitTypesRoute)]
-        public async Task<IActionResult> GetAsync(
+        public async Task<Result<PagedData<UnitTypeShortEntry>>> GetAsync(
             int offset = 0,
             int limit = 10,
             string? name = null,
             Guid? purchaseId = null,
             bool? isActive = null)
         {
-            var unitTypeResponse = await _unitTypeService.GetUnitTypesAsync(offset, limit, name, purchaseId, isActive, HttpContext.RequestAborted);
+            var result = await Mediator.Send(new GetUnitTypeListRequest(offset, limit, name, purchaseId, isActive), HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, unitTypeResponse);
+            return result;
         }
 
         /// <summary>

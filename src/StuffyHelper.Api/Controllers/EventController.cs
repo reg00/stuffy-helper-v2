@@ -30,7 +30,7 @@ namespace StuffyHelper.Api.Controllers
         /// Получение списка ивентов
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Response<EventShortEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(PagedData<EventShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]

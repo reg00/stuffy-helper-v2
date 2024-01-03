@@ -31,7 +31,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
             };
         }
 
-        public static Response<UnitTypeEntry> GetCorrectUnitTypeResponse()
+        public static PagedData<UnitTypeEntry> GetCorrectUnitTypeResponse()
         {
             return new()
             {

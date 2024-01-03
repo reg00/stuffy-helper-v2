@@ -6,7 +6,7 @@ namespace StuffyHelper.Core.Features.Purchase
     {
         Task<GetPurchaseEntry> GetPurchaseAsync(Guid purchaseId, CancellationToken cancellationToken);
 
-        Task<Response<GetPurchaseEntry>> GetPurchasesAsync(
+        Task<PagedData<GetPurchaseEntry>> GetPurchasesAsync(
             int offset = 0,
             int limit = 10,
             string? name = null,

@@ -41,7 +41,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
 
         }
 
-        public async Task<Response<UnitTypeEntry>> GetUnitTypesAsync(
+        public async Task<PagedData<UnitTypeEntry>> GetUnitTypesAsync(
             int offset = 0,
             int limit = 10,
             string? name = null,
@@ -58,7 +58,7 @@ namespace StuffyHelper.EntityFrameworkCore.Features.Storage
                     .OrderByDescending(e => e.Name)
                     .ToListAsync(cancellationToken);
 
-                return new Response<UnitTypeEntry>()
+                return new PagedData<UnitTypeEntry>()
                 {
                     Data = searchedData.Skip(offset).Take(limit),
                     TotalPages = (int)Math.Ceiling(searchedData.Count() / (double)limit),

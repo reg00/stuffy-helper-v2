@@ -80,6 +80,8 @@ namespace StuffyHelper.Api.Registration
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
             });
 
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
             services.AddMinioBlobDataStores(configuration);
 
             services.AddEmailService(configuration);

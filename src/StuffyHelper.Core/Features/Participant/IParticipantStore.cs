@@ -6,7 +6,7 @@ namespace StuffyHelper.Core.Features.Participant
     {
         Task<ParticipantEntry> GetParticipantAsync(Guid participantId, CancellationToken cancellationToken);
 
-        Task<Response<ParticipantEntry>> GetParticipantsAsync(
+        Task<PagedData<ParticipantEntry>> GetParticipantsAsync(
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,

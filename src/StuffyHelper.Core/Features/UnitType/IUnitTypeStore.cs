@@ -6,7 +6,7 @@ namespace StuffyHelper.Core.Features.UnitType
     {
         Task<UnitTypeEntry> GetUnitTypeAsync(Guid unitTypeId, CancellationToken cancellationToken);
 
-        Task<Response<UnitTypeEntry>> GetUnitTypesAsync(
+        Task<PagedData<UnitTypeEntry>> GetUnitTypesAsync(
             int offset = 0,
             int limit = 10,
             string? name = null,

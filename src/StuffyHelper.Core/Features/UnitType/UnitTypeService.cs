@@ -22,7 +22,7 @@ namespace StuffyHelper.Core.Features.UnitType
             return new GetUnitTypeEntry(entry);
         }
 
-        public async Task<Response<UnitTypeShortEntry>> GetUnitTypesAsync(
+        public async Task<Result<PagedData<UnitTypeShortEntry>>> GetUnitTypesAsync(
             int offset = 0,
             int limit = 10,
             string? name = null,
@@ -30,14 +30,22 @@ namespace StuffyHelper.Core.Features.UnitType
             bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
-            var resp = await _unitTypeStore.GetUnitTypesAsync(offset, limit, name, purchaseId, isActive, cancellationToken);
-
-            return new Response<UnitTypeShortEntry>()
+            try
             {
-                Data = resp.Data.Select(x => new UnitTypeShortEntry(x)),
-                TotalPages = resp.TotalPages,
-                Total = resp.Total
-            };
+                var resp = await _unitTypeStore.GetUnitTypesAsync(offset, limit, name, purchaseId, isActive, cancellationToken);
+
+                return Result.Ok(
+                    new PagedData<UnitTypeShortEntry>()
+                    {
+                        Data = resp.Data.Select(x => new UnitTypeShortEntry(x)),
+                        TotalPages = resp.TotalPages,
+                        Total = resp.Total
+                    });
+            }
+            catch (Exception ex)
+            {
+                return Result.Fail<PagedData<UnitTypeShortEntry>>(ex.Message);
+            }
         }
 
         public async Task<UnitTypeShortEntry> AddUnitTypeAsync(UpsertUnitTypeEntry unitType, CancellationToken cancellationToken = default)

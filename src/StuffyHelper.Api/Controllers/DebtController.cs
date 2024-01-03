@@ -26,7 +26,7 @@ namespace StuffyHelper.Api.Controllers
         /// Получение списка долгов
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Response<GetDebtEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(PagedData<GetDebtEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
