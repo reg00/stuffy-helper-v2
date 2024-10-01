@@ -7,9 +7,6 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class PurchaseTagServiceUnitTests : UnitTestsBase
     {
-        public PurchaseTagServiceUnitTests() : base()
-        { }
-
         [Fact]
         public async Task GetPurchaseTagAsync_EmptyInput()
         {

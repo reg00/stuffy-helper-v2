@@ -13,11 +13,6 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class EventServiceUnitTests : UnitTestsBase
     {
-        public EventServiceUnitTests() : base()
-        {
-
-        }
-
         [Fact]
         public async Task GetEventAsync_EmptyInput()
         {

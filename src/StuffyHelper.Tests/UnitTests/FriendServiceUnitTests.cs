@@ -9,11 +9,6 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class FriendServiceUnitTests : UnitTestsBase
     {
-        public FriendServiceUnitTests() : base()
-        {
-
-        }
-
         [Fact]
         public async Task AddFriendAsync_EmptyInput()
         {

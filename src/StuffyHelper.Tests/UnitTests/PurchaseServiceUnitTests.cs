@@ -8,9 +8,6 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class PurchaseServiceUnitTests : UnitTestsBase
     {
-        public PurchaseServiceUnitTests() : base()
-        { }
-
         [Fact]
         public async Task GetPurchaseAsync_EmptyInput()
         {

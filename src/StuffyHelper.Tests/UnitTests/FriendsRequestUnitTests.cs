@@ -10,11 +10,6 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class FriendsRequestUnitTests : UnitTestsBase
     {
-        public FriendsRequestUnitTests() : base()
-        {
-
-        }
-
         [Fact]
         public async Task AcceptRequest_NullInput()
         {
