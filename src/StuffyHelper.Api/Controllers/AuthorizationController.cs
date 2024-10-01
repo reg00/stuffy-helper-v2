@@ -35,6 +35,8 @@ namespace StuffyHelper.Api.Controllers
         /// <summary>
         /// Регистрация пользователя
         /// </summary>
+        /// <param name="model">Модель для регистрации</param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
@@ -73,6 +75,12 @@ namespace StuffyHelper.Api.Controllers
             return Ok("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
         }
 
+        /// <summary>
+        /// Подтверждение почты
+        /// </summary>
+        /// <param name="login">Логин пользователя</param>
+        /// <param name="code">Код, отправленный на почту</param>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
@@ -86,8 +94,10 @@ namespace StuffyHelper.Api.Controllers
         }
 
         /// <summary>
-        /// Логин
+        /// Авторизация
         /// </summary>
+        /// <param name="model">Модель для логина</param>
+        /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
@@ -127,7 +137,7 @@ namespace StuffyHelper.Api.Controllers
         /// <summary>
         /// Отправка на email ссылки на сброс пароля
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">Модель для сброса пароля</param>
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
@@ -156,6 +166,12 @@ namespace StuffyHelper.Api.Controllers
             return Ok("Инструкция по изменению пароля отправлена на почту.");
         }
 
+        /// <summary>
+        /// Сброс пароля. Вызывается при клике на ссылку из почты.
+        /// </summary>
+        /// <param name="email">Почта пользователя</param>
+        /// <param name="code">Код из письма</param>
+        /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordConfirmRoute)]
@@ -170,7 +186,7 @@ namespace StuffyHelper.Api.Controllers
         /// <summary>
         /// Сброс пароля. Выполняется после того, как перейдешь по ссылке на мыле.
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">Модель для сброса пароля</param>
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
@@ -233,6 +249,8 @@ namespace StuffyHelper.Api.Controllers
         /// <summary>
         /// Список зарегистрированных пользователей
         /// </summary>
+        /// <param name="userName">Логин пользователя. Опциональное поле.</param>
+        /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<UserEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -245,6 +263,8 @@ namespace StuffyHelper.Api.Controllers
         /// <summary>
         /// Изменение данных пользователя
         /// </summary>
+        /// <param name="updateModel">Модель для обновления информации пользователя</param>
+        /// <returns></returns>
         [HttpPatch]
         [ProducesResponseType(typeof(UserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
@@ -266,6 +286,8 @@ namespace StuffyHelper.Api.Controllers
         /// <summary>
         /// Изменение аватара пользователя
         /// </summary>
+        /// <param name="file">Новый аватар</param>
+        /// <returns></returns>
         [HttpPost]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AvatarRoute)]

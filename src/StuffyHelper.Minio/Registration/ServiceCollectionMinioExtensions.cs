@@ -22,7 +22,7 @@ namespace StuffyHelper.Minio.Registration
 
             services
                 .AddMinioClient(minioClientOptions)
-                .AddMinioBlobStore(minioClientOptions);
+                .AddMinioBlobStore(configuration, minioClientOptions);
 
             return services;
         }
@@ -41,16 +41,18 @@ namespace StuffyHelper.Minio.Registration
             return services;
         }
 
-        private static IServiceCollection AddMinioBlobStore(this IServiceCollection services, MinioClientOptions minioClientOptions)
+        private static IServiceCollection AddMinioBlobStore(this IServiceCollection services, IConfiguration configuration, MinioClientOptions minioClientOptions)
         {
             EnsureArg.IsNotNull(minioClientOptions, nameof(minioClientOptions));
 
-            var options = new MinioBlobStoreConfigurationSection();
+            var options = new FileStoreConfiguration();
+            configuration.GetSection(MinioClientOptions.DefaultSectionName)
+               .Bind(minioClientOptions);
 
             services.AddScoped<IFileStore>(sp =>
             {
                 var minioClient = sp.GetRequiredService<MinioClient>();
-                return new MinioFileStore(minioClient, options.BucketConfigurationName, minioClientOptions);
+                return new MinioFileStore(minioClient, options.ContainerName, minioClientOptions);
             });
 
             return services;
