@@ -47,11 +47,6 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features
         {
             try
             {
-                var existsUser = _context.Users.Where(x => x.UserName == "admin").ToList();
-
-                if (existsUser.Any())
-                    return;
-
                 StuffyUser user = new()
                 {
                     Id = Guid.NewGuid().ToString(),
@@ -65,6 +60,11 @@ namespace StuffyHelper.Authorization.EntityFrameworkCore.Features
                     PhoneNumber = "+79174409895",
                     EmailConfirmed = true
                 };
+
+                var existsUser = _context.Users.Where(x => x.UserName == user.UserName).ToList();
+
+                if (existsUser.Any())
+                    return;
 
                 _context.Users.Add(user);
 

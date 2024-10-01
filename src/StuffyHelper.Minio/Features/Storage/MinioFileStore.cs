@@ -16,21 +16,6 @@ namespace StuffyHelper.Minio.Features.Storage
         private readonly MinioClient _client;
 
         public MinioFileStore(MinioClient client,
-            IOptionsMonitor<BlobContainerConfiguration> namedBlobBucketConfigurationAccessor,
-            MinioClientOptions minioClientOptions)
-        {
-            EnsureArg.IsNotNull(client, nameof(client));
-            EnsureArg.IsNotNull(namedBlobBucketConfigurationAccessor, nameof(namedBlobBucketConfigurationAccessor));
-
-            var bucketConfiguration = namedBlobBucketConfigurationAccessor
-                .Get(Constants.BlobBucketConfigurationName);
-
-            _client = client;
-            _bucket = client.GetBucketClientAsync(minioClientOptions, bucketConfiguration.ContainerName).Result;
-            SetPublicPolicy(bucketConfiguration.ContainerName);
-        }
-
-        public MinioFileStore(MinioClient client,
             string bucketName,
             MinioClientOptions minioClientOptions)
         {

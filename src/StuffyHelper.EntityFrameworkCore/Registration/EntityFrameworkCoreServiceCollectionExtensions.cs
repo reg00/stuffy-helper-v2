@@ -19,7 +19,7 @@ namespace StuffyHelper.EntityFrameworkCore.Registration
             EnsureArg.IsNotNull(configuration, nameof(configuration));
 
             var entityFrameworkConfiguration = new EntityFrameworkConfiguration();
-            configuration.GetSection(Constants.EntityFrameworkConfigurationSection)
+            configuration.GetSection(EntityFrameworkConfiguration.DefaultSectionName)
                 .Bind(entityFrameworkConfiguration);
 
             services.AddSingleton(Options.Create(entityFrameworkConfiguration));
