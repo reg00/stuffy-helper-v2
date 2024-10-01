@@ -6,12 +6,12 @@ namespace StuffyHelper.Core.Features.Media
 {
     public class GetMediaEntry
     {
-        public Guid Id { get; set; }
-        public FileType FileType { get; set; }
-        public string FileName { get; set; } = string.Empty;
-        public MediaType MediaType { get; set; }
-        public string Link { get; set; } = string.Empty;
-        public EventShortEntry? Event { get; set; }
+        public Guid Id { get; init; }
+        public FileType FileType { get; init; }
+        public string FileName { get; init; } = string.Empty;
+        public MediaType MediaType { get; init; }
+        public string Link { get; init; } = string.Empty;
+        public EventShortEntry? Event { get; init; }
 
         public GetMediaEntry(MediaEntry media)
         {

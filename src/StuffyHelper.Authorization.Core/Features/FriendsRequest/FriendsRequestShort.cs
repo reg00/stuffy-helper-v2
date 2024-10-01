@@ -4,11 +4,11 @@ namespace StuffyHelper.Authorization.Core.Features.Friend
 {
     public class FriendsRequestShort
     {
-        public Guid Id { get; set; }
-        public string UserIdFrom { get; set; }
-        public string UserIdTo { get; set; } = string.Empty;
-        public string UserNameFrom { get; set; } = string.Empty;
-        public string UserNameTo { get; set; } = string.Empty;
+        public Guid Id { get; init; }
+        public string UserIdFrom { get; init; }
+        public string UserIdTo { get; init; } = string.Empty;
+        public string UserNameFrom { get; init; } = string.Empty;
+        public string UserNameTo { get; init; } = string.Empty;
 
         public FriendsRequestShort(FriendsRequest request)
         {

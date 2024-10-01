@@ -6,10 +6,10 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
     public class PurchaseUsageShortEntry
     {
         [Required]
-        public Guid PurchaseUsageId { get; set; }
-        public Guid PurchaseId { get; set; }
-        public Guid ParticipantId { get; set; }
-        public double Amount { get; set; }
+        public Guid PurchaseUsageId { get; init; }
+        public Guid PurchaseId { get; init; }
+        public Guid ParticipantId { get; init; }
+        public double Amount { get; init; }
 
         public PurchaseUsageShortEntry(PurchaseUsageEntry entry)
         {

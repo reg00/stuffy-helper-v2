@@ -8,7 +8,7 @@ namespace StuffyHelper.Core.Features.Checkout
     {
         public Guid Id { get; set; }
 
-        public Guid EventId { get; set; }
+        public Guid EventId { get; init; }
 
         public DateTimeOffset CreatedDate { get; set; }
 

@@ -10,25 +10,25 @@ namespace StuffyHelper.Core.Features.Event
     public class GetEventEntry
     {
         [Required]
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         [Required]
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
+        public string Description { get; init; } = string.Empty;
         [Required]
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; init; }
         [Required]
-        public DateTime EventDateStart { get; set; }
-        public DateTime? EventDateEnd { get; set; }
+        public DateTime EventDateStart { get; init; }
+        public DateTime? EventDateEnd { get; init; }
         [Required]
-        public bool IsCompleted { get; set; }
-        public Uri? MediaUri { get; set; }
+        public bool IsCompleted { get; init; }
+        public Uri? MediaUri { get; init; }
 
 
         [Required]
-        public UserShortEntry? User { get; set; }
-        public List<ParticipantShortEntry> Participants { get; set; }
-        public List<PurchaseShortEntry> Purchases { get; set; }
-        public List<MediaShortEntry> Medias { get; set; }
+        public UserShortEntry? User { get; init; }
+        public List<ParticipantShortEntry> Participants { get; init; }
+        public List<PurchaseShortEntry> Purchases { get; init; }
+        public List<MediaShortEntry> Medias { get; init; }
 
 
         public GetEventEntry()

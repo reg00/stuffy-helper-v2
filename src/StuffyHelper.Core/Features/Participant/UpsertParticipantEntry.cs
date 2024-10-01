@@ -5,9 +5,9 @@ namespace StuffyHelper.Core.Features.Participant
     public class UpsertParticipantEntry
     {
         [Required]
-        public Guid EventId { get; set; }
+        public Guid EventId { get; init; }
         [Required]
-        public string UserId { get; set; } = string.Empty;
+        public string UserId { get; init; } = string.Empty;
 
         public ParticipantEntry ToCommonEntry()
         {

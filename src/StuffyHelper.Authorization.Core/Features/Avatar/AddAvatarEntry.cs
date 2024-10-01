@@ -6,8 +6,8 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
 {
     public class AddAvatarEntry
     {
-        public string UserId { get; set; } = string.Empty;
-        public IFormFile? File { get; set; }
+        public string UserId { get; init; } = string.Empty;
+        public IFormFile? File { get; init; }
 
         public AddAvatarEntry()
         {

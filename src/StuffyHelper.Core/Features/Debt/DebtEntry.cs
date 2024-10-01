@@ -5,8 +5,8 @@ namespace StuffyHelper.Core.Features.Debt
 {
     public class DebtEntry
     {
-        public Guid Id { get; set; }
-        public Guid EventId { get; set; }
+        public Guid Id { get; init; }
+        public Guid EventId { get; init; }
         public Guid? CheckoutId { get; set; }
         public string LenderId { get; set; } = string.Empty;
         public string DebtorId { get; set; } = string.Empty;
@@ -15,7 +15,7 @@ namespace StuffyHelper.Core.Features.Debt
         public bool IsComfirmed { get; set; }
         public DateTimeOffset CreatedDate { get; set; }
 
-        public virtual EventEntry Event { get; set; }
+        public virtual EventEntry Event { get; init; }
         public virtual CheckoutEntry Checkout { get; set; }
 
         public DebtEntry()

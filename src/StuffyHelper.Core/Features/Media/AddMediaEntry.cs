@@ -7,11 +7,11 @@ namespace StuffyHelper.Core.Features.Media
     public class AddMediaEntry
     {
         [Required]
-        public Guid EventId { get; set; }
+        public Guid EventId { get; init; }
         public IFormFile? File { get; set; }
         [Required]
-        public MediaType MediaType { get; set; }
-        public string Link { get; set; } = string.Empty;
+        public MediaType MediaType { get; init; }
+        public string Link { get; init; } = string.Empty;
 
         public AddMediaEntry()
         {

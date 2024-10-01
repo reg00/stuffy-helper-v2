@@ -4,15 +4,15 @@ namespace StuffyHelper.Authorization.Core.Models
 {
     public class UserEntry
     {
-        public string Id { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string Role { get; set; } = string.Empty;
-        public string FirstName { get; set; } = string.Empty;
-        public string MiddleName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public string Phone { get; set; } = string.Empty;
-        public Uri? ImageUri { get; set; }
+        public string Id { get; init; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
+        public string Email { get; init; } = string.Empty;
+        public string Role { get; init; } = string.Empty;
+        public string FirstName { get; init; } = string.Empty;
+        public string MiddleName { get; init; } = string.Empty;
+        public string LastName { get; init; } = string.Empty;
+        public string Phone { get; init; } = string.Empty;
+        public Uri? ImageUri { get; init; }
 
         public UserEntry()
         { }

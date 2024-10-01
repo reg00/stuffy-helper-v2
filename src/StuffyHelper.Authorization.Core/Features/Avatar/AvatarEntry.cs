@@ -6,8 +6,8 @@ namespace StuffyHelper.Authorization.Core.Features.Avatar
 {
     public class AvatarEntry
     {
-        public Guid Id { get; set; }
-        public string UserId { get; set; } = string.Empty;
+        public Guid Id { get; init; }
+        public string UserId { get; init; } = string.Empty;
         public string FileName { get; set; } = string.Empty;
         public DateTimeOffset CreatedDate { get; set; }
         public FileType FileType { get; set; }

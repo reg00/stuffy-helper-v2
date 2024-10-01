@@ -4,9 +4,9 @@ namespace StuffyHelper.Core.Features.Common
 {
     public class ErrorResponse
     {
-        public string Message { get; set; } = string.Empty;
+        public string Message { get; init; } = string.Empty;
 
-        public Dictionary<string, string[]> Errors { get; set; } = new Dictionary<string, string[]>();
+        public Dictionary<string, string[]> Errors { get; init; } = new Dictionary<string, string[]>();
 
         public ErrorResponse()
         {
