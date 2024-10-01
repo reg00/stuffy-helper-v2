@@ -7,11 +7,11 @@ namespace StuffyHelper.Core.Features.Participant
 {
     public class ParticipantEntry
     {
-        public Guid Id { get; set; }
-        public string UserId { get; set; } = string.Empty;
+        public Guid Id { get; init; }
+        public string UserId { get; init; } = string.Empty;
         public Guid EventId { get; set; }
 
-        public virtual EventEntry Event { get; set; }
+        public virtual EventEntry Event { get; init; }
         public virtual List<PurchaseEntry> Purchases { get; set; } = new List<PurchaseEntry>();
         public virtual List<PurchaseUsageEntry> PurchaseUsages { get; set; } = new List<PurchaseUsageEntry>();
 

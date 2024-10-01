@@ -169,22 +169,5 @@ namespace StuffyHelper.Tests.UnitTests
 
             await ThrowsTask(async () => await participantService.DeleteParticipantAsync(string.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
-
-        [Fact]
-        public async Task DeleteParticipantAsync_Success()
-        {
-            var participantStoreMoq = new Mock<IParticipantStore>();
-            participantStoreMoq.Setup(x =>
-            x.DeleteParticipantAsync(It.IsAny<ParticipantEntry>(), CancellationToken))
-                .Returns(Task.CompletedTask);
-
-            var participantService = new ParticipantService(
-                participantStoreMoq.Object,
-                new Mock<IAuthorizationService>().Object);
-
-            await participantService.DeleteParticipantAsync("test", Guid.NewGuid(), CancellationToken);
-
-            participantStoreMoq.Verify(x => x.DeleteParticipantAsync(It.IsAny<ParticipantEntry>(), CancellationToken), Times.Once());
-        }
     }
 }

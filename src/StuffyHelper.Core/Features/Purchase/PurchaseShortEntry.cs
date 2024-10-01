@@ -8,20 +8,20 @@ namespace StuffyHelper.Core.Features.Purchase
     public class PurchaseShortEntry
     {
         [Required]
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         [Required]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
         [Required]
-        public double Cost { get; set; }
+        public double Cost { get; init; }
         [Required]
-        public double Amount { get; set; }
+        public double Amount { get; init; }
         [Required]
-        public bool IsPartial { get; set; }
+        public bool IsPartial { get; init; }
         [Required]
-        public bool IsComplete { get; set; }
+        public bool IsComplete { get; init; }
 
-        public List<PurchaseTagShortEntry> PurchaseTags { get; set; }
-        public UnitTypeShortEntry? UnitType { get; set; }
+        public List<PurchaseTagShortEntry> PurchaseTags { get; init; }
+        public UnitTypeShortEntry? UnitType { get; init; }
 
         public PurchaseShortEntry(PurchaseEntry entry)
         {

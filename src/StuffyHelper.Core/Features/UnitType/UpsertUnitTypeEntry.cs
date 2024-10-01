@@ -5,7 +5,7 @@ namespace StuffyHelper.Core.Features.UnitType
     public class UpsertUnitTypeEntry
     {
         [Required]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
 
         public UnitTypeEntry ToCommonEntry()
         {

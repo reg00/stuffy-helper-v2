@@ -9,20 +9,20 @@ namespace StuffyHelper.Core.Features.Event
 {
     public class EventEntry
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public DateTime EventDateStart { get; set; }
         public DateTime? EventDateEnd { get; set; }
-        public string UserId { get; set; } = string.Empty;
+        public string UserId { get; init; } = string.Empty;
         public Uri? ImageUri { get; set; }
         public bool IsCompleted { get; set; }
         public bool IsActive { get; set; }
 
         public virtual List<CheckoutEntry> Checkouts { get; set; } = new List<CheckoutEntry>();
         public virtual List<ParticipantEntry> Participants { get; set; } = new List<ParticipantEntry>();
-        public virtual List<PurchaseEntry> Purchases { get; set; } = new List<PurchaseEntry>();
+        public virtual List<PurchaseEntry> Purchases { get; init; } = new List<PurchaseEntry>();
         public virtual List<MediaEntry> Medias { get; set; } = new List<MediaEntry>();
         public virtual List<DebtEntry> Debts { get; set; } = new List<DebtEntry>();
 

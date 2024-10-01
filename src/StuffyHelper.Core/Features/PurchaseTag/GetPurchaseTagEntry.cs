@@ -7,11 +7,11 @@ namespace StuffyHelper.Core.Features.PurchaseTag
     public class GetPurchaseTagEntry
     {
         [Required]
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         [Required]
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
 
-        public List<PurchaseShortEntry> Purchases { get; set; }
+        public List<PurchaseShortEntry> Purchases { get; init; }
 
         public GetPurchaseTagEntry(PurchaseTagEntry entry)
         {

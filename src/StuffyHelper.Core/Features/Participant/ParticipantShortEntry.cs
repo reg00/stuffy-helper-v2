@@ -7,9 +7,9 @@ namespace StuffyHelper.Core.Features.Participant
     public class ParticipantShortEntry
     {
         [Required]
-        public Guid Id { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public Uri? ImageUri { get; set; }
+        public Guid Id { get; init; }
+        public string Name { get; init; } = string.Empty;
+        public Uri? ImageUri { get; init; }
 
         public ParticipantShortEntry(ParticipantEntry entry, UserShortEntry? user = null)
         {

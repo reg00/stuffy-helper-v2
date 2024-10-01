@@ -3,8 +3,8 @@
     public class UserShortEntry
     {
         public string Id { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
-        public Uri? ImageUri { get; set; }
+        public string Name { get; init; } = string.Empty;
+        public Uri? ImageUri { get; init; }
 
         public UserShortEntry()
         { }

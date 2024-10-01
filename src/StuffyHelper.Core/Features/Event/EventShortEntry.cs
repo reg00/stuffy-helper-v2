@@ -6,16 +6,16 @@ namespace StuffyHelper.Core.Features.Event
     public class EventShortEntry
     {
         [Required]
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         [Required]
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string Name { get; init; } = string.Empty;
+        public string Description { get; init; } = string.Empty;
         [Required]
-        public DateTime? EventDateStart { get; set; }
-        public DateTime? EventDateEnd { get; set;}
+        public DateTime? EventDateStart { get; init; }
+        public DateTime? EventDateEnd { get; init;}
         [Required]
-        public bool IsCompleted { get; set; }
-        public Uri? ImageUri { get; set; }
+        public bool IsCompleted { get; init; }
+        public Uri? ImageUri { get; init; }
 
         public EventShortEntry(EventEntry entry)
         {

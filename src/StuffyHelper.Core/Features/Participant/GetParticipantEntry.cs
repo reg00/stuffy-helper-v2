@@ -10,14 +10,14 @@ namespace StuffyHelper.Core.Features.Participant
     public class GetParticipantEntry
     {
         [Required]
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
 
         [Required]
-        public GetUserEntry? User { get; set; }
+        public GetUserEntry? User { get; init; }
         [Required]
-        public EventShortEntry? Event { get; set; }
-        public List<PurchaseShortEntry> Purchases { get; set; }
-        public IEnumerable<PurchaseUsageShortEntry> PurchaseUsages { get; set; }
+        public EventShortEntry? Event { get; init; }
+        public List<PurchaseShortEntry> Purchases { get; init; }
+        public IEnumerable<PurchaseUsageShortEntry> PurchaseUsages { get; init; }
 
 
         public GetParticipantEntry()
