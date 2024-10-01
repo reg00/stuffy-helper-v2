@@ -8,11 +8,6 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class ParticipantServiceUnitTests : UnitTestsBase
     {
-        public ParticipantServiceUnitTests() : base()
-        {
-
-        }
-
         [Fact]
         public async Task GetParticipantAsync_EmptyInput()
         {

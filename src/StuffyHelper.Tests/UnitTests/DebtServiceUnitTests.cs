@@ -11,11 +11,6 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class DebtServiceUnitTests : UnitTestsBase
     {
-        public DebtServiceUnitTests() : base()
-        {
-
-        }
-
         [Fact]
         public async Task GetDebtAsync_EmptyInput()
         {

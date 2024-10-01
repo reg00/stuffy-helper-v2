@@ -8,11 +8,6 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class AvatarServiceUnitTests : UnitTestsBase
     {
-        public AvatarServiceUnitTests() : base()
-        {
-
-        }
-
         [Fact]
         public async Task DeleteAvatarAsync_EmptyUserId()
         {

@@ -9,11 +9,6 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class MediaServiceUnitTests : UnitTestsBase
     {
-        public MediaServiceUnitTests() : base()
-        {
-
-        }
-
         [Fact]
         public async Task DeleteMediaAsync_EmptyInput()
         {

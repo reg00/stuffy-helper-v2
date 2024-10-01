@@ -7,9 +7,6 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class UnitTypeServiceUnitTests : UnitTestsBase
     {
-        public UnitTypeServiceUnitTests() : base()
-        { }
-
         [Fact]
         public async Task GetUnitTypeAsync_EmptyInput()
         {
