@@ -98,3 +98,14 @@ services:
 networks:
   app-network:
     driver: bridge
+  stuffyhelper.authorization.api:
+    image: stuffyhelper.authorization.api
+    build:
+      context: .
+      dockerfile: src/StuffyHelper.Authorization.Api/Dockerfile
+
+  stuffyhelper.emailservice.api:
+    image: stuffyhelper.emailservice.api
+    build:
+      context: .
+      dockerfile: src/StuffyHelper.EmailService.Api/Dockerfile

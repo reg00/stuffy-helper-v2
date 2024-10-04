@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
 using StuffyHelper.EmailService.Core.Configs;
-using StuffyHelper.EmailService.Core.Service;
+using StuffyHelper.EmailService.Core.Service.Interfaces;
 
 namespace StuffyHelper.EmailService.Core.Registration
 {
@@ -37,7 +37,7 @@ namespace StuffyHelper.EmailService.Core.Registration
                 });
             });
 
-            services.AddScoped<IEmailService, Service.EmailService>();
+            services.AddScoped<IStuffyEmailService, Service.StuffyStuffyEmailService>();
 
             return services;
         }

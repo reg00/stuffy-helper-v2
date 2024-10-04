@@ -13,7 +13,7 @@ using StuffyHelper.EmailService.Core.Service;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net;
 
-namespace StuffyHelper.Api.Controllers
+namespace StuffyHelper.Authorization.Api.Controllers
 {
     [Authorize]
     public class AuthorizationController : Controller
