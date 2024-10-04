@@ -365,3 +365,5 @@ FodyWeavers.xsd
 /src/StuffyHelper.Hosting/appsettings.Development.json
 /.env
 nuget.config
+.idea
+src/StuffyHelper.EmailService.Api/appsettings.Development.json
