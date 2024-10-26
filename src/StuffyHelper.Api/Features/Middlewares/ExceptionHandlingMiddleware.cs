@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core.Exceptions;
+using StuffyHelper.Authorization.Core1.Exceptions;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using System.ComponentModel.DataAnnotations;

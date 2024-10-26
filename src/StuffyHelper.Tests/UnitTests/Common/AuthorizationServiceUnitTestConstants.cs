@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using StuffyHelper.Authorization.Core.Configs;
-using StuffyHelper.Authorization.Core.Models;
-using StuffyHelper.Authorization.Core.Models.User;
+using StuffyHelper.Authorization.Core1.Configs;
+using StuffyHelper.Authorization.Core1.Models;
+using StuffyHelper.Authorization.Core1.Models.User;
 using System.Security.Claims;
 using System.Text;
 

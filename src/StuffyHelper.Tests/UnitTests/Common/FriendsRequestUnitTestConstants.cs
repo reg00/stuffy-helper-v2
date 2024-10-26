@@ -1,4 +1,4 @@
-﻿using StuffyHelper.Authorization.Core.Features.Friend;
+﻿using StuffyHelper.Authorization.Core1.Features.Friend;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {

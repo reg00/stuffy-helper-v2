@@ -1,6 +1,6 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using StuffyHelper.EmailService.Core.Models;
+using StuffyHelper.EmailService.Contracts.Models;
 using StuffyHelper.EmailService.Core.Service.Interfaces;
 
 namespace StuffyHelper.EmailService.Api.Controllers;

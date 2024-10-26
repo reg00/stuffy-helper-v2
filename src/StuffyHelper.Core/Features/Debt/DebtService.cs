@@ -1,6 +1,6 @@
 ﻿using EnsureThat;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core.Features;
+using StuffyHelper.Authorization.Core1.Features;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Checkout;
 using StuffyHelper.Core.Features.Common;

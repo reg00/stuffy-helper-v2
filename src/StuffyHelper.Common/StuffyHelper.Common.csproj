@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\StuffyHelper.Authorization.Contracts\StuffyHelper.Authorization.Contracts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.0-rc.2.24473.5" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0-rc.2.24473.5" />
+      <PackageReference Include="RestSharp" Version="112.1.0" />
+    </ItemGroup>
+
+</Project>

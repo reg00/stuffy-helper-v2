@@ -1,7 +1,7 @@
 ﻿using EnsureThat;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core.Features;
-using StuffyHelper.Authorization.Core.Models.User;
+using StuffyHelper.Authorization.Core1.Features;
+using StuffyHelper.Authorization.Core1.Models.User;
 using StuffyHelper.Core.Features.Common;
 
 namespace StuffyHelper.Core.Features.PurchaseUsage

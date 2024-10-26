@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32516.85
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Authorization.EntityFrameworkCore", "src\StuffyHelper.Authorization.EntityFrameworkCore\StuffyHelper.Authorization.EntityFrameworkCore.csproj", "{DA3CF683-6F90-43F0-AAB0-C368F8F1F593}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Authorization.EntityFrameworkCore1", "src\StuffyHelper.Authorization.EntityFrameworkCore1\StuffyHelper.Authorization.EntityFrameworkCore1.csproj", "{DA3CF683-6F90-43F0-AAB0-C368F8F1F593}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Authorization.Core", "src\StuffyHelper.Authorization.Core\StuffyHelper.Authorization.Core.csproj", "{33B78268-CE05-4231-AEA4-1BF6AD0AAA32}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Authorization.Core1", "src\StuffyHelper.Authorization.Core1\StuffyHelper.Authorization.Core1.csproj", "{33B78268-CE05-4231-AEA4-1BF6AD0AAA32}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StuffyHelper.Api", "src\StuffyHelper.Api\StuffyHelper.Api.csproj", "{D9252782-73E9-4D50-8700-B3307D3A2E75}"
 EndProject
@@ -35,6 +35,20 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EmailService", "EmailService", "{7C914DB3-5AA0-4792-B8C2-F835127D323C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StuffyHelper.EmailService.Api", "src\StuffyHelper.EmailService.Api\StuffyHelper.EmailService.Api.csproj", "{3CA1D1E5-E680-4CB0-8899-04052DE5A385}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StuffyHelper.Authorization.Data", "src\StuffyHelper.Authorization.Data\StuffyHelper.Authorization.Data.csproj", "{BD5DC2C9-77E6-4872-9B90-86726C720F61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StuffyHelper.Authorization.Core", "src\StuffyHelper.Authorization.Core\StuffyHelper.Authorization.Core.csproj", "{6815FE81-A8FD-4505-8D85-96F0B8169A41}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{34E30156-2E8C-425E-B67F-587065C5F6EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StuffyHelper.Common", "src\StuffyHelper.Common\StuffyHelper.Common.csproj", "{515D0B69-7080-4D3D-8A0D-9A7F81C354EB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StuffyHelper.Authorization.Contracts", "src\StuffyHelper.Authorization.Contracts\StuffyHelper.Authorization.Contracts.csproj", "{85029C19-D52E-45EF-8187-436EAD93C684}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StuffyHelper.EmailService.Contracts", "src\StuffyHelper.EmailService.Contracts\StuffyHelper.EmailService.Contracts.csproj", "{9F7EF9A7-D650-4B09-981A-7D4CA7695347}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StuffyHelper.Common.Client", "src\StuffyHelper.Common.Client\StuffyHelper.Common.Client.csproj", "{38196E4C-6B06-4D23-93DB-45277916506D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +100,30 @@ Global
 		{3CA1D1E5-E680-4CB0-8899-04052DE5A385}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CA1D1E5-E680-4CB0-8899-04052DE5A385}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3CA1D1E5-E680-4CB0-8899-04052DE5A385}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD5DC2C9-77E6-4872-9B90-86726C720F61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD5DC2C9-77E6-4872-9B90-86726C720F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD5DC2C9-77E6-4872-9B90-86726C720F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD5DC2C9-77E6-4872-9B90-86726C720F61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6815FE81-A8FD-4505-8D85-96F0B8169A41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6815FE81-A8FD-4505-8D85-96F0B8169A41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6815FE81-A8FD-4505-8D85-96F0B8169A41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6815FE81-A8FD-4505-8D85-96F0B8169A41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{515D0B69-7080-4D3D-8A0D-9A7F81C354EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{515D0B69-7080-4D3D-8A0D-9A7F81C354EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{515D0B69-7080-4D3D-8A0D-9A7F81C354EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{515D0B69-7080-4D3D-8A0D-9A7F81C354EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85029C19-D52E-45EF-8187-436EAD93C684}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85029C19-D52E-45EF-8187-436EAD93C684}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85029C19-D52E-45EF-8187-436EAD93C684}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85029C19-D52E-45EF-8187-436EAD93C684}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F7EF9A7-D650-4B09-981A-7D4CA7695347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F7EF9A7-D650-4B09-981A-7D4CA7695347}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F7EF9A7-D650-4B09-981A-7D4CA7695347}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F7EF9A7-D650-4B09-981A-7D4CA7695347}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38196E4C-6B06-4D23-93DB-45277916506D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38196E4C-6B06-4D23-93DB-45277916506D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38196E4C-6B06-4D23-93DB-45277916506D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38196E4C-6B06-4D23-93DB-45277916506D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -105,5 +143,11 @@ Global
 		{5736D6CE-8989-4483-BD8F-BDD15ED655FA} = {F465E904-50EF-49BD-92A5-3D4C4067A985}
 		{4FB3FB89-73D9-4557-8ADF-4FD17FC06557} = {7C914DB3-5AA0-4792-B8C2-F835127D323C}
 		{3CA1D1E5-E680-4CB0-8899-04052DE5A385} = {7C914DB3-5AA0-4792-B8C2-F835127D323C}
+		{BD5DC2C9-77E6-4872-9B90-86726C720F61} = {F465E904-50EF-49BD-92A5-3D4C4067A985}
+		{6815FE81-A8FD-4505-8D85-96F0B8169A41} = {F465E904-50EF-49BD-92A5-3D4C4067A985}
+		{515D0B69-7080-4D3D-8A0D-9A7F81C354EB} = {34E30156-2E8C-425E-B67F-587065C5F6EF}
+		{85029C19-D52E-45EF-8187-436EAD93C684} = {F465E904-50EF-49BD-92A5-3D4C4067A985}
+		{9F7EF9A7-D650-4B09-981A-7D4CA7695347} = {7C914DB3-5AA0-4792-B8C2-F835127D323C}
+		{38196E4C-6B06-4D23-93DB-45277916506D} = {34E30156-2E8C-425E-B67F-587065C5F6EF}
 	EndGlobalSection
 EndGlobal

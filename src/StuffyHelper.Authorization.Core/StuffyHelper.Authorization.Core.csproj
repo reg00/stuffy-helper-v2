@@ -1,23 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Ensure.That" Version="10.1.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.8" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Reg00.Infrastructure" Version="1.0.1" />
-    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-  </ItemGroup>
+    <ItemGroup>
+      <PackageReference Include="Ensure.That" Version="10.1.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.0-rc.2.24474.3" />
+      <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\StuffyHelper.EmailService.Core\StuffyHelper.EmailService.Core.csproj" />
-    <ProjectReference Include="..\StuffyHelper.Minio\StuffyHelper.Minio.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\StuffyHelper.Authorization.Data\StuffyHelper.Authorization.Data.csproj" />
+      <ProjectReference Include="..\StuffyHelper.Common\StuffyHelper.Common.csproj" />
+      <ProjectReference Include="..\StuffyHelper.Minio\StuffyHelper.Minio.csproj" />
+    </ItemGroup>
 
 </Project>

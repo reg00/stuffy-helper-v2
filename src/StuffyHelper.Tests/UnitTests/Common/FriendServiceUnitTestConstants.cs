@@ -1,5 +1,5 @@
-﻿using StuffyHelper.Authorization.Core.Features.Friends;
-using StuffyHelper.Authorization.Core.Models;
+﻿using StuffyHelper.Authorization.Core1.Features.Friends;
+using StuffyHelper.Authorization.Core1.Models;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {

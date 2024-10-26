@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\StuffyHelper.Authorization.Core\StuffyHelper.Authorization.Core.csproj" />
+    <ProjectReference Include="..\StuffyHelper.Authorization.Core1\StuffyHelper.Authorization.Core1.csproj" />
   </ItemGroup>
 
 </Project>

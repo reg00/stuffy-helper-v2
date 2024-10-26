@@ -1,6 +1,6 @@
 ﻿using Moq;
-using StuffyHelper.Authorization.Core.Features;
-using StuffyHelper.Authorization.Core.Features.Friends;
+using StuffyHelper.Authorization.Core1.Features;
+using StuffyHelper.Authorization.Core1.Features.Friends;
 using StuffyHelper.Tests.UnitTests.Common;
 using System.Security.Claims;
 

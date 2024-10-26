@@ -2,9 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Api.Web;
-using StuffyHelper.Authorization.Core.Features.Friends;
-using StuffyHelper.Authorization.Core.Models;
-using StuffyHelper.Authorization.Core.Models.User;
+using StuffyHelper.Authorization.Core1.Features.Friends;
+using StuffyHelper.Authorization.Core1.Models;
+using StuffyHelper.Authorization.Core1.Models.User;
 using StuffyHelper.Core.Features.Common;
 using System.Net;
 

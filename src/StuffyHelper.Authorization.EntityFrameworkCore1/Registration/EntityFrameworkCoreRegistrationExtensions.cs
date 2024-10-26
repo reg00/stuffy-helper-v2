@@ -1,0 +1,62 @@
+﻿using EnsureThat;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using StuffyHelper.Authorization.Core1.Configs;
+using StuffyHelper.Authorization.Core1.Features;
+using StuffyHelper.Authorization.Core1.Features.Avatar;
+using StuffyHelper.Authorization.Core1.Features.Friend;
+using StuffyHelper.Authorization.Core1.Features.Friends;
+using StuffyHelper.Authorization.Core1.Models.User;
+using StuffyHelper.Authorization.EntityFrameworkCore1.Features;
+using StuffyHelper.Authorization.EntityFrameworkCore1.Features.Schema;
+using StuffyHelper.Authorization.EntityFrameworkCore1.Features.Storage;
+
+namespace StuffyHelper.Authorization.EntityFrameworkCore1.Registration
+{
+    public static class EntityFrameworkCoreRegistrationExtensions
+    {
+        public static IServiceCollection AddEfAuthDbServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            var authOptions = configuration.GetSection(AuthorizationConfiguration.DefaultSectionName)
+                                                    .Get<AuthorizationConfiguration>();
+
+            EnsureArg.IsNotNull(authOptions, nameof(authOptions));
+
+            services.AddDbContext<UserDbContext>(
+                options => options.UseNpgsql(authOptions.ConnectionString));
+
+            services.AddIdentity<StuffyUser, IdentityRole>(options =>
+            {
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = true;
+                options.User.RequireUniqueEmail = true;
+            })
+                    .AddEntityFrameworkStores<UserDbContext>()
+                    .AddDefaultTokenProviders();
+
+            services.AddScoped<IInitializer, EfInitializer>();
+            services.AddScoped<IFriendsRequestStore, EfFriendsRequestStorage>();
+            services.AddScoped<IFriendStore, EfFriendStorage>();
+            services.AddScoped<IAvatarStore, EfAvatarStore>();
+
+            return services;
+        }
+
+        public static IServiceProvider AddAuthDatabaseMigration(this IServiceProvider services)
+        {
+            using (var scope = services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+
+                dbContext.Database.Migrate();
+            }
+
+            return services;
+        }
+    }
+}

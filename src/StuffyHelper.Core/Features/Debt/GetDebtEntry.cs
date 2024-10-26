@@ -1,6 +1,6 @@
 ﻿using EnsureThat;
-using StuffyHelper.Authorization.Core.Models;
-using StuffyHelper.Authorization.Core.Models.User;
+using StuffyHelper.Authorization.Core1.Models;
+using StuffyHelper.Authorization.Core1.Models.User;
 using StuffyHelper.Core.Features.Event;
 
 namespace StuffyHelper.Core.Features.Debt

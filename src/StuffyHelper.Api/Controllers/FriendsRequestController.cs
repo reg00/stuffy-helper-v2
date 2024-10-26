@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Api.Web;
-using StuffyHelper.Authorization.Core.Features.Friend;
+using StuffyHelper.Authorization.Core1.Features.Friend;
 using StuffyHelper.Core.Features.Common;
 using System.ComponentModel.DataAnnotations;
 using System.Net;

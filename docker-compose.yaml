@@ -109,3 +109,15 @@ networks:
     build:
       context: .
       dockerfile: src/StuffyHelper.EmailService.Api/Dockerfile
+
+  stuffyhelper.authorization.data:
+    image: stuffyhelper.authorization.data
+    build:
+      context: .
+      dockerfile: src/StuffyHelper.Authorization.Data/Dockerfile
+
+  stuffyhelper.authorization.core:
+    image: stuffyhelper.authorization.core
+    build:
+      context: .
+      dockerfile: StuffyHelper.Authorization.Core/Dockerfile

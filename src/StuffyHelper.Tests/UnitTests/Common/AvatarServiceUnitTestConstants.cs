@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Moq;
-using StuffyHelper.Authorization.Core.Features.Avatar;
+using StuffyHelper.Authorization.Core1.Features.Avatar;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {

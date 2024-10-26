@@ -1,18 +1,18 @@
-﻿using EnsureThat;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core.Configs;
-using StuffyHelper.Authorization.Core.Exceptions;
-using StuffyHelper.Authorization.Core.Models;
-using StuffyHelper.Authorization.Core.Models.User;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using EnsureThat;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using StuffyHelper.Authorization.Contracts.Entities;
+using StuffyHelper.Authorization.Contracts.Enums;
+using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Common.Configurations;
+using StuffyHelper.Common.Exceptions;
 
-namespace StuffyHelper.Authorization.Core.Extensions
-{
-    public static class AuthorizationExtensions
+namespace StuffyHelper.Authorization.Core.Extensions;
+
+public static class AuthorizationExtensions
     {
         private static JwtSecurityToken GetToken(this List<Claim> authClaims, AuthorizationConfiguration authorizationConfiguration)
         {
@@ -33,8 +33,8 @@ namespace StuffyHelper.Authorization.Core.Extensions
         {
             var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new(ClaimTypes.Name, user.UserName ?? string.Empty),
+                    new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
             foreach (var userRole in roles)
@@ -43,25 +43,25 @@ namespace StuffyHelper.Authorization.Core.Extensions
             return authClaims.GetToken(authorizationConfiguration);
         }
 
-        public static async Task CreateRolesIfNotExists(this RoleManager<IdentityRole> _roleManager)
+        public static async Task CreateRolesIfNotExists(this RoleManager<IdentityRole> roleManager)
         {
-            if (!await _roleManager.RoleExistsAsync(nameof(UserType.Admin)))
-                await _roleManager.CreateAsync(new IdentityRole(nameof(UserType.Admin)));
-            if (!await _roleManager.RoleExistsAsync(nameof(UserType.User)))
-                await _roleManager.CreateAsync(new IdentityRole(nameof(UserType.User)));
+            if (!await roleManager.RoleExistsAsync(nameof(UserType.Admin)))
+                await roleManager.CreateAsync(new IdentityRole(nameof(UserType.Admin)));
+            if (!await roleManager.RoleExistsAsync(nameof(UserType.User)))
+                await roleManager.CreateAsync(new IdentityRole(nameof(UserType.User)));
         }
 
-        public static async Task AddRoleToUser(this StuffyUser user, RoleManager<IdentityRole> _roleManager, UserManager<StuffyUser> _userManager, UserType role)
+        public static async Task AddRoleToUser(this StuffyUser user, RoleManager<IdentityRole> roleManager, UserManager<StuffyUser> userManager, UserType role)
         {
             EnsureArg.IsNotNull(user, nameof(user));
-            EnsureArg.IsNotNull(_roleManager, nameof(_roleManager));
-            EnsureArg.IsNotNull(_userManager, nameof(_userManager));
+            EnsureArg.IsNotNull(roleManager, nameof(roleManager));
+            EnsureArg.IsNotNull(userManager, nameof(userManager));
 
-            if (role == UserType.Admin && await _roleManager.RoleExistsAsync(nameof(UserType.Admin)))
-                await _userManager.AddToRoleAsync(user, nameof(UserType.Admin));
+            if (role == UserType.Admin && await roleManager.RoleExistsAsync(nameof(UserType.Admin)))
+                await userManager.AddToRoleAsync(user, nameof(UserType.Admin));
 
-            if (await _roleManager.RoleExistsAsync(nameof(UserType.User)))
-                await _userManager.AddToRoleAsync(user, nameof(UserType.User));
+            if (await roleManager.RoleExistsAsync(nameof(UserType.User)))
+                await userManager.AddToRoleAsync(user, nameof(UserType.User));
         }
 
         public static StuffyUser InitializeUser(this RegisterModel model)
@@ -88,4 +88,3 @@ namespace StuffyHelper.Authorization.Core.Extensions
             }
         }
     }
-}

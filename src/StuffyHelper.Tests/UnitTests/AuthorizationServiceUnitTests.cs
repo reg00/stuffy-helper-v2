@@ -2,11 +2,11 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using StuffyHelper.Authorization.Core.Configs;
-using StuffyHelper.Authorization.Core.Features.Authorization;
-using StuffyHelper.Authorization.Core.Features.Avatar;
-using StuffyHelper.Authorization.Core.Models;
-using StuffyHelper.Authorization.Core.Models.User;
+using StuffyHelper.Authorization.Core1.Configs;
+using StuffyHelper.Authorization.Core1.Features.Authorization;
+using StuffyHelper.Authorization.Core1.Features.Avatar;
+using StuffyHelper.Authorization.Core1.Models;
+using StuffyHelper.Authorization.Core1.Models.User;
 using StuffyHelper.Tests.UnitTests.Common;
 using System.Security.Claims;
 

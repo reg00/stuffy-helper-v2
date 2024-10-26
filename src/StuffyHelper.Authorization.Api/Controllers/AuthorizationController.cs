@@ -1,34 +1,34 @@
-﻿using EnsureThat;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using System.IdentityModel.Tokens.Jwt;
+using EnsureThat;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using StuffyHelper.Api.Web;
-using StuffyHelper.Authorization.Core.Models;
-using StuffyHelper.Authorization.Core.Models.User;
-using StuffyHelper.Core.Configs;
-using StuffyHelper.Core.Features.Common;
-using StuffyHelper.EmailService.Core.Service;
-using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using Microsoft.AspNetCore.Authorization;
+using StuffyHelper.Authorization.Api.Web;
+using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Common.Configurations;
+using StuffyHelper.Common.Messages;
+using StuffyHelper.EmailService.Contracts.Clients.Interfaces;
+using StuffyHelper.EmailService.Contracts.Models;
+using IAuthorizationService = StuffyHelper.Authorization.Core.Services.Interfaces.IAuthorizationService;
 
 namespace StuffyHelper.Authorization.Api.Controllers
 {
     [Authorize]
     public class AuthorizationController : Controller
     {
-        private readonly Authorization.Core.Features.IAuthorizationService _authorizationService;
-        private readonly IEmailService _emailService;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IStuffyEmailClient _emailClient;
         private readonly FrontEndConfiguration _frontEndConfiguration;
 
         public AuthorizationController(
-            Authorization.Core.Features.IAuthorizationService authorizationService,
-            IEmailService emailService,
+            IAuthorizationService authorizationService,
+            IStuffyEmailClient emailClient,
             IOptions<FrontEndConfiguration> options)
         {
             _authorizationService = authorizationService;
-            _emailService = emailService;
+            _emailClient = emailClient;
             _frontEndConfiguration = options.Value;
         }
 
@@ -61,8 +61,14 @@ namespace StuffyHelper.Authorization.Api.Controllers
                 protocol: HttpContext.Request.Scheme,
                 _frontEndConfiguration.Endpoint.OriginalString);
 
-                await _emailService.SendEmailAsync(model.Email, "Confirm your account",
-                    $"Подтвердите регистрацию, перейдя по <a href='{callbackUrl}'>ссылке</a>.");
+                var request = new SendEmailRequest()
+                {
+                    Email = model.Email,
+                    Subject = "Confirm your account",
+                    Message = $"Подтвердите регистрацию, перейдя по <a href='{callbackUrl}'>ссылке</a>."
+                };
+                
+                await _emailClient.SendAsync(request);
 
             }
             catch (Exception)
@@ -151,7 +157,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
                 return BadRequest(new ErrorResponse(ModelState));
             }
 
-            var (name, code) = await _authorizationService.ForgotPasswordAsync(model);
+            var (_, code) = await _authorizationService.ForgotPasswordAsync(model);
 
             var callbackUrl = Url.Action(
                 "ResetPassword",
@@ -160,8 +166,14 @@ namespace StuffyHelper.Authorization.Api.Controllers
                 protocol: HttpContext.Request.Scheme,
                 _frontEndConfiguration.Endpoint.OriginalString);
 
-            await _emailService.SendEmailAsync(model.Email, "Reset password",
-                $"Для того, чтобы изменить пароль, перейдите по этой: <a href='{callbackUrl}'>ссылке</a>. Если вы не присылали запрос на изменение пароля, проигнорируйте сообщение.");
+            var request = new SendEmailRequest()
+            {
+                Email = model.Email,
+                Subject = "Reset password",
+                Message = $"Для того, чтобы изменить пароль, перейдите по этой: <a href='{callbackUrl}'>ссылке</a>. Если вы не присылали запрос на изменение пароля, проигнорируйте сообщение."
+            };
+
+            await _emailClient.SendAsync(request);
 
             return Ok("Инструкция по изменению пароля отправлена на почту.");
         }

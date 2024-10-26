@@ -4,7 +4,7 @@ using StuffyHelper.Api.Web;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Debt;
 using System.Net;
-using IAuthorizationService = StuffyHelper.Authorization.Core.Features.IAuthorizationService;
+using IAuthorizationService = StuffyHelper.Authorization.Core1.Features.IAuthorizationService;
 
 namespace StuffyHelper.Api.Controllers
 {

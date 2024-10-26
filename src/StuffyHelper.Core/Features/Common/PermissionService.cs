@@ -1,5 +1,5 @@
-﻿using StuffyHelper.Authorization.Core.Features;
-using StuffyHelper.Authorization.Core.Models;
+﻿using StuffyHelper.Authorization.Core1.Features;
+using StuffyHelper.Authorization.Core1.Models;
 using System.Security.Claims;
 
 namespace StuffyHelper.Core.Features.Common

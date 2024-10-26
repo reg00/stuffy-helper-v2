@@ -1,9 +1,9 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Http;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core.Exceptions;
-using StuffyHelper.Authorization.Core.Features;
-using StuffyHelper.Authorization.Core.Models.User;
+using StuffyHelper.Authorization.Core1.Exceptions;
+using StuffyHelper.Authorization.Core1.Features;
+using StuffyHelper.Authorization.Core1.Models.User;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Media;

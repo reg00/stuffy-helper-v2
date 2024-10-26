@@ -1,5 +1,5 @@
 ﻿using Moq;
-using StuffyHelper.Authorization.Core.Features;
+using StuffyHelper.Authorization.Core1.Features;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Tests.UnitTests.Common;
 

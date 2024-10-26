@@ -18,4 +18,10 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\StuffyHelper.Authorization.Core\StuffyHelper.Authorization.Core.csproj" />
+      <ProjectReference Include="..\StuffyHelper.Authorization.Data\StuffyHelper.Authorization.Data.csproj" />
+      <ProjectReference Include="..\StuffyHelper.EmailService.Contracts\StuffyHelper.EmailService.Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

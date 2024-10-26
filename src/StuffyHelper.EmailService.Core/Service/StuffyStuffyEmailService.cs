@@ -1,6 +1,6 @@
 ﻿using EnsureThat;
 using NETCore.MailKit.Core;
-using StuffyHelper.EmailService.Core.Models;
+using StuffyHelper.EmailService.Contracts.Models;
 using StuffyHelper.EmailService.Core.Service.Interfaces;
 
 namespace StuffyHelper.EmailService.Core.Service

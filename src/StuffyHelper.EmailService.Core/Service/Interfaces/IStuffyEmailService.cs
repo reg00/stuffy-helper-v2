@@ -1,4 +1,4 @@
-﻿using StuffyHelper.EmailService.Core.Models;
+﻿using StuffyHelper.EmailService.Contracts.Models;
 
 namespace StuffyHelper.EmailService.Core.Service.Interfaces
 {

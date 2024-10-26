@@ -1,5 +1,4 @@
 using StuffyHelper.Api.Registration;
-using StuffyHelper.Authorization.Core.Registration;
 using StuffyHelper.Core.Registration;
 using StuffyHelper.EntityFrameworkCore.Features.Schema;
 using StuffyHelper.EntityFrameworkCore.Registration;
