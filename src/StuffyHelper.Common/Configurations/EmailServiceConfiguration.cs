@@ -1,4 +1,4 @@
-﻿namespace StuffyHelper.EmailService.Core.Configs
+﻿namespace StuffyHelper.Common.Configurations
 {
     public record EmailServiceConfiguration
     {

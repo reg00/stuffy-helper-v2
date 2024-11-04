@@ -27,12 +27,12 @@ public class AuthorizationService : IAuthorizationService
             UserManager<StuffyUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IAvatarService avatarService,
-            IOptions<AuthorizationConfiguration> authorizationConfiguration)
+            IOptions<StuffyConfiguration> configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _avatarService = avatarService;
-            _authorizationConfiguration = authorizationConfiguration.Value;
+            _authorizationConfiguration = configuration.Value.Authorization;
         }
 
         public async Task<JwtSecurityToken> Login(LoginModel model, HttpContext httpContext)

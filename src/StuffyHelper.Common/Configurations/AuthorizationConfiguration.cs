@@ -1,4 +1,7 @@
-﻿namespace StuffyHelper.Common.Configurations;
+﻿using System.Text;
+using Microsoft.IdentityModel.Tokens;
+
+namespace StuffyHelper.Common.Configurations;
 
 public class AuthorizationConfiguration
 {
@@ -14,4 +17,5 @@ public class JWTOptions
     public string ValidIssuer { get; init; } = string.Empty;
     public string Secret { get; init; } = string.Empty;
     public int TokenExpireInHours { get; init; }
+    public SymmetricSecurityKey GetSecurityKey() => new(Encoding.UTF8.GetBytes(Secret));
 }

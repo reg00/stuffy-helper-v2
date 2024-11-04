@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
-using StuffyHelper.EmailService.Core.Configs;
+using StuffyHelper.Common.Configurators;
 using StuffyHelper.EmailService.Core.Service.Interfaces;
 
 namespace StuffyHelper.EmailService.Core.Registration
@@ -16,10 +16,10 @@ namespace StuffyHelper.EmailService.Core.Registration
             EnsureArg.IsNotNull(services, nameof(services));
             EnsureArg.IsNotNull(configuration, nameof(configuration));
 
-            var emailServiceConfiguration = new EmailServiceConfiguration();
-            configuration.GetSection(EmailServiceConfiguration.DefaultSectionName)
-                .Bind(emailServiceConfiguration);
+            var emailServiceConfiguration = configuration.GetConfig().EmailService;
 
+            EnsureArg.IsNotNull(emailServiceConfiguration, nameof(emailServiceConfiguration));
+            
             services.AddSingleton(Options.Create(emailServiceConfiguration));
 
             services.AddMailKit(options =>

@@ -45,14 +45,16 @@ namespace StuffyHelper.Minio.Registration
         {
             EnsureArg.IsNotNull(minioClientOptions, nameof(minioClientOptions));
 
-            var options = new FileStoreConfiguration();
-            configuration.GetSection(MinioClientOptions.DefaultSectionName)
-               .Bind(minioClientOptions);
+            var a = configuration.GetSection(FileStoreConfiguration.DefaultSection);
+            
+            var fileStoreConfiguration = new FileStoreConfiguration();
+            configuration.GetSection(FileStoreConfiguration.DefaultSection)
+               .Bind(fileStoreConfiguration);
 
             services.AddScoped<IFileStore>(sp =>
             {
                 var minioClient = sp.GetRequiredService<MinioClient>();
-                return new MinioFileStore(minioClient, options.ContainerName, minioClientOptions);
+                return new MinioFileStore(minioClient, fileStoreConfiguration.ContainerName, minioClientOptions);
             });
 
             return services;

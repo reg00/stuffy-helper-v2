@@ -16,14 +16,12 @@ public static class AuthorizationExtensions
     {
         private static JwtSecurityToken GetToken(this List<Claim> authClaims, AuthorizationConfiguration authorizationConfiguration)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authorizationConfiguration.JWT.Secret));
-
             var token = new JwtSecurityToken(
                 issuer: authorizationConfiguration.JWT.ValidIssuer,
                 audience: authorizationConfiguration.JWT.ValidAudience,
                 expires: DateTime.UtcNow.AddHours(authorizationConfiguration.JWT.TokenExpireInHours),
                 claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                signingCredentials: new SigningCredentials(authorizationConfiguration.JWT.GetSecurityKey(), SecurityAlgorithms.HmacSha256)
                 );
 
             return token;

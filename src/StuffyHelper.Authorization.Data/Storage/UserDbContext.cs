@@ -6,8 +6,20 @@ namespace StuffyHelper.Authorization.Data.Storage;
 
 public class UserDbContext : IdentityDbContext<StuffyUser>
 {
+    public UserDbContext()
+    {
+        
+    }
     public UserDbContext(DbContextOptions<UserDbContext> options) : base(options)
     {
+    }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseNpgsql("ConnectionString");
+        }
     }
     
     public virtual DbSet<FriendEntry> Friends { get; set; }

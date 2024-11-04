@@ -1,14 +1,24 @@
-﻿using EnsureThat;
+﻿using System.Text;
+using EnsureThat;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using StuffyHelper.Authorization.Contracts.Entities;
+using StuffyHelper.Authorization.Core.Services;
+using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Authorization.Data;
 using StuffyHelper.Authorization.Data.Repository;
 using StuffyHelper.Authorization.Data.Repository.Interfaces;
 using StuffyHelper.Authorization.Data.Storage;
+using StuffyHelper.Common.Configurations;
 using StuffyHelper.Common.Configurators;
 using StuffyHelper.EmailService.Contracts.Clients;
 using StuffyHelper.EmailService.Contracts.Clients.Interfaces;
+using StuffyHelper.Minio.Registration;
+using IAuthorizationService = StuffyHelper.Authorization.Core.Services.Interfaces.IAuthorizationService;
 
 namespace StuffyHelper.Authorization.Api.Registration;
 
@@ -28,7 +38,7 @@ public static class AuthorizationRegistrationExtensions
     
     public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration configuration)
     {
-        var config = configuration.GetConfig().AuthorizationConfiguration;
+        var config = configuration.GetConfig().Authorization;
 
         EnsureArg.IsNotNull(config, nameof(config));
 
@@ -46,11 +56,24 @@ public static class AuthorizationRegistrationExtensions
             })
             .AddEntityFrameworkStores<UserDbContext>()
             .AddDefaultTokenProviders();
-
+        
+        services.AddAuthentificationServices();
+        services.AddMinioBlobDataStores(configuration.GetSection(StuffyConfiguration.DefaultSection));
+        
+        return services;
+    }
+    
+    private static IServiceCollection AddAuthentificationServices(this IServiceCollection services)
+    {
         services.AddScoped<IInitializer, DatabaseInitializer>();
-        services.AddScoped<IFriendRequestRepository, FriendRequestRepository>();
-        services.AddScoped<IFriendRepository, FriendRepository>();
-        services.AddScoped<IAvatarRepository, AvatarRepository>();
+        services.AddTransient<IFriendRequestRepository, FriendRequestRepository>();
+        services.AddTransient<IFriendRepository, FriendRepository>();
+        services.AddTransient<IAvatarRepository, AvatarRepository>();
+        
+        services.AddScoped<IAuthorizationService, AuthorizationService>();
+        services.AddScoped<IFriendsRequestService, FriendsRequestService>();
+        services.AddScoped<IFriendService, FriendService>();
+        services.AddScoped<IAvatarService, AvatarService>();
 
         return services;
     }
