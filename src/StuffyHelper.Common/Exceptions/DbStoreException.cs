@@ -1,5 +1,9 @@
 ﻿namespace StuffyHelper.Common.Exceptions;
 
+/// <summary>
+/// Database exception
+/// 500 status code
+/// </summary>
 public class DbStoreException : Exception
 {
     public DbStoreException(string message)

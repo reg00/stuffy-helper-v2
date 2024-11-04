@@ -16,6 +16,7 @@ using StuffyHelper.Common.Exceptions;
 
 namespace StuffyHelper.Authorization.Core.Services;
 
+/// <inheritdoc />
 public class AuthorizationService : IAuthorizationService
     {
         private readonly UserManager<StuffyUser> _userManager;
@@ -23,6 +24,9 @@ public class AuthorizationService : IAuthorizationService
         private readonly AuthorizationConfiguration _authorizationConfiguration;
         private readonly IAvatarService _avatarService;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public AuthorizationService(
             UserManager<StuffyUser> userManager,
             RoleManager<IdentityRole> roleManager,
@@ -35,6 +39,7 @@ public class AuthorizationService : IAuthorizationService
             _authorizationConfiguration = configuration.Value.Authorization;
         }
 
+        /// <inheritdoc />
         public async Task<JwtSecurityToken> Login(LoginModel model, HttpContext httpContext)
         {
             EnsureArg.IsNotNull(model, nameof(model));
@@ -75,6 +80,7 @@ public class AuthorizationService : IAuthorizationService
                 throw new EntityNotFoundException($"Неверный логин/пароль");
         }
 
+        /// <inheritdoc />
         public async Task Logout(HttpContext httpContext)
         {
             await httpContext.SignOutAsync();
@@ -82,6 +88,7 @@ public class AuthorizationService : IAuthorizationService
 
         }
 
+        /// <inheritdoc />
         public async Task<string> Register(RegisterModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
@@ -91,7 +98,7 @@ public class AuthorizationService : IAuthorizationService
             if (userExists != null)
                 throw new EntityAlreadyExistsException($"Пользователь с логином {model.Username} уже существует");
 
-            StuffyUser identityUser = model.InitializeUser();
+            var identityUser = model.InitializeUser();
 
             var result = await _userManager.CreateAsync(identityUser, model.Password);
 
@@ -104,8 +111,10 @@ public class AuthorizationService : IAuthorizationService
             return await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
         }
 
+        /// <inheritdoc />
         public IEnumerable<IdentityRole> GetRoles() => _roleManager.Roles.ToList();
 
+        /// <inheritdoc />
         public async Task<bool> CheckUserIsAdmin(ClaimsPrincipal user, CancellationToken cancellationToken = default)
         {
             var userName = user.Identity?.Name;
@@ -121,6 +130,7 @@ public class AuthorizationService : IAuthorizationService
             return await _userManager.IsInRoleAsync(stuffyUser, nameof(UserType.Admin));
         }
 
+        /// <inheritdoc />
         public async Task<UserEntry> GetUserByToken(ClaimsPrincipal user, CancellationToken cancellationToken = default)
         {
             var userName = user.Identity?.Name;
@@ -138,6 +148,7 @@ public class AuthorizationService : IAuthorizationService
             return new UserEntry(identityUser, rolesList);
         }
 
+        /// <inheritdoc />
         public IEnumerable<UserShortEntry> GetUserLogins(string? userName = null)
         {
             var users = _userManager.Users
@@ -147,6 +158,7 @@ public class AuthorizationService : IAuthorizationService
             return users;
         }
 
+        /// <inheritdoc />
         public async Task DeleteUser(string? userName = null, string? userId = null)
         {
             if (string.IsNullOrWhiteSpace(userName) && string.IsNullOrWhiteSpace(userId))
@@ -168,6 +180,7 @@ public class AuthorizationService : IAuthorizationService
             await _userManager.DeleteAsync(userToDelete);
         }
 
+        /// <inheritdoc />
         public async Task<UserEntry> UpdateUser(ClaimsPrincipal user, UpdateModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
@@ -196,9 +209,10 @@ public class AuthorizationService : IAuthorizationService
             return new UserEntry(updatedUser, rolesList);
         }
 
+        /// <inheritdoc />
         public async Task UpdateAvatar(ClaimsPrincipal user, IFormFile file)
         {
-            var userName = user?.Identity?.Name;
+            var userName = user.Identity?.Name;
 
             if (userName == null)
                 throw new ForbiddenException("Authorization error");
@@ -219,6 +233,7 @@ public class AuthorizationService : IAuthorizationService
             }
         }
 
+        /// <inheritdoc />
         public async Task RemoveAvatar(ClaimsPrincipal user)
         {
             var userName = user.Identity?.Name;
@@ -239,6 +254,7 @@ public class AuthorizationService : IAuthorizationService
             }
         }
 
+        /// <inheritdoc />
         public async Task<UserEntry> GetUserByName(string userName)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(userName, nameof(userName));
@@ -256,6 +272,7 @@ public class AuthorizationService : IAuthorizationService
             return new UserEntry(user, rolesList);
         }
 
+        /// <inheritdoc />
         public async Task<UserEntry> GetUserById(string userId)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(userId, nameof(userId));
@@ -273,6 +290,7 @@ public class AuthorizationService : IAuthorizationService
             return new UserEntry(user, rolesList);
         }
 
+        /// <inheritdoc />
         public async Task<UserEntry> ConfirmEmail(string login, string code)
         {
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(code))
@@ -299,6 +317,7 @@ public class AuthorizationService : IAuthorizationService
                 throw new ForbiddenException("Неверный код");
         }
 
+        /// <inheritdoc />
         public async Task<(string name, string code)> ForgotPasswordAsync(ForgotPasswordModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
@@ -312,6 +331,7 @@ public class AuthorizationService : IAuthorizationService
             return new(user.UserName ?? string.Empty, code);
         }
 
+        /// <inheritdoc />
         public async Task ResetPasswordAsync(ResetPasswordModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));

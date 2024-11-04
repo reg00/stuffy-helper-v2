@@ -8,15 +8,20 @@ using StuffyHelper.Common.Exceptions;
 
 namespace StuffyHelper.Authorization.Data.Repository;
 
+/// <inheritdoc />
 public class FriendRequestRepository : IFriendRequestRepository
     {
         private readonly UserDbContext _context;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public FriendRequestRepository(UserDbContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc />
         public async Task<FriendsRequest> GetRequest(Guid requestId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(requestId, nameof(requestId));
@@ -43,6 +48,7 @@ public class FriendRequestRepository : IFriendRequestRepository
             }
         }
 
+        /// <inheritdoc />
         public async Task<IEnumerable<FriendsRequest>> GetSendedRequestsAsync(
             string userId,
             CancellationToken cancellationToken = default)
@@ -62,6 +68,7 @@ public class FriendRequestRepository : IFriendRequestRepository
             }
         }
 
+        /// <inheritdoc />
         public async Task<IEnumerable<FriendsRequest>> GetIncomingRequestsAsync(
             string userId,
             CancellationToken cancellationToken = default)
@@ -81,6 +88,7 @@ public class FriendRequestRepository : IFriendRequestRepository
             }
         }
 
+        /// <inheritdoc />
         public async Task<FriendsRequest> AddRequestAsync(FriendsRequest request, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(request, nameof(request));
@@ -104,6 +112,7 @@ public class FriendRequestRepository : IFriendRequestRepository
             }
         }
 
+        /// <inheritdoc />
         public async Task DeleteRequestAsync(Guid requestId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(requestId, nameof(requestId));
@@ -128,6 +137,7 @@ public class FriendRequestRepository : IFriendRequestRepository
             }
         }
 
+        /// <inheritdoc />
         public async Task ComfirmRequestAsync(Guid requestId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(requestId, nameof(requestId));

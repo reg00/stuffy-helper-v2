@@ -8,12 +8,16 @@ using StuffyHelper.Common.Exceptions;
 
 namespace StuffyHelper.Authorization.Core.Services;
 
+/// <inheritdoc />
  public class FriendsRequestService : IFriendsRequestService
     {
         private readonly IFriendRequestRepository _requestRepository;
         private readonly IAuthorizationService _authorizationService;
         private readonly IFriendService _friendService;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public FriendsRequestService(
             IFriendRequestRepository requestRepository,
             IAuthorizationService authorizationService,
@@ -24,7 +28,8 @@ namespace StuffyHelper.Authorization.Core.Services;
             _friendService = friendService;
         }
 
-        public async Task AcceptRequest(Guid requestId, CancellationToken cancellationToken = default)
+        /// <inheritdoc />
+        public async Task ConfirmRequest(Guid requestId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(requestId, nameof(requestId));
 
@@ -34,6 +39,7 @@ namespace StuffyHelper.Authorization.Core.Services;
             await _requestRepository.ComfirmRequestAsync(requestId, cancellationToken);
         }
 
+        /// <inheritdoc />
         public async Task<FriendsRequestShort> GetRequestAsync(Guid requestId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(requestId, nameof(requestId));
@@ -42,13 +48,14 @@ namespace StuffyHelper.Authorization.Core.Services;
             return new FriendsRequestShort(entry);
         }
 
+        /// <inheritdoc />
         public async Task<IEnumerable<FriendsRequestShort>> GetSendedRequestsAsync(
            ClaimsPrincipal user,
            CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(user, nameof(user));
 
-            var userName = user?.Identity?.Name;
+            var userName = user.Identity?.Name;
 
             if (userName == null)
                 throw new ForbiddenException("Authorization error");
@@ -59,13 +66,14 @@ namespace StuffyHelper.Authorization.Core.Services;
             return resp.Select(x => new FriendsRequestShort(x));
         }
 
+        /// <inheritdoc />
         public async Task<IEnumerable<FriendsRequestShort>> GetIncomingRequestsAsync(
             ClaimsPrincipal user,
             CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(user, nameof(user));
 
-            var userName = user?.Identity?.Name;
+            var userName = user.Identity?.Name;
 
             if (userName == null)
                 throw new ForbiddenException("Authorization error");
@@ -76,15 +84,16 @@ namespace StuffyHelper.Authorization.Core.Services;
             return resp.Select(x => new FriendsRequestShort(x));
         }
 
+        /// <inheritdoc />
         public async Task<FriendsRequestShort> AddRequestAsync(
-            ClaimsPrincipal user,
+            ClaimsPrincipal friend,
             string userId,
             CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
-            EnsureArg.IsNotNull(user, nameof(user));
+            EnsureArg.IsNotNull(friend, nameof(friend));
 
-            var userName = user?.Identity?.Name;
+            var userName = friend.Identity?.Name;
 
             if (userName == null)
                 throw new ForbiddenException("Authorization error");
@@ -101,6 +110,7 @@ namespace StuffyHelper.Authorization.Core.Services;
             return new FriendsRequestShort(result);
         }
 
+        /// <inheritdoc />
         public async Task DeleteRequestAsync(Guid requestId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(requestId, nameof(requestId));

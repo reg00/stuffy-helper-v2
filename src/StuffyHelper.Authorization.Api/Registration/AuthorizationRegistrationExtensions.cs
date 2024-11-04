@@ -22,8 +22,14 @@ using IAuthorizationService = StuffyHelper.Authorization.Core.Services.Interface
 
 namespace StuffyHelper.Authorization.Api.Registration;
 
+/// <summary>
+/// Authorization registration extensions
+/// </summary>
 public static class AuthorizationRegistrationExtensions
 {
+    /// <summary>
+    /// Add DI clients
+    /// </summary>
     public static IServiceCollection AddClients(this IServiceCollection services, IConfiguration configuration)
     {
         var config = configuration.GetConfig();
@@ -36,6 +42,9 @@ public static class AuthorizationRegistrationExtensions
         return services;
     }
     
+    /// <summary>
+    /// Add services and database
+    /// </summary>
     public static IServiceCollection AddAuthServices(this IServiceCollection services, IConfiguration configuration)
     {
         var config = configuration.GetConfig().Authorization;
@@ -59,10 +68,13 @@ public static class AuthorizationRegistrationExtensions
         
         services.AddAuthentificationServices();
         services.AddMinioBlobDataStores(configuration.GetSection(StuffyConfiguration.DefaultSection));
-        
+
         return services;
     }
     
+    /// <summary>
+    /// Add services
+    /// </summary>
     private static IServiceCollection AddAuthentificationServices(this IServiceCollection services)
     {
         services.AddScoped<IInitializer, DatabaseInitializer>();
@@ -78,6 +90,9 @@ public static class AuthorizationRegistrationExtensions
         return services;
     }
 
+    /// <summary>
+    /// Add auth database migration
+    /// </summary>
     public static IServiceProvider AddAuthDatabaseMigration(this IServiceProvider services)
     {
         using var scope = services.CreateScope();

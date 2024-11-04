@@ -9,8 +9,14 @@ using StuffyHelper.Common.Configurators;
 
 namespace StuffyHelper.Common.Extensions;
 
+/// <summary>
+/// Authorization extensions
+/// </summary>
 public static class AuthorizationExtensions
 {
+    /// <summary>
+    /// Add stuffy helper authorization 
+    /// </summary>
     public static IServiceCollection AddStuffyAuthorization(this IServiceCollection services,
         IConfiguration configuration)
     {

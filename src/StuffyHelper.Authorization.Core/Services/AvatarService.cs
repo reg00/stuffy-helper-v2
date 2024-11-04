@@ -10,17 +10,22 @@ using StuffyHelper.Minio.Features.Helpers;
 
 namespace StuffyHelper.Authorization.Core.Services;
 
+/// <inheritdoc />
 public class AvatarService : IAvatarService
     {
         private readonly IAvatarRepository _avatarRepository;
         private readonly IFileStore _fileStore;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public AvatarService(IAvatarRepository avatarRepository, IFileStore fileStore)
         {
             _avatarRepository = avatarRepository;
             _fileStore = fileStore;
         }
 
+        /// <inheritdoc />
         public async Task DeleteAvatarAsync(string userId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNullOrEmpty(userId, nameof(userId));
@@ -53,6 +58,7 @@ public class AvatarService : IAvatarService
             }
         }
 
+        /// <inheritdoc />
         public async Task<MediaBlobEntry> GetAvatarAsync(Guid avatarId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(avatarId, nameof(avatarId));
@@ -69,6 +75,7 @@ public class AvatarService : IAvatarService
             return new MediaBlobEntry(stream, entry.FileName, entry.FileType);
         }
 
+        /// <inheritdoc />
         public async Task<AvatarEntry> GetAvatarMetadataAsync(Guid avatarId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(avatarId, nameof(avatarId));
@@ -80,6 +87,7 @@ public class AvatarService : IAvatarService
             return entry;
         }
 
+        /// <inheritdoc />
         public async Task<AvatarEntry> StoreAvatarFormFileAsync(
             AddAvatarEntry avatar,
             CancellationToken cancellationToken = default)
@@ -148,6 +156,7 @@ public class AvatarService : IAvatarService
             }
         }
 
+        /// <inheritdoc />
         public async Task<Uri?> GetAvatarUri(string userId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));

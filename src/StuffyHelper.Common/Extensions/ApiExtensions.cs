@@ -1,11 +1,16 @@
-﻿using System.Reflection;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
 namespace StuffyHelper.Common.Extensions;
 
+/// <summary>
+/// API extensions
+/// </summary>
 public static class ApiExtensions
 {
+    /// <summary>
+    /// Add swagger support
+    /// </summary>
     public static IServiceCollection AddSwagger(this IServiceCollection services)
     {
         services.AddSwaggerGen(options =>

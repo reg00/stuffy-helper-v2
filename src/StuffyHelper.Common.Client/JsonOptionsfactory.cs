@@ -1,10 +1,12 @@
-﻿using System.Net.Http.Json;
-using System.Text.Encodings.Web;
+﻿using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace StuffyHelper.Common.Client;
 
+/// <summary>
+/// Json options factory
+/// </summary>
 public static class JsonOptionsFactory
     {
         private static readonly Lazy<JsonSerializerOptions> Options;
@@ -41,7 +43,7 @@ public static class JsonOptionsFactory
             return options;
         }
 
-        public static JsonSerializerOptions ConfigureDefaultOptionsIndent(this JsonSerializerOptions options)
+        private static JsonSerializerOptions ConfigureDefaultOptionsIndent(this JsonSerializerOptions options)
         {
             ConfigureDefaultOptions(options);
             options.WriteIndented = true;
@@ -53,7 +55,7 @@ public static class JsonOptionsFactory
         {
             var type = jsonConverter.GetType();
 
-            if (!CustomConverters.Any(x => x.GetType() == type))
+            if (CustomConverters.All(x => x.GetType() != type))
                 CustomConverters.Add(jsonConverter);
         }
     }

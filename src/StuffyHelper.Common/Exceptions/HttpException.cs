@@ -1,5 +1,9 @@
 ﻿namespace StuffyHelper.Common.Exceptions;
 
+/// <summary>
+/// Http exception
+/// 400 status code
+/// </summary>
 public class HttpException : Exception
 {
     public HttpException(string message)

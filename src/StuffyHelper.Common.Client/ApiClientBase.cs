@@ -8,20 +8,23 @@ using StuffyHelper.Common.Messages;
 
 namespace StuffyHelper.Common.Client;
 
+/// <summary>
+/// Base HTTP client based on RestSharp client
+/// </summary>
 public abstract class ApiClientBase
 {
-    protected static Lazy<JsonSerializerOptions> SerializerOptions;
+    private static readonly Lazy<JsonSerializerOptions> SerializerOptions;
 
     static ApiClientBase()
     {
         SerializerOptions = new Lazy<JsonSerializerOptions>(() => JsonOptionsFactory.DefaultOptions);
     }
 
-    protected readonly RestClient Client;
+    private readonly RestClient _client;
 
     protected ApiClientBase(string baseUrl)
     {
-        Client = new RestClient(new RestClientOptions(baseUrl)
+        _client = new RestClient(new RestClientOptions(baseUrl)
             {
                 ThrowOnDeserializationError = true,
                 Timeout = TimeSpan.MaxValue
@@ -79,7 +82,7 @@ public abstract class ApiClientBase
         T? result;
         try
         {
-            result = (await Client.Deserialize<T>(response, cancellationToken)).Data;
+            result = (await _client.Deserialize<T>(response, cancellationToken)).Data;
         }
         catch (Exception e)
         {
@@ -170,7 +173,7 @@ public abstract class ApiClientBase
         Method method,
         CancellationToken cancellationToken)
     {
-        var response = await Client.ExecuteAsync(request, method, cancellationToken);
+        var response = await _client.ExecuteAsync(request, method, cancellationToken);
 
         if (!response.IsSuccessful)
         {

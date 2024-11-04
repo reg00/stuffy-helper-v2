@@ -9,16 +9,20 @@ using StuffyHelper.Common.Messages;
 
 namespace StuffyHelper.Authorization.Data.Repository;
 
+/// <inheritdoc />
 public class FriendRepository : IFriendRepository
     {
         private readonly UserDbContext _context;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public FriendRepository(UserDbContext context)
         {
             _context = context;
         }
 
-
+        /// <inheritdoc />
         public async Task<FriendEntry> AddFriendAsync(FriendEntry friendEntry, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(friendEntry, nameof(friendEntry));
@@ -42,19 +46,20 @@ public class FriendRepository : IFriendRepository
             }
         }
 
-        public async Task DeleteFriendAsync(Guid friendshipId, CancellationToken cancellationToken = default)
+        /// <inheritdoc />
+        public async Task DeleteFriendAsync(Guid friendId, CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotDefault(friendshipId, nameof(friendshipId));
+            EnsureArg.IsNotDefault(friendId, nameof(friendId));
 
             try
             {
                 var friendship = await _context.Friends
                     .FirstOrDefaultAsync(
-                    s => s.Id == friendshipId, cancellationToken);
+                    s => s.Id == friendId, cancellationToken);
 
                 if (friendship is null)
                 {
-                    throw new EntityNotFoundException($"Friendship with Id '{friendshipId}' not found.");
+                    throw new EntityNotFoundException($"Friendship with Id '{friendId}' not found.");
                 }
 
 
@@ -67,6 +72,7 @@ public class FriendRepository : IFriendRepository
             }
         }
 
+        /// <inheritdoc />
         public async Task<AuthResponse<FriendEntry>> GetFriends(string userId, int limit = 20, int offset = 0, CancellationToken cancellationToken = default)
         {
             try

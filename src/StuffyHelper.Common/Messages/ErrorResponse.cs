@@ -2,6 +2,9 @@
 
 namespace StuffyHelper.Common.Messages;
 
+/// <summary>
+/// Error response
+/// </summary>
 public class ErrorResponse
 {
     public string Message { get; init; } = string.Empty;

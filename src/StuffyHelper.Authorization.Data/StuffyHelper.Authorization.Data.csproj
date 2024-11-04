@@ -15,6 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\StuffyHelper.Authorization.Contracts\StuffyHelper.Authorization.Contracts.csproj" />
       <ProjectReference Include="..\StuffyHelper.Common\StuffyHelper.Common.csproj" />
     </ItemGroup>
 

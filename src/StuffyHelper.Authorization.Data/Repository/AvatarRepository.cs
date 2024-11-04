@@ -6,18 +6,22 @@ using StuffyHelper.Authorization.Data.Repository.Interfaces;
 using StuffyHelper.Authorization.Data.Storage;
 using StuffyHelper.Common.Exceptions;
 
-
 namespace StuffyHelper.Authorization.Data.Repository;
 
+/// <inheritdoc />
 public class AvatarRepository : IAvatarRepository
     {
         private readonly UserDbContext _context;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public AvatarRepository(UserDbContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc />
         public async Task<AvatarEntry> AddAvatarAsync(AvatarEntry avatar, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(avatar, nameof(avatar));
@@ -34,7 +38,7 @@ public class AvatarRepository : IAvatarRepository
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
                     throw new EntityAlreadyExistsException($"User {avatar.UserId} already have avatar", ex);
 
-                else throw new DbStoreException(ex);
+                throw new DbStoreException(ex);
             }
             catch (Exception ex)
             {
@@ -42,6 +46,7 @@ public class AvatarRepository : IAvatarRepository
             }
         }
 
+        /// <inheritdoc />
         public async Task<AvatarEntry> UpdateAvatarAsync(AvatarEntry avatar, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(avatar, nameof(avatar));
@@ -58,6 +63,7 @@ public class AvatarRepository : IAvatarRepository
             }
         }
 
+        /// <inheritdoc />
         public async Task DeleteAvatarAsync(AvatarEntry avatar, CancellationToken cancellationToken = default)
         {
             try
@@ -71,6 +77,7 @@ public class AvatarRepository : IAvatarRepository
             }
         }
 
+        /// <inheritdoc />
         public async Task<AvatarEntry> GetAvatarAsync(Guid avatarId, CancellationToken cancellationToken = default)
         {
             try
@@ -97,6 +104,7 @@ public class AvatarRepository : IAvatarRepository
             }
         }
 
+        /// <inheritdoc />
         public async Task<AvatarEntry> GetAvatarAsync(string userId, CancellationToken cancellationToken = default)
         {
             try

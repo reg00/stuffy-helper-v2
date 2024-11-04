@@ -1,6 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
 using EnsureThat;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -12,8 +11,14 @@ using StuffyHelper.Common.Exceptions;
 
 namespace StuffyHelper.Authorization.Core.Extensions;
 
+/// <summary>
+/// Authorization extensions
+/// </summary>
 public static class AuthorizationExtensions
     {
+        /// <summary>
+        /// Get JwtSecurityToken
+        /// </summary>
         private static JwtSecurityToken GetToken(this List<Claim> authClaims, AuthorizationConfiguration authorizationConfiguration)
         {
             var token = new JwtSecurityToken(
@@ -27,6 +32,9 @@ public static class AuthorizationExtensions
             return token;
         }
 
+        /// <summary>
+        /// Creates JWT token
+        /// </summary>
         public static JwtSecurityToken CreateToken(this StuffyUser user, IEnumerable<string> roles, AuthorizationConfiguration authorizationConfiguration)
         {
             var authClaims = new List<Claim>
@@ -41,6 +49,9 @@ public static class AuthorizationExtensions
             return authClaims.GetToken(authorizationConfiguration);
         }
 
+        /// <summary>
+        /// Create role if not exists
+        /// </summary>
         public static async Task CreateRolesIfNotExists(this RoleManager<IdentityRole> roleManager)
         {
             if (!await roleManager.RoleExistsAsync(nameof(UserType.Admin)))
@@ -49,6 +60,9 @@ public static class AuthorizationExtensions
                 await roleManager.CreateAsync(new IdentityRole(nameof(UserType.User)));
         }
 
+        /// <summary>
+        /// Add role to user
+        /// </summary>
         public static async Task AddRoleToUser(this StuffyUser user, RoleManager<IdentityRole> roleManager, UserManager<StuffyUser> userManager, UserType role)
         {
             EnsureArg.IsNotNull(user, nameof(user));
@@ -62,6 +76,9 @@ public static class AuthorizationExtensions
                 await userManager.AddToRoleAsync(user, nameof(UserType.User));
         }
 
+        /// <summary>
+        /// Initialize user
+        /// </summary>
         public static StuffyUser InitializeUser(this RegisterModel model)
         {
             return new()
@@ -73,16 +90,18 @@ public static class AuthorizationExtensions
         }
 
 
+        /// <summary>
+        /// Handle identity result
+        /// </summary>
         public static void HandleIdentityResult(this IdentityResult identityResult)
         {
-            if (!identityResult.Succeeded)
-            {
-                var errors = string.Join(' ', identityResult.Errors.Select(y => y.Description));
+            if (identityResult.Succeeded) return;
+            
+            var errors = string.Join(' ', identityResult.Errors.Select(y => y.Description));
 
-                if (identityResult.Errors.Any(x => x.Code == "DuplicateUserName"))
-                    throw new EntityAlreadyExistsException(errors);
+            if (identityResult.Errors.Any(x => x.Code == "DuplicateUserName"))
+                throw new EntityAlreadyExistsException(errors);
 
-                throw new AuthorizationException($"Ошибка обновления пользователя!. Детали: {errors}");
-            }
+            throw new AuthorizationException($"Ошибка обновления пользователя!. Детали: {errors}");
         }
     }

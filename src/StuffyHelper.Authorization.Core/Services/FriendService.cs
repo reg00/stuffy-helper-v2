@@ -9,17 +9,22 @@ using StuffyHelper.Common.Messages;
 
 namespace StuffyHelper.Authorization.Core.Services;
 
+/// <inheritdoc />
 public class FriendService : IFriendService
     {
         private readonly IFriendRepository _friendRepository;
         private readonly IAuthorizationService _authorizationService;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public FriendService(IFriendRepository friendRepository, IAuthorizationService authorizationService)
         {
             _friendRepository = friendRepository;
             _authorizationService = authorizationService;
         }
 
+        /// <inheritdoc />
         public async Task<FriendShortEntry> AddFriendAsync(
             string userId,
             string friendId,
@@ -40,6 +45,7 @@ public class FriendService : IFriendService
             return new FriendShortEntry(result);
         }
 
+        /// <inheritdoc />
         public async Task DeleteFriendAsync(Guid friendshipId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(friendshipId, nameof(friendshipId));
@@ -47,6 +53,7 @@ public class FriendService : IFriendService
             await _friendRepository.DeleteFriendAsync(friendshipId, cancellationToken);
         }
 
+        /// <inheritdoc />
         public async Task<AuthResponse<UserShortEntry>> GetFriends(ClaimsPrincipal user, int limit = 20, int offset = 0, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(user, nameof(user));

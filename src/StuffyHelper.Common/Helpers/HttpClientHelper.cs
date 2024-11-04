@@ -4,8 +4,14 @@ using RestSharp;
 
 namespace StuffyHelper.Common.Helpers;
 
+/// <summary>
+/// Helper for work with Http clients
+/// </summary>
 public static class HttpClientHelper
 {
+    /// <summary>
+    /// Return filename from response
+    /// </summary>
     public static bool TryExtractFileName(this RestResponse response, out string? fileName)
     {
         fileName = null;
@@ -23,6 +29,9 @@ public static class HttpClientHelper
         return true;
     }
 
+    /// <summary>
+    /// Return auth token by key
+    /// </summary>
     public static bool TryExtractAuthToken(this string? authKey, [NotNullWhen(true)] out string? token)
     {
         token = null;

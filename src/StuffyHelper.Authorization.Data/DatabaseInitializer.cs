@@ -8,6 +8,7 @@ using StuffyHelper.Authorization.Data.Storage;
 
 namespace StuffyHelper.Authorization.Data;
 
+/// <inheritdoc />
 public class DatabaseInitializer : IInitializer
     {
         private readonly ILogger<DatabaseInitializer> _logger;
@@ -28,6 +29,7 @@ public class DatabaseInitializer : IInitializer
             _passwordHasher = passwordHasher;
         }
 
+        /// <inheritdoc />
         public void Initialize()
         {
             InitializeTokenServerConfigurationDatabase();

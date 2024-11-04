@@ -6,8 +6,14 @@ using StuffyHelper.Common.Configurations;
 
 namespace StuffyHelper.Common.Configurators;
 
+/// <summary>
+/// Helper for set up custom configuration
+/// </summary>
 public static class ConfigurationHelper
 {
+    /// <summary>
+    /// Get configuration
+    /// </summary>
     public static StuffyConfiguration GetConfig(this IConfiguration configuration)
     {
         var config = configuration.GetSection(StuffyConfiguration.DefaultSection)
@@ -19,6 +25,9 @@ public static class ConfigurationHelper
         return config;
     }
     
+    /// <summary>
+    /// Add custom configuration file to pipeline
+    /// </summary>
     public static IServiceCollection AddCustomConfiguration(this IServiceCollection services, ConfigurationManager configuration, string environment)
     {
         var assemblyLocation = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;

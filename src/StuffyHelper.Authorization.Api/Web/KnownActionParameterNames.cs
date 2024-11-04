@@ -1,6 +1,9 @@
 ﻿namespace StuffyHelper.Authorization.Api.Web;
 
-public class KnownActionParameterNames
+/// <summary>
+/// Route parameters
+/// </summary>
+public static class KnownActionParameterNames
 {
     internal const string EventId = "eventId";
     internal const string ParticipantId = "participantId";

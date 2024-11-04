@@ -28,4 +28,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.Services.AddAuthDatabaseMigration();
 app.Run();

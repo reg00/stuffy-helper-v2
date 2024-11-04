@@ -1,5 +1,8 @@
 ﻿namespace StuffyHelper.Authorization.Api.Web;
 
+/// <summary>
+/// Stuffy helper auth routes
+/// </summary>
 public static class KnownRoutes
 {
     private const string DefaultRouteSegment = "api";
