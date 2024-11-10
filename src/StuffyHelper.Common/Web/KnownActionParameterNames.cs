@@ -1,4 +1,4 @@
-﻿namespace StuffyHelper.Authorization.Api.Web;
+﻿namespace StuffyHelper.Common.Web;
 
 /// <summary>
 /// Route parameters

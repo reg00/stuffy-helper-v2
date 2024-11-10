@@ -1,24 +1,32 @@
-﻿using EnsureThat;
-using StuffyHelper.Authorization.Contracts.Entities;
+﻿namespace StuffyHelper.Authorization.Contracts.Models;
 
-namespace StuffyHelper.Authorization.Contracts.Models;
-
+/// <summary>
+/// Record for short friend request entry
+/// </summary>
 public class FriendsRequestShort
 {
+    /// <summary>
+    /// Identifier
+    /// </summary>
     public Guid Id { get; init; }
+    
+    /// <summary>
+    /// User id from
+    /// </summary>
     public string UserIdFrom { get; init; }
+    
+    /// <summary>
+    /// User id to
+    /// </summary>
     public string UserIdTo { get; init; } = string.Empty;
+    
+    /// <summary>
+    /// Username from
+    /// </summary>
     public string? UserNameFrom { get; init; } = string.Empty;
+    
+    /// <summary>
+    /// Username to
+    /// </summary>
     public string? UserNameTo { get; init; } = string.Empty;
-
-    public FriendsRequestShort(FriendsRequest request)
-    {
-        EnsureArg.IsNotNull(request, nameof(request));
-
-        Id = request.Id;
-        UserIdFrom = request.UserIdFrom;
-        UserIdTo = request.UserIdTo;
-        UserNameFrom = request.UserFrom.UserName;
-        UserNameTo = request.UserTo.UserName;
-    }
 }

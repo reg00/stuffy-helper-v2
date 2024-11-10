@@ -1,12 +1,8 @@
-﻿using System.Text;
-using EnsureThat;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using EnsureThat;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using StuffyHelper.Authorization.Contracts.Entities;
+using StuffyHelper.Authorization.Core.AutoMapper;
 using StuffyHelper.Authorization.Core.Services;
 using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Authorization.Data;
@@ -65,9 +61,25 @@ public static class AuthorizationRegistrationExtensions
             })
             .AddEntityFrameworkStores<UserDbContext>()
             .AddDefaultTokenProviders();
-        
-        services.AddAuthentificationServices();
-        services.AddMinioBlobDataStores(configuration.GetSection(StuffyConfiguration.DefaultSection));
+
+        services.AddMapping()
+                .AddAuthentificationServices()
+                .AddMinioBlobDataStores(configuration.GetSection(StuffyConfiguration.DefaultSection));
+
+        return services;
+    }
+
+    /// <summary>
+    /// Add automapper mappings
+    /// </summary>
+    private static IServiceCollection AddMapping(this IServiceCollection services)
+    {
+        services.AddAutoMapper(cfg =>
+        {
+            cfg.AddProfile(new FriendsRequestAutoMapperProfile());
+            cfg.AddProfile(new FriendAutoMapperProfile());
+            cfg.AddProfile(new UserAutoMapperProfile());
+        });
 
         return services;
     }

@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using AutoMapper;
 using EnsureThat;
 using Minio.Exceptions;
 using StuffyHelper.Authorization.Contracts.Entities;
@@ -14,14 +15,16 @@ public class FriendService : IFriendService
     {
         private readonly IFriendRepository _friendRepository;
         private readonly IAuthorizationService _authorizationService;
-
+        private readonly IMapper _mapper;
+        
         /// <summary>
         /// Ctor.
         /// </summary>
-        public FriendService(IFriendRepository friendRepository, IAuthorizationService authorizationService)
+        public FriendService(IFriendRepository friendRepository, IAuthorizationService authorizationService, IMapper mapper)
         {
             _friendRepository = friendRepository;
             _authorizationService = authorizationService;
+            _mapper = mapper;
         }
 
         /// <inheritdoc />
@@ -39,10 +42,11 @@ public class FriendService : IFriendService
             if (stuffyUser.Id == friend.Id)
                 throw new AuthorizationException("Can not request yourself.");
 
-            var request = new FriendEntry(stuffyUser.Id, friend.Id);
+            var request = _mapper.Map<FriendEntry>((stuffyUser.Id, friend.Id));
 
             var result = await _friendRepository.AddFriendAsync(request, cancellationToken);
-            return new FriendShortEntry(result);
+            
+            return _mapper.Map<FriendShortEntry>(result);
         }
 
         /// <inheritdoc />
@@ -68,7 +72,7 @@ public class FriendService : IFriendService
 
             return new AuthResponse<UserShortEntry>()
             {
-                Data = response.Data.Select(x => new UserShortEntry(x.Friend)),
+                Data = response.Data.Select(x => _mapper.Map<UserShortEntry>(x)),
                 Total = response.Total,
                 TotalPages = response.TotalPages
             };

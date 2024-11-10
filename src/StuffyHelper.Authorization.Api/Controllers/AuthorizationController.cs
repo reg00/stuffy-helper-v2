@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
-using StuffyHelper.Authorization.Api.Web;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Configurations;
 using StuffyHelper.Common.Messages;
+using StuffyHelper.Common.Web;
 using StuffyHelper.EmailService.Contracts.Clients.Interfaces;
 using StuffyHelper.EmailService.Contracts.Models;
 using IAuthorizationService = StuffyHelper.Authorization.Core.Services.Interfaces.IAuthorizationService;
@@ -126,7 +126,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
 
             var user = await _authorizationService.GetUserByName(model.Username);
 
-            return Ok(new GetUserEntry(user));
+            return Ok(user);
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         {
             var user = await _authorizationService.GetUserByToken(User);
 
-            return Ok(new GetUserEntry(user));
+            return Ok(user);
         }
 
         /// <summary>
@@ -264,7 +264,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// <param name="userName">Логин пользователя. Опциональное поле.</param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<UserEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<GetUserEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UserLoginsRoute)]
         public IActionResult GetUserLogins(string? userName = null)
@@ -278,7 +278,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// <param name="updateModel">Модель для обновления информации пользователя</param>
         /// <returns></returns>
         [HttpPatch]
-        [ProducesResponseType(typeof(UserEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.EditUserRoute)]
         public async Task<IActionResult> EditUserAsync([FromBody] UpdateModel updateModel)
@@ -292,7 +292,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
 
             var user = await _authorizationService.UpdateUser(User, updateModel);
 
-            return Ok(new GetUserEntry(user));
+            return Ok(user);
         }
 
         /// <summary>

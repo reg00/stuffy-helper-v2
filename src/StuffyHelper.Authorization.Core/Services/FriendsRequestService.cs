@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using AutoMapper;
 using EnsureThat;
 using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Models;
@@ -14,6 +15,7 @@ namespace StuffyHelper.Authorization.Core.Services;
         private readonly IFriendRequestRepository _requestRepository;
         private readonly IAuthorizationService _authorizationService;
         private readonly IFriendService _friendService;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// Ctor.
@@ -21,11 +23,13 @@ namespace StuffyHelper.Authorization.Core.Services;
         public FriendsRequestService(
             IFriendRequestRepository requestRepository,
             IAuthorizationService authorizationService,
-            IFriendService friendService)
+            IFriendService friendService,
+            IMapper mapper)
         {
             _requestRepository = requestRepository;
             _authorizationService = authorizationService;
             _friendService = friendService;
+            _mapper = mapper;
         }
 
         /// <inheritdoc />
@@ -34,6 +38,7 @@ namespace StuffyHelper.Authorization.Core.Services;
             EnsureArg.IsNotDefault(requestId, nameof(requestId));
 
             var request = await _requestRepository.GetRequest(requestId, cancellationToken);
+            
             await _friendService.AddFriendAsync(request.UserIdFrom, request.UserIdTo, cancellationToken);
             await _friendService.AddFriendAsync(request.UserIdTo, request.UserIdFrom, cancellationToken);
             await _requestRepository.ComfirmRequestAsync(requestId, cancellationToken);
@@ -45,7 +50,7 @@ namespace StuffyHelper.Authorization.Core.Services;
             EnsureArg.IsNotDefault(requestId, nameof(requestId));
 
             var entry = await _requestRepository.GetRequest(requestId, cancellationToken);
-            return new FriendsRequestShort(entry);
+            return _mapper.Map<FriendsRequestShort>(entry);
         }
 
         /// <inheritdoc />
@@ -63,7 +68,7 @@ namespace StuffyHelper.Authorization.Core.Services;
             var stuffyUser = await _authorizationService.GetUserByName(userName);
             var resp = await _requestRepository.GetSendedRequestsAsync(stuffyUser.Id, cancellationToken);
 
-            return resp.Select(x => new FriendsRequestShort(x));
+            return resp.Select(x => _mapper.Map<FriendsRequestShort>(x));
         }
 
         /// <inheritdoc />
@@ -81,7 +86,7 @@ namespace StuffyHelper.Authorization.Core.Services;
             var stuffyUser = await _authorizationService.GetUserByName(userName);
             var resp = await _requestRepository.GetIncomingRequestsAsync(stuffyUser.Id, cancellationToken);
 
-            return resp.Select(x => new FriendsRequestShort(x));
+            return resp.Select(x => _mapper.Map<FriendsRequestShort>(x));
         }
 
         /// <inheritdoc />
@@ -104,10 +109,10 @@ namespace StuffyHelper.Authorization.Core.Services;
             if (incomingUser.Id == requestUser.Id)
                 throw new AuthorizationException("Can not request yourself.");
 
-            var request = new FriendsRequest(incomingUser.Id, requestUser.Id);
-
+            var request = _mapper.Map<FriendsRequest>((incomingUser.Id, requestUser.Id));
             var result = await _requestRepository.AddRequestAsync(request, cancellationToken);
-            return new FriendsRequestShort(result);
+            
+            return _mapper.Map<FriendsRequestShort>(result);
         }
 
         /// <inheritdoc />
