@@ -32,22 +32,22 @@ public class StuffyUser : IdentityUser
     /// <summary>
     /// Linked list of incoming friend requests 
     /// </summary>
-    public virtual List<FriendsRequest> IncomingRequests { get; set; } = new List<FriendsRequest>();
+    public IReadOnlyList<FriendsRequest> IncomingRequests { get; init; } = new List<FriendsRequest>();
     
     /// <summary>
     /// Linked list of sended friend requests 
     /// </summary>
-    public virtual List<FriendsRequest> SendedRequests { get; set; } = new List<FriendsRequest>();
+    public IReadOnlyList<FriendsRequest> SendedRequests { get; init; } = new List<FriendsRequest>();
     
     /// <summary>
     /// Linked list of user friends
     /// </summary>
-    public virtual List<FriendEntry> Friends { get; set; } = new List<FriendEntry>();
+    public IReadOnlyList<FriendEntry> Friends { get; init; } = new List<FriendEntry>();
     
     /// <summary>
     /// Linked entity of avatar
     /// </summary>
-    public virtual AvatarEntry? Avatar { get; set; }
+    public AvatarEntry? Avatar { get; init; }
 
     public void PatchFrom(UpdateModel model)
     {

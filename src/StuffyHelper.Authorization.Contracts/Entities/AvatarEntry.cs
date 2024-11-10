@@ -38,24 +38,11 @@ public class AvatarEntry
     /// <summary>
     /// Linked user entity
     /// </summary>
-    public virtual StuffyUser User { get; set; }
+    public StuffyUser User { get; init; }
 
-    public AvatarEntry()
-    {
-    }
-
-    public AvatarEntry(
-        string userId,
-        string fileName,
-        FileType fileType)
-    {
-        EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
-
-        UserId = userId;
-        FileType = fileType;
-        FileName = fileName;
-    }
-
+    /// <summary>
+    /// Patch add avatar entry
+    /// </summary>
     public void PatchFrom(AddAvatarEntry entry)
     {
         EnsureArg.IsNotNull(entry, nameof(entry));

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using EnsureThat;
 
 namespace StuffyHelper.Authorization.Contracts.Entities;
 
@@ -11,8 +10,8 @@ public class FriendsRequest
     /// <summary>
     /// Identifier
     /// </summary>
-    public Guid Id { get; set; }
-    
+    public Guid Id { get; init; }
+
     /// <summary>
     /// If confirmed - users became friends
     /// </summary>
@@ -21,33 +20,22 @@ public class FriendsRequest
     /// <summary>
     /// Initiator user id
     /// </summary>
-    public string UserIdFrom { get; set; } = string.Empty;
+    public string UserIdFrom { get; init; } = string.Empty;
     
     /// <summary>
     /// To user id
     /// </summary>
-    public string UserIdTo { get; set; } = string.Empty;
-
+    public string UserIdTo { get; init; } = string.Empty;
     
     /// <summary>
     /// Linked initiator user entity
     /// </summary>
     [ForeignKey("UserIdFrom")]
-    public virtual StuffyUser UserFrom { get; init; }
+    public StuffyUser UserFrom { get; init; }
     
     /// <summary>
     /// Linked to user entity
     /// </summary>
     [ForeignKey("UserIdTo")]
-    public virtual StuffyUser UserTo { get; init; }
-
-    public FriendsRequest(string userIdFrom, string userIdTo)
-    {
-        EnsureArg.IsNotNullOrWhiteSpace(userIdFrom, nameof(userIdFrom));
-        EnsureArg.IsNotNullOrWhiteSpace(userIdTo, nameof(userIdTo));
-
-        UserIdFrom = userIdFrom;
-        UserIdTo = userIdTo;
-        IsComfirmed = false;
-    }
+    public StuffyUser UserTo { get; init; }
 }

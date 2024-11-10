@@ -47,7 +47,7 @@ public interface IAuthorizationService
     /// </summary>
     /// <param name="user">User claims</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    Task<UserEntry> GetUserByToken(ClaimsPrincipal user, CancellationToken cancellationToken = default);
+    Task<GetUserEntry> GetUserByToken(ClaimsPrincipal user, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Return users by username
@@ -67,7 +67,7 @@ public interface IAuthorizationService
     /// </summary>
     /// <param name="user">User claims</param>
     /// <param name="model">Update model</param>
-    Task<UserEntry> UpdateUser(ClaimsPrincipal user, UpdateModel model);
+    Task<GetUserEntry> UpdateUser(ClaimsPrincipal user, UpdateModel model);
 
     /// <summary>
     /// Update avatar of user
@@ -86,20 +86,20 @@ public interface IAuthorizationService
     /// Return user by username
     /// </summary>
     /// <param name="userName">Username</param>
-    Task<UserEntry> GetUserByName(string userName);
+    Task<GetUserEntry> GetUserByName(string userName);
 
     /// <summary>
     /// Get user by its id
     /// </summary>
     /// <param name="userId">User id</param>
-    Task<UserEntry> GetUserById(string userId);
+    Task<GetUserEntry> GetUserById(string userId);
 
     /// <summary>
     /// Confirm email in stuffy helper
     /// </summary>
     /// <param name="login">User login</param>
     /// <param name="code">Confirm code</param>
-    Task<UserEntry> ConfirmEmail(string login, string code);
+    Task<GetUserEntry> ConfirmEmail(string login, string code);
 
     /// <summary>
     /// When user forgot pass, he can send request to reset it

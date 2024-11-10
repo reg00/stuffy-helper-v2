@@ -2,6 +2,9 @@
 
 namespace StuffyHelper.Authorization.Contracts.Models;
 
+/// <summary>
+/// Record for forgot password request
+/// </summary>
 public class ForgotPasswordModel
 {
     [Required]

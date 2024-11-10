@@ -1,4 +1,5 @@
-﻿using EnsureThat;
+﻿using AutoMapper;
+using EnsureThat;
 using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Authorization.Core.Services.Interfaces;
@@ -15,14 +16,16 @@ public class AvatarService : IAvatarService
     {
         private readonly IAvatarRepository _avatarRepository;
         private readonly IFileStore _fileStore;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// Ctor.
         /// </summary>
-        public AvatarService(IAvatarRepository avatarRepository, IFileStore fileStore)
+        public AvatarService(IAvatarRepository avatarRepository, IFileStore fileStore, IMapper mapper)
         {
             _avatarRepository = avatarRepository;
             _fileStore = fileStore;
+            _mapper = mapper;
         }
 
         /// <inheritdoc />
@@ -72,7 +75,7 @@ public class AvatarService : IAvatarService
                     entry.UserId, entry.FileType),
                 cancellationToken);
 
-            return new MediaBlobEntry(stream, entry.FileName, entry.FileType);
+            return _mapper.Map<MediaBlobEntry>((stream, entry));
         }
 
         /// <inheritdoc />
@@ -115,8 +118,6 @@ public class AvatarService : IAvatarService
                         avatar.File!.OpenReadStream(),
                     cancellationToken);
 
-                //return new AvatarShortEntry(entry);
-
                 return avatarEntry;
             }
             catch (EntityAlreadyExistsException)
@@ -125,7 +126,7 @@ public class AvatarService : IAvatarService
             }
             catch (EntityNotFoundException)
             {
-                entry = avatar.ToCommonEntry();
+                entry = _mapper.Map<AvatarEntry>(avatar);
 
                 var avatarEntry = await _avatarRepository.AddAvatarAsync(
                     entry, cancellationToken);

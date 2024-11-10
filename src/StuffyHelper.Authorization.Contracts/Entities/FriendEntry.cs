@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using EnsureThat;
 
 namespace StuffyHelper.Authorization.Contracts.Entities;
 
@@ -12,43 +11,33 @@ public class FriendEntry
     /// Identifier
     /// </summary>
     [Required]
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
     
     /// <summary>
     /// User id
     /// </summary>
     [Required]
-    public string UserId { get; set; }
+    public string UserId { get; init; }
     
     /// <summary>
     /// Friend id
     /// </summary>
     [Required]
-    public string FriendId { get; set; }
+    public string FriendId { get; init; }
     
     /// <summary>
     /// Date when user became friend
     /// </summary>
     [Required]
-    public DateTime FriendsSince { get; set; }
+    public DateTime FriendsSince { get; init; }
 
     /// <summary>
     /// Linked user entity
     /// </summary>
-    public virtual StuffyUser User { get; set; }
+    public StuffyUser User { get; init; }
     
     /// <summary>
     /// Linked friend user entity
     /// </summary>
-    public virtual StuffyUser Friend { get; init; }
-
-    public FriendEntry(string userId, string friendId)
-    {
-        EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
-        EnsureArg.IsNotNullOrWhiteSpace(friendId, nameof(friendId));
-
-        UserId = userId;
-        FriendId = friendId;
-        FriendsSince = DateTime.UtcNow;
-    }
+    public StuffyUser Friend { get; init; }
 }

@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using AutoMapper;
 using EnsureThat;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -23,6 +24,7 @@ public class AuthorizationService : IAuthorizationService
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly AuthorizationConfiguration _authorizationConfiguration;
         private readonly IAvatarService _avatarService;
+        private readonly IMapper _mapper;
 
         /// <summary>
         /// Ctor.
@@ -31,11 +33,13 @@ public class AuthorizationService : IAuthorizationService
             UserManager<StuffyUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IAvatarService avatarService,
-            IOptions<StuffyConfiguration> configuration)
+            IOptions<StuffyConfiguration> configuration,
+            IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _avatarService = avatarService;
+            _mapper = mapper;
             _authorizationConfiguration = configuration.Value.Authorization;
         }
 
@@ -131,7 +135,7 @@ public class AuthorizationService : IAuthorizationService
         }
 
         /// <inheritdoc />
-        public async Task<UserEntry> GetUserByToken(ClaimsPrincipal user, CancellationToken cancellationToken = default)
+        public async Task<GetUserEntry> GetUserByToken(ClaimsPrincipal user, CancellationToken cancellationToken = default)
         {
             var userName = user.Identity?.Name;
 
@@ -145,7 +149,7 @@ public class AuthorizationService : IAuthorizationService
             
             var rolesList = await _userManager.GetRolesAsync(identityUser);
 
-            return new UserEntry(identityUser, rolesList);
+            return _mapper.Map<GetUserEntry>((identityUser, rolesList));
         }
 
         /// <inheritdoc />
@@ -153,7 +157,7 @@ public class AuthorizationService : IAuthorizationService
         {
             var users = _userManager.Users
                 .Where(u => userName == null || u.UserName != null && u.UserName.ToLower().StartsWith(userName.ToLower()) && u.EmailConfirmed == true)
-                .Select(u => new UserShortEntry() { Id = u.Id, Name = u.UserName!, ImageUri = u.ImageUri }).ToList();
+                .Select(u => _mapper.Map<UserShortEntry>(u)).ToList();
 
             return users;
         }
@@ -181,7 +185,7 @@ public class AuthorizationService : IAuthorizationService
         }
 
         /// <inheritdoc />
-        public async Task<UserEntry> UpdateUser(ClaimsPrincipal user, UpdateModel model)
+        public async Task<GetUserEntry> UpdateUser(ClaimsPrincipal user, UpdateModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
             EnsureArg.IsNotNull(user, nameof(user));
@@ -206,7 +210,7 @@ public class AuthorizationService : IAuthorizationService
             
             var rolesList = await _userManager.GetRolesAsync(updatedUser);
 
-            return new UserEntry(updatedUser, rolesList);
+            return _mapper.Map<GetUserEntry>((updatedUser, rolesList));
         }
 
         /// <inheritdoc />
@@ -223,7 +227,7 @@ public class AuthorizationService : IAuthorizationService
 
             if (file != null)
             {
-                var addAvatar = new AddAvatarEntry(existUser.Id, file);
+                var addAvatar = _mapper.Map<AddAvatarEntry>((existUser.Id, file));
 
                 await _avatarService.StoreAvatarFormFileAsync(addAvatar);
 
@@ -255,7 +259,7 @@ public class AuthorizationService : IAuthorizationService
         }
 
         /// <inheritdoc />
-        public async Task<UserEntry> GetUserByName(string userName)
+        public async Task<GetUserEntry> GetUserByName(string userName)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(userName, nameof(userName));
 
@@ -269,11 +273,11 @@ public class AuthorizationService : IAuthorizationService
 
             var rolesList = await _userManager.GetRolesAsync(user);
 
-            return new UserEntry(user, rolesList);
+            return _mapper.Map<GetUserEntry>((user, rolesList));
         }
 
         /// <inheritdoc />
-        public async Task<UserEntry> GetUserById(string userId)
+        public async Task<GetUserEntry> GetUserById(string userId)
         {
             EnsureArg.IsNotEmptyOrWhiteSpace(userId, nameof(userId));
 
@@ -287,11 +291,11 @@ public class AuthorizationService : IAuthorizationService
 
             var rolesList = await _userManager.GetRolesAsync(user);
 
-            return new UserEntry(user, rolesList);
+            return _mapper.Map<GetUserEntry>((user, rolesList));
         }
 
         /// <inheritdoc />
-        public async Task<UserEntry> ConfirmEmail(string login, string code)
+        public async Task<GetUserEntry> ConfirmEmail(string login, string code)
         {
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(code))
             {
@@ -311,7 +315,7 @@ public class AuthorizationService : IAuthorizationService
             {
                 var rolesList = await _userManager.GetRolesAsync(user);
 
-                return new UserEntry(user, rolesList);
+                return _mapper.Map<GetUserEntry>((user, rolesList));
             }
             else
                 throw new ForbiddenException("Неверный код");
