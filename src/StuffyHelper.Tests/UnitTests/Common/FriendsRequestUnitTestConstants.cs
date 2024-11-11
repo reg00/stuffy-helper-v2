@@ -1,4 +1,4 @@
-﻿using StuffyHelper.Authorization.Core1.Features.Friend;
+﻿using StuffyHelper.Authorization.Contracts.Entities;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {
@@ -6,8 +6,10 @@ namespace StuffyHelper.Tests.UnitTests.Common
     {
         public static FriendsRequest GetCorrectRequest()
         {
-            return new("123", "321")
+            return new()
             {
+                UserIdFrom = "123",
+                UserIdTo = "321",
                 UserFrom = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUsers().First(),
                 UserTo = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUsers().Last(),
             };
@@ -17,9 +19,21 @@ namespace StuffyHelper.Tests.UnitTests.Common
         {
             return new List<FriendsRequest>()
             {
-                new("123", "321"),
-                new("321", "222"),
-                new("222", "126"),
+                new()
+                {
+                    UserIdFrom = "123",
+                    UserIdTo = "321",
+                },
+                new()
+                {
+                    UserIdFrom = "321",
+                    UserIdTo = "222",
+                },
+                new()
+                {
+                    UserIdFrom = "222",
+                    UserIdTo = "126",
+                },
             };
         }
     }

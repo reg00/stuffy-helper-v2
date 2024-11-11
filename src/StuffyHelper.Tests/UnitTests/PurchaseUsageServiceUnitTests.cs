@@ -1,6 +1,7 @@
 ﻿using Moq;
-using StuffyHelper.Authorization.Core1.Features;
+using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Core.Features.PurchaseUsage;
+using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -8,12 +9,23 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class PurchaseUsageServiceUnitTests : UnitTestsBase
     {
+        private readonly Mock<IPurchaseUsageStore> _purchaseUsageRepositoryMoq = new();
+        private readonly Mock<IAuthorizationService> _authorizationServiceMoq = new();
+
+        private PurchaseUsageService GetService()
+        {
+            var mapper = CommonTestConstants.GetMapperConfiguration().CreateMapper();
+
+            return new PurchaseUsageService(
+                _purchaseUsageRepositoryMoq.Object,
+                _authorizationServiceMoq.Object,
+                mapper);
+        }
+        
         [Fact]
         public async Task GetPurchaseUsageAsync_EmptyInput()
         {
-            var purchaseUsageService = new PurchaseUsageService(
-                new Mock<IPurchaseUsageStore>().Object,
-                new Mock<IAuthorizationService>().Object);
+            var purchaseUsageService = GetService();
 
             await ThrowsTask(async () => await purchaseUsageService.GetPurchaseUsageAsync(Guid.Empty, CancellationToken), VerifySettings);
         }
@@ -23,20 +35,13 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchaseUsage = PurchaseUsageServiceUnitTestConstants.GetCorrectPurchaseUsageEntry();
 
-            var purchaseUsageStoreMoq = new Mock<IPurchaseUsageStore>();
-            purchaseUsageStoreMoq.Setup(x =>
-            x.GetPurchaseUsageAsync(purchaseUsage.Id, CancellationToken))
+            _purchaseUsageRepositoryMoq.Setup(x => x.GetPurchaseUsageAsync(purchaseUsage.Id, CancellationToken))
                 .ReturnsAsync(purchaseUsage);
 
-            var authorizationServiceMoq = new Mock<IAuthorizationService>();
-            authorizationServiceMoq.Setup(x =>
-            x.GetUserById(purchaseUsage.Participant.UserId))
+            _authorizationServiceMoq.Setup(x => x.GetUserById(purchaseUsage.Participant.UserId))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
-            var purchaseUsageService = new PurchaseUsageService(
-                purchaseUsageStoreMoq.Object,
-                authorizationServiceMoq.Object);
-
+            var purchaseUsageService = GetService();
             var result = await purchaseUsageService.GetPurchaseUsageAsync(purchaseUsage.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -47,8 +52,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchaseUsageResponse = PurchaseUsageServiceUnitTestConstants.GetCorrectPurchaseUsageResponse();
 
-            var purchaseUsageStoreMoq = new Mock<IPurchaseUsageStore>();
-            purchaseUsageStoreMoq.Setup(x =>
+            _purchaseUsageRepositoryMoq.Setup(x =>
             x.GetPurchaseUsagesAsync(
                 It.IsAny<int>(),
                 It.IsAny<int>(),
@@ -58,10 +62,7 @@ namespace StuffyHelper.Tests.UnitTests
                 It.IsAny<CancellationToken>()))
                 .ReturnsAsync(purchaseUsageResponse);
 
-            var purchaseUsageService = new PurchaseUsageService(
-                purchaseUsageStoreMoq.Object,
-                new Mock<IAuthorizationService>().Object);
-
+            var purchaseUsageService = GetService();
             var result = await purchaseUsageService.GetPurchaseUsagesAsync(
                 cancellationToken: CancellationToken);
 
@@ -71,9 +72,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task AddPurchaseUsageAsync_EmptyInput()
         {
-            var purchaseUsageService = new PurchaseUsageService(
-               new Mock<IPurchaseUsageStore>().Object,
-               new Mock<IAuthorizationService>().Object);
+            var purchaseUsageService = GetService();
 
             await ThrowsTask(async () => await purchaseUsageService.AddPurchaseUsageAsync(null, CancellationToken), VerifySettings);
         }
@@ -84,15 +83,10 @@ namespace StuffyHelper.Tests.UnitTests
             var purchaseUsage = PurchaseUsageServiceUnitTestConstants.GetCorrectPurchaseUsageEntry();
             var addPurchaseUsage = PurchaseUsageServiceUnitTestConstants.GetCorrectAddPurchaseUsageEntry();
 
-            var purchaseUsageStoreMoq = new Mock<IPurchaseUsageStore>();
-            purchaseUsageStoreMoq.Setup(x =>
-            x.AddPurchaseUsageAsync(It.IsAny<PurchaseUsageEntry>(), CancellationToken))
+            _purchaseUsageRepositoryMoq.Setup(x => x.AddPurchaseUsageAsync(It.IsAny<PurchaseUsageEntry>(), CancellationToken))
                 .ReturnsAsync(purchaseUsage);
 
-            var purchaseUsageService = new PurchaseUsageService(
-                purchaseUsageStoreMoq.Object,
-               new Mock<IAuthorizationService>().Object);
-
+            var purchaseUsageService = GetService();
             var result = await purchaseUsageService.AddPurchaseUsageAsync(addPurchaseUsage, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -101,9 +95,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task DeletePurchaseUsageAsync_EmptyInput()
         {
-            var purchaseUsageService = new PurchaseUsageService(
-               new Mock<IPurchaseUsageStore>().Object,
-               new Mock<IAuthorizationService>().Object);
+            var purchaseUsageService = GetService();
 
             await ThrowsTask(async () => await purchaseUsageService.DeletePurchaseUsageAsync(Guid.Empty, CancellationToken), VerifySettings);
         }
@@ -113,26 +105,19 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchaseUsage = PurchaseUsageServiceUnitTestConstants.GetCorrectPurchaseUsageEntry();
 
-            var purchaseUsageStoreMoq = new Mock<IPurchaseUsageStore>();
-            purchaseUsageStoreMoq.Setup(x =>
-            x.DeletePurchaseUsageAsync(It.IsAny<Guid>(), CancellationToken))
+            _purchaseUsageRepositoryMoq.Setup(x => x.DeletePurchaseUsageAsync(It.IsAny<Guid>(), CancellationToken))
                 .Returns(Task.CompletedTask);
 
-            var purchaseUsageService = new PurchaseUsageService(
-               purchaseUsageStoreMoq.Object,
-               new Mock<IAuthorizationService>().Object);
-
+            var purchaseUsageService = GetService();
             await purchaseUsageService.DeletePurchaseUsageAsync(purchaseUsage.Id, CancellationToken);
 
-            purchaseUsageStoreMoq.Verify(x => x.DeletePurchaseUsageAsync(It.IsAny<Guid>(), CancellationToken), Times.Once());
+            _purchaseUsageRepositoryMoq.Verify(x => x.DeletePurchaseUsageAsync(It.IsAny<Guid>(), CancellationToken), Times.Once());
         }
 
         [Fact]
         public async Task UpdatePurchaseUsageAsync_EmptyInput()
         {
-            var purchaseUsageService = new PurchaseUsageService(
-               new Mock<IPurchaseUsageStore>().Object,
-               new Mock<IAuthorizationService>().Object);
+            var purchaseUsageService = GetService();
 
             await ThrowsTask(async () => await purchaseUsageService.UpdatePurchaseUsageAsync(Guid.Empty, null, CancellationToken), VerifySettings);
         }
@@ -140,9 +125,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task UpdatePurchaseUsageAsync_NotFound()
         {
-            var purchaseUsageService = new PurchaseUsageService(
-               new Mock<IPurchaseUsageStore>().Object,
-               new Mock<IAuthorizationService>().Object);
+            var purchaseUsageService = GetService();
 
             await ThrowsTask(async () => await purchaseUsageService.UpdatePurchaseUsageAsync(Guid.Parse("e9aa0073-5de0-4227-a5f6-4d6c47d5f9e6"), new(), CancellationToken), VerifySettings);
         }
@@ -153,18 +136,12 @@ namespace StuffyHelper.Tests.UnitTests
             var purchaseUsage = PurchaseUsageServiceUnitTestConstants.GetCorrectPurchaseUsageEntry();
             var updatePurchaseUsage = PurchaseUsageServiceUnitTestConstants.GetCorrectUpdatePurchaseUsageEntry();
 
-            var purchaseUsageStoreMoq = new Mock<IPurchaseUsageStore>();
-            purchaseUsageStoreMoq.Setup(x =>
-            x.UpdatePurchaseUsageAsync(It.IsAny<PurchaseUsageEntry>(), CancellationToken))
+            _purchaseUsageRepositoryMoq.Setup(x => x.UpdatePurchaseUsageAsync(It.IsAny<PurchaseUsageEntry>(), CancellationToken))
                 .ReturnsAsync(purchaseUsage);
-            purchaseUsageStoreMoq.Setup(x =>
-            x.GetPurchaseUsageAsync(purchaseUsage.Id, CancellationToken))
+            _purchaseUsageRepositoryMoq.Setup(x => x.GetPurchaseUsageAsync(purchaseUsage.Id, CancellationToken))
                 .ReturnsAsync(purchaseUsage);
 
-            var purchaseUsageService = new PurchaseUsageService(
-                purchaseUsageStoreMoq.Object,
-                new Mock<IAuthorizationService>().Object);
-
+            var purchaseUsageService = GetService();
             var result = await purchaseUsageService.UpdatePurchaseUsageAsync(purchaseUsage.Id, updatePurchaseUsage, CancellationToken);
 
             await Verify(result, VerifySettings);

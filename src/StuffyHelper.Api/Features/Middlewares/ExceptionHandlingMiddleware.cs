@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core1.Exceptions;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +10,12 @@ using System.Net.Http.Headers;
 using System.Runtime.ExceptionServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using StuffyHelper.Common.Exceptions;
+using StuffyHelper.Common.Messages;
+using DbStoreException = Reg00.Infrastructure.Errors.DbStoreException;
+using EntityAlreadyExistsException = Reg00.Infrastructure.Errors.EntityAlreadyExistsException;
+using EntityNotFoundException = Reg00.Infrastructure.Errors.EntityNotFoundException;
+using ForbiddenException = Reg00.Infrastructure.Errors.ForbiddenException;
 
 namespace StuffyHelper.Api.Features.Middlewares
 {

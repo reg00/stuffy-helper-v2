@@ -73,7 +73,7 @@ public class FriendRepository : IFriendRepository
         }
 
         /// <inheritdoc />
-        public async Task<AuthResponse<FriendEntry>> GetFriends(string userId, int limit = 20, int offset = 0, CancellationToken cancellationToken = default)
+        public async Task<Response<FriendEntry>> GetFriends(string userId, int limit = 20, int offset = 0, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -83,7 +83,7 @@ public class FriendRepository : IFriendRepository
                     .OrderByDescending(e => e.User.FirstName)
                     .ToListAsync(cancellationToken);
 
-                return new AuthResponse<FriendEntry>()
+                return new Response<FriendEntry>()
                 {
                     Data = searchedData.Skip(offset).Take(limit),
                     TotalPages = (int)Math.Ceiling(searchedData.Count() / (double)limit),

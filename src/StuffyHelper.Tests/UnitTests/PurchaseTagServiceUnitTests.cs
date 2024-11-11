@@ -7,11 +7,17 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class PurchaseTagServiceUnitTests : UnitTestsBase
     {
+        private readonly Mock<IPurchaseTagStore> _purchaseTagRepositoryMoq = new();
+
+        private PurchaseTagService GetService()
+        {
+            return new PurchaseTagService(_purchaseTagRepositoryMoq.Object);
+        }
+        
         [Fact]
         public async Task GetPurchaseTagAsync_EmptyInput()
         {
-            var purchaseTagService = new PurchaseTagService(
-                new Mock<IPurchaseTagStore>().Object);
+            var purchaseTagService = GetService();
 
             await ThrowsTask(async () => await purchaseTagService.GetPurchaseTagAsync(Guid.Empty, CancellationToken), VerifySettings);
         }
@@ -21,14 +27,10 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchaseTag = PurchaseTagServiceUnitTestConstants.GetCorrectPurchaseTagEntry();
 
-            var purchaseTagStoreMoq = new Mock<IPurchaseTagStore>();
-            purchaseTagStoreMoq.Setup(x =>
-            x.GetPurchaseTagAsync(purchaseTag.Id, CancellationToken))
+            _purchaseTagRepositoryMoq.Setup(x => x.GetPurchaseTagAsync(purchaseTag.Id, CancellationToken))
                 .ReturnsAsync(purchaseTag);
 
-            var purchaseTagService = new PurchaseTagService(
-                purchaseTagStoreMoq.Object);
-
+            var purchaseTagService = GetService();
             var result = await purchaseTagService.GetPurchaseTagAsync(purchaseTag.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -39,8 +41,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchaseTagResponse = PurchaseTagServiceUnitTestConstants.GetCorrectPurchaseTagResponse();
 
-            var purchaseTagStoreMoq = new Mock<IPurchaseTagStore>();
-            purchaseTagStoreMoq.Setup(x =>
+            _purchaseTagRepositoryMoq.Setup(x =>
             x.GetPurchaseTagsAsync(
                 It.IsAny<int>(),
                 It.IsAny<int>(),
@@ -50,9 +51,7 @@ namespace StuffyHelper.Tests.UnitTests
                 It.IsAny<CancellationToken>()))
                 .ReturnsAsync(purchaseTagResponse);
 
-            var purchaseTagService = new PurchaseTagService(
-                purchaseTagStoreMoq.Object);
-
+            var purchaseTagService = GetService();
             var result = await purchaseTagService.GetPurchaseTagsAsync(
                 cancellationToken: CancellationToken);
 
@@ -62,8 +61,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task AddPurchaseTagAsync_EmptyInput()
         {
-            var purchaseTagService = new PurchaseTagService(
-               new Mock<IPurchaseTagStore>().Object);
+            var purchaseTagService = GetService();
 
             await ThrowsTask(async () => await purchaseTagService.AddPurchaseTagAsync(null, CancellationToken), VerifySettings);
         }
@@ -74,13 +72,10 @@ namespace StuffyHelper.Tests.UnitTests
             var purchaseTag = PurchaseTagServiceUnitTestConstants.GetCorrectPurchaseTagEntry();
             var addPurchaseTag = PurchaseTagServiceUnitTestConstants.GetCorrectAddPurchaseTagEntry();
 
-            var purchaseTagStoreMoq = new Mock<IPurchaseTagStore>();
-            purchaseTagStoreMoq.Setup(x =>
-            x.AddPurchaseTagAsync(It.IsAny<PurchaseTagEntry>(), CancellationToken))
+            _purchaseTagRepositoryMoq.Setup(x => x.AddPurchaseTagAsync(It.IsAny<PurchaseTagEntry>(), CancellationToken))
                 .ReturnsAsync(purchaseTag);
 
-            var purchaseTagService = new PurchaseTagService(
-                purchaseTagStoreMoq.Object);
+            var purchaseTagService = GetService();
 
             var result = await purchaseTagService.AddPurchaseTagAsync(addPurchaseTag, CancellationToken);
 
@@ -101,27 +96,21 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchaseTag = PurchaseTagServiceUnitTestConstants.GetCorrectPurchaseTagEntry();
 
-            var purchaseTagStoreMoq = new Mock<IPurchaseTagStore>();
-            purchaseTagStoreMoq.Setup(x =>
-            x.AddPurchaseTagAsync(It.IsAny<PurchaseTagEntry>(), CancellationToken))
+            _purchaseTagRepositoryMoq.Setup(x => x.AddPurchaseTagAsync(It.IsAny<PurchaseTagEntry>(), CancellationToken))
                 .ReturnsAsync(purchaseTag);
-            purchaseTagStoreMoq.Setup(x =>
-            x.GetPurchaseTagAsync(purchaseTag.Id, CancellationToken))
+            _purchaseTagRepositoryMoq.Setup(x => x.GetPurchaseTagAsync(purchaseTag.Id, CancellationToken))
                 .ReturnsAsync(purchaseTag);
 
-            var purchaseTagService = new PurchaseTagService(
-               purchaseTagStoreMoq.Object);
-
+            var purchaseTagService = GetService();
             await purchaseTagService.DeletePurchaseTagAsync(purchaseTag.Id, CancellationToken);
 
-            purchaseTagStoreMoq.Verify(x => x.DeletePurchaseTagAsync(It.IsAny<Guid>(), CancellationToken), Times.Once());
+            _purchaseTagRepositoryMoq.Verify(x => x.DeletePurchaseTagAsync(It.IsAny<Guid>(), CancellationToken), Times.Once());
         }
 
         [Fact]
         public async Task UpdatePurchaseTagAsync_EmptyInput()
         {
-            var purchaseTagService = new PurchaseTagService(
-               new Mock<IPurchaseTagStore>().Object);
+            var purchaseTagService = GetService();
 
             await ThrowsTask(async () => await purchaseTagService.UpdatePurchaseTagAsync(Guid.Empty, null, CancellationToken), VerifySettings);
         }
@@ -129,8 +118,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task UpdatePurchaseTagAsync_NotFound()
         {
-            var purchaseTagService = new PurchaseTagService(
-               new Mock<IPurchaseTagStore>().Object);
+            var purchaseTagService = GetService();
 
             await ThrowsTask(async () => await purchaseTagService.UpdatePurchaseTagAsync(Guid.Parse("e9aa0073-5de0-4227-a5f6-4d6c47d5f9e6"), new(), CancellationToken), VerifySettings);
         }
@@ -141,17 +129,12 @@ namespace StuffyHelper.Tests.UnitTests
             var purchaseTag = PurchaseTagServiceUnitTestConstants.GetCorrectPurchaseTagEntry();
             var updatePurchaseTag = PurchaseTagServiceUnitTestConstants.GetCorrectUpdatePurchaseTagEntry();
 
-            var purchaseTagStoreMoq = new Mock<IPurchaseTagStore>();
-            purchaseTagStoreMoq.Setup(x =>
-            x.UpdatePurchaseTagAsync(It.IsAny<PurchaseTagEntry>(), CancellationToken))
+            _purchaseTagRepositoryMoq.Setup(x => x.UpdatePurchaseTagAsync(It.IsAny<PurchaseTagEntry>(), CancellationToken))
                 .ReturnsAsync(purchaseTag);
-            purchaseTagStoreMoq.Setup(x =>
-            x.GetPurchaseTagAsync(purchaseTag.Id, CancellationToken))
+            _purchaseTagRepositoryMoq.Setup(x => x.GetPurchaseTagAsync(purchaseTag.Id, CancellationToken))
                 .ReturnsAsync(purchaseTag);
 
-            var purchaseTagService = new PurchaseTagService(
-                purchaseTagStoreMoq.Object);
-
+            var purchaseTagService = GetService();
             var result = await purchaseTagService.UpdatePurchaseTagAsync(purchaseTag.Id, updatePurchaseTag, CancellationToken);
 
             await Verify(result, VerifySettings);

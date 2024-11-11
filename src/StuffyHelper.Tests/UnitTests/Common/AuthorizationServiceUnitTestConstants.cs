@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using StuffyHelper.Authorization.Core1.Configs;
-using StuffyHelper.Authorization.Core1.Models;
-using StuffyHelper.Authorization.Core1.Models.User;
 using System.Security.Claims;
 using System.Text;
+using StuffyHelper.Authorization.Contracts.Entities;
+using StuffyHelper.Authorization.Contracts.Enums;
+using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Common.Configurations;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {
@@ -50,7 +51,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
             };
         }
 
-        public static UserEntry GetCorrectUserEntry()
+        public static GetUserEntry GetCorrectUserEntry()
         {
             return new()
             {
@@ -59,17 +60,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 LastName = "Тестов",
                 Id = "123",
                 Name = "test"
-            };
-        }
-
-        public static UserEntry GetCorrectSecontUserEntry()
-        {
-            return new()
-            {
-                FirstName = "Тест",
-                MiddleName = "Тестович",
-                LastName = "Тестов",
-                Id = "321",
             };
         }
 
@@ -111,7 +101,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 }
             };
         }
-
+        
         public static AuthorizationConfiguration GetCorrectAuthorizationConfiguration()
         {
             return new()

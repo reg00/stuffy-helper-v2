@@ -8,12 +8,20 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class PurchaseServiceUnitTests : UnitTestsBase
     {
+        private readonly Mock<IPurchaseStore> _purchaseRepositoryMoq = new();
+        private readonly Mock<IPurchaseTagPipeline> _purchaseTagPipelineMoq = new();
+
+        private PurchaseService GetService()
+        {
+            return new PurchaseService(
+                _purchaseRepositoryMoq.Object,
+                _purchaseTagPipelineMoq.Object);
+        }
+        
         [Fact]
         public async Task GetPurchaseAsync_EmptyInput()
         {
-            var purchaseService = new PurchaseService(
-                new Mock<IPurchaseStore>().Object,
-                new Mock<IPurchaseTagPipeline>().Object);
+            var purchaseService = GetService();
 
             await ThrowsTask(async () => await purchaseService.GetPurchaseAsync(Guid.Empty, CancellationToken), VerifySettings);
         }
@@ -23,15 +31,10 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchase = PurchaseServiceUnitTestConstants.GetCorrectPurchaseEntry();
 
-            var purchaseStoreMoq = new Mock<IPurchaseStore>();
-            purchaseStoreMoq.Setup(x =>
-            x.GetPurchaseAsync(purchase.Id, CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.GetPurchaseAsync(purchase.Id, CancellationToken))
                 .ReturnsAsync(purchase);
 
-            var purchaseService = new PurchaseService(
-                purchaseStoreMoq.Object,
-                new Mock<IPurchaseTagPipeline>().Object);
-
+            var purchaseService = GetService();
             var result = await purchaseService.GetPurchaseAsync(purchase.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -42,8 +45,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchaseResponse = PurchaseServiceUnitTestConstants.GetCorrectPurchaseResponse();
 
-            var purchaseStoreMoq = new Mock<IPurchaseStore>();
-            purchaseStoreMoq.Setup(x =>
+            _purchaseRepositoryMoq.Setup(x =>
             x.GetPurchasesAsync(
                 It.IsAny<int>(),
                 It.IsAny<int>(),
@@ -57,10 +59,7 @@ namespace StuffyHelper.Tests.UnitTests
                 It.IsAny<CancellationToken>()))
                 .ReturnsAsync(purchaseResponse);
 
-            var purchaseService = new PurchaseService(
-                purchaseStoreMoq.Object,
-                new Mock<IPurchaseTagPipeline>().Object);
-
+            var purchaseService = GetService();
             var result = await purchaseService.GetPurchasesAsync(
                 cancellationToken: CancellationToken);
 
@@ -70,9 +69,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task AddPurchaseAsync_EmptyInput()
         {
-            var purchaseService = new PurchaseService(
-               new Mock<IPurchaseStore>().Object,
-               new Mock<IPurchaseTagPipeline>().Object);
+            var purchaseService = GetService();
 
             await ThrowsTask(async () => await purchaseService.AddPurchaseAsync(null, CancellationToken), VerifySettings);
         }
@@ -83,14 +80,10 @@ namespace StuffyHelper.Tests.UnitTests
             var purchase = PurchaseServiceUnitTestConstants.GetCorrectPurchaseEntry();
             var addPurchase = PurchaseServiceUnitTestConstants.GetCorrectAddPurchaseEntry();
 
-            var purchaseStoreMoq = new Mock<IPurchaseStore>();
-            purchaseStoreMoq.Setup(x =>
-            x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
                 .ReturnsAsync(purchase);
 
-            var purchaseService = new PurchaseService(
-                purchaseStoreMoq.Object,
-               new Mock<IPurchaseTagPipeline>().Object);
+            var purchaseService = GetService();
 
             var result = await purchaseService.AddPurchaseAsync(addPurchase, CancellationToken);
 
@@ -100,9 +93,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task DeletePurchaseAsync_EmptyInput()
         {
-            var purchaseService = new PurchaseService(
-               new Mock<IPurchaseStore>().Object,
-               new Mock<IPurchaseTagPipeline>().Object);
+            var purchaseService = GetService();
 
             await ThrowsTask(async () => await purchaseService.DeletePurchaseAsync(Guid.Empty, CancellationToken), VerifySettings);
         }
@@ -110,9 +101,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task DeletePurchaseAsync_NotFound()
         {
-            var purchaseService = new PurchaseService(
-               new Mock<IPurchaseStore>().Object,
-               new Mock<IPurchaseTagPipeline>().Object);
+            var purchaseService = GetService();
 
             await ThrowsTask(async () => await purchaseService.DeletePurchaseAsync(Guid.Parse("e9aa0073-5de0-4227-a5f6-4d6c47d5f9e6"), CancellationToken), VerifySettings);
         }
@@ -122,17 +111,12 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchase = PurchaseServiceUnitTestConstants.GetCorrectPurchaseEntry();
 
-            var purchaseStoreMoq = new Mock<IPurchaseStore>();
-            purchaseStoreMoq.Setup(x =>
-            x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
                 .ReturnsAsync(purchase);
-            purchaseStoreMoq.Setup(x =>
-            x.GetPurchaseAsync(purchase.Id, CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.GetPurchaseAsync(purchase.Id, CancellationToken))
                 .ReturnsAsync(purchase);
 
-            var purchaseService = new PurchaseService(
-               purchaseStoreMoq.Object,
-               new Mock<IPurchaseTagPipeline>().Object);
+            var purchaseService = GetService();
 
             await ThrowsTask(async () => await purchaseService.DeletePurchaseAsync(purchase.Id, CancellationToken), VerifySettings);
         }
@@ -143,29 +127,21 @@ namespace StuffyHelper.Tests.UnitTests
             var purchase = PurchaseServiceUnitTestConstants.GetCorrectPurchaseEntry();
             purchase.IsComplete = false;
 
-            var purchaseStoreMoq = new Mock<IPurchaseStore>();
-            purchaseStoreMoq.Setup(x =>
-            x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
                 .ReturnsAsync(purchase);
-            purchaseStoreMoq.Setup(x =>
-            x.GetPurchaseAsync(purchase.Id, CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.GetPurchaseAsync(purchase.Id, CancellationToken))
                 .ReturnsAsync(purchase);
 
-            var purchaseService = new PurchaseService(
-               purchaseStoreMoq.Object,
-               new Mock<IPurchaseTagPipeline>().Object);
-
+            var purchaseService = GetService();
             await purchaseService.DeletePurchaseAsync(purchase.Id, CancellationToken);
 
-            purchaseStoreMoq.Verify(x => x.DeletePurchaseAsync(It.IsAny<Guid>(), CancellationToken), Times.Once());
+            _purchaseRepositoryMoq.Verify(x => x.DeletePurchaseAsync(It.IsAny<Guid>(), CancellationToken), Times.Once());
         }
 
         [Fact]
         public async Task CompletePurchaseAsync_EmptyInput()
         {
-            var purchaseService = new PurchaseService(
-               new Mock<IPurchaseStore>().Object,
-               new Mock<IPurchaseTagPipeline>().Object);
+            var purchaseService = GetService();
 
             await ThrowsTask(async () => await purchaseService.CompletePurchaseAsync(Guid.Empty, CancellationToken), VerifySettings);
         }
@@ -173,9 +149,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task CompletePurchaseAsync_NotFound()
         {
-            var purchaseService = new PurchaseService(
-               new Mock<IPurchaseStore>().Object,
-               new Mock<IPurchaseTagPipeline>().Object);
+            var purchaseService = GetService();
 
             await ThrowsTask(async () => await purchaseService.CompletePurchaseAsync(Guid.Parse("e9aa0073-5de0-4227-a5f6-4d6c47d5f9e6"), CancellationToken), VerifySettings);
         }
@@ -185,17 +159,12 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchase = PurchaseServiceUnitTestConstants.GetCorrectPurchaseEntry();
 
-            var purchaseStoreMoq = new Mock<IPurchaseStore>();
-            purchaseStoreMoq.Setup(x =>
-            x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
                 .ReturnsAsync(purchase);
-            purchaseStoreMoq.Setup(x =>
-            x.GetPurchaseAsync(purchase.Id, CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.GetPurchaseAsync(purchase.Id, CancellationToken))
                 .ReturnsAsync(purchase);
 
-            var purchaseService = new PurchaseService(
-               purchaseStoreMoq.Object,
-               new Mock<IPurchaseTagPipeline>().Object);
+            var purchaseService = GetService();
 
             await ThrowsTask(async () => await purchaseService.CompletePurchaseAsync(purchase.Id, CancellationToken), VerifySettings);
         }
@@ -206,29 +175,21 @@ namespace StuffyHelper.Tests.UnitTests
             var purchase = PurchaseServiceUnitTestConstants.GetCorrectPurchaseEntry();
             purchase.IsComplete = false;
 
-            var purchaseStoreMoq = new Mock<IPurchaseStore>();
-            purchaseStoreMoq.Setup(x =>
-            x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
                 .ReturnsAsync(purchase);
-            purchaseStoreMoq.Setup(x =>
-            x.GetPurchaseAsync(purchase.Id, CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.GetPurchaseAsync(purchase.Id, CancellationToken))
                 .ReturnsAsync(purchase);
 
-            var purchaseService = new PurchaseService(
-               purchaseStoreMoq.Object,
-               new Mock<IPurchaseTagPipeline>().Object);
-
+            var purchaseService = GetService();
             await purchaseService.CompletePurchaseAsync(purchase.Id, CancellationToken);
 
-            purchaseStoreMoq.Verify(x => x.CompletePurchaseAsync(It.IsAny<Guid>(), CancellationToken), Times.Once());
+            _purchaseRepositoryMoq.Verify(x => x.CompletePurchaseAsync(It.IsAny<Guid>(), CancellationToken), Times.Once());
         }
 
         [Fact]
         public async Task UpdatePurchaseAsync_EmptyInput()
         {
-            var purchaseService = new PurchaseService(
-               new Mock<IPurchaseStore>().Object,
-               new Mock<IPurchaseTagPipeline>().Object);
+            var purchaseService = GetService();
 
             await ThrowsTask(async () => await purchaseService.UpdatePurchaseAsync(Guid.Empty, null, CancellationToken), VerifySettings);
         }
@@ -236,9 +197,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task UpdatePurchaseAsync_NotFound()
         {
-            var purchaseService = new PurchaseService(
-               new Mock<IPurchaseStore>().Object,
-               new Mock<IPurchaseTagPipeline>().Object);
+            var purchaseService = GetService();
 
             await ThrowsTask(async () => await purchaseService.UpdatePurchaseAsync(Guid.Parse("e9aa0073-5de0-4227-a5f6-4d6c47d5f9e6"), new(), CancellationToken), VerifySettings);
         }
@@ -248,17 +207,12 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchase = PurchaseServiceUnitTestConstants.GetCorrectPurchaseEntry();
 
-            var purchaseStoreMoq = new Mock<IPurchaseStore>();
-            purchaseStoreMoq.Setup(x =>
-            x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.AddPurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
                 .ReturnsAsync(purchase);
-            purchaseStoreMoq.Setup(x =>
-            x.GetPurchaseAsync(purchase.Id, CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.GetPurchaseAsync(purchase.Id, CancellationToken))
                 .ReturnsAsync(purchase);
 
-            var purchaseService = new PurchaseService(
-               purchaseStoreMoq.Object,
-               new Mock<IPurchaseTagPipeline>().Object);
+            var purchaseService = GetService();
 
             await ThrowsTask(async () => await purchaseService.UpdatePurchaseAsync(purchase.Id, new(), CancellationToken), VerifySettings);
         }
@@ -270,18 +224,12 @@ namespace StuffyHelper.Tests.UnitTests
             var updatePurchase = PurchaseServiceUnitTestConstants.GetCorrectUpdatePurchaseEntry();
             purchase.IsComplete = false;
 
-            var purchaseStoreMoq = new Mock<IPurchaseStore>();
-            purchaseStoreMoq.Setup(x =>
-            x.UpdatePurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.UpdatePurchaseAsync(It.IsAny<PurchaseEntry>(), CancellationToken))
                 .ReturnsAsync(purchase);
-            purchaseStoreMoq.Setup(x =>
-            x.GetPurchaseAsync(purchase.Id, CancellationToken))
+            _purchaseRepositoryMoq.Setup(x => x.GetPurchaseAsync(purchase.Id, CancellationToken))
                 .ReturnsAsync(purchase);
 
-            var purchaseService = new PurchaseService(
-                purchaseStoreMoq.Object,
-                new Mock<IPurchaseTagPipeline>().Object);
-
+            var purchaseService = GetService();
             var result = await purchaseService.UpdatePurchaseAsync(purchase.Id, updatePurchase, CancellationToken);
 
             await Verify(result, VerifySettings);

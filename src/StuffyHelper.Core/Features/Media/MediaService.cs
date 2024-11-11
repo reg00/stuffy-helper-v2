@@ -1,4 +1,5 @@
-﻿using EnsureThat;
+﻿using AutoMapper;
+using EnsureThat;
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Core.Extensions;
 using StuffyHelper.Core.Features.Common;
@@ -10,11 +11,13 @@ namespace StuffyHelper.Core.Features.Media
     {
         private readonly IMediaStore _mediaStore;
         private readonly IFileStore _fileStore;
+        private readonly IMapper _mapper;
 
-        public MediaService(IMediaStore mediaStore, IFileStore fileStore)
+        public MediaService(IMediaStore mediaStore, IFileStore fileStore, IMapper mapper)
         {
             _mediaStore = mediaStore;
             _fileStore = fileStore;
+            _mapper = mapper;
         }
 
         public async Task DeleteMediaAsync(Guid mediaId, CancellationToken cancellationToken = default)
@@ -93,7 +96,7 @@ namespace StuffyHelper.Core.Features.Media
                     entry.FileType),
                 cancellationToken);
 
-            return new MediaBlobEntry(stream, entry.FileName, entry.FileType);
+            return _mapper.Map<MediaBlobEntry>((stream, entry));
         }
 
         public async Task<GetMediaEntry> GetMediaMetadataAsync(Guid mediaId, CancellationToken cancellationToken = default)

@@ -26,9 +26,5 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseExceptionHandling();
-
 app.UseApi();
-
-app.SeedUserData();
-
 app.Run();

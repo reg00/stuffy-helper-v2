@@ -1,6 +1,7 @@
 ﻿using Moq;
-using StuffyHelper.Authorization.Core1.Features;
+using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Core.Features.Participant;
+using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -8,12 +9,23 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class ParticipantServiceUnitTests : UnitTestsBase
     {
+        private readonly Mock<IParticipantStore> _participantRepositoryMoq = new();
+        private readonly Mock<IAuthorizationService> _authorizationServiceMoq = new();
+
+        private ParticipantService GetService()
+        {
+            var mapper = CommonTestConstants.GetMapperConfiguration().CreateMapper();
+
+            return new ParticipantService(
+                _participantRepositoryMoq.Object,
+                _authorizationServiceMoq.Object,
+                mapper);
+        }
+        
         [Fact]
         public async Task GetParticipantAsync_EmptyInput()
         {
-            var participantService = new ParticipantService(
-                new Mock<IParticipantStore>().Object,
-                new Mock<IAuthorizationService>().Object);
+            var participantService = GetService();
 
             await ThrowsTask(async () => await participantService.GetParticipantAsync(Guid.Empty, CancellationToken), VerifySettings);
         }
@@ -23,20 +35,13 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var participant = ParticipantServiceUnitTestConstants.GetCorrectParticipantEntry();
 
-            var participantStoreMoq = new Mock<IParticipantStore>();
-            participantStoreMoq.Setup(x =>
-            x.GetParticipantAsync(participant.Id, CancellationToken))
+            _participantRepositoryMoq.Setup(x => x.GetParticipantAsync(participant.Id, CancellationToken))
                 .ReturnsAsync(participant);
 
-            var authorizationServiceMoq = new Mock<IAuthorizationService>();
-            authorizationServiceMoq.Setup(x =>
-            x.GetUserById(participant.UserId))
+            _authorizationServiceMoq.Setup(x => x.GetUserById(participant.UserId))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
-            var participantService = new ParticipantService(
-                participantStoreMoq.Object,
-                authorizationServiceMoq.Object);
-
+            var participantService = GetService();
             var result = await participantService.GetParticipantAsync(participant.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -47,8 +52,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var participantResponse = ParticipantServiceUnitTestConstants.GetCorrectParticipantResponse();
 
-            var participantStoreMoq = new Mock<IParticipantStore>();
-            participantStoreMoq.Setup(x =>
+            _participantRepositoryMoq.Setup(x =>
             x.GetParticipantsAsync(
                 It.IsAny<int>(),
                 It.IsAny<int>(),
@@ -57,15 +61,10 @@ namespace StuffyHelper.Tests.UnitTests
                 It.IsAny<CancellationToken>()))
                 .ReturnsAsync(participantResponse);
 
-            var authorizationServiceMoq = new Mock<IAuthorizationService>();
-            authorizationServiceMoq.Setup(x =>
-            x.GetUserById(It.IsAny<string>()))
+            _authorizationServiceMoq.Setup(x => x.GetUserById(It.IsAny<string>()))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
-            var participantService = new ParticipantService(
-                participantStoreMoq.Object,
-                authorizationServiceMoq.Object);
-
+            var participantService = GetService();
             var result = await participantService.GetParticipantsAsync(
                 cancellationToken: CancellationToken);
 
@@ -75,9 +74,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task AddParticipantAsync_EmptyInput()
         {
-            var participantService = new ParticipantService(
-               new Mock<IParticipantStore>().Object,
-               new Mock<IAuthorizationService>().Object);
+            var participantService = GetService();
 
             await ThrowsTask(async () => await participantService.AddParticipantAsync(null, CancellationToken), VerifySettings);
         }
@@ -88,20 +85,13 @@ namespace StuffyHelper.Tests.UnitTests
             var participant = ParticipantServiceUnitTestConstants.GetCorrectParticipantEntry();
             var addParticipant = ParticipantServiceUnitTestConstants.GetCorrectUpsertParticipantEntry();
 
-            var participantStoreMoq = new Mock<IParticipantStore>();
-            participantStoreMoq.Setup(x =>
-            x.AddParticipantAsync(It.IsAny<ParticipantEntry>(), CancellationToken))
+            _participantRepositoryMoq.Setup(x => x.AddParticipantAsync(It.IsAny<ParticipantEntry>(), CancellationToken))
                 .ReturnsAsync(participant);
 
-            var authorizationServiceMoq = new Mock<IAuthorizationService>();
-            authorizationServiceMoq.Setup(x =>
-            x.GetUserById(participant.UserId))
+            _authorizationServiceMoq.Setup(x => x.GetUserById(participant.UserId))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
-            var participantService = new ParticipantService(
-                participantStoreMoq.Object,
-                authorizationServiceMoq.Object);
-
+            var participantService = GetService();
             var result = await participantService.AddParticipantAsync(addParticipant, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -110,9 +100,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task UpdateParticipantAsync_EmptyInput()
         {
-            var participantService = new ParticipantService(
-               new Mock<IParticipantStore>().Object,
-               new Mock<IAuthorizationService>().Object);
+            var participantService = GetService();
 
             await ThrowsTask(async () => await participantService.UpdateParticipantAsync(Guid.Empty, null, CancellationToken), VerifySettings);
         }
@@ -120,9 +108,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task UpdateParticipantAsync_ParticipantNotFound()
         {
-            var participantService = new ParticipantService(
-               new Mock<IParticipantStore>().Object,
-               new Mock<IAuthorizationService>().Object);
+            var participantService = GetService();
 
             await ThrowsTask(async () => await participantService.UpdateParticipantAsync(Guid.Parse("e9aa0073-5de0-4227-a5f6-4d6c47d5f9e6"), new(), CancellationToken), VerifySettings);
         }
@@ -133,23 +119,15 @@ namespace StuffyHelper.Tests.UnitTests
             var participant = ParticipantServiceUnitTestConstants.GetCorrectParticipantEntry();
             var updateParticipant = ParticipantServiceUnitTestConstants.GetCorrectUpsertParticipantEntry();
 
-            var participantStoreMoq = new Mock<IParticipantStore>();
-            participantStoreMoq.Setup(x =>
-            x.UpdateParticipantAsync(It.IsAny<ParticipantEntry>(), CancellationToken))
+            _participantRepositoryMoq.Setup(x => x.UpdateParticipantAsync(It.IsAny<ParticipantEntry>(), CancellationToken))
                 .ReturnsAsync(participant);
-            participantStoreMoq.Setup(x =>
-            x.GetParticipantAsync(participant.Id, CancellationToken))
+            _participantRepositoryMoq.Setup(x => x.GetParticipantAsync(participant.Id, CancellationToken))
                 .ReturnsAsync(participant);
 
-            var authorizationServiceMoq = new Mock<IAuthorizationService>();
-            authorizationServiceMoq.Setup(x =>
-            x.GetUserById(participant.UserId))
+            _authorizationServiceMoq.Setup(x => x.GetUserById(participant.UserId))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
-            var participantService = new ParticipantService(
-                participantStoreMoq.Object,
-                authorizationServiceMoq.Object);
-
+            var participantService = GetService();
             var result = await participantService.UpdateParticipantAsync(participant.Id, updateParticipant, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -158,9 +136,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task DeleteParticipantAsync_EmptyInput()
         {
-            var participantService = new ParticipantService(
-               new Mock<IParticipantStore>().Object,
-               new Mock<IAuthorizationService>().Object);
+            var participantService = GetService();
 
             await ThrowsTask(async () => await participantService.DeleteParticipantAsync(string.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }

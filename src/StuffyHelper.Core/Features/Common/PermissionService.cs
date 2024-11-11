@@ -1,6 +1,6 @@
-﻿using StuffyHelper.Authorization.Core1.Features;
-using StuffyHelper.Authorization.Core1.Models;
-using System.Security.Claims;
+﻿using System.Security.Claims;
+using StuffyHelper.Authorization.Contracts.Enums;
+using StuffyHelper.Authorization.Core.Services.Interfaces;
 
 namespace StuffyHelper.Core.Features.Common
 {

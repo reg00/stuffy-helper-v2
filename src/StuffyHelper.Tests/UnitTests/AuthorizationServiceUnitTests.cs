@@ -2,13 +2,14 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using StuffyHelper.Authorization.Core1.Configs;
-using StuffyHelper.Authorization.Core1.Features.Authorization;
-using StuffyHelper.Authorization.Core1.Features.Avatar;
-using StuffyHelper.Authorization.Core1.Models;
-using StuffyHelper.Authorization.Core1.Models.User;
 using StuffyHelper.Tests.UnitTests.Common;
 using System.Security.Claims;
+using StuffyHelper.Authorization.Contracts.Entities;
+using StuffyHelper.Authorization.Contracts.Enums;
+using StuffyHelper.Authorization.Core.Services;
+using StuffyHelper.Authorization.Core.Services.Interfaces;
+using StuffyHelper.Common.Configurations;
+using StuffyHelper.Tests.Common;
 
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8620 // Argument cannot be used for parameter due to differences in the nullability of reference types.
@@ -17,32 +18,43 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class AuthorizationServiceUnitTests : UnitTestsBase
     {
-        private readonly Mock<UserManager<StuffyUser>> userManagerMoq;
-        private readonly Mock<RoleManager<IdentityRole>> roleManagerMoq;
-
+        private readonly Mock<UserManager<StuffyUser>> _userManagerMoq;
+        private readonly Mock<RoleManager<IdentityRole>> _roleManagerMoq;
+        private readonly Mock<IAvatarService> _avatarServiceMoq;
+        private readonly Mock<IOptions<StuffyConfiguration>> _optionsMoq;
+        
         public AuthorizationServiceUnitTests() : base()
         {
             var userNamagerStoreMoq = new Mock<IUserStore<StuffyUser>>();
-            userManagerMoq = new Mock<UserManager<StuffyUser>>(userNamagerStoreMoq.Object, null, null, null, null, null, null, null, null);
+            _userManagerMoq = new Mock<UserManager<StuffyUser>>(userNamagerStoreMoq.Object, null, null, null, null, null, null, null, null);
 
-            roleManagerMoq = new Mock<RoleManager<IdentityRole>>(
+            _roleManagerMoq = new Mock<RoleManager<IdentityRole>>(
                 new Mock<IRoleStore<IdentityRole>>().Object,
-                new IRoleValidator<IdentityRole>[0],
+                Array.Empty<IRoleValidator<IdentityRole>>(),
                 new Mock<ILookupNormalizer>().Object,
                 new Mock<IdentityErrorDescriber>().Object,
                 new Mock<ILogger<RoleManager<IdentityRole>>>().Object);
+
+            _avatarServiceMoq = new Mock<IAvatarService>();
+            _optionsMoq = new Mock<IOptions<StuffyConfiguration>>();
         }
 
+        private AuthorizationService GetService()
+        {
+            var mapper = CommonTestConstants.GetMapperConfiguration().CreateMapper();
+
+            return new AuthorizationService(
+                _userManagerMoq.Object,
+                _roleManagerMoq.Object,
+                _avatarServiceMoq.Object,
+                _optionsMoq.Object,
+                mapper);
+        }
+        
         [Fact]
         public async Task Login_NullModel()
         {
-            var loginModel = AuthorizationServiceUnitTestConstants.GetCorrectLoginModel();
-
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.Login(null, HttpContext), VerifySettings);
         }
@@ -52,15 +64,10 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var loginModel = AuthorizationServiceUnitTestConstants.GetCorrectLoginModel();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((StuffyUser)null);
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.Login(loginModel, HttpContext), VerifySettings);
         }
@@ -71,18 +78,12 @@ namespace StuffyHelper.Tests.UnitTests
             var loginModel = AuthorizationServiceUnitTestConstants.GetCorrectLoginModel();
             var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
-            x.IsEmailConfirmedAsync(stuffyUser))
+            _userManagerMoq.Setup(x => x.IsEmailConfirmedAsync(stuffyUser))
                 .ReturnsAsync(false);
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.Login(loginModel, HttpContext), VerifySettings);
         }
@@ -93,21 +94,14 @@ namespace StuffyHelper.Tests.UnitTests
             var loginModel = AuthorizationServiceUnitTestConstants.GetCorrectLoginModel();
             var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
-            x.IsEmailConfirmedAsync(stuffyUser))
+            _userManagerMoq.Setup(x => x.IsEmailConfirmedAsync(stuffyUser))
                 .ReturnsAsync(true);
-            userManagerMoq.Setup(x =>
-            x.CheckPasswordAsync(stuffyUser, loginModel.Password))
+            _userManagerMoq.Setup(x => x.CheckPasswordAsync(stuffyUser, loginModel.Password))
                 .ReturnsAsync(false);
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.Login(loginModel, HttpContext), VerifySettings);
         }
@@ -118,29 +112,19 @@ namespace StuffyHelper.Tests.UnitTests
             var loginModel = AuthorizationServiceUnitTestConstants.GetCorrectLoginModel();
             var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
-            x.IsEmailConfirmedAsync(stuffyUser))
+            _userManagerMoq.Setup(x => x.IsEmailConfirmedAsync(stuffyUser))
                 .ReturnsAsync(true);
-            userManagerMoq.Setup(x =>
-            x.CheckPasswordAsync(stuffyUser, loginModel.Password))
+            _userManagerMoq.Setup(x => x.CheckPasswordAsync(stuffyUser, loginModel.Password))
                 .ReturnsAsync(true);
-            userManagerMoq.Setup(x =>
-            x.GetRolesAsync(stuffyUser))
+            _userManagerMoq.Setup(x => x.GetRolesAsync(stuffyUser))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectRoles());
 
-            var authConfigMoq = new Mock<IOptions<AuthorizationConfiguration>>();
-            authConfigMoq.Setup(x =>
-            x.Value)
-                .Returns(AuthorizationServiceUnitTestConstants.GetCorrectAuthorizationConfiguration());
+            _optionsMoq.Setup(x => x.Value)
+                .Returns(CommonTestConstants.GetCorrectStuffyConfiguration());
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                authConfigMoq.Object);
+            var authService = GetService();
 
             var result = await authService.Login(loginModel, HttpContext);
 
@@ -150,11 +134,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task Logout_Success()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await authService.Logout(HttpContext);
         }
@@ -162,13 +142,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task Register_NullModel()
         {
-            var loginModel = AuthorizationServiceUnitTestConstants.GetCorrectLoginModel();
-
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.Register(null), VerifySettings);
         }
@@ -179,15 +153,10 @@ namespace StuffyHelper.Tests.UnitTests
             var registerModel = AuthorizationServiceUnitTestConstants.GetCorrectRegisterModel();
             var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(stuffyUser);
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.Register(registerModel), VerifySettings);
         }
@@ -196,20 +165,13 @@ namespace StuffyHelper.Tests.UnitTests
         public async Task Register_CreateError()
         {
             var registerModel = AuthorizationServiceUnitTestConstants.GetCorrectRegisterModel();
-            var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((StuffyUser)null);
-            userManagerMoq.Setup(x =>
-            x.CreateAsync(It.IsAny<StuffyUser>(), It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.CreateAsync(It.IsAny<StuffyUser>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(IdentityResult.Failed(AuthorizationServiceUnitTestConstants.GetIdentityErrors())));
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.Register(registerModel), VerifySettings);
         }
@@ -218,24 +180,15 @@ namespace StuffyHelper.Tests.UnitTests
         public async Task Register_Success()
         {
             var registerModel = AuthorizationServiceUnitTestConstants.GetCorrectRegisterModel();
-            var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((StuffyUser)null);
-            userManagerMoq.Setup(x =>
-            x.CreateAsync(It.IsAny<StuffyUser>(), It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.CreateAsync(It.IsAny<StuffyUser>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(IdentityResult.Success));
-            userManagerMoq.Setup(x =>
-            x.GenerateEmailConfirmationTokenAsync(It.IsAny<StuffyUser>()))
+            _userManagerMoq.Setup(x => x.GenerateEmailConfirmationTokenAsync(It.IsAny<StuffyUser>()))
                 .ReturnsAsync("test");
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
-
+            var authService = GetService();
             var result = await authService.Register(registerModel);
 
             await Verify(result, VerifySettings);
@@ -244,16 +197,10 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task GetRoles_Success()
         {
-            roleManagerMoq.Setup(x =>
-            x.Roles)
+            _roleManagerMoq.Setup(x => x.Roles)
                 .Returns(AuthorizationServiceUnitTestConstants.GetCorrectIdentityRoles().AsQueryable());
 
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
-
+            var authService = GetService();
             var result = authService.GetRoles();
 
             await Verify(result, VerifySettings);
@@ -262,11 +209,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task CheckUserIsAdmin_BadClaims()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.CheckUserIsAdmin(new ClaimsPrincipal(), CancellationToken), VerifySettings);
         }
@@ -276,20 +219,13 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
             var claims = AuthorizationServiceUnitTestConstants.GetCorrectClaims();
-
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
-
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
-            x.IsInRoleAsync(stuffyUser, nameof(UserType.Admin)))
+            _userManagerMoq.Setup(x => x.IsInRoleAsync(stuffyUser, nameof(UserType.Admin)))
                 .ReturnsAsync(true);
 
+            var authService = GetService();
             var result = await authService.CheckUserIsAdmin(claims, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -298,11 +234,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task GetUserByToken_BadClaims()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.GetUserByToken(new ClaimsPrincipal(), CancellationToken), VerifySettings);
         }
@@ -313,19 +245,12 @@ namespace StuffyHelper.Tests.UnitTests
             var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
             var claims = AuthorizationServiceUnitTestConstants.GetCorrectClaims();
 
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
-
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
-            x.IsInRoleAsync(stuffyUser, nameof(UserType.Admin)))
+            _userManagerMoq.Setup(x => x.IsInRoleAsync(stuffyUser, nameof(UserType.Admin)))
                 .ReturnsAsync(true);
-
+            
+            var authService = GetService();
             var result = await authService.GetUserByToken(claims, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -334,16 +259,11 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task GetUserLogins_Success()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
-
-            userManagerMoq.Setup(x =>
+            _userManagerMoq.Setup(x =>
             x.Users)
                 .Returns(AuthorizationServiceUnitTestConstants.GetCorrectStuffyUsers().AsQueryable());
 
+            var authService = GetService();
             var result = authService.GetUserLogins();
 
             await Verify(result, VerifySettings);
@@ -352,11 +272,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task DeleteUser_EmptyInput()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.DeleteUser(string.Empty, string.Empty), VerifySettings);
         }
@@ -364,11 +280,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task DeleteUser_UserNotFound()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.DeleteUser("test", string.Empty), VerifySettings);
         }
@@ -376,15 +288,11 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task DeleteUser_Success()
         {
-            userManagerMoq.Setup(x =>
+            _userManagerMoq.Setup(x =>
             x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser());
 
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await authService.DeleteUser("test", string.Empty);
         }
@@ -392,11 +300,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task UpdateUser_NullModel()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.UpdateUser(null, null), VerifySettings);
         }
@@ -406,11 +310,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var updateModel = AuthorizationServiceUnitTestConstants.GetCorrectUpdateModel();
 
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.UpdateUser(new ClaimsPrincipal(), updateModel), VerifySettings);
         }
@@ -421,15 +321,10 @@ namespace StuffyHelper.Tests.UnitTests
             var updateModel = AuthorizationServiceUnitTestConstants.GetCorrectUpdateModel();
             var claims = AuthorizationServiceUnitTestConstants.GetCorrectClaims();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((StuffyUser)null);
 
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.UpdateUser(claims, updateModel), VerifySettings);
         }
@@ -441,18 +336,14 @@ namespace StuffyHelper.Tests.UnitTests
             var updateModel = AuthorizationServiceUnitTestConstants.GetCorrectUpdateModel();
             var claims = AuthorizationServiceUnitTestConstants.GetCorrectClaims();
 
-            userManagerMoq.Setup(x =>
+            _userManagerMoq.Setup(x =>
             x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
+            _userManagerMoq.Setup(x =>
             x.UpdateAsync(It.IsAny<StuffyUser>()))
                 .Returns(Task.FromResult(IdentityResult.Failed(AuthorizationServiceUnitTestConstants.GetIdentityErrors())));
 
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.UpdateUser(claims, updateModel), VerifySettings);
         }
@@ -464,25 +355,16 @@ namespace StuffyHelper.Tests.UnitTests
             var updateModel = AuthorizationServiceUnitTestConstants.GetCorrectUpdateModel();
             var claims = AuthorizationServiceUnitTestConstants.GetCorrectClaims();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
-            x.UpdateAsync(It.IsAny<StuffyUser>()))
+            _userManagerMoq.Setup(x => x.UpdateAsync(It.IsAny<StuffyUser>()))
                 .Returns(Task.FromResult(IdentityResult.Success));
-            userManagerMoq.Setup(x =>
-            x.FindByIdAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByIdAsync(It.IsAny<string>()))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
-            x.GetRolesAsync(stuffyUser))
+            _userManagerMoq.Setup(x => x.GetRolesAsync(stuffyUser))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectRoles());
 
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
-
+            var authService = GetService();
             var result = await authService.UpdateUser(claims, updateModel);
 
             await Verify(result, VerifySettings);
@@ -491,11 +373,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task UpdateAvatar_BadClaims()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.UpdateAvatar(new ClaimsPrincipal(), null), VerifySettings);
         }
@@ -505,15 +383,10 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var claims = AuthorizationServiceUnitTestConstants.GetCorrectClaims();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((StuffyUser)null);
 
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.UpdateAvatar(claims, null), VerifySettings);
         }
@@ -524,20 +397,14 @@ namespace StuffyHelper.Tests.UnitTests
             var claims = AuthorizationServiceUnitTestConstants.GetCorrectClaims();
             var file = AuthorizationServiceUnitTestConstants.CreateTestFormFile();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser());
 
-            var avatarServiceMoq = new Mock<IAvatarService>();
-            avatarServiceMoq.Setup(x =>
+            _avatarServiceMoq.Setup(x =>
             x.GetAvatarUri(It.IsAny<string>(), CancellationToken))
                 .ReturnsAsync(new Uri("about:blank"));
 
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await authService.UpdateAvatar(claims, file);
         }
@@ -545,11 +412,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task RemoveAvatar_BadClaims()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.RemoveAvatar(new ClaimsPrincipal()), VerifySettings);
         }
@@ -559,15 +422,10 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var claims = AuthorizationServiceUnitTestConstants.GetCorrectClaims();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync((StuffyUser)null);
 
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.RemoveAvatar(claims), VerifySettings);
         }
@@ -577,27 +435,17 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var claims = AuthorizationServiceUnitTestConstants.GetCorrectClaims();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser());
 
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
-
+            var authService = GetService();
             await authService.RemoveAvatar(claims);
         }
 
         [Fact]
         public async Task GetUser_EmptyInput()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.GetUserByName(string.Empty), VerifySettings);
         }
@@ -605,11 +453,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task GetUser_UserNotFound()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.GetUserByName("test"), VerifySettings);
         }
@@ -617,27 +461,17 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task GetUser_Success()
         {
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser());
 
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
-
+            var authService = GetService();
             await authService.GetUserByName("test");
         }
 
         [Fact]
         public async Task ConfirmEmail_EmptyInput()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.ConfirmEmail(string.Empty, string.Empty), VerifySettings);
         }
@@ -645,11 +479,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task ConfirmEmail_UserNotFound()
         {
-            var authService = new AuthorizationService(
-               userManagerMoq.Object,
-               roleManagerMoq.Object,
-               new Mock<IAvatarService>().Object,
-               new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.ConfirmEmail("test", "12345"), VerifySettings);
         }
@@ -659,18 +489,12 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
-            x.ConfirmEmailAsync(It.IsAny<StuffyUser>(), It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.ConfirmEmailAsync(It.IsAny<StuffyUser>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(IdentityResult.Failed(AuthorizationServiceUnitTestConstants.GetIdentityErrors())));
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.ConfirmEmail("test", "12345"), VerifySettings);
         }
@@ -680,22 +504,14 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
 
-            userManagerMoq.Setup(x =>
-            x.FindByNameAsync(It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
-            x.ConfirmEmailAsync(It.IsAny<StuffyUser>(), It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.ConfirmEmailAsync(It.IsAny<StuffyUser>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(IdentityResult.Success));
-            userManagerMoq.Setup(x =>
-            x.GetRolesAsync(stuffyUser))
+            _userManagerMoq.Setup(x => x.GetRolesAsync(stuffyUser))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectRoles());
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
-
+            var authService = GetService();
             var result = await authService.ConfirmEmail("test", "12345");
 
             await Verify(result, VerifySettings);
@@ -704,11 +520,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task ForgotPasswordAsync_NullModel()
         {
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.ForgotPasswordAsync(null), VerifySettings);
         }
@@ -718,15 +530,10 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var forgotPasswordModel = AuthorizationServiceUnitTestConstants.GetCorrectForgotPasswordModel();
 
-            userManagerMoq.Setup(x =>
-            x.FindByEmailAsync(forgotPasswordModel.Email))
+            _userManagerMoq.Setup(x => x.FindByEmailAsync(forgotPasswordModel.Email))
                 .ReturnsAsync((StuffyUser)null);
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.ForgotPasswordAsync(forgotPasswordModel), VerifySettings);
         }
@@ -737,22 +544,14 @@ namespace StuffyHelper.Tests.UnitTests
             var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
             var forgotPasswordModel = AuthorizationServiceUnitTestConstants.GetCorrectForgotPasswordModel();
 
-            userManagerMoq.Setup(x =>
-            x.FindByEmailAsync(forgotPasswordModel.Email))
+            _userManagerMoq.Setup(x => x.FindByEmailAsync(forgotPasswordModel.Email))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
-            x.IsEmailConfirmedAsync(stuffyUser))
+            _userManagerMoq.Setup(x => x.IsEmailConfirmedAsync(stuffyUser))
                 .ReturnsAsync(true);
-            userManagerMoq.Setup(x =>
-            x.GeneratePasswordResetTokenAsync(stuffyUser))
+            _userManagerMoq.Setup(x => x.GeneratePasswordResetTokenAsync(stuffyUser))
                 .ReturnsAsync("12345");
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
-
+            var authService = GetService();
             var result = await authService.ForgotPasswordAsync(forgotPasswordModel);
 
             await Verify(result, VerifySettings);
@@ -761,11 +560,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task ResetPasswordAsync_NullModel()
         {
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.ResetPasswordAsync(null), VerifySettings);
         }
@@ -775,15 +570,10 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var resetPasswordModel = AuthorizationServiceUnitTestConstants.GetCorrectResetPasswordModel();
 
-            userManagerMoq.Setup(x =>
-            x.FindByEmailAsync(resetPasswordModel.Email))
+            _userManagerMoq.Setup(x => x.FindByEmailAsync(resetPasswordModel.Email))
                 .ReturnsAsync((StuffyUser)null);
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.ResetPasswordAsync(resetPasswordModel), VerifySettings);
         }
@@ -794,18 +584,12 @@ namespace StuffyHelper.Tests.UnitTests
             var resetPasswordModel = AuthorizationServiceUnitTestConstants.GetCorrectResetPasswordModel();
             var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
 
-            userManagerMoq.Setup(x =>
-            x.FindByEmailAsync(resetPasswordModel.Email))
+            _userManagerMoq.Setup(x => x.FindByEmailAsync(resetPasswordModel.Email))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
-            x.ResetPasswordAsync(It.IsAny<StuffyUser>(), It.IsAny<string>(), It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.ResetPasswordAsync(It.IsAny<StuffyUser>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(IdentityResult.Failed(AuthorizationServiceUnitTestConstants.GetIdentityErrors())));
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await ThrowsTask(async () => await authService.ResetPasswordAsync(resetPasswordModel), VerifySettings);
         }
@@ -816,18 +600,12 @@ namespace StuffyHelper.Tests.UnitTests
             var resetPasswordModel = AuthorizationServiceUnitTestConstants.GetCorrectResetPasswordModel();
             var stuffyUser = AuthorizationServiceUnitTestConstants.GetCorrectStuffyUser();
 
-            userManagerMoq.Setup(x =>
-            x.FindByEmailAsync(resetPasswordModel.Email))
+            _userManagerMoq.Setup(x => x.FindByEmailAsync(resetPasswordModel.Email))
                 .ReturnsAsync(stuffyUser);
-            userManagerMoq.Setup(x =>
-            x.ResetPasswordAsync(It.IsAny<StuffyUser>(), It.IsAny<string>(), It.IsAny<string>()))
+            _userManagerMoq.Setup(x => x.ResetPasswordAsync(It.IsAny<StuffyUser>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(Task.FromResult(IdentityResult.Success));
 
-            var authService = new AuthorizationService(
-                userManagerMoq.Object,
-                roleManagerMoq.Object,
-                new Mock<IAvatarService>().Object,
-                new Mock<IOptions<AuthorizationConfiguration>>().Object);
+            var authService = GetService();
 
             await authService.ResetPasswordAsync(resetPasswordModel);
         }

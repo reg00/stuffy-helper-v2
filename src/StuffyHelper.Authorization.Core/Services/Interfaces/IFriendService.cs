@@ -34,5 +34,5 @@ public interface IFriendService
     /// <param name="limit">Pagination limit</param>
     /// <param name="offset">Pagination offset</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    Task<AuthResponse<UserShortEntry>> GetFriends(ClaimsPrincipal user, int limit = 20, int offset = 0, CancellationToken cancellationToken = default);
+    Task<Response<UserShortEntry>> GetFriends(ClaimsPrincipal user, int limit = 20, int offset = 0, CancellationToken cancellationToken = default);
 }

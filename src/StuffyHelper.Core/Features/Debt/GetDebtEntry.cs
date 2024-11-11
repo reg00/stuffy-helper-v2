@@ -1,6 +1,5 @@
 ﻿using EnsureThat;
-using StuffyHelper.Authorization.Core1.Models;
-using StuffyHelper.Authorization.Core1.Models.User;
+using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Core.Features.Event;
 
 namespace StuffyHelper.Core.Features.Debt
@@ -18,8 +17,8 @@ namespace StuffyHelper.Core.Features.Debt
 
         public GetDebtEntry(
             DebtEntry entry,
-            UserEntry lender,
-            UserEntry debtor)
+            UserShortEntry lender,
+            UserShortEntry debtor)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));
             EnsureArg.IsNotNull(lender, nameof(lender));
@@ -30,8 +29,8 @@ namespace StuffyHelper.Core.Features.Debt
             IsSent = entry.IsSent;
             IsComfirmed = entry.IsComfirmed;
             Event = new EventShortEntry(entry.Event);
-            Lender = new UserShortEntry(lender);
-            Debtor = new UserShortEntry(debtor);
+            Lender = lender;
+            Debtor = debtor;
         }
     }
 }

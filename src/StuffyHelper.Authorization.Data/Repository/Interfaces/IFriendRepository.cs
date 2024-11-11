@@ -32,5 +32,5 @@ public interface IFriendRepository
     /// <param name="offset"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    Task<AuthResponse<FriendEntry>> GetFriends(string userId, int limit = 20, int offset = 0, CancellationToken cancellationToken = default);
+    Task<Response<FriendEntry>> GetFriends(string userId, int limit = 20, int offset = 0, CancellationToken cancellationToken = default);
 }

@@ -22,7 +22,7 @@ public class FriendController : Controller
     /// Получение списка друзей
     /// </summary>
     [HttpGet]
-    [ProducesResponseType(typeof(AuthResponse<UserShortEntry>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Response<UserShortEntry>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Forbidden)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]

@@ -35,4 +35,8 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\StuffyHelper.Common.Contracts\StuffyHelper.Common.Contracts.csproj" />
+    </ItemGroup>
+
 </Project>

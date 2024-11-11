@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using StuffyHelper.Minio.Features.Common;
 using System.ComponentModel.DataAnnotations;
+using StuffyHelper.Minio.Features.Helpers;
 
 namespace StuffyHelper.Core.Features.Media
 {

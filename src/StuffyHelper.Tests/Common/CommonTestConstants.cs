@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Http;
 using Moq;
 using System.Security.Claims;
+using AutoMapper;
+using StuffyHelper.Authorization.Core.AutoMapper;
+using StuffyHelper.Common.Configurations;
+using StuffyHelper.Tests.UnitTests.Common;
 
 namespace StuffyHelper.Tests.Common
 {
@@ -32,6 +36,24 @@ namespace StuffyHelper.Tests.Common
             };
 
             return httpContext;
+        }
+        
+        public static MapperConfiguration GetMapperConfiguration()
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new FriendsRequestAutoMapperProfile());
+                cfg.AddProfile(new FriendAutoMapperProfile());
+                cfg.AddProfile(new UserAutoMapperProfile());
+            });
+        }
+
+        public static StuffyConfiguration GetCorrectStuffyConfiguration()
+        {
+            return new StuffyConfiguration()
+            {
+                Authorization = AuthorizationServiceUnitTestConstants.GetCorrectAuthorizationConfiguration()
+            };
         }
     }
 }

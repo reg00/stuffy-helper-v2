@@ -1,8 +1,8 @@
 ﻿using EnsureThat;
-using StuffyHelper.Authorization.Core1.Models.User;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Core.Features.Purchase;
 using System.ComponentModel.DataAnnotations;
+using StuffyHelper.Authorization.Contracts.Models;
 
 namespace StuffyHelper.Core.Features.PurchaseUsage
 {

@@ -1,7 +1,8 @@
-﻿using EnsureThat;
+﻿using AutoMapper;
+using EnsureThat;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core1.Features;
-using StuffyHelper.Authorization.Core1.Models.User;
+using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Core.Features.Common;
 
 namespace StuffyHelper.Core.Features.PurchaseUsage
@@ -10,10 +11,13 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
     {
         private readonly IPurchaseUsageStore _purchaseUsageStore;
         private readonly IAuthorizationService _authorizationService;
-        public PurchaseUsageService(IPurchaseUsageStore purchaseUsageStore, IAuthorizationService authorizationService)
+        private readonly IMapper _mapper;
+        
+        public PurchaseUsageService(IPurchaseUsageStore purchaseUsageStore, IAuthorizationService authorizationService, IMapper mapper)
         {
             _purchaseUsageStore = purchaseUsageStore;
             _authorizationService = authorizationService;
+            _mapper = mapper;
         }
 
         public async Task<GetPurchaseUsageEntry> GetPurchaseUsageAsync(Guid purchaseUsageId, CancellationToken cancellationToken)
@@ -23,7 +27,7 @@ namespace StuffyHelper.Core.Features.PurchaseUsage
             var entry = await _purchaseUsageStore.GetPurchaseUsageAsync(purchaseUsageId, cancellationToken);
             var user = await _authorizationService.GetUserById(entry.Participant.UserId);
 
-            return new GetPurchaseUsageEntry(entry, new UserShortEntry(user));
+            return new GetPurchaseUsageEntry(entry, _mapper.Map<UserShortEntry>(user));
         }
 
         public async Task<Response<PurchaseUsageShortEntry>> GetPurchaseUsagesAsync(

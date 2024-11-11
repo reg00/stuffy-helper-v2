@@ -58,7 +58,7 @@ public class FriendService : IFriendService
         }
 
         /// <inheritdoc />
-        public async Task<AuthResponse<UserShortEntry>> GetFriends(ClaimsPrincipal user, int limit = 20, int offset = 0, CancellationToken cancellationToken = default)
+        public async Task<Response<UserShortEntry>> GetFriends(ClaimsPrincipal user, int limit = 20, int offset = 0, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(user, nameof(user));
 
@@ -70,7 +70,7 @@ public class FriendService : IFriendService
             var stuffyUser = await _authorizationService.GetUserByName(userName);
             var response = await _friendRepository.GetFriends(stuffyUser.Id, limit, offset, cancellationToken);
 
-            return new AuthResponse<UserShortEntry>()
+            return new Response<UserShortEntry>()
             {
                 Data = response.Data.Select(x => _mapper.Map<UserShortEntry>(x)),
                 Total = response.Total,

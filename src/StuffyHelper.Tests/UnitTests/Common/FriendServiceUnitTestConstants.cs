@@ -1,5 +1,5 @@
-﻿using StuffyHelper.Authorization.Core1.Features.Friends;
-using StuffyHelper.Authorization.Core1.Models;
+﻿using StuffyHelper.Authorization.Contracts.Entities;
+using StuffyHelper.Common.Messages;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {
@@ -7,10 +7,14 @@ namespace StuffyHelper.Tests.UnitTests.Common
     {
         public static FriendEntry GetCorrectFriendEntry()
         {
-            return new("123", "321");
+            return new()
+            {
+                UserId = "123",
+                FriendId = "321"
+            };
         }
 
-        public static AuthResponse<FriendEntry> GetCorrectAuthResponse()
+        public static Response<FriendEntry> GetCorrectAuthResponse()
         {
             return new()
             {
@@ -18,8 +22,10 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 TotalPages = 1,
                 Data = new List<FriendEntry>()
                 {
-                    new FriendEntry("123", "321")
+                    new()
                     {
+                        UserId = "123",
+                        FriendId = "321",
                         Friend = new ()
                         {
                             Id = "321",

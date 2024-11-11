@@ -1,7 +1,8 @@
-﻿using EnsureThat;
+﻿using AutoMapper;
+using EnsureThat;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core1.Features;
-using StuffyHelper.Authorization.Core1.Models.User;
+using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.PurchaseUsage;
@@ -12,13 +13,16 @@ namespace StuffyHelper.Core.Features.Participant
     {
         private readonly IParticipantStore _participantStore;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IMapper _mapper;
 
         public ParticipantService(
             IParticipantStore participantStore,
-            IAuthorizationService authorizationService)
+            IAuthorizationService authorizationService,
+            IMapper mapper)
         {
             _participantStore = participantStore;
             _authorizationService = authorizationService;
+            _mapper = mapper;
         }
 
         public async Task<GetParticipantEntry> GetParticipantAsync(Guid participantId, CancellationToken cancellationToken)
@@ -28,7 +32,7 @@ namespace StuffyHelper.Core.Features.Participant
             var entry = await _participantStore.GetParticipantAsync(participantId, cancellationToken);
             var user = await _authorizationService.GetUserById(entry.UserId);
 
-            return new GetParticipantEntry(entry, new GetUserEntry(user), entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x)));
+            return new GetParticipantEntry(entry, _mapper.Map<GetUserEntry>(user), entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x)));
         }
 
         public async Task<Response<ParticipantShortEntry>> GetParticipantsAsync(
@@ -44,7 +48,7 @@ namespace StuffyHelper.Core.Features.Participant
             foreach (var participant in resp.Data)
             {
                 var user = await _authorizationService.GetUserById(participant.UserId);
-                participants.Add(new ParticipantShortEntry(participant, new UserShortEntry(user)));
+                participants.Add(new ParticipantShortEntry(participant, _mapper.Map<UserShortEntry>(user)));
             }
 
             return new Response<ParticipantShortEntry>()
@@ -63,7 +67,7 @@ namespace StuffyHelper.Core.Features.Participant
             var entry = participant.ToCommonEntry();
             var result = await _participantStore.AddParticipantAsync(entry, cancellationToken);
 
-            return new ParticipantShortEntry(result, new UserShortEntry(user));
+            return new ParticipantShortEntry(result, _mapper.Map<UserShortEntry>(user));
         }
 
         public async Task DeleteParticipantAsync(string userId, Guid participantId, CancellationToken cancellationToken = default)
@@ -116,7 +120,7 @@ namespace StuffyHelper.Core.Features.Participant
             existingParticipant.PatchFrom(participant);
             var result = await _participantStore.UpdateParticipantAsync(existingParticipant, cancellationToken);
 
-            return new ParticipantShortEntry(result, new UserShortEntry(user));
+            return new ParticipantShortEntry(result, _mapper.Map<UserShortEntry>(user));
         }
     }
 }

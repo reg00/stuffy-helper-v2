@@ -5,13 +5,12 @@ using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using StuffyHelper.Api.Features.Middlewares;
-using StuffyHelper.Authorization.Core1.Registration;
-using StuffyHelper.Authorization.EntityFrameworkCore1.Registration;
 using StuffyHelper.EmailService.Core.Registration;
 using StuffyHelper.EntityFrameworkCore.Registration;
 using StuffyHelper.Minio.Registration;
 using System.Reflection;
 using System.Text.Json.Serialization;
+using StuffyHelper.Common.Extensions;
 
 namespace StuffyHelper.Api.Registration
 {
@@ -29,7 +28,8 @@ namespace StuffyHelper.Api.Registration
                 });
             });
 
-            services.AddAuth(configuration);
+           services.AddStuffyAuthorization(configuration);
+
 
             services
                 .AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
@@ -106,17 +106,8 @@ namespace StuffyHelper.Api.Registration
             return app;
         }
 
-        private static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddEfAuthDbServices(configuration);
-            services.AddStuffyAuthentication(configuration);
-
-            return services;
-        }
-
         private static IApplicationBuilder UseAuth(this IApplicationBuilder app)
         {
-            app.ApplicationServices.AddAuthDatabaseMigration();
             app.ApplicationServices.AddEfDatabaseMigration();
 
             app.UseAuthTokenChecker();

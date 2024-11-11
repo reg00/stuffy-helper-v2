@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Api.Web;
-using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Debt;
 using System.Net;
-using IAuthorizationService = StuffyHelper.Authorization.Core1.Features.IAuthorizationService;
+using StuffyHelper.Common.Contracts;
+using StuffyHelper.Common.Messages;
 
 namespace StuffyHelper.Api.Controllers
 {
@@ -14,6 +14,8 @@ namespace StuffyHelper.Api.Controllers
         private readonly IDebtService _debtService;
         private readonly IAuthorizationService _authorizationService;
 
+        private StuffyClaims StuffyClaims => new StuffyClaims();
+        
         public DebtController(
             IDebtService debtService,
             IAuthorizationService authorizationService)
@@ -26,16 +28,14 @@ namespace StuffyHelper.Api.Controllers
         /// Получение списка долгов
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Response<GetDebtEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Core.Features.Common.Response<GetDebtEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetDebtsRoute)]
         public async Task<IActionResult> GetDebtsAsync(int offset = 0, int limit = 10)
         {
-            var user = await _authorizationService.GetUserByToken(User, HttpContext.RequestAborted);
-
-            var debtsResponce = await _debtService.GetDebtsByUserAsync(user.Id, offset, limit, HttpContext.RequestAborted);
+            var debtsResponce = await _debtService.GetDebtsByUserAsync(StuffyClaims.UserId, offset, limit, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, debtsResponce);
         }
@@ -52,9 +52,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.SendDebtRoute)]
         public async Task<IActionResult> SendDebtAsync([FromRoute] Guid debtId)
         {
-            var user = await _authorizationService.GetUserByToken(User, HttpContext.RequestAborted);
-
-            await _debtService.SendDebtAsync(user.Id, debtId, HttpContext.RequestAborted);
+            await _debtService.SendDebtAsync(StuffyClaims.UserId, debtId, HttpContext.RequestAborted);
 
             return Ok("Succeccfully send debt");
         }
@@ -71,9 +69,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.ConfirmDebtRoute)]
         public async Task<IActionResult> ConfirmDebtAsync([FromRoute] Guid debtId)
         {
-            var user = await _authorizationService.GetUserByToken(User, HttpContext.RequestAborted);
-
-            await _debtService.ConfirmDebtAsync(user.Id, debtId, HttpContext.RequestAborted);
+            await _debtService.ConfirmDebtAsync(StuffyClaims.UserId, debtId, HttpContext.RequestAborted);
 
             return Ok("Succeccfully confirm debt");
         }

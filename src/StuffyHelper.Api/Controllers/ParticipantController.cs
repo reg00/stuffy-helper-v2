@@ -4,6 +4,7 @@ using StuffyHelper.Api.Web;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Participant;
 using System.Net;
+using StuffyHelper.Common.Messages;
 
 namespace StuffyHelper.Api.Controllers
 {
@@ -23,7 +24,7 @@ namespace StuffyHelper.Api.Controllers
         /// Получение списка участников ивента
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Response<ParticipantShortEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Core.Features.Common.Response<ParticipantShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]

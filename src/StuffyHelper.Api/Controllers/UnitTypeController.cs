@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Api.Web;
-using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.UnitType;
 using System.Net;
+using StuffyHelper.Common.Messages;
 
 namespace StuffyHelper.Api.Controllers
 {
@@ -21,7 +21,7 @@ namespace StuffyHelper.Api.Controllers
         /// Получение списка единиц измерения
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Response<UnitTypeShortEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Core.Features.Common.Response<UnitTypeShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]

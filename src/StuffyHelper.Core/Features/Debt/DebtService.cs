@@ -1,6 +1,8 @@
-﻿using EnsureThat;
+﻿using AutoMapper;
+using EnsureThat;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core1.Features;
+using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Checkout;
 using StuffyHelper.Core.Features.Common;
@@ -16,23 +18,26 @@ namespace StuffyHelper.Core.Features.Debt
         private readonly IEventStore _eventStore;
         private readonly ICheckoutStore _checkoutStore;
         private readonly IPurchaseUsageStore _purchaseUsageStore;
-        private readonly IAuthorizationService _authorizationService;
         private readonly IPurchaseService _purchaseService;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IMapper _mapper;
 
         public DebtService(
             IDebtStore debtStore,
             IEventStore eventStore,
             ICheckoutStore checkoutStore,
             IPurchaseUsageStore purchaseUsageStore,
+            IPurchaseService purchaseService,
             IAuthorizationService authorizationService,
-            IPurchaseService purchaseService)
+            IMapper mapper)
         {
             _debtStore = debtStore;
             _eventStore = eventStore;
             _checkoutStore = checkoutStore;
             _purchaseUsageStore = purchaseUsageStore;
-            _authorizationService = authorizationService;
             _purchaseService = purchaseService;
+            _authorizationService = authorizationService;
+            _mapper = mapper;
         }
 
         public async Task<GetDebtEntry> GetDebtAsync(Guid debtId, CancellationToken cancellationToken)
@@ -43,7 +48,7 @@ namespace StuffyHelper.Core.Features.Debt
             var lender = await _authorizationService.GetUserById(entry.LenderId);
             var debtor = await _authorizationService.GetUserById(entry.DebtorId);
 
-            return new GetDebtEntry(entry, lender, debtor);
+            return new GetDebtEntry(entry,_mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor));
         }
 
         public async Task<Response<GetDebtEntry>> GetDebtsAsync(
@@ -64,7 +69,7 @@ namespace StuffyHelper.Core.Features.Debt
                 var lender = await _authorizationService.GetUserById(debt.LenderId);
                 var debtor = await _authorizationService.GetUserById(debt.DebtorId);
 
-                debts.Add(new GetDebtEntry(debt, lender, debtor));
+                debts.Add(new GetDebtEntry(debt, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor)));
             }
 
             return new Response<GetDebtEntry>()
@@ -91,7 +96,7 @@ namespace StuffyHelper.Core.Features.Debt
                 var lender = await _authorizationService.GetUserById(dbDebt.LenderId);
                 var debtor = await _authorizationService.GetUserById(dbDebt.DebtorId);
 
-                debts.Add(new GetDebtEntry(dbDebt, lender, debtor));
+                debts.Add(new GetDebtEntry(dbDebt, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor)));
             }
 
             return new Response<GetDebtEntry>()
@@ -136,7 +141,7 @@ namespace StuffyHelper.Core.Features.Debt
             var lender = await _authorizationService.GetUserById(result.LenderId);
             var debtor = await _authorizationService.GetUserById(result.DebtorId);
 
-            return new GetDebtEntry(result, lender, debtor);
+            return new GetDebtEntry(result, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor));
         }
 
         public async Task<GetDebtEntry> ConfirmDebtAsync(string userId, Guid debtId, CancellationToken cancellationToken = default)
@@ -158,7 +163,7 @@ namespace StuffyHelper.Core.Features.Debt
             var lender = await _authorizationService.GetUserById(result.LenderId);
             var debtor = await _authorizationService.GetUserById(result.DebtorId);
 
-            return new GetDebtEntry(result, lender, debtor);
+            return new GetDebtEntry(result, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor));
         }
 
         public async Task CheckoutEvent(Guid eventId, string? userId, CancellationToken cancellationToken = default)

@@ -39,6 +39,7 @@ public static class AuthorizationExtensions
         {
             var authClaims = new List<Claim>
                 {
+                    new (ClaimTypes.Sid, user.Id),
                     new(ClaimTypes.Name, user.UserName ?? string.Empty),
                     new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };

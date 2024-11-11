@@ -6,6 +6,7 @@ using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Debt;
 using StuffyHelper.Core.Features.Event;
 using System.Net;
+using StuffyHelper.Common.Messages;
 
 namespace StuffyHelper.Api.Controllers
 {
@@ -30,7 +31,7 @@ namespace StuffyHelper.Api.Controllers
         /// Получение списка ивентов
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Response<EventShortEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Core.Features.Common.Response<EventShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
