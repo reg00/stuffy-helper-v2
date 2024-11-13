@@ -33,7 +33,7 @@ public interface IAuthorizationService
     /// <summary>
     /// Return all exists roles
     /// </summary>
-    IEnumerable<IdentityRole> GetRoles();
+    IReadOnlyList<IdentityRole> GetRoles();
 
     /// <summary>
     /// Identify is user an admin
@@ -53,7 +53,7 @@ public interface IAuthorizationService
     /// Return users by username
     /// </summary>
     /// <param name="userName">Username</param>
-    IEnumerable<UserShortEntry> GetUserLogins(string? userName = null);
+    IReadOnlyList<UserShortEntry> GetUserLogins(string? userName = null);
 
     /// <summary>
     /// Delete user from stuffy helper by username or id

@@ -11,7 +11,6 @@ public class StuffyEmailClient : ApiClientBase, IStuffyEmailClient
     {
     }
     
-    
     public Task SendAsync(
         SendEmailRequest body,
         CancellationToken cancellationToken = default)

@@ -28,11 +28,11 @@ public class FriendsRequestController : Controller
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetSendedRequestsRoute)]
-        public async Task<IActionResult> GetSendedRequestsAsync()
+        public async Task<IReadOnlyList<FriendsRequestShort>> GetSendedRequestsAsync()
         {
             var requests = await _requestService.GetSendedRequestsAsync(User, HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, requests);
+            return requests;
         }
 
         /// <summary>
@@ -44,11 +44,11 @@ public class FriendsRequestController : Controller
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetIncomingRequestsRoute)]
-        public async Task<IActionResult> GetIncomingRequestsAsync()
+        public async Task<IReadOnlyList<FriendsRequestShort>> GetIncomingRequestsAsync()
         {
             var requests = await _requestService.GetIncomingRequestsAsync(User, HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, requests);
+            return requests;
         }
 
         /// <summary>
@@ -60,11 +60,11 @@ public class FriendsRequestController : Controller
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetRequestRoute)]
-        public async Task<IActionResult> GetAsync(Guid requestId)
+        public async Task<FriendsRequestShort> GetAsync(Guid requestId)
         {
             var request = await _requestService.GetRequestAsync(requestId, HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, request);
+            return request;
         }
 
         /// <summary>
@@ -77,11 +77,9 @@ public class FriendsRequestController : Controller
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AcceptRequestRoute)]
-        public async Task<IActionResult> AcceptAsync(Guid requestId)
+        public async Task ConfirmAsync(Guid requestId)
         {
             await _requestService.ConfirmRequest(requestId, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -94,11 +92,11 @@ public class FriendsRequestController : Controller
         [ProducesResponseType(typeof(FriendsRequestShort), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddRequestRoute)]
-        public async Task<IActionResult> PostAsync([Required] string userId)
+        public async Task<FriendsRequestShort> PostAsync([Required] string userId)
         {
             var request = await _requestService.AddRequestAsync(User, userId, HttpContext.RequestAborted);
 
-            return StatusCode((int)HttpStatusCode.OK, request);
+            return request;
         }
 
         /// <summary>
@@ -108,10 +106,8 @@ public class FriendsRequestController : Controller
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteRequestRoute)]
-        public async Task<IActionResult> DeleteAsync(Guid requestId)
+        public async Task DeleteAsync(Guid requestId)
         {
             await _requestService.DeleteRequestAsync(requestId, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK);
         }
 }

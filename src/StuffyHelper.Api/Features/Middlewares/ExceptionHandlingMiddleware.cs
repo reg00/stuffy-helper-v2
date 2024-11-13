@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using StuffyHelper.Core.Exceptions;
-using StuffyHelper.Core.Features.Common;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Net.Http.Headers;
@@ -12,6 +11,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using StuffyHelper.Common.Exceptions;
 using StuffyHelper.Common.Messages;
+using BadRequestException = StuffyHelper.Common.Exceptions.BadRequestException;
 using DbStoreException = Reg00.Infrastructure.Errors.DbStoreException;
 using EntityAlreadyExistsException = Reg00.Infrastructure.Errors.EntityAlreadyExistsException;
 using EntityNotFoundException = Reg00.Infrastructure.Errors.EntityNotFoundException;
@@ -80,7 +80,7 @@ namespace StuffyHelper.Api.Features.Middlewares
             switch (exception)
             {
                 case ValidationException _:
-                case System.NotSupportedException _:
+                case NotSupportedException _:
                 case Reg00.Infrastructure.Errors.NotSupportedException _:
                 case ArgumentNullException _:
                 case BadRequestException _:

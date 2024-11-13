@@ -10,11 +10,11 @@ namespace StuffyHelper.Api.Controllers
     [Authorize]
     public class PurchaseUsageController : Controller
     {
-        private readonly IPurchaseUsageService _PurchaseUsageService;
+        private readonly IPurchaseUsageService _purchaseUsageService;
 
-        public PurchaseUsageController(IPurchaseUsageService PurchaseUsageService)
+        public PurchaseUsageController(IPurchaseUsageService purchaseUsageService)
         {
-            _PurchaseUsageService = PurchaseUsageService;
+            _purchaseUsageService = purchaseUsageService;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace StuffyHelper.Api.Controllers
             Guid? participantId = null,
             Guid? purchaseId = null)
         {
-            var purchaseUsageResponse = await _PurchaseUsageService.GetPurchaseUsagesAsync(offset, limit, eventId, participantId, purchaseId, HttpContext.RequestAborted);
+            var purchaseUsageResponse = await _purchaseUsageService.GetPurchaseUsagesAsync(offset, limit, eventId, participantId, purchaseId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, purchaseUsageResponse);
         }
@@ -49,7 +49,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.GetPurchaseUsageRoute)]
         public async Task<IActionResult> GetAsync(Guid purchaseUsageId)
         {
-            var purchaseUsageEntry = await _PurchaseUsageService.GetPurchaseUsageAsync(purchaseUsageId, HttpContext.RequestAborted);
+            var purchaseUsageEntry = await _purchaseUsageService.GetPurchaseUsageAsync(purchaseUsageId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, purchaseUsageEntry);
         }
@@ -64,7 +64,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.AddPurchaseUsageRoute)]
         public async Task<IActionResult> PostAsync([FromBody] UpsertPurchaseUsageEntry addEntry)
         {
-            var purchaseUsage = await _PurchaseUsageService.AddPurchaseUsageAsync(addEntry, HttpContext.RequestAborted);
+            var purchaseUsage = await _purchaseUsageService.AddPurchaseUsageAsync(addEntry, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, purchaseUsage);
         }
@@ -78,7 +78,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.DeletePurchaseUsageRoute)]
         public async Task<IActionResult> DeleteAsync(Guid purchaseUsageId)
         {
-            await _PurchaseUsageService.DeletePurchaseUsageAsync(purchaseUsageId, HttpContext.RequestAborted);
+            await _purchaseUsageService.DeletePurchaseUsageAsync(purchaseUsageId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK);
         }
@@ -93,7 +93,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.UpdatePurchaseUsageRoute)]
         public async Task<IActionResult> PatchAsync(Guid purchaseUsageId, [FromBody] UpsertPurchaseUsageEntry updateEntry)
         {
-            var entry = await _PurchaseUsageService.UpdatePurchaseUsageAsync(purchaseUsageId, updateEntry, HttpContext.RequestAborted);
+            var entry = await _purchaseUsageService.UpdatePurchaseUsageAsync(purchaseUsageId, updateEntry, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, entry);
         }

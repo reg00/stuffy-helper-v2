@@ -1,23 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StuffyHelper.Api.Web;
-using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Participant;
 using System.Net;
+using StuffyHelper.Common.Contracts;
+using StuffyHelper.Common.Helpers;
 using StuffyHelper.Common.Messages;
+using StuffyHelper.Common.Web;
+using KnownContentTypes = StuffyHelper.Api.Web.KnownContentTypes;
+using KnownRoutes = StuffyHelper.Api.Web.KnownRoutes;
 
 namespace StuffyHelper.Api.Controllers
 {
     [Authorize]
-    public class ParticipantController : Controller
+    public class ParticipantController : AuthorizedApiController
     {
         private readonly IParticipantService _participantService;
-        private readonly IPermissionService _permissionService;
 
-        public ParticipantController(IParticipantService participantService, IPermissionService permissionService)
+        private StuffyClaims UserClaims => IdentityClaims.GetUserClaims();
+        
+        public ParticipantController(IParticipantService participantService)
         {
             _participantService = participantService;
-            _permissionService = permissionService;
         }
 
         /// <summary>
@@ -80,9 +83,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.DeleteParticipantRoute)]
         public async Task<IActionResult> DeleteAsync(Guid participantId)
         {
-            var userId = await _permissionService.GetUserId(User, HttpContext.RequestAborted);
-
-            await _participantService.DeleteParticipantAsync(userId, participantId, HttpContext.RequestAborted);
+            await _participantService.DeleteParticipantAsync(UserClaims.UserId, participantId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK);
         }

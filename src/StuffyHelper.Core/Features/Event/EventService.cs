@@ -1,6 +1,5 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Http;
-using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
@@ -10,6 +9,7 @@ using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Common.Exceptions;
 using StuffyHelper.Minio.Features.Helpers;
+using BadRequestException = StuffyHelper.Common.Exceptions.BadRequestException;
 using EntityNotFoundException = Reg00.Infrastructure.Errors.EntityNotFoundException;
 using ForbiddenException = Reg00.Infrastructure.Errors.ForbiddenException;
 

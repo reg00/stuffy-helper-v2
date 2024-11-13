@@ -27,7 +27,7 @@ public interface IFriendsRequestService
     /// </summary>
     /// <param name="user">User claims</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    Task<IEnumerable<FriendsRequestShort>> GetSendedRequestsAsync(
+    Task<IReadOnlyList<FriendsRequestShort>> GetSendedRequestsAsync(
         ClaimsPrincipal user,
         CancellationToken cancellationToken = default);
 
@@ -36,7 +36,7 @@ public interface IFriendsRequestService
     /// </summary>
     /// <param name="user">User claims</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    Task<IEnumerable<FriendsRequestShort>> GetIncomingRequestsAsync(
+    Task<IReadOnlyList<FriendsRequestShort>> GetIncomingRequestsAsync(
         ClaimsPrincipal user,
         CancellationToken cancellationToken = default);
 

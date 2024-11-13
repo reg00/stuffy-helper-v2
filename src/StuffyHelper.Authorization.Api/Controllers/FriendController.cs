@@ -27,10 +27,8 @@ public class FriendController : Controller
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
     [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
     [Route(KnownRoutes.GetFriendsRoute)]
-    public async Task<IActionResult> GetAsync(int limit = 20, int offset = 0)
+    public async Task<Response<UserShortEntry>> GetAsync(int limit = 20, int offset = 0)
     {
-        var friends = await _friendshipService.GetFriends(User, limit, offset, HttpContext.RequestAborted);
-
-        return StatusCode((int)HttpStatusCode.OK, friends);
+        return await _friendshipService.GetFriends(User, limit, offset, HttpContext.RequestAborted);
     }
 }

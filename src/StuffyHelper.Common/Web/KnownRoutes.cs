@@ -99,7 +99,7 @@ public static class KnownRoutes
         public const string StoreMediaPresignedUrlRoute = $"{DefaultRouteSegment}/{MediaSegment}/{PresignedUrlSegment}";
         public const string DeleteMediaRoute = GetMediaRouteSegment;
 
-        private const string RequestRoute = $"{DefaultRouteSegment}/{RequestSegment}";
+        public const string RequestRoute = $"{DefaultRouteSegment}/{RequestSegment}";
         public const string AddRequestRoute = RequestRoute;
         public const string AcceptRequestRoute = $"{GetRequestRoute}/accept";
         public const string GetRequestRoute = $"{RequestRoute}/{RequestIdRouteSegment}";

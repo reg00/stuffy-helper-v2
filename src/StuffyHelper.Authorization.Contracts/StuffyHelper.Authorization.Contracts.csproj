@@ -13,11 +13,8 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\StuffyHelper.Common.Client\StuffyHelper.Common.Client.csproj" />
       <ProjectReference Include="..\StuffyHelper.Minio\StuffyHelper.Minio.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Clients\Interface\" />
     </ItemGroup>
 
 </Project>

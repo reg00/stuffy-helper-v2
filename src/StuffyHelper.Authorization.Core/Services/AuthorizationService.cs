@@ -116,7 +116,7 @@ public class AuthorizationService : IAuthorizationService
         }
 
         /// <inheritdoc />
-        public IEnumerable<IdentityRole> GetRoles() => _roleManager.Roles.ToList();
+        public IReadOnlyList<IdentityRole> GetRoles() => _roleManager.Roles.ToList();
 
         /// <inheritdoc />
         public async Task<bool> CheckUserIsAdmin(ClaimsPrincipal user, CancellationToken cancellationToken = default)
@@ -153,7 +153,7 @@ public class AuthorizationService : IAuthorizationService
         }
 
         /// <inheritdoc />
-        public IEnumerable<UserShortEntry> GetUserLogins(string? userName = null)
+        public IReadOnlyList<UserShortEntry> GetUserLogins(string? userName = null)
         {
             var users = _userManager.Users
                 .Where(u => userName == null || u.UserName != null && u.UserName.ToLower().StartsWith(userName.ToLower()) && u.EmailConfirmed == true)

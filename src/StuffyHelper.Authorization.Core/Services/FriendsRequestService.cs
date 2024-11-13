@@ -54,7 +54,7 @@ namespace StuffyHelper.Authorization.Core.Services;
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<FriendsRequestShort>> GetSendedRequestsAsync(
+        public async Task<IReadOnlyList<FriendsRequestShort>> GetSendedRequestsAsync(
            ClaimsPrincipal user,
            CancellationToken cancellationToken = default)
         {
@@ -68,11 +68,11 @@ namespace StuffyHelper.Authorization.Core.Services;
             var stuffyUser = await _authorizationService.GetUserByName(userName);
             var resp = await _requestRepository.GetSendedRequestsAsync(stuffyUser.Id, cancellationToken);
 
-            return resp.Select(x => _mapper.Map<FriendsRequestShort>(x));
+            return resp.Select(x => _mapper.Map<FriendsRequestShort>(x)).ToList();
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<FriendsRequestShort>> GetIncomingRequestsAsync(
+        public async Task<IReadOnlyList<FriendsRequestShort>> GetIncomingRequestsAsync(
             ClaimsPrincipal user,
             CancellationToken cancellationToken = default)
         {
@@ -86,7 +86,7 @@ namespace StuffyHelper.Authorization.Core.Services;
             var stuffyUser = await _authorizationService.GetUserByName(userName);
             var resp = await _requestRepository.GetIncomingRequestsAsync(stuffyUser.Id, cancellationToken);
 
-            return resp.Select(x => _mapper.Map<FriendsRequestShort>(x));
+            return resp.Select(x => _mapper.Map<FriendsRequestShort>(x)).ToList();
         }
 
         /// <inheritdoc />

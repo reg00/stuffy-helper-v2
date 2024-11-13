@@ -7,6 +7,7 @@ using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Configurations;
+using StuffyHelper.Common.Exceptions;
 using StuffyHelper.Common.Messages;
 using StuffyHelper.Common.Web;
 using StuffyHelper.EmailService.Contracts.Clients.Interfaces;
@@ -42,14 +43,12 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.RegisterRoute)]
-        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        public async Task<string> Register([FromBody] RegisterModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
 
             if (!ModelState.IsValid)
-            {
-                return BadRequest(new ErrorResponse(ModelState));
-            }
+                throw new BadRequestException(ModelState);
 
             var code = await _authorizationService.Register(model);
             try
@@ -78,7 +77,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
                 throw;
             }
 
-            return Ok("Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме");
+            return "Для завершения регистрации проверьте электронную почту и перейдите по ссылке, указанной в письме";
         }
 
         /// <summary>
@@ -92,11 +91,9 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.EmailConfirmRoute)]
-        public async Task<IActionResult> ConfirmEmail(string login, string code)
+        public async Task ConfirmEmail(string login, string code)
         {
             await _authorizationService.ConfirmEmail(login, code);
-
-            return Redirect("~/sign-up/success");
         }
 
         /// <summary>
@@ -110,23 +107,19 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.LoginRoute)]
-        public async Task<IActionResult> Login([FromBody] LoginModel model)
+        public async Task<GetUserEntry> Login([FromBody] LoginModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
 
             if (!ModelState.IsValid)
-            {
-                return BadRequest(new ErrorResponse(ModelState));
-            }
+                throw new BadRequestException(ModelState);
 
             var token = await _authorizationService.Login(model, HttpContext);
 
             Response.Headers.Add("token", new JwtSecurityTokenHandler().WriteToken(token));
             Response.Headers.Add("expiration", token.ValidTo.ToString());
 
-            var user = await _authorizationService.GetUserByName(model.Username);
-
-            return Ok(user);
+            return await _authorizationService.GetUserByName(model.Username);
         }
 
         /// <summary>
@@ -134,10 +127,9 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// </summary>
         [HttpPost]
         [Route(KnownRoutes.LogoutRoute)]
-        public async Task<IActionResult> Logout()
+        public async Task Logout()
         {
             await _authorizationService.Logout(HttpContext);
-            return Ok();
         }
 
         /// <summary>
@@ -148,14 +140,12 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordRoute)]
-        public async Task<IActionResult> ForgotPassword(ForgotPasswordModel model)
+        public async Task<string> ForgotPassword(ForgotPasswordModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
 
             if (!ModelState.IsValid)
-            {
-                return BadRequest(new ErrorResponse(ModelState));
-            }
+                throw new BadRequestException(ModelState);
 
             var (_, code) = await _authorizationService.ForgotPasswordAsync(model);
 
@@ -175,7 +165,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
 
             await _emailClient.SendAsync(request);
 
-            return Ok("Инструкция по изменению пароля отправлена на почту.");
+            return "Инструкция по изменению пароля отправлена на почту.";
         }
 
         /// <summary>
@@ -187,12 +177,16 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordConfirmRoute)]
-        public IActionResult ResetPassword(string email, string code)
+        public ResetPasswordResult ResetPassword(string email, string code)
         {
             EnsureArg.IsNotNullOrWhiteSpace(code, nameof(code));
             EnsureArg.IsNotNullOrWhiteSpace(email, nameof(email));
 
-            return Redirect($"~/password-reset/confirm?email={email}&code={code}");
+            return new ResetPasswordResult()
+            {
+                Email = email,
+                Code = code
+            };
         }
 
         /// <summary>
@@ -203,18 +197,16 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordConfirmRoute)]
-        public async Task<IActionResult> ResetPassword(ResetPasswordModel model)
+        public async Task<string> ResetPassword(ResetPasswordModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
 
             if (!ModelState.IsValid)
-            {
-                return BadRequest(new ErrorResponse(ModelState));
-            }
+                throw new BadRequestException(ModelState);
 
             await _authorizationService.ResetPasswordAsync(model);
 
-            return Ok("Пароль успешно изменен");
+            return "Пароль успешно изменен";
         }
 
         /// <summary>
@@ -224,11 +216,14 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [ProducesResponseType(typeof(IdentityRole), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Forbidden)]
         [Route(KnownRoutes.RolesRoute)]
-        public async Task<IActionResult> GetRoles()
+        public async Task<IReadOnlyList<IdentityRole>> GetRoles()
         {
             var isAdmin = await _authorizationService.CheckUserIsAdmin(User, HttpContext.RequestAborted);
 
-            return isAdmin ? Ok(_authorizationService.GetRoles()) : Forbid();
+            if (!isAdmin)
+                throw new ForbiddenException("You dont have permissions");
+            
+            return _authorizationService.GetRoles();
         }
 
         /// <summary>
@@ -238,10 +233,9 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.IsAdminRoute)]
-        public async Task<IActionResult> CheckUserIsAdmin()
+        public async Task<bool> CheckUserIsAdmin()
         {
-            var isAdmin = await _authorizationService.CheckUserIsAdmin(User, HttpContext.RequestAborted);
-            return Ok(isAdmin);
+            return await _authorizationService.CheckUserIsAdmin(User, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -251,11 +245,9 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AccountRoute)]
-        public async Task<IActionResult> GetAccountInfoAsync()
+        public async Task<GetUserEntry> GetAccountInfoAsync()
         {
-            var user = await _authorizationService.GetUserByToken(User);
-
-            return Ok(user);
+            return await _authorizationService.GetUserByToken(User);
         }
 
         /// <summary>
@@ -264,12 +256,12 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// <param name="userName">Логин пользователя. Опциональное поле.</param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<GetUserEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IReadOnlyList<UserShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UserLoginsRoute)]
-        public IActionResult GetUserLogins(string? userName = null)
+        public IReadOnlyList<UserShortEntry> GetUserLogins(string? userName = null)
         {
-            return Ok(_authorizationService.GetUserLogins(userName));
+            return _authorizationService.GetUserLogins(userName);
         }
 
         /// <summary>
@@ -281,18 +273,14 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.EditUserRoute)]
-        public async Task<IActionResult> EditUserAsync([FromBody] UpdateModel updateModel)
+        public async Task<GetUserEntry> EditUserAsync([FromBody] UpdateModel updateModel)
         {
             EnsureArg.IsNotNull(updateModel, nameof(updateModel));
 
             if (!ModelState.IsValid)
-            {
-                return BadRequest(new ErrorResponse(ModelState));
-            }
+                throw new BadRequestException(ModelState);
 
-            var user = await _authorizationService.UpdateUser(User, updateModel);
-
-            return Ok(user);
+            return await _authorizationService.UpdateUser(User, updateModel);
         }
 
         /// <summary>
@@ -303,13 +291,11 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AvatarRoute)]
-        public async Task<IActionResult> EditAvatarAsync(IFormFile file)
+        public async Task EditAvatarAsync(IFormFile file)
         {
             EnsureArg.IsNotNull(file, nameof(file));
 
             await _authorizationService.UpdateAvatar(User, file);
-
-            return Ok();
         }
 
         /// <summary>
@@ -318,11 +304,9 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [HttpDelete]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AvatarRoute)]
-        public async Task<IActionResult> RemoveAvatarAsync()
+        public async Task RemoveAvatarAsync()
         {
             await _authorizationService.RemoveAvatar(User);
-
-            return Ok();
         }
     }
 }

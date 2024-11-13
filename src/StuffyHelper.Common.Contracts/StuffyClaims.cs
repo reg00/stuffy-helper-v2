@@ -8,10 +8,15 @@ public record StuffyClaims
     /// <summary>
     /// User id from token
     /// </summary>
-    public string UserId { get; set; } = string.Empty;
+    public string UserId { get; init; } = string.Empty;
 
     /// <summary>
     /// user name from token
     /// </summary>
     public string Username { get; init; } = string.Empty;
+    
+    /// <summary>
+    /// User roles
+    /// </summary>
+    public List<string> Roles { get; init; } = new();
 }
