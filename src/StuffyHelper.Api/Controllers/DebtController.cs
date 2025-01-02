@@ -32,7 +32,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.GetDebtsRoute)]
         public async Task<IActionResult> GetDebtsAsync(int offset = 0, int limit = 10)
         {
-            var debtsResponce = await _debtService.GetDebtsByUserAsync(UserClams.UserId, offset, limit, HttpContext.RequestAborted);
+            var debtsResponce = await _debtService.GetDebtsByUserAsync(Token, UserClams.UserId, offset, limit, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, debtsResponce);
         }
@@ -49,7 +49,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.SendDebtRoute)]
         public async Task<IActionResult> SendDebtAsync([FromRoute] Guid debtId)
         {
-            await _debtService.SendDebtAsync(UserClams.UserId, debtId, HttpContext.RequestAborted);
+            await _debtService.SendDebtAsync(Token, UserClams.UserId, debtId, HttpContext.RequestAborted);
 
             return Ok("Succeccfully send debt");
         }
@@ -66,7 +66,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.ConfirmDebtRoute)]
         public async Task<IActionResult> ConfirmDebtAsync([FromRoute] Guid debtId)
         {
-            await _debtService.ConfirmDebtAsync(UserClams.UserId, debtId, HttpContext.RequestAborted);
+            await _debtService.ConfirmDebtAsync(Token, UserClams.UserId, debtId, HttpContext.RequestAborted);
 
             return Ok("Succeccfully confirm debt");
         }

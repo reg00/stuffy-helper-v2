@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Http;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
-using System.Security.Claims;
 using AutoMapper;
+using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Authorization.Contracts.Models;
-using StuffyHelper.Authorization.Core.Services.Interfaces;
+using StuffyHelper.Common.Contracts;
 using StuffyHelper.Common.Exceptions;
+using StuffyHelper.Common.Helpers;
 using StuffyHelper.Minio.Features.Helpers;
 using BadRequestException = StuffyHelper.Common.Exceptions.BadRequestException;
 using EntityNotFoundException = Reg00.Infrastructure.Errors.EntityNotFoundException;
-using ForbiddenException = Reg00.Infrastructure.Errors.ForbiddenException;
 
 namespace StuffyHelper.Core.Features.Event
 {
@@ -19,40 +19,40 @@ namespace StuffyHelper.Core.Features.Event
     {
         private readonly IEventStore _eventStore;
         private readonly IParticipantService _participantService;
-        private readonly IAuthorizationService _authorizationService;
         private readonly IMediaService _mediaService;
+        private readonly IAuthorizationClient _authorizationClient;
         private readonly IMapper _mapper;
 
         public EventService(
             IEventStore eventStore,
             IParticipantService participantService,
-            IAuthorizationService authorizationService,
             IMediaService mediaService,
+            IAuthorizationClient authorizationClient,
             IMapper mapper)
         {
             _eventStore = eventStore;
             _participantService = participantService;
-            _authorizationService = authorizationService;
             _mediaService = mediaService;
+            _authorizationClient = authorizationClient;
             _mapper = mapper;
         }
 
-        public async Task<GetEventEntry> GetEventAsync(Guid eventId, string? userId = null, CancellationToken cancellationToken = default)
+        public async Task<GetEventEntry> GetEventAsync(string token, Guid eventId, string? userId = null, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             var entry = await _eventStore.GetEventAsync(eventId, userId, cancellationToken);
-            var user = await _authorizationService.GetUserById(entry.UserId);
+            var userClaims = token.GetUserClaims();
 
             var participants = new List<ParticipantShortEntry>();
 
             foreach (var item in entry.Participants)
             {
-                var participantUser = await _authorizationService.GetUserById(item.UserId);
+                var participantUser = await _authorizationClient.GetUserById(token, item.UserId, cancellationToken);
                 participants.Add(new ParticipantShortEntry(item, _mapper.Map<UserShortEntry>(participantUser)));
             }
 
-            return new GetEventEntry(entry, _mapper.Map<UserShortEntry>(user), participants);
+            return new GetEventEntry(entry, _mapper.Map<UserShortEntry>(userClaims), participants);
         }
 
         public async Task<Response<EventShortEntry>> GetEventsAsync(
@@ -86,22 +86,18 @@ namespace StuffyHelper.Core.Features.Event
         }
 
         public async Task<EventShortEntry> AddEventAsync(
+            string token,
             AddEventEntry eventEntry,
-            ClaimsPrincipal user,
+            StuffyClaims claims,
             CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotNull(user, nameof(user));
+            EnsureArg.IsNotNull(claims, nameof(claims));
             EnsureArg.IsNotNull(eventEntry, nameof(eventEntry));
 
             if (eventEntry.EventDateEnd != null && eventEntry.EventDateEnd < eventEntry.EventDateStart)
                 throw new BadRequestException("End date must be later than start date.");
 
-            var userName = user.Identity?.Name;
-
-            if (userName == null)
-                throw new ForbiddenException("Authorization error");
-
-            var identityUser = await _authorizationService.GetUserByName(userName);
+            var identityUser = await _authorizationClient.GetUserById(token, claims.UserId, cancellationToken);
             var entry = new EventEntry(
                 eventEntry.Name,
                 eventEntry.Description,
@@ -117,7 +113,7 @@ namespace StuffyHelper.Core.Features.Event
                 UserId = entry.UserId
             };
 
-            await _participantService.AddParticipantAsync(addParticipant, cancellationToken);
+            await _participantService.AddParticipantAsync(token, addParticipant, cancellationToken);
 
             return new EventShortEntry(result);
         }
@@ -211,21 +207,19 @@ namespace StuffyHelper.Core.Features.Event
                 throw new BadRequestException("Cannot edit completed event");
             }
 
-            await CheckEventPermissionsAsync(existingEvent.UserId, userId);
+            CheckEventPermissionsAsync(existingEvent.UserId, userId);
 
             return existingEvent;
         }
 
-        private async Task CheckEventPermissionsAsync(string eventUserId, string? userId)
+        private static void CheckEventPermissionsAsync(string eventUserId, string? userId)
         {
             EnsureArg.IsNotNullOrWhiteSpace(eventUserId, nameof(eventUserId));
 
             if (string.IsNullOrWhiteSpace(userId))
                 return;
 
-            var stuffyUser = await _authorizationService.GetUserById(userId);
-
-            if (eventUserId != stuffyUser.Id)
+            if (eventUserId != userId)
             {
                 throw new AuthorizationException($"You don't have permission to complete/uncomplete event.");
             }

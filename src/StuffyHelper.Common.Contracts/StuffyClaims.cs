@@ -19,4 +19,9 @@ public record StuffyClaims
     /// User roles
     /// </summary>
     public List<string> Roles { get; init; } = new();
+    
+    /// <summary>
+    /// user avatar image url
+    /// </summary>
+    public Uri? ImageUri { get; init; }
 }

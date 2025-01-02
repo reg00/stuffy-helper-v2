@@ -59,6 +59,11 @@ public interface IAuthorizationClient
         string? userName = null,
         CancellationToken cancellationToken = default);
 
+    public Task<GetUserEntry> GetUserById(
+        string token,
+        string userId,
+        CancellationToken cancellationToken = default);
+    
     public Task<GetUserEntry> EditUserAsync(
         string token,
         UpdateModel body,

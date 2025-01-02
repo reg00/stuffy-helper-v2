@@ -78,7 +78,7 @@ namespace StuffyHelper.Api.Controllers
         {
             var userId = PermissionHelper.GetUserId(UserClaims);
 
-            var @event = await _eventService.GetEventAsync(eventId, userId, HttpContext.RequestAborted);
+            var @event = await _eventService.GetEventAsync(Token, eventId, userId, HttpContext.RequestAborted);
 
             return Ok(@event);
         }
@@ -93,8 +93,9 @@ namespace StuffyHelper.Api.Controllers
         public async Task<IActionResult> PostAsync([FromBody] AddEventEntry entry)
         {
             var @event = await _eventService.AddEventAsync(
+                Token,
                 entry,
-                User,
+                UserClaims,
                 HttpContext.RequestAborted);
 
             return Ok(@event);
@@ -109,9 +110,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.DeleteEventRoute)]
         public async Task<IActionResult> DeleteAsync(Guid eventId)
         {
-            var userId = PermissionHelper.GetUserId(UserClaims);
-
-            await _eventService.DeleteEventAsync(eventId, userId, HttpContext.RequestAborted);
+            await _eventService.DeleteEventAsync(eventId, UserClaims.UserId, HttpContext.RequestAborted);
 
             return Ok();
         }

@@ -1,17 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StuffyHelper.Api.Web;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using System.Net;
+using StuffyHelper.Common.Contracts;
+using StuffyHelper.Common.Helpers;
 using StuffyHelper.Common.Messages;
+using StuffyHelper.Common.Web;
+using KnownContentTypes = StuffyHelper.Api.Web.KnownContentTypes;
+using KnownRoutes = StuffyHelper.Api.Web.KnownRoutes;
 
 namespace StuffyHelper.Api.Controllers
 {
     [Authorize]
-    public class PurchaseUsageController : Controller
+    public class PurchaseUsageController : AuthorizedApiController
     {
         private readonly IPurchaseUsageService _purchaseUsageService;
 
+        private StuffyClaims UserClaims => IdentityClaims.GetUserClaims();
+        
         public PurchaseUsageController(IPurchaseUsageService purchaseUsageService)
         {
             _purchaseUsageService = purchaseUsageService;
@@ -49,7 +55,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.GetPurchaseUsageRoute)]
         public async Task<IActionResult> GetAsync(Guid purchaseUsageId)
         {
-            var purchaseUsageEntry = await _purchaseUsageService.GetPurchaseUsageAsync(purchaseUsageId, HttpContext.RequestAborted);
+            var purchaseUsageEntry = await _purchaseUsageService.GetPurchaseUsageAsync(UserClaims, purchaseUsageId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, purchaseUsageEntry);
         }

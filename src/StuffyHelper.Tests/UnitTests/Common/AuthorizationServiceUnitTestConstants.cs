@@ -6,6 +6,7 @@ using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Enums;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Configurations;
+using StuffyHelper.Common.Contracts;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {
@@ -144,6 +145,16 @@ namespace StuffyHelper.Tests.UnitTests.Common
             };
         }
 
+        public static StuffyClaims GetCorrectStuffyClaims()
+        {
+            return new StuffyClaims()
+            {
+                UserId = "test",
+                Roles = new List<string>() { "admin", "user" },
+                Username = "test"
+            };
+        }
+        
         public static ClaimsPrincipal GetCorrectClaims()
         {
             var claims = new List<Claim>()

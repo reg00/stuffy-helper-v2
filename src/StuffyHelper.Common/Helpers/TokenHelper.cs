@@ -40,11 +40,14 @@ public static class TokenHelper
 
     private static StuffyClaims GetClaimsData(IList<Claim> claims)
     {
+        var imageUri = claims.FirstOrDefault(c => c.Type == ClaimTypes.Uri)?.Value;
+        
         return new StuffyClaims()
         {
             UserId = claims.First(c => c.Type == ClaimTypes.Sid).Value,
             Username = claims.First(c => c.Type == ClaimTypes.Name).Value,
-            Roles = claims.Where(c => c.Type == ClaimTypes.Role).Select(x => x.Value).ToList()
+            Roles = claims.Where(c => c.Type == ClaimTypes.Role).Select(x => x.Value).ToList(),
+            ImageUri = string.IsNullOrWhiteSpace(imageUri) ? new Uri(imageUri!) : new Uri("about:blank")
         };
     }
 

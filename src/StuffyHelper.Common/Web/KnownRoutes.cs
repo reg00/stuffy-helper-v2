@@ -25,6 +25,7 @@ public static class KnownRoutes
         private const string DebtsSegment = "debts";
 
 
+        private const string UserIdRouteSegment = $"{{{KnownActionParameterNames.UserId}}}";
         private const string EventIdRouteSegment = $"{{{KnownActionParameterNames.EventId}}}";
         private const string ParticipantIdRouteSegment = $"{{{KnownActionParameterNames.ParticipantId}}}";
         private const string PurchaseIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseId}}}";
@@ -48,6 +49,7 @@ public static class KnownRoutes
         public const string UserLoginsRoute = $"{AuthRoute}/users";
         public const string ResetPasswordRoute = $"{AuthRoute}/reset-password";
         public const string ResetPasswordConfirmRoute = $"{AuthRoute}/reset-password-confirm";
+        public const string GetUserByIdRoute = $"{UserLoginsRoute}/{UserIdRouteSegment}";
 
         public const string AddEventRoute = $"{DefaultRouteSegment}/{EventsSegment}";
         public const string GetEventRoute = $"{AddEventRoute}/{EventIdRouteSegment}";

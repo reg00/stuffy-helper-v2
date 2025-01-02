@@ -38,7 +38,7 @@ namespace StuffyHelper.Api.Controllers
             Guid? eventId = null,
             string? userId = null)
         {
-            var participantResponse = await _participantService.GetParticipantsAsync(offset, limit, eventId, userId, HttpContext.RequestAborted);
+            var participantResponse = await _participantService.GetParticipantsAsync(Token, offset, limit, eventId, userId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, participantResponse);
         }
@@ -54,7 +54,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.GetParticipantRoute)]
         public async Task<IActionResult> GetAsync(Guid participantId)
         {
-            var participantEntry = await _participantService.GetParticipantAsync(participantId, HttpContext.RequestAborted);
+            var participantEntry = await _participantService.GetParticipantAsync(Token, participantId, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, participantEntry);
         }
@@ -69,7 +69,7 @@ namespace StuffyHelper.Api.Controllers
         [Route(KnownRoutes.AddParticipantRoute)]
         public async Task<IActionResult> PostAsync([FromBody] UpsertParticipantEntry addEntry)
         {
-            var participant = await _participantService.AddParticipantAsync(addEntry, HttpContext.RequestAborted);
+            var participant = await _participantService.AddParticipantAsync(Token, addEntry, HttpContext.RequestAborted);
 
             return StatusCode((int)HttpStatusCode.OK, participant);
         }

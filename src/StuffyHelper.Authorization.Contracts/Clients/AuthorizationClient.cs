@@ -132,6 +132,17 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Get<GetUserEntry>(request, cancellationToken);
     }
     
+    public Task<GetUserEntry> GetUserById(
+        string token,
+        string userId,
+        CancellationToken cancellationToken = default)
+    {
+        var request = CreateRequest($"{KnownRoutes.UserLoginsRoute}/{userId}")
+            .AddBearerToken(token);
+
+        return Get<GetUserEntry>(request, cancellationToken);
+    }
+    
     public Task<IReadOnlyList<UserShortEntry>> GetUserLogins(
         string token,
         string? userName = null,

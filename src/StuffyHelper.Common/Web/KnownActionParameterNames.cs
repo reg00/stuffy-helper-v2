@@ -5,6 +5,7 @@
 /// </summary>
 public static class KnownActionParameterNames
 {
+    internal const string UserId = "userId";
     internal const string EventId = "eventId";
     internal const string ParticipantId = "participantId";
     internal const string PurchaseId = "purchaseId";

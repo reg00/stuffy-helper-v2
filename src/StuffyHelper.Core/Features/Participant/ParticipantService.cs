@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using EnsureThat;
 using Reg00.Infrastructure.Errors;
+using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Authorization.Contracts.Models;
-using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.PurchaseUsage;
@@ -12,30 +12,31 @@ namespace StuffyHelper.Core.Features.Participant
     public class ParticipantService : IParticipantService
     {
         private readonly IParticipantStore _participantStore;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IAuthorizationClient _authorizationClient;
         private readonly IMapper _mapper;
 
         public ParticipantService(
             IParticipantStore participantStore,
-            IAuthorizationService authorizationService,
+            IAuthorizationClient authorizationClient,
             IMapper mapper)
         {
             _participantStore = participantStore;
-            _authorizationService = authorizationService;
+            _authorizationClient = authorizationClient;
             _mapper = mapper;
         }
 
-        public async Task<GetParticipantEntry> GetParticipantAsync(Guid participantId, CancellationToken cancellationToken)
+        public async Task<GetParticipantEntry> GetParticipantAsync(string token, Guid participantId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(participantId, nameof(participantId));
 
             var entry = await _participantStore.GetParticipantAsync(participantId, cancellationToken);
-            var user = await _authorizationService.GetUserById(entry.UserId);
+            var user = await _authorizationClient.GetUserById(token, entry.UserId, cancellationToken);
 
             return new GetParticipantEntry(entry, _mapper.Map<GetUserEntry>(user), entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x)));
         }
 
         public async Task<Response<ParticipantShortEntry>> GetParticipantsAsync(
+            string token,
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
@@ -47,7 +48,7 @@ namespace StuffyHelper.Core.Features.Participant
 
             foreach (var participant in resp.Data)
             {
-                var user = await _authorizationService.GetUserById(participant.UserId);
+                var user = await _authorizationClient.GetUserById(token, participant.UserId, cancellationToken);
                 participants.Add(new ParticipantShortEntry(participant, _mapper.Map<UserShortEntry>(user)));
             }
 
@@ -59,11 +60,11 @@ namespace StuffyHelper.Core.Features.Participant
             };
         }
 
-        public async Task<ParticipantShortEntry> AddParticipantAsync(UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
+        public async Task<ParticipantShortEntry> AddParticipantAsync(string token, UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(participant, nameof(participant));
 
-            var user = await _authorizationService.GetUserById(participant.UserId);
+            var user = await _authorizationClient.GetUserById(token, participant.UserId, cancellationToken);
             var entry = participant.ToCommonEntry();
             var result = await _participantStore.AddParticipantAsync(entry, cancellationToken);
 
@@ -103,7 +104,7 @@ namespace StuffyHelper.Core.Features.Participant
             await _participantStore.DeleteParticipantAsync(participant, cancellationToken);
         }
 
-        public async Task<ParticipantShortEntry> UpdateParticipantAsync(Guid participantId, UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
+        public async Task<ParticipantShortEntry> UpdateParticipantAsync(string token, Guid participantId, UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(participant, nameof(participant));
             EnsureArg.IsNotDefault(participantId, nameof(participantId));
@@ -115,7 +116,7 @@ namespace StuffyHelper.Core.Features.Participant
                 throw new EntityNotFoundException($"Participant Id '{participantId}' not found");
             }
 
-            var user = await _authorizationService.GetUserById(participant.UserId);
+            var user = await _authorizationClient.GetUserById(token, participant.UserId, cancellationToken);
 
             existingParticipant.PatchFrom(participant);
             var result = await _participantStore.UpdateParticipantAsync(existingParticipant, cancellationToken);

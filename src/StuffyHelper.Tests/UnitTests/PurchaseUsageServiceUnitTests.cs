@@ -1,5 +1,4 @@
 ﻿using Moq;
-using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
@@ -10,7 +9,6 @@ namespace StuffyHelper.Tests.UnitTests
     public class PurchaseUsageServiceUnitTests : UnitTestsBase
     {
         private readonly Mock<IPurchaseUsageStore> _purchaseUsageRepositoryMoq = new();
-        private readonly Mock<IAuthorizationService> _authorizationServiceMoq = new();
 
         private PurchaseUsageService GetService()
         {
@@ -18,31 +16,29 @@ namespace StuffyHelper.Tests.UnitTests
 
             return new PurchaseUsageService(
                 _purchaseUsageRepositoryMoq.Object,
-                _authorizationServiceMoq.Object,
                 mapper);
         }
         
         [Fact]
         public async Task GetPurchaseUsageAsync_EmptyInput()
         {
+            var claims = AuthorizationServiceUnitTestConstants.GetCorrectStuffyClaims();
             var purchaseUsageService = GetService();
 
-            await ThrowsTask(async () => await purchaseUsageService.GetPurchaseUsageAsync(Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await purchaseUsageService.GetPurchaseUsageAsync(claims, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
         public async Task GetPurchaseUsageAsync_Success()
         {
+            var claims = AuthorizationServiceUnitTestConstants.GetCorrectStuffyClaims();
             var purchaseUsage = PurchaseUsageServiceUnitTestConstants.GetCorrectPurchaseUsageEntry();
 
             _purchaseUsageRepositoryMoq.Setup(x => x.GetPurchaseUsageAsync(purchaseUsage.Id, CancellationToken))
                 .ReturnsAsync(purchaseUsage);
 
-            _authorizationServiceMoq.Setup(x => x.GetUserById(purchaseUsage.Participant.UserId))
-                .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
-
             var purchaseUsageService = GetService();
-            var result = await purchaseUsageService.GetPurchaseUsageAsync(purchaseUsage.Id, CancellationToken);
+            var result = await purchaseUsageService.GetPurchaseUsageAsync(claims, purchaseUsage.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }

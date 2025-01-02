@@ -249,6 +249,18 @@ namespace StuffyHelper.Authorization.Api.Controllers
         {
             return await _authorizationService.GetUserByToken(User);
         }
+        
+        /// <summary>
+        /// Получение данных о пользователе по айдишнику
+        /// </summary>
+        [HttpGet]
+        [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.GetUserByIdRoute)]
+        public async Task<GetUserEntry> GetUserById(string userId)
+        {
+            return await _authorizationService.GetUserById(userId);
+        }
 
         /// <summary>
         /// Список зарегистрированных пользователей

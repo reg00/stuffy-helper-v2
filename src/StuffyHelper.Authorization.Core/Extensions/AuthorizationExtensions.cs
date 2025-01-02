@@ -42,6 +42,7 @@ public static class AuthorizationExtensions
                     new (ClaimTypes.Sid, user.Id),
                     new(ClaimTypes.Name, user.UserName ?? string.Empty),
                     new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new(ClaimTypes.Uri, user.ImageUri?.AbsoluteUri ?? string.Empty)
                 };
 
             foreach (var userRole in roles)

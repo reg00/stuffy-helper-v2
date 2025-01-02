@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StuffyHelper.Authorization.Contracts\StuffyHelper.Authorization.Contracts.csproj" />
-    <ProjectReference Include="..\StuffyHelper.Authorization.Core\StuffyHelper.Authorization.Core.csproj" />
     <ProjectReference Include="..\StuffyHelper.Minio\StuffyHelper.Minio.csproj" />
   </ItemGroup>
 

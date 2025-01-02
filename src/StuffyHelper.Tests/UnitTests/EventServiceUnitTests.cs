@@ -1,6 +1,6 @@
 ﻿using Moq;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core.Services.Interfaces;
+using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;
@@ -16,7 +16,7 @@ namespace StuffyHelper.Tests.UnitTests
     {
         private readonly Mock<IEventStore> _eventRepositoryMoq = new();
         private readonly Mock<IParticipantService> _participantServiceMoq = new();
-        private readonly Mock<IAuthorizationService> _authorizationServiceMoq = new();
+        private readonly Mock<IAuthorizationClient> _authorizationClientMoq = new();
         private readonly Mock<IMediaService> _mediaServiceMoq = new();
 
         private EventService GetService()
@@ -26,8 +26,8 @@ namespace StuffyHelper.Tests.UnitTests
             return new EventService(
                 _eventRepositoryMoq.Object,
                 _participantServiceMoq.Object,
-                _authorizationServiceMoq.Object,
                 _mediaServiceMoq.Object,
+                _authorizationClientMoq.Object,
                 mapper);
         }
         
@@ -36,7 +36,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var eventService = GetService();
 
-            await ThrowsTask(async () => await eventService.GetEventAsync(Guid.Empty, string.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await eventService.GetEventAsync(string.Empty, Guid.Empty, string.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -48,7 +48,7 @@ namespace StuffyHelper.Tests.UnitTests
 
             var eventService = GetService();
 
-            await ThrowsTask(async () => await eventService.GetEventAsync(eventId, string.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await eventService.GetEventAsync(string.Empty, eventId, string.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -59,12 +59,12 @@ namespace StuffyHelper.Tests.UnitTests
             _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, eventEntry.UserId, CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            _authorizationServiceMoq.Setup(x => x.GetUserById(eventEntry.UserId))
+            _authorizationClientMoq.Setup(x => x.GetUserById(It.IsAny<string>(), eventEntry.UserId, It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new EntityNotFoundException($"User with Id '{eventEntry.UserId}' not found"));
 
             var eventService = GetService();
 
-            await ThrowsTask(async () => await eventService.GetEventAsync(eventEntry.Id, eventEntry.UserId, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await eventService.GetEventAsync(string.Empty, eventEntry.Id, eventEntry.UserId, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -75,11 +75,11 @@ namespace StuffyHelper.Tests.UnitTests
             _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, eventEntry.UserId, CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            _authorizationServiceMoq.Setup(x => x.GetUserById(eventEntry.UserId))
+            _authorizationClientMoq.Setup(x => x.GetUserById(It.IsAny<string>(), eventEntry.UserId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
             var eventService = GetService();
-            var result = await eventService.GetEventAsync(eventEntry.Id, eventEntry.UserId, CancellationToken);
+            var result = await eventService.GetEventAsync(string.Empty, eventEntry.Id, eventEntry.UserId, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -120,7 +120,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var eventService = GetService();
 
-            await ThrowsTask(async () => await eventService.AddEventAsync(null, null, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await eventService.AddEventAsync(string.Empty, null, null, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var eventService = GetService();
 
-            await ThrowsTask(async () => await eventService.AddEventAsync(new(), new(), CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await eventService.AddEventAsync(string.Empty, new(), new(), CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -136,16 +136,16 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var addEventEntry = EventServiceUnitTestConstants.GetCorrectAddEventEntry();
             var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
-            var claims = AuthorizationServiceUnitTestConstants.GetCorrectClaims();
+            var claims = AuthorizationServiceUnitTestConstants.GetCorrectStuffyClaims();
 
             _eventRepositoryMoq.Setup(x => x.AddEventAsync(It.IsAny<EventEntry>(), CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            _authorizationServiceMoq.Setup(x => x.GetUserByName(It.IsAny<string>()))
+            _authorizationClientMoq.Setup(x => x.GetUserById(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
             var eventService = GetService();
-            var result = await eventService.AddEventAsync(addEventEntry, claims, CancellationToken);
+            var result = await eventService.AddEventAsync(string.Empty, addEventEntry, claims, CancellationToken);
 
             await Verify(result, VerifySettings);
         }

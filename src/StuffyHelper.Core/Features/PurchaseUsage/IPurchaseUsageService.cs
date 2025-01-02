@@ -1,10 +1,11 @@
-﻿using StuffyHelper.Core.Features.Common;
+﻿using StuffyHelper.Common.Contracts;
+using StuffyHelper.Core.Features.Common;
 
 namespace StuffyHelper.Core.Features.PurchaseUsage
 {
     public interface IPurchaseUsageService
     {
-        Task<GetPurchaseUsageEntry> GetPurchaseUsageAsync(Guid purchaseUsageId, CancellationToken cancellationToken);
+        Task<GetPurchaseUsageEntry> GetPurchaseUsageAsync(StuffyClaims claims, Guid purchaseUsageId, CancellationToken cancellationToken);
 
         Task<Response<PurchaseUsageShortEntry>> GetPurchaseUsagesAsync(
             int offset = 0,
