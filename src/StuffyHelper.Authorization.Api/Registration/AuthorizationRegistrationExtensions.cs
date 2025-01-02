@@ -79,6 +79,7 @@ public static class AuthorizationRegistrationExtensions
             cfg.AddProfile(new FriendsRequestAutoMapperProfile());
             cfg.AddProfile(new FriendAutoMapperProfile());
             cfg.AddProfile(new UserAutoMapperProfile());
+            cfg.AddProfile(new AvatarAutoMapperProfile());
         });
 
         return services;

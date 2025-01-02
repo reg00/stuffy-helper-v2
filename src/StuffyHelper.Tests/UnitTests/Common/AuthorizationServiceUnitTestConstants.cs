@@ -63,6 +63,18 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 Name = "test"
             };
         }
+        
+        public static GetUserEntry GetCorrectSecondUserEntry()
+        {
+            return new()
+            {
+                FirstName = "Второв",
+                MiddleName = "Вторович",
+                LastName = "Второв",
+                Id = "651",
+                Name = "vtor"
+            };
+        }
 
         public static StuffyUser GetCorrectStuffyUser()
         {

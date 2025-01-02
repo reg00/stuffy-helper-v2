@@ -254,6 +254,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// Получение данных о пользователе по айдишнику
         /// </summary>
         [HttpGet]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetUserByIdRoute)]

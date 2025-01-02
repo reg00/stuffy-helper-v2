@@ -18,6 +18,7 @@
       <ProjectReference Include="..\StuffyHelper.Authorization.Contracts\StuffyHelper.Authorization.Contracts.csproj" />
       <ProjectReference Include="..\StuffyHelper.Authorization.Data\StuffyHelper.Authorization.Data.csproj" />
       <ProjectReference Include="..\StuffyHelper.Common\StuffyHelper.Common.csproj" />
+      <ProjectReference Include="..\StuffyHelper.Core\StuffyHelper.Core.csproj" />
       <ProjectReference Include="..\StuffyHelper.Minio\StuffyHelper.Minio.csproj" />
     </ItemGroup>
 

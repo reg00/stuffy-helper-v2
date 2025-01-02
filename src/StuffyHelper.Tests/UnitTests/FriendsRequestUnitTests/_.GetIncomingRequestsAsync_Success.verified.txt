@@ -1,1 +1,14 @@
-﻿[]
+﻿[
+  {
+    UserIdFrom: 123,
+    UserIdTo: 321
+  },
+  {
+    UserIdFrom: 321,
+    UserIdTo: 222
+  },
+  {
+    UserIdFrom: 222,
+    UserIdTo: 126
+  }
+]

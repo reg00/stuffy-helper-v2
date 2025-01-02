@@ -8,7 +8,6 @@ using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Contracts;
 using StuffyHelper.Common.Exceptions;
-using StuffyHelper.Common.Helpers;
 using StuffyHelper.Minio.Features.Helpers;
 using BadRequestException = StuffyHelper.Common.Exceptions.BadRequestException;
 using EntityNotFoundException = Reg00.Infrastructure.Errors.EntityNotFoundException;
@@ -37,22 +36,21 @@ namespace StuffyHelper.Core.Features.Event
             _mapper = mapper;
         }
 
-        public async Task<GetEventEntry> GetEventAsync(string token, Guid eventId, string? userId = null, CancellationToken cancellationToken = default)
+        public async Task<GetEventEntry> GetEventAsync(StuffyClaims claims, Guid eventId, string? userId = null, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             var entry = await _eventStore.GetEventAsync(eventId, userId, cancellationToken);
-            var userClaims = token.GetUserClaims();
 
             var participants = new List<ParticipantShortEntry>();
 
             foreach (var item in entry.Participants)
             {
-                var participantUser = await _authorizationClient.GetUserById(token, item.UserId, cancellationToken);
+                var participantUser = await _authorizationClient.GetUserById(item.UserId, cancellationToken);
                 participants.Add(new ParticipantShortEntry(item, _mapper.Map<UserShortEntry>(participantUser)));
             }
 
-            return new GetEventEntry(entry, _mapper.Map<UserShortEntry>(userClaims), participants);
+            return new GetEventEntry(entry, _mapper.Map<UserShortEntry>(claims), participants);
         }
 
         public async Task<Response<EventShortEntry>> GetEventsAsync(
@@ -86,7 +84,6 @@ namespace StuffyHelper.Core.Features.Event
         }
 
         public async Task<EventShortEntry> AddEventAsync(
-            string token,
             AddEventEntry eventEntry,
             StuffyClaims claims,
             CancellationToken cancellationToken = default)
@@ -97,7 +94,7 @@ namespace StuffyHelper.Core.Features.Event
             if (eventEntry.EventDateEnd != null && eventEntry.EventDateEnd < eventEntry.EventDateStart)
                 throw new BadRequestException("End date must be later than start date.");
 
-            var identityUser = await _authorizationClient.GetUserById(token, claims.UserId, cancellationToken);
+            var identityUser = await _authorizationClient.GetUserById(claims.UserId, cancellationToken);
             var entry = new EventEntry(
                 eventEntry.Name,
                 eventEntry.Description,
@@ -113,7 +110,7 @@ namespace StuffyHelper.Core.Features.Event
                 UserId = entry.UserId
             };
 
-            await _participantService.AddParticipantAsync(token, addParticipant, cancellationToken);
+            await _participantService.AddParticipantAsync(addParticipant, cancellationToken);
 
             return new EventShortEntry(result);
         }

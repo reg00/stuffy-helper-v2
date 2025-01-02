@@ -18,31 +18,18 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class AuthorizationServiceUnitTests : UnitTestsBase
     {
-        private readonly Mock<UserManager<StuffyUser>> _userManagerMoq;
-        private readonly Mock<RoleManager<IdentityRole>> _roleManagerMoq;
-        private readonly Mock<IAvatarService> _avatarServiceMoq;
-        private readonly Mock<IOptions<StuffyConfiguration>> _optionsMoq;
-        
-        public AuthorizationServiceUnitTests() : base()
-        {
-            var userNamagerStoreMoq = new Mock<IUserStore<StuffyUser>>();
-            _userManagerMoq = new Mock<UserManager<StuffyUser>>(userNamagerStoreMoq.Object, null, null, null, null, null, null, null, null);
-
-            _roleManagerMoq = new Mock<RoleManager<IdentityRole>>(
-                new Mock<IRoleStore<IdentityRole>>().Object,
-                Array.Empty<IRoleValidator<IdentityRole>>(),
-                new Mock<ILookupNormalizer>().Object,
-                new Mock<IdentityErrorDescriber>().Object,
-                new Mock<ILogger<RoleManager<IdentityRole>>>().Object);
-
-            _avatarServiceMoq = new Mock<IAvatarService>();
-            _optionsMoq = new Mock<IOptions<StuffyConfiguration>>();
-        }
+        private readonly Mock<UserManager<StuffyUser>> _userManagerMoq = new(new Mock<IUserStore<StuffyUser>>().Object, null, null, null, null, null, null, null, null);
+        private readonly Mock<RoleManager<IdentityRole>> _roleManagerMoq = new(new Mock<IRoleStore<IdentityRole>>().Object, Array.Empty<IRoleValidator<IdentityRole>>(), new Mock<ILookupNormalizer>().Object, new Mock<IdentityErrorDescriber>().Object, new Mock<ILogger<RoleManager<IdentityRole>>>().Object);
+        private readonly Mock<IAvatarService> _avatarServiceMoq = new();
+        private readonly Mock<IOptions<StuffyConfiguration>> _optionsMoq = new();
 
         private AuthorizationService GetService()
         {
             var mapper = CommonTestConstants.GetMapperConfiguration().CreateMapper();
 
+            _optionsMoq.Setup(x => x.Value)
+                .Returns(CommonTestConstants.GetCorrectStuffyConfiguration());
+            
             return new AuthorizationService(
                 _userManagerMoq.Object,
                 _roleManagerMoq.Object,
@@ -120,9 +107,6 @@ namespace StuffyHelper.Tests.UnitTests
                 .ReturnsAsync(true);
             _userManagerMoq.Setup(x => x.GetRolesAsync(stuffyUser))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectRoles());
-
-            _optionsMoq.Setup(x => x.Value)
-                .Returns(CommonTestConstants.GetCorrectStuffyConfiguration());
 
             var authService = GetService();
 

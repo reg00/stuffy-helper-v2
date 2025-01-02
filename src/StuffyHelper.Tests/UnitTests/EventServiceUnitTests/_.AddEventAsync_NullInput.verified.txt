@@ -1,5 +1,5 @@
 ﻿{
   Type: ArgumentNullException,
   Message: Value can not be null.,
-  ParamName: user
+  ParamName: claims
 }

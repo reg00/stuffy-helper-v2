@@ -17,39 +17,33 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
     }
 
     public Task<string> Register(
-        string token,
         RegisterModel body,
         CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.RegisterRoute)
-            .AddJsonBody(body)
-            .AddBearerToken(token);
+            .AddJsonBody(body);
 
         return Post<string>(request, cancellationToken);
     }
 
     public Task ConfirmEmail(
-        string token,
         string login,
         string code,
         CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.EmailConfirmRoute)
             .AddQueryParameter(nameof(login), login)
-            .AddQueryParameter(nameof(code), code)
-            .AddBearerToken(token);
+            .AddQueryParameter(nameof(code), code);
 
         return Get(request, cancellationToken);
     }
     
     public Task<GetUserEntry> Login(
-        string token,
         LoginModel body,
         CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.LoginRoute)
-            .AddJsonBody(body)
-            .AddBearerToken(token);
+            .AddJsonBody(body);
 
         return Post<GetUserEntry>(request, cancellationToken);
     }
@@ -65,39 +59,33 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
     }
     
     public Task<string> ForgotPassword(
-        string token,
         ForgotPasswordModel body,
         CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.ResetPasswordRoute)
-            .AddJsonBody(body)
-            .AddBearerToken(token);
+            .AddJsonBody(body);
 
         return Post<string>(request, cancellationToken);
     }
     
     public Task<ResetPasswordResult> ResetPassword(
-        string token,
         string email,
         string code,
         CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.ResetPasswordRoute)
             .AddQueryParameter(nameof(email), email)
-            .AddQueryParameter(nameof(code), code)
-            .AddBearerToken(token);
+            .AddQueryParameter(nameof(code), code);
 
         return Get<ResetPasswordResult>(request, cancellationToken);
     }
     
     public Task<string> ConfirmResetPassword(
-        string token,
         ResetPasswordModel body,
         CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.ResetPasswordConfirmRoute)
-            .AddJsonBody(body)
-            .AddBearerToken(token);
+            .AddJsonBody(body);
 
         return Post<string>(request, cancellationToken);
     }
@@ -132,15 +120,13 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Get<GetUserEntry>(request, cancellationToken);
     }
     
-    public Task<GetUserEntry> GetUserById(
-        string token,
+    public async Task<GetUserEntry> GetUserById(
         string userId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{KnownRoutes.UserLoginsRoute}/{userId}")
-            .AddBearerToken(token);
+        var request = CreateRequest($"{KnownRoutes.UserLoginsRoute}/{userId}");
 
-        return Get<GetUserEntry>(request, cancellationToken);
+        return await Get<GetUserEntry>(request, cancellationToken);
     }
     
     public Task<IReadOnlyList<UserShortEntry>> GetUserLogins(

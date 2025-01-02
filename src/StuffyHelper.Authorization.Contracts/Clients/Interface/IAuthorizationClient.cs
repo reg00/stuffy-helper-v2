@@ -7,18 +7,15 @@ namespace StuffyHelper.Authorization.Contracts.Clients.Interface;
 public interface IAuthorizationClient
 {
     public Task<string> Register(
-        string token,
         RegisterModel body,
         CancellationToken cancellationToken = default);
 
     public Task ConfirmEmail(
-        string token,
         string login,
         string code,
         CancellationToken cancellationToken = default);
 
     public Task<GetUserEntry> Login(
-        string token,
         LoginModel body,
         CancellationToken cancellationToken = default);
 
@@ -27,18 +24,15 @@ public interface IAuthorizationClient
         CancellationToken cancellationToken = default);
 
     public Task<string> ForgotPassword(
-        string token,
         ForgotPasswordModel body,
         CancellationToken cancellationToken = default);
 
     public Task<ResetPasswordResult> ResetPassword(
-        string token,
         string email,
         string code,
         CancellationToken cancellationToken = default);
 
     public Task<string> ConfirmResetPassword(
-        string token,
         ResetPasswordModel body,
         CancellationToken cancellationToken = default);
 
@@ -60,7 +54,6 @@ public interface IAuthorizationClient
         CancellationToken cancellationToken = default);
 
     public Task<GetUserEntry> GetUserById(
-        string token,
         string userId,
         CancellationToken cancellationToken = default);
     

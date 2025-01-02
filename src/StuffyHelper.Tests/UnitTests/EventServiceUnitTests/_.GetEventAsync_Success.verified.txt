@@ -4,7 +4,7 @@
   Description: test,
   IsCompleted: true,
   User: {
-    Id: 123,
+    Id: test,
     Name: test
   },
   Purchases: [

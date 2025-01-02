@@ -45,6 +45,7 @@ namespace StuffyHelper.Tests.Common
                 cfg.AddProfile(new FriendsRequestAutoMapperProfile());
                 cfg.AddProfile(new FriendAutoMapperProfile());
                 cfg.AddProfile(new UserAutoMapperProfile());
+                cfg.AddProfile(new AvatarAutoMapperProfile());
             });
         }
 

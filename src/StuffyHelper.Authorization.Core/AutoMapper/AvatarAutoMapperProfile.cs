@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Minio.Features.Common;
 using StuffyHelper.Minio.Features.Helpers;
 
@@ -17,11 +18,28 @@ public class AvatarAutoMapperProfile : Profile
     /// </summary>
     public AvatarAutoMapperProfile()
     {
-        CreateMap<(Stream Stream, AvatarEntry Avatar), MediaBlobEntry>()
+        CreateMap<(Stream? Stream, AvatarEntry Avatar), MediaBlobEntry>()
             .ForMember(mbe => mbe.ContentType, opt => opt.MapFrom(src => FileTypeMapper.MapContentTypeFromFileType(src.Avatar.FileType)))
             .ForMember(mbe => mbe.Ext, opt => opt.MapFrom(src => FileTypeMapper.MapExtFromFileType(src.Avatar.FileType)))
+            .ForMember(mbe => mbe.FileName, opt => opt.MapFrom(src => src.Avatar.FileName))
             .AfterMap((src, dest) =>
             {
+                if(src.Stream == null)
+                    return;
+                
+                src.Stream.Seek(0, SeekOrigin.Begin);
+                dest.Stream = src.Stream;
+            });
+        
+        CreateMap<(Stream? Stream, MediaEntry Avatar), MediaBlobEntry>()
+            .ForMember(mbe => mbe.ContentType, opt => opt.MapFrom(src => FileTypeMapper.MapContentTypeFromFileType(src.Avatar.FileType)))
+            .ForMember(mbe => mbe.Ext, opt => opt.MapFrom(src => FileTypeMapper.MapExtFromFileType(src.Avatar.FileType)))
+            .ForMember(mbe => mbe.FileName, opt => opt.MapFrom(src => src.Avatar.FileName))
+            .AfterMap((src, dest) =>
+            {
+                if(src.Stream == null)
+                    return;
+                
                 src.Stream.Seek(0, SeekOrigin.Begin);
                 dest.Stream = src.Stream;
             });

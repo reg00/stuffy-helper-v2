@@ -1,13 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using StuffyHelper.Core.Features.Common;
-using System.Security.Claims;
 using StuffyHelper.Common.Contracts;
 
 namespace StuffyHelper.Core.Features.Event
 {
     public interface IEventService
     {
-        Task<GetEventEntry> GetEventAsync(string token, Guid eventId, string? userId = null, CancellationToken cancellationToken = default);
+        Task<GetEventEntry> GetEventAsync(StuffyClaims claims, Guid eventId, string? userId = null, CancellationToken cancellationToken = default);
 
         Task<Response<EventShortEntry>> GetEventsAsync(
             int offset = 0,
@@ -28,7 +27,6 @@ namespace StuffyHelper.Core.Features.Event
             CancellationToken cancellationToken = default);
 
         Task<EventShortEntry> AddEventAsync(
-            string token,
             AddEventEntry eventEntry,
             StuffyClaims claims,
             CancellationToken cancellationToken = default);

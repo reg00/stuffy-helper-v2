@@ -77,8 +77,7 @@ namespace StuffyHelper.Api.Controllers
         public async Task<IActionResult> GetAsync(Guid eventId)
         {
             var userId = PermissionHelper.GetUserId(UserClaims);
-
-            var @event = await _eventService.GetEventAsync(Token, eventId, userId, HttpContext.RequestAborted);
+            var @event = await _eventService.GetEventAsync(UserClaims, eventId, userId, HttpContext.RequestAborted);
 
             return Ok(@event);
         }
@@ -93,7 +92,6 @@ namespace StuffyHelper.Api.Controllers
         public async Task<IActionResult> PostAsync([FromBody] AddEventEntry entry)
         {
             var @event = await _eventService.AddEventAsync(
-                Token,
                 entry,
                 UserClaims,
                 HttpContext.RequestAborted);

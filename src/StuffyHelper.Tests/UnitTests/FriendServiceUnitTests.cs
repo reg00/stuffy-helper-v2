@@ -78,7 +78,7 @@ namespace StuffyHelper.Tests.UnitTests
         public async Task GetFriends_BadClaims()
         {
             var friendService = GetService();
-
+            
             await ThrowsTask(async () => await friendService.GetFriends(new ClaimsPrincipal(), cancellationToken: CancellationToken), VerifySettings);
         }
 

@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
 using AutoMapper;
 using EnsureThat;
-using Minio.Exceptions;
 using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Authorization.Data.Repository.Interfaces;
+using StuffyHelper.Common.Exceptions;
 using StuffyHelper.Common.Messages;
 
 namespace StuffyHelper.Authorization.Core.Services;
@@ -72,7 +72,7 @@ public class FriendService : IFriendService
 
             return new Response<UserShortEntry>()
             {
-                Data = response.Data.Select(x => _mapper.Map<UserShortEntry>(x)),
+                Data = response.Data.Select(x => _mapper.Map<UserShortEntry>(x.Friend)),
                 Total = response.Total,
                 TotalPages = response.TotalPages
             };

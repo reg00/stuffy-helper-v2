@@ -40,19 +40,18 @@ namespace StuffyHelper.Core.Features.Debt
             _mapper = mapper;
         }
 
-        public async Task<GetDebtEntry> GetDebtAsync(string token, Guid debtId, CancellationToken cancellationToken)
+        public async Task<GetDebtEntry> GetDebtAsync(Guid debtId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(debtId, nameof(debtId));
 
             var entry = await _debtStore.GetDebtAsync(debtId, cancellationToken);
-            var lender = await _authorizationClient.GetUserById(token, entry.LenderId, cancellationToken);
-            var debtor = await _authorizationClient.GetUserById(token, entry.DebtorId, cancellationToken);
+            var lender = await _authorizationClient.GetUserById(entry.LenderId, cancellationToken);
+            var debtor = await _authorizationClient.GetUserById(entry.DebtorId, cancellationToken);
 
             return new GetDebtEntry(entry,_mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor));
         }
 
         public async Task<Response<GetDebtEntry>> GetDebtsAsync(
-            string token,
             int offset = 0,
             int limit = 10,
             string? lenderId = null,
@@ -67,8 +66,8 @@ namespace StuffyHelper.Core.Features.Debt
 
             foreach (var debt in resp.Data)
             {
-                var lender = await _authorizationClient.GetUserById(token, debt.LenderId, cancellationToken);
-                var debtor = await _authorizationClient.GetUserById(token, debt.DebtorId, cancellationToken);
+                var lender = await _authorizationClient.GetUserById(debt.LenderId, cancellationToken);
+                var debtor = await _authorizationClient.GetUserById(debt.DebtorId, cancellationToken);
 
                 debts.Add(new GetDebtEntry(debt, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor)));
             }
@@ -82,7 +81,6 @@ namespace StuffyHelper.Core.Features.Debt
         }
 
         public async Task<Response<GetDebtEntry>> GetDebtsByUserAsync(
-            string token,
             string userId,
             int offset = 0,
             int limit = 10,
@@ -95,8 +93,8 @@ namespace StuffyHelper.Core.Features.Debt
 
             foreach (var dbDebt in resp.Data)
             {
-                var lender = await _authorizationClient.GetUserById(token, dbDebt.LenderId, cancellationToken);
-                var debtor = await _authorizationClient.GetUserById(token, dbDebt.DebtorId, cancellationToken);
+                var lender = await _authorizationClient.GetUserById(dbDebt.LenderId, cancellationToken);
+                var debtor = await _authorizationClient.GetUserById(dbDebt.DebtorId, cancellationToken);
 
                 debts.Add(new GetDebtEntry(dbDebt, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor)));
             }
@@ -127,7 +125,7 @@ namespace StuffyHelper.Core.Features.Debt
         //    await _debtStore.DeleteDebtAsync(debtId, cancellationToken);
         //}
 
-        public async Task<GetDebtEntry> SendDebtAsync(string token, string userId, Guid debtId, CancellationToken cancellationToken = default)
+        public async Task<GetDebtEntry> SendDebtAsync(string userId, Guid debtId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(debtId, nameof(debtId));
             EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
@@ -140,13 +138,13 @@ namespace StuffyHelper.Core.Features.Debt
             debt.IsSent = true;
 
             var result = await _debtStore.UpdateDebtAsync(debt, cancellationToken);
-            var lender = await _authorizationClient.GetUserById(token, result.LenderId, cancellationToken);
-            var debtor = await _authorizationClient.GetUserById(token, result.DebtorId, cancellationToken);
+            var lender = await _authorizationClient.GetUserById(result.LenderId, cancellationToken);
+            var debtor = await _authorizationClient.GetUserById(result.DebtorId, cancellationToken);
 
             return new GetDebtEntry(result, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor));
         }
 
-        public async Task<GetDebtEntry> ConfirmDebtAsync(string token, string userId, Guid debtId, CancellationToken cancellationToken = default)
+        public async Task<GetDebtEntry> ConfirmDebtAsync(string userId, Guid debtId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(debtId, nameof(debtId));
             EnsureArg.IsNotNullOrWhiteSpace(userId, nameof(userId));
@@ -162,8 +160,8 @@ namespace StuffyHelper.Core.Features.Debt
             debt.IsComfirmed = true;
 
             var result = await _debtStore.UpdateDebtAsync(debt, cancellationToken);
-            var lender = await _authorizationClient.GetUserById(token, result.LenderId, cancellationToken);
-            var debtor = await _authorizationClient.GetUserById(token, result.DebtorId, cancellationToken);
+            var lender = await _authorizationClient.GetUserById(result.LenderId, cancellationToken);
+            var debtor = await _authorizationClient.GetUserById(result.DebtorId, cancellationToken);
 
             return new GetDebtEntry(result, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor));
         }

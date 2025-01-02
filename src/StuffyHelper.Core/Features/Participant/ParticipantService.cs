@@ -25,18 +25,17 @@ namespace StuffyHelper.Core.Features.Participant
             _mapper = mapper;
         }
 
-        public async Task<GetParticipantEntry> GetParticipantAsync(string token, Guid participantId, CancellationToken cancellationToken)
+        public async Task<GetParticipantEntry> GetParticipantAsync(Guid participantId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(participantId, nameof(participantId));
 
             var entry = await _participantStore.GetParticipantAsync(participantId, cancellationToken);
-            var user = await _authorizationClient.GetUserById(token, entry.UserId, cancellationToken);
+            var user = await _authorizationClient.GetUserById(entry.UserId, cancellationToken);
 
             return new GetParticipantEntry(entry, _mapper.Map<GetUserEntry>(user), entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x)));
         }
 
         public async Task<Response<ParticipantShortEntry>> GetParticipantsAsync(
-            string token,
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
@@ -48,7 +47,7 @@ namespace StuffyHelper.Core.Features.Participant
 
             foreach (var participant in resp.Data)
             {
-                var user = await _authorizationClient.GetUserById(token, participant.UserId, cancellationToken);
+                var user = await _authorizationClient.GetUserById(participant.UserId, cancellationToken);
                 participants.Add(new ParticipantShortEntry(participant, _mapper.Map<UserShortEntry>(user)));
             }
 
@@ -60,11 +59,11 @@ namespace StuffyHelper.Core.Features.Participant
             };
         }
 
-        public async Task<ParticipantShortEntry> AddParticipantAsync(string token, UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
+        public async Task<ParticipantShortEntry> AddParticipantAsync(UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(participant, nameof(participant));
 
-            var user = await _authorizationClient.GetUserById(token, participant.UserId, cancellationToken);
+            var user = await _authorizationClient.GetUserById(participant.UserId, cancellationToken);
             var entry = participant.ToCommonEntry();
             var result = await _participantStore.AddParticipantAsync(entry, cancellationToken);
 
@@ -104,7 +103,7 @@ namespace StuffyHelper.Core.Features.Participant
             await _participantStore.DeleteParticipantAsync(participant, cancellationToken);
         }
 
-        public async Task<ParticipantShortEntry> UpdateParticipantAsync(string token, Guid participantId, UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
+        public async Task<ParticipantShortEntry> UpdateParticipantAsync(Guid participantId, UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(participant, nameof(participant));
             EnsureArg.IsNotDefault(participantId, nameof(participantId));
@@ -116,7 +115,7 @@ namespace StuffyHelper.Core.Features.Participant
                 throw new EntityNotFoundException($"Participant Id '{participantId}' not found");
             }
 
-            var user = await _authorizationClient.GetUserById(token, participant.UserId, cancellationToken);
+            var user = await _authorizationClient.GetUserById(participant.UserId, cancellationToken);
 
             existingParticipant.PatchFrom(participant);
             var result = await _participantStore.UpdateParticipantAsync(existingParticipant, cancellationToken);
