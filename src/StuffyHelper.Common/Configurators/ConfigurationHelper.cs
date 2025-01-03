@@ -34,8 +34,9 @@ public static class ConfigurationHelper
     
         var builder = new ConfigurationBuilder()
             .SetBasePath(assemblyLocation)
-            .AddJsonFile(Path.Combine(assemblyLocation, "appsettings.json"), optional: true, reloadOnChange: true)
+            .AddJsonFile(Path.Combine(assemblyLocation, "appsettings.json"), optional: false, reloadOnChange: true)
             .AddJsonFile(Path.Combine(assemblyLocation, $"appsettings.{environment}.json"), optional: true, reloadOnChange: true)
+            .AddEnvironmentVariables()
             .Build();
 
         configuration.AddConfiguration(builder);

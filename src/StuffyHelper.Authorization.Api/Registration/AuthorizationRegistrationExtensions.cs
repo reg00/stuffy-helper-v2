@@ -113,6 +113,9 @@ public static class AuthorizationRegistrationExtensions
 
         dbContext.Database.Migrate();
 
+        var initializer = scope.ServiceProvider.GetRequiredService<IInitializer>();
+        initializer.Initialize();
+        
         return services;
     }
 }
