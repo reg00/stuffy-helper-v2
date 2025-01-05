@@ -151,7 +151,7 @@ namespace StuffyHelper.Api.Controllers
                 return BadRequest(new ErrorResponse(ModelState));
             }
 
-            var (name, code) = await _authorizationService.ForgotPasswordAsync(model);
+            var (_, code) = await _authorizationService.ForgotPasswordAsync(model);
 
             var callbackUrl = Url.Action(
                 "ResetPassword",
@@ -252,7 +252,7 @@ namespace StuffyHelper.Api.Controllers
         /// <param name="userName">Логин пользователя. Опциональное поле.</param>
         /// <returns></returns>
         [HttpGet]
-        [ProducesResponseType(typeof(IEnumerable<UserEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<UserShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UserLoginsRoute)]
         public IActionResult GetUserLogins(string? userName = null)
@@ -266,7 +266,7 @@ namespace StuffyHelper.Api.Controllers
         /// <param name="updateModel">Модель для обновления информации пользователя</param>
         /// <returns></returns>
         [HttpPatch]
-        [ProducesResponseType(typeof(UserEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.EditUserRoute)]
         public async Task<IActionResult> EditUserAsync([FromBody] UpdateModel updateModel)
