@@ -2,7 +2,7 @@
 {
     internal sealed class FileStoreConfiguration
     {
-        public const string DefaultSection = "FileStore";
+        public const string DefaultSection = "FileStore" ;
 
         /// <summary>
         /// Folder to store files
