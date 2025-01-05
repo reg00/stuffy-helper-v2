@@ -7,6 +7,6 @@
         /// <summary>
         /// Folder to store files
         /// </summary>
-        public string ContainerName { get; } = string.Empty;
+        public string ContainerName { get; set; } = string.Empty;
     }
 }
