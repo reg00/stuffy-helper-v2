@@ -46,8 +46,8 @@ namespace StuffyHelper.Minio.Registration
             EnsureArg.IsNotNull(minioClientOptions, nameof(minioClientOptions));
 
             var options = new FileStoreConfiguration();
-            configuration.GetSection(MinioClientOptions.DefaultSectionName)
-               .Bind(minioClientOptions);
+            configuration.GetSection(FileStoreConfiguration.DefaultSection)
+               .Bind(options);
 
             services.AddScoped<IFileStore>(sp =>
             {
