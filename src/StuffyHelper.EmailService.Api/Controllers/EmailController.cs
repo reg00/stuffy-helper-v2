@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using StuffyHelper.Common.Web;
 using StuffyHelper.EmailService.Contracts.Models;
 using StuffyHelper.EmailService.Core.Service.Interfaces;
 
@@ -18,7 +19,7 @@ public class EmailController : Controller
 
     [HttpPost]
     [ProducesResponseType((int)HttpStatusCode.OK)]
-    [Route("send")]
+    [Route(KnownRoutes.SendEmailRoute)]
     public async Task SendAsync([FromBody] SendEmailRequest request)
     {
         _logger.LogInformation("Start to send email");

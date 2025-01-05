@@ -368,3 +368,4 @@ nuget.config
 .idea
 src/StuffyHelper.EmailService.Api/appsettings.Development.json
 src/StuffyHelper.Common/appsettings.Development.json
+.env1

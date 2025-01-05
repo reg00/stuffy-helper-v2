@@ -67,7 +67,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
                     Message = $"Подтвердите регистрацию, перейдя по <a href='{callbackUrl}'>ссылке</a>."
                 };
                 
-                await _emailClient.SendAsync(request);
+                await _emailClient.SendAsync(request, HttpContext.RequestAborted);
 
             }
             catch (Exception)

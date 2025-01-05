@@ -8,7 +8,9 @@ public static class KnownRoutes
     private const string DefaultRouteSegment = "api";
 
         private const string AuthRoute = $"{DefaultRouteSegment}/{AuthRouteSegment}";
-
+        private const string EmailRoute = $"{DefaultRouteSegment}/{EmailRouteSegment}";
+        
+        private const string EmailRouteSegment = "email";
         private const string AuthRouteSegment = "auth";
         private const string EventsSegment = "events";
         private const string ParticipantsSegment = "participants";
@@ -115,4 +117,6 @@ public static class KnownRoutes
         public const string GetDebtsRoute = $"{DefaultRouteSegment}/{DebtsSegment}";
         public const string SendDebtRoute = $"{GetDebtsRoute}/{DebtIdRouteSegment}/send";
         public const string ConfirmDebtRoute = $"{GetDebtsRoute}/{DebtIdRouteSegment}/confirm";
+        
+        public const string SendEmailRoute = $"{EmailRoute}/send";
 }

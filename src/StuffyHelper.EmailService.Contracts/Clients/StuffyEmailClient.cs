@@ -1,5 +1,6 @@
 ﻿using RestSharp;
 using StuffyHelper.Common.Client;
+using StuffyHelper.Common.Web;
 using StuffyHelper.EmailService.Contracts.Clients.Interfaces;
 using StuffyHelper.EmailService.Contracts.Models;
 
@@ -15,7 +16,7 @@ public class StuffyEmailClient : ApiClientBase, IStuffyEmailClient
         SendEmailRequest body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest("Email/send")
+        var request = CreateRequest(KnownRoutes.SendEmailRoute)
             .AddJsonBody(body);
 
         return Post(request, cancellationToken);

@@ -27,7 +27,7 @@ public abstract class ApiClientBase
         _client = new RestClient(new RestClientOptions(baseUrl)
             {
                 ThrowOnDeserializationError = true,
-                Timeout = TimeSpan.MaxValue
+                Timeout = TimeSpan.FromHours(1)
             },
             configureSerialization: s => s.UseSystemTextJson(SerializerOptions.Value));
     }

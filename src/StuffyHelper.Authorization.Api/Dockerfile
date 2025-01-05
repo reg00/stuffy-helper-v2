@@ -1,22 +1,71 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization.Api.csproj", "src/StuffyHelper.Authorization.Api/"]
-RUN dotnet restore "src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization.Api.csproj"
-COPY . .
-WORKDIR "/src/src/StuffyHelper.Authorization.Api"
-RUN dotnet build "StuffyHelper.Authorization.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+COPY src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization.Api.csproj \
+	 src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization.Api.csproj
+
+COPY src/StuffyHelper.Authorization.Contracts/StuffyHelper.Authorization.Contracts.csproj \
+	 src/StuffyHelper.Authorization.Contracts/StuffyHelper.Authorization.Contracts.csproj
+
+COPY src/StuffyHelper.Authorization.Core/StuffyHelper.Authorization.Core.csproj \
+	 src/StuffyHelper.Authorization.Core/StuffyHelper.Authorization.Core.csproj
+
+COPY src/StuffyHelper.Authorization.Data/StuffyHelper.Authorization.Data.csproj \
+	 src/StuffyHelper.Authorization.Data/StuffyHelper.Authorization.Data.csproj
+	 
+COPY src/StuffyHelper.Common/StuffyHelper.Common.csproj \
+	 src/StuffyHelper.Common/StuffyHelper.Common.csproj
+	 
+COPY src/StuffyHelper.Common.Client/StuffyHelper.Common.Client.csproj \
+	 src/StuffyHelper.Common.Client/StuffyHelper.Common.Client.csproj
+	 
+COPY src/StuffyHelper.Common.Contracts/StuffyHelper.Common.Contracts.csproj \
+	 src/StuffyHelper.Common.Contracts/StuffyHelper.Common.Contracts.csproj
+
+COPY src/StuffyHelper.EmailService.Contracts/StuffyHelper.EmailService.Contracts.csproj \
+	 src/StuffyHelper.EmailService.Contracts/StuffyHelper.EmailService.Contracts.csproj
+	 
+COPY src/StuffyHelper.Core/StuffyHelper.Core.csproj \
+	 src/StuffyHelper.Core/StuffyHelper.Core.csproj
+
+COPY src/StuffyHelper.Minio/StuffyHelper.Minio.csproj \
+	 src/StuffyHelper.Minio/StuffyHelper.Minio.csproj
+
+RUN dotnet restore src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization.Api.csproj
+
+RUN dotnet restore src/StuffyHelper.Authorization.Contracts/StuffyHelper.Authorization.Contracts.csproj
+
+RUN dotnet restore src/StuffyHelper.Authorization.Core/StuffyHelper.Authorization.Core.csproj
+
+RUN dotnet restore src/StuffyHelper.Authorization.Data/StuffyHelper.Authorization.Data.csproj
+
+RUN dotnet restore src/StuffyHelper.Common/StuffyHelper.Common.csproj
+
+RUN dotnet restore src/StuffyHelper.Common.Client/StuffyHelper.Common.Client.csproj
+
+RUN dotnet restore src/StuffyHelper.Common.Contracts/StuffyHelper.Common.Contracts.csproj
+
+RUN dotnet restore src/StuffyHelper.EmailService.Contracts/StuffyHelper.EmailService.Contracts.csproj
+
+RUN dotnet restore src/StuffyHelper.Core/StuffyHelper.Core.csproj
+
+RUN dotnet restore src/StuffyHelper.Minio/StuffyHelper.Minio.csproj
+
+COPY ./ ./
+
+RUN dotnet build src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization.Api.csproj -c Release -o /app
 
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "StuffyHelper.Authorization.Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization.Api.csproj -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app .
+
+ENV ASPNETCORE_URLS=http://+:7168
+EXPOSE 7168
+
 ENTRYPOINT ["dotnet", "StuffyHelper.Authorization.Api.dll"]
