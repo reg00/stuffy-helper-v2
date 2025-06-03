@@ -15,8 +15,8 @@ builder.Services.AddEfDbServices();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
 // Configure the HTTP request pipeline.
     app.UseSwagger(c => { c.RouteTemplate = "api/swagger/{documentname}/swagger.json"; });
     app.UseSwaggerUI(c =>
@@ -24,7 +24,7 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Stuffy helper API V1");
         c.RoutePrefix = "api/swagger";
     });
-}
+//}
 
 app.UseExceptionHandling();
 
