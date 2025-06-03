@@ -50,8 +50,8 @@ namespace StuffyHelper.Api.Registration
             services.AddControllersWithViews();
             services.AddEndpointsApiExplorer();
 
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            {
+            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            //{
                 services.AddSwaggerGen(options =>
                 {
                     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -83,7 +83,7 @@ namespace StuffyHelper.Api.Registration
                     var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
                 });
-            }
+            //}
 
             services.AddMinioBlobDataStores(configuration);
 
@@ -96,11 +96,11 @@ namespace StuffyHelper.Api.Registration
         {
             app.UseMiddleware<CorsHeaderMiddleware>();
 
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
-            {
+            //if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
+            //{
                 app.UseSwagger();
                 app.UseSwaggerUI();
-            }
+            //}
 
             app.UseRouting();
             app.UseCors();
