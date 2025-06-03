@@ -115,12 +115,14 @@ namespace StuffyHelper.Api.Controllers
 
             var token = await _authorizationService.Login(model, HttpContext);
 
-            Response.Headers.Add("token", new JwtSecurityTokenHandler().WriteToken(token));
-            Response.Headers.Add("expiration", token.ValidTo.ToString());
+            //Response.Headers.Add("token", new JwtSecurityTokenHandler().WriteToken(token));
+            //Response.Headers.Add("expiration", token.ValidTo.ToString());
 
             var user = await _authorizationService.GetUserByName(model.Username);
 
-            return Ok(new GetUserEntry(user));
+            //return Ok(new GetUserEntry(user));
+
+            return Ok(new { Token = new JwtSecurityTokenHandler().WriteToken(token), Expired = token.ValidTo.ToString() });
         }
 
         /// <summary>
