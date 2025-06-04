@@ -13,11 +13,13 @@ public class StuffyEmailClient : ApiClientBase, IStuffyEmailClient
     }
     
     public Task SendAsync(
+        string token,
         SendEmailRequest body,
         CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.SendEmailRoute)
-            .AddJsonBody(body);
+            .AddJsonBody(body)
+            .AddBearerToken(token);
 
         return Post(request, cancellationToken);
     }

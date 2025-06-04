@@ -38,24 +38,14 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Get(request, cancellationToken);
     }
     
-    public Task<GetUserEntry> Login(
+    public Task<string> Login(
         LoginModel body,
         CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.LoginRoute)
             .AddJsonBody(body);
 
-        return Post<GetUserEntry>(request, cancellationToken);
-    }
-
-    public Task Logout(
-        string token,
-        CancellationToken cancellationToken = default)
-    {
-        var request = CreateRequest(KnownRoutes.LogoutRoute)
-            .AddBearerToken(token);
-
-        return Post(request, cancellationToken);
+        return Post<string>(request, cancellationToken);
     }
     
     public Task<string> ForgotPassword(

@@ -2,12 +2,13 @@
 using EnsureThat;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Configurations;
+using StuffyHelper.Common.Configurators;
 using StuffyHelper.Common.Exceptions;
+using StuffyHelper.Common.Helpers;
 using StuffyHelper.Common.Messages;
 using StuffyHelper.Common.Web;
 using StuffyHelper.EmailService.Contracts.Clients.Interfaces;
@@ -22,15 +23,20 @@ namespace StuffyHelper.Authorization.Api.Controllers
         private readonly IAuthorizationService _authorizationService;
         private readonly IStuffyEmailClient _emailClient;
         private readonly FrontEndConfiguration _frontEndConfiguration;
+        private readonly AuthorizationConfiguration _authorizationConfiguration;
 
         public AuthorizationController(
             IAuthorizationService authorizationService,
             IStuffyEmailClient emailClient,
-            IOptions<FrontEndConfiguration> options)
+            IConfiguration configuration)
         {
             _authorizationService = authorizationService;
             _emailClient = emailClient;
-            _frontEndConfiguration = options.Value;
+
+            var config = configuration.GetConfig();
+            
+            _frontEndConfiguration = config.Frontend;
+            _authorizationConfiguration = config.Authorization;
         }
 
         /// <summary>
@@ -67,7 +73,8 @@ namespace StuffyHelper.Authorization.Api.Controllers
                     Message = $"Подтвердите регистрацию, перейдя по <a href='{callbackUrl}'>ссылке</a>."
                 };
                 
-                await _emailClient.SendAsync(request, HttpContext.RequestAborted);
+                var token = TokenHelper.GenerateSystemToken(_authorizationConfiguration);
+                await _emailClient.SendAsync(token, request, HttpContext.RequestAborted);
 
             }
             catch (Exception)
@@ -107,7 +114,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.LoginRoute)]
-        public async Task<GetUserEntry> Login([FromBody] LoginModel model)
+        public async Task<string> Login([FromBody] LoginModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
 
@@ -116,20 +123,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
 
             var token = await _authorizationService.Login(model, HttpContext);
 
-            Response.Headers.Add("token", new JwtSecurityTokenHandler().WriteToken(token));
-            Response.Headers.Add("expiration", token.ValidTo.ToString());
-
-            return await _authorizationService.GetUserByName(model.Username);
-        }
-
-        /// <summary>
-        /// Выход
-        /// </summary>
-        [HttpPost]
-        [Route(KnownRoutes.LogoutRoute)]
-        public async Task Logout()
-        {
-            await _authorizationService.Logout(HttpContext);
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         /// <summary>
@@ -163,7 +157,8 @@ namespace StuffyHelper.Authorization.Api.Controllers
                 Message = $"Для того, чтобы изменить пароль, перейдите по этой: <a href='{callbackUrl}'>ссылке</a>. Если вы не присылали запрос на изменение пароля, проигнорируйте сообщение."
             };
 
-            await _emailClient.SendAsync(request);
+            var token = TokenHelper.GenerateSystemToken(_authorizationConfiguration);
+            await _emailClient.SendAsync(token, request);
 
             return "Инструкция по изменению пароля отправлена на почту.";
         }

@@ -1,5 +1,4 @@
 ﻿using EnsureThat;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
@@ -24,30 +23,17 @@ public static class AuthorizationExtensions
 
         EnsureArg.IsNotNull(config, nameof(config));
         
-        services.AddAuthentication()
-            .AddCookie(options =>
-            {
-                options.Events = new CookieAuthenticationEvents()
-                {
-                    OnRedirectToLogin = async (_) =>
-                    {
-                        await Task.CompletedTask;
-                        //context.HttpContext.Response.Redirect("api/auth/login");
-                    }
-                };
-                options.LoginPath = "/api/auth/login";
-                options.LogoutPath = "/api/auth/logout";
-                options.AccessDeniedPath = "/api/auth/login";
-                options.ExpireTimeSpan = TimeSpan.FromHours(config.JWT.TokenExpireInHours);
-            })
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.SaveToken = true;
                 options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
+                    ValidateLifetime = true,
                     ValidateIssuer = true,
                     ValidateAudience = true,
+                    ValidateIssuerSigningKey = true,
                     ValidAudience = config.JWT.ValidAudience,
                     ValidIssuer = config.JWT.ValidIssuer,
                     IssuerSigningKey = config.JWT.GetSecurityKey()
@@ -57,7 +43,6 @@ public static class AuthorizationExtensions
         services.AddAuthorization(options =>
         {
             var defaultAuthorizationPolicyBuilder = new AuthorizationPolicyBuilder(
-                CookieAuthenticationDefaults.AuthenticationScheme,
                 JwtBearerDefaults.AuthenticationScheme);
 
             defaultAuthorizationPolicyBuilder = defaultAuthorizationPolicyBuilder.RequireAuthenticatedUser();

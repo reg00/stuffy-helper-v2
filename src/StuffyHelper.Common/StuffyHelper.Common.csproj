@@ -21,15 +21,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="appsettings.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-      <None Update="appsettings.Development.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="Microsoft.AspNetCore.Authentication.Cookies">
         <HintPath>..\..\..\..\..\Program Files\dotnet\shared\Microsoft.AspNetCore.App\7.0.4\Microsoft.AspNetCore.Authentication.Cookies.dll</HintPath>
       </Reference>
@@ -37,6 +28,17 @@
 
     <ItemGroup>
       <ProjectReference Include="..\StuffyHelper.Common.Contracts\StuffyHelper.Common.Contracts.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="appsettings.Development.json" />
+      <Content Include="appsettings.Development.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="appsettings.json" />
+      <Content Include="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>

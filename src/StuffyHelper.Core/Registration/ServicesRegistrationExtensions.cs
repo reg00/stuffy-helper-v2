@@ -26,8 +26,8 @@ namespace StuffyHelper.Core.Registration
         {
             var config = configuration.GetConfig();
         
-            if(!config.Endpoints.TryGetValue("AuthorizationEnpoint", out var baseUrl))
-                throw new Exception("Cannot find Email enpdoint");
+            if(!config.Endpoints.TryGetValue("AuthorizationEndpoint", out var baseUrl))
+                throw new Exception("Cannot find Email endpoint");
 
             services.AddScoped<IAuthorizationClient>(_ => new AuthorizationClient(baseUrl));
             services.AddScoped<IFriendClient>(_ => new FriendClient(baseUrl));

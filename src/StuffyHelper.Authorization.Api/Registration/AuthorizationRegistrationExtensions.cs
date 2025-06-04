@@ -30,8 +30,8 @@ public static class AuthorizationRegistrationExtensions
     {
         var config = configuration.GetConfig();
         
-        if(!config.Endpoints.TryGetValue("EmailEnpoint", out var baseUrl))
-            throw new Exception("Cannot find Email enpdoint");
+        if(!config.Endpoints.TryGetValue("EmailEndpoint", out var baseUrl))
+            throw new Exception("Cannot find Email endpoint");
 
         services.AddScoped<IStuffyEmailClient>(_ => new StuffyEmailClient(baseUrl));
 

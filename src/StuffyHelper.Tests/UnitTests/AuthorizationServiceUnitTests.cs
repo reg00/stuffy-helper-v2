@@ -1,14 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Moq;
 using StuffyHelper.Tests.UnitTests.Common;
 using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
 using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Enums;
 using StuffyHelper.Authorization.Core.Services;
 using StuffyHelper.Authorization.Core.Services.Interfaces;
-using StuffyHelper.Common.Configurations;
+using StuffyHelper.Common.Configurators;
 using StuffyHelper.Tests.Common;
 
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
@@ -21,20 +21,20 @@ namespace StuffyHelper.Tests.UnitTests
         private readonly Mock<UserManager<StuffyUser>> _userManagerMoq = new(new Mock<IUserStore<StuffyUser>>().Object, null, null, null, null, null, null, null, null);
         private readonly Mock<RoleManager<IdentityRole>> _roleManagerMoq = new(new Mock<IRoleStore<IdentityRole>>().Object, Array.Empty<IRoleValidator<IdentityRole>>(), new Mock<ILookupNormalizer>().Object, new Mock<IdentityErrorDescriber>().Object, new Mock<ILogger<RoleManager<IdentityRole>>>().Object);
         private readonly Mock<IAvatarService> _avatarServiceMoq = new();
-        private readonly Mock<IOptions<StuffyConfiguration>> _optionsMoq = new();
+        private readonly Mock<IConfiguration> _configMoq = new();
 
         private AuthorizationService GetService()
         {
             var mapper = CommonTestConstants.GetMapperConfiguration().CreateMapper();
 
-            _optionsMoq.Setup(x => x.Value)
+            _configMoq.Setup(x => x.GetConfig())
                 .Returns(CommonTestConstants.GetCorrectStuffyConfiguration());
             
             return new AuthorizationService(
                 _userManagerMoq.Object,
                 _roleManagerMoq.Object,
                 _avatarServiceMoq.Object,
-                _optionsMoq.Object,
+                _configMoq.Object,
                 mapper);
         }
         
@@ -113,14 +113,6 @@ namespace StuffyHelper.Tests.UnitTests
             var result = await authService.Login(loginModel, HttpContext);
 
             Assert.NotNull(result);
-        }
-
-        [Fact]
-        public async Task Logout_Success()
-        {
-            var authService = GetService();
-
-            await authService.Logout(HttpContext);
         }
 
         [Fact]

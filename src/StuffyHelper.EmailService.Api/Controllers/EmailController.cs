@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Common.Web;
 using StuffyHelper.EmailService.Contracts.Models;
@@ -6,6 +7,7 @@ using StuffyHelper.EmailService.Core.Service.Interfaces;
 
 namespace StuffyHelper.EmailService.Api.Controllers;
 
+[Authorize]
 public class EmailController : Controller
 {
     private readonly IStuffyEmailService _emailService;

@@ -3,7 +3,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Http;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
+using StuffyHelper.Common.Configurations;
 using StuffyHelper.Common.Contracts;
 
 namespace StuffyHelper.Common.Helpers;
@@ -71,5 +73,29 @@ public static class TokenHelper
         token = match.Groups[1].Value;
 
         return true;
+    }
+    
+    /// <summary>
+    /// Generate system token
+    /// </summary>
+    public static string GenerateSystemToken(AuthorizationConfiguration config)
+    {
+        var authClaims = new List<Claim>
+        {
+            new (ClaimTypes.Sid, Guid.Empty.ToString()),
+            new(ClaimTypes.Name, "admin"),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new(ClaimTypes.Role, "admin")
+        };
+
+        var token = new JwtSecurityToken(
+            issuer: config.JWT.ValidIssuer,
+            audience: config.JWT.ValidAudience,
+            expires: DateTime.UtcNow.AddHours(config.JWT.TokenExpireInHours),
+            claims: authClaims,
+            signingCredentials: new SigningCredentials(config.JWT.GetSecurityKey(), SecurityAlgorithms.HmacSha256)
+        );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 }

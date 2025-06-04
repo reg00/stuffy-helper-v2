@@ -15,12 +15,8 @@ public interface IAuthorizationClient
         string code,
         CancellationToken cancellationToken = default);
 
-    public Task<GetUserEntry> Login(
+    public Task<string> Login(
         LoginModel body,
-        CancellationToken cancellationToken = default);
-
-    public Task Logout(
-        string token,
         CancellationToken cancellationToken = default);
 
     public Task<string> ForgotPassword(

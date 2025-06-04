@@ -19,12 +19,6 @@ public interface IAuthorizationService
     Task<JwtSecurityToken> Login(LoginModel model, HttpContext httpContext);
 
     /// <summary>
-    /// Logout from our stuffy helper
-    /// </summary>
-    /// <param name="httpContext">Http context</param>
-    Task Logout(HttpContext httpContext);
-
-    /// <summary>
     /// Register user in stuffy helper
     /// </summary>
     /// <param name="model">Register model</param>

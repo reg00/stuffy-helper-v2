@@ -2,17 +2,17 @@
 using System.Security.Claims;
 using AutoMapper;
 using EnsureThat;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Configuration;
 using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Enums;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Authorization.Core.Extensions;
 using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Common.Configurations;
+using StuffyHelper.Common.Configurators;
 using StuffyHelper.Common.Exceptions;
 
 namespace StuffyHelper.Authorization.Core.Services;
@@ -33,14 +33,16 @@ public class AuthorizationService : IAuthorizationService
             UserManager<StuffyUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IAvatarService avatarService,
-            IOptions<StuffyConfiguration> configuration,
+            IConfiguration configuration,
             IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _avatarService = avatarService;
             _mapper = mapper;
-            _authorizationConfiguration = configuration.Value.Authorization;
+
+            var config = configuration.GetConfig();
+            _authorizationConfiguration = config.Authorization;
         }
 
         /// <inheritdoc />
@@ -58,7 +60,7 @@ public class AuthorizationService : IAuthorizationService
                 var roles = await _userManager.GetRolesAsync(user);
                 var token = user.CreateToken(roles, _authorizationConfiguration);
 
-                var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
+                var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
                 identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.UserName ?? string.Empty));
                 identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName ?? string.Empty));
 
@@ -67,29 +69,10 @@ public class AuthorizationService : IAuthorizationService
                     identity.AddClaim(new Claim(ClaimTypes.Role, role));
                 }
 
-                var principal = new ClaimsPrincipal(identity);
-                await httpContext.SignInAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme,
-                    principal,
-                    new AuthenticationProperties
-                    {
-                        IsPersistent = true,
-                        AllowRefresh = true,
-                        ExpiresUtc = DateTime.UtcNow.AddHours(_authorizationConfiguration.JWT.TokenExpireInHours)
-                    });
-
                 return token;
             }
             else
                 throw new EntityNotFoundException($"Неверный логин/пароль");
-        }
-
-        /// <inheritdoc />
-        public async Task Logout(HttpContext httpContext)
-        {
-            await httpContext.SignOutAsync();
-            await httpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
         }
 
         /// <inheritdoc />
