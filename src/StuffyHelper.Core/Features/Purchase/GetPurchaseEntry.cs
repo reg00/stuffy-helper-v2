@@ -5,6 +5,8 @@ using StuffyHelper.Core.Features.PurchaseTag;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.UnitType;
 using System.ComponentModel.DataAnnotations;
+using StuffyHelper.Contracts.Entities;
+using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Core.Features.Purchase
 {

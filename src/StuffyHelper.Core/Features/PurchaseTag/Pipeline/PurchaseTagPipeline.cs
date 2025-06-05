@@ -1,5 +1,8 @@
 ﻿using EnsureThat;
 using Reg00.Infrastructure.Errors;
+using StuffyHelper.Contracts.Entities;
+using StuffyHelper.Contracts.Interfaces;
+using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Core.Features.PurchaseTag.Pipeline
 {

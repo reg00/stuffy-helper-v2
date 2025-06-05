@@ -1,5 +1,6 @@
 ﻿using EnsureThat;
 using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Features.Event;
 
 namespace StuffyHelper.Core.Features.Debt

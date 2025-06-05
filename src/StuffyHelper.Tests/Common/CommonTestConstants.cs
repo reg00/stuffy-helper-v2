@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Moq;
 using System.Security.Claims;
 using AutoMapper;
-using StuffyHelper.Authorization.Core.AutoMapper;
+using StuffyHelper.Authorization.Contracts.AutoMapper;
 using StuffyHelper.Common.Configurations;
 using StuffyHelper.Tests.UnitTests.Common;
 

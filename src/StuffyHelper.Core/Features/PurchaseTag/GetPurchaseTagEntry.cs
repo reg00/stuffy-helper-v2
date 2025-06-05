@@ -1,6 +1,7 @@
 ﻿using EnsureThat;
 using StuffyHelper.Core.Features.Purchase;
 using System.ComponentModel.DataAnnotations;
+using StuffyHelper.Contracts.Entities;
 
 namespace StuffyHelper.Core.Features.PurchaseTag
 {

@@ -1,5 +1,6 @@
 ﻿using EnsureThat;
 using System.ComponentModel.DataAnnotations;
+using StuffyHelper.Contracts.Entities;
 
 namespace StuffyHelper.Core.Features.PurchaseUsage
 {

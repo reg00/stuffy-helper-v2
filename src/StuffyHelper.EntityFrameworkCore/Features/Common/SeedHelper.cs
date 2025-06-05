@@ -1,4 +1,4 @@
-﻿using StuffyHelper.Core.Features.UnitType;
+﻿using StuffyHelper.Contracts.Entities;
 
 namespace StuffyHelper.EntityFrameworkCore.Features.Common
 {

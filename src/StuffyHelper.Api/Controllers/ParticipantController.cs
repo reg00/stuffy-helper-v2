@@ -6,8 +6,7 @@ using StuffyHelper.Common.Contracts;
 using StuffyHelper.Common.Helpers;
 using StuffyHelper.Common.Messages;
 using StuffyHelper.Common.Web;
-using KnownContentTypes = StuffyHelper.Api.Web.KnownContentTypes;
-using KnownRoutes = StuffyHelper.Api.Web.KnownRoutes;
+using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Api.Controllers
 {

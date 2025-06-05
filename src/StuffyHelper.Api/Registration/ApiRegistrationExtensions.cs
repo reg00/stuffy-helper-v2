@@ -1,16 +1,11 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using StuffyHelper.Api.Features.Middlewares;
 using StuffyHelper.EmailService.Core.Registration;
 using StuffyHelper.EntityFrameworkCore.Registration;
 using StuffyHelper.Minio.Registration;
-using System.Reflection;
 using System.Text.Json.Serialization;
-using StuffyHelper.Common.Extensions;
+using StuffyHelper.Api.Features.Middlewares;
+using StuffyHelper.Common.Configurations;
 
 namespace StuffyHelper.Api.Registration
 {
@@ -27,9 +22,6 @@ namespace StuffyHelper.Api.Registration
                     builder.AllowAnyHeader();
                 });
             });
-
-           services.AddStuffyAuthorization(configuration);
-
 
             services
                 .AddControllers(options => options.UseDateOnlyTimeOnlyStringConverters())
@@ -49,38 +41,8 @@ namespace StuffyHelper.Api.Registration
                 });
             services.AddControllersWithViews();
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen(options =>
-            {
-                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Description = @"Для авторизации в сваггере необходимо ввести токен, полученный при авторизации.",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.Http,
-                    Scheme = "Bearer",
-                    BearerFormat = "JWT"
-                });
 
-                options.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new List<string>()
-                    }
-                });
-
-                var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
-            });
-
-            services.AddMinioBlobDataStores(configuration);
+            services.AddMinioBlobDataStores(configuration.GetSection(StuffyConfiguration.DefaultSection));
 
             services.AddEmailService(configuration);
 
@@ -90,18 +52,11 @@ namespace StuffyHelper.Api.Registration
         public static IApplicationBuilder UseApi(this IApplicationBuilder app)
         {
             app.UseMiddleware<CorsHeaderMiddleware>();
-            app.UseSwagger();
-            app.UseSwaggerUI();
 
             app.UseRouting();
             app.UseCors();
 
             app.UseAuth();
-
-            app.UseEndpoints(options =>
-            {
-                options.MapControllers();
-            });
 
             return app;
         }

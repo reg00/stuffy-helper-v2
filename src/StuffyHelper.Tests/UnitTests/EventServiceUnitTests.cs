@@ -1,6 +1,7 @@
 ﻿using Moq;
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Core.Features.Participant;

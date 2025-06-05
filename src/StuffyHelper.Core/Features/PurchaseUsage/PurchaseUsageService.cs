@@ -3,6 +3,7 @@ using EnsureThat;
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Contracts;
+using StuffyHelper.Contracts.Models;
 using StuffyHelper.Core.Features.Common;
 
 namespace StuffyHelper.Core.Features.PurchaseUsage

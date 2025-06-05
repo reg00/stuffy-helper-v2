@@ -1,4 +1,7 @@
-﻿namespace StuffyHelper.Core.Features.Media
+﻿using StuffyHelper.Contracts.Entities;
+using StuffyHelper.Contracts.Enums;
+
+namespace StuffyHelper.Core.Features.Media
 {
     public interface IMediaStore
     {

@@ -1,7 +1,5 @@
 ﻿using EnsureThat;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using StuffyHelper.Core.Exceptions;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
@@ -23,7 +21,7 @@ namespace StuffyHelper.Api.Features.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
-        private readonly JsonSerializerOptions jsonSerializerOptions;
+        private readonly JsonSerializerOptions _jsonSerializerOptions;
 
         public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
@@ -32,7 +30,7 @@ namespace StuffyHelper.Api.Features.Middlewares
 
             _next = next;
             _logger = logger;
-            jsonSerializerOptions = new JsonSerializerOptions
+            _jsonSerializerOptions = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
@@ -62,18 +60,17 @@ namespace StuffyHelper.Api.Features.Middlewares
                     var statusCode = MapStatusCodeToResult(exceptionDispatchInfo.SourceException);
                     context.Response.ContentType = new MediaTypeHeaderValue("application/json").ToString();
                     context.Response.StatusCode = (int)statusCode;
-                    var result = JsonSerializer.Serialize(new ErrorResponse() { Message = exception.Message }, jsonSerializerOptions);
+                    var result = JsonSerializer.Serialize(new ErrorResponse() { Message = exception.Message }, _jsonSerializerOptions);
                     await context.Response.WriteAsync(result);
                 }
             }
         }
 
-        public HttpStatusCode MapStatusCodeToResult(Exception exception)
+        private HttpStatusCode MapStatusCodeToResult(Exception exception)
         {
             EnsureArg.IsNotNull(exception, nameof(exception));
 
-            HttpStatusCode statusCode = HttpStatusCode.InternalServerError;
-            string message = exception.Message;
+            var statusCode = HttpStatusCode.InternalServerError;
 
             // TODO: Register all possible exceptions in exception handler middleware.
 

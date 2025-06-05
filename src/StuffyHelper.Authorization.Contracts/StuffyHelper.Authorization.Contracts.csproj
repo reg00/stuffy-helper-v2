@@ -13,6 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\StuffyHelper.Contracts\StuffyHelper.Contracts.csproj" />
       <ProjectReference Include="..\StuffyHelper.Common.Client\StuffyHelper.Common.Client.csproj" />
       <ProjectReference Include="..\StuffyHelper.Minio\StuffyHelper.Minio.csproj" />
     </ItemGroup>

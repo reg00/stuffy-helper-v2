@@ -1,5 +1,6 @@
 ﻿using Moq;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Features.Checkout;
 using StuffyHelper.Core.Features.Debt;
 using StuffyHelper.Core.Features.Event;

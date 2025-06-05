@@ -1,5 +1,6 @@
 ﻿using Moq;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Features.Participant;
 using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;

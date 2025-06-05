@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using StuffyHelper.Authorization.Contracts.AutoMapper;
 using StuffyHelper.Authorization.Contracts.Clients;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
+using StuffyHelper.Common.Configurations;
 using StuffyHelper.Common.Configurators;
-using StuffyHelper.Core.Configs;
 using StuffyHelper.Core.Features.Debt;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Media;
@@ -14,6 +15,7 @@ using StuffyHelper.Core.Features.PurchaseTag;
 using StuffyHelper.Core.Features.PurchaseTag.Pipeline;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.UnitType;
+using FrontEndConfiguration = StuffyHelper.Core.Configs.FrontEndConfiguration;
 
 namespace StuffyHelper.Core.Registration
 {
@@ -39,11 +41,14 @@ namespace StuffyHelper.Core.Registration
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             var frontEndOptions = new FrontEndConfiguration();
-            configuration.GetSection(FrontEndConfiguration.DefaultSectionName)
+            configuration.GetSection(StuffyConfiguration.DefaultSection)
+                .GetSection(FrontEndConfiguration.DefaultSectionName)
                 .Bind(frontEndOptions);
 
             services.AddSingleton(Options.Create(frontEndOptions));
 
+            services.AddMapping();
+            
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IParticipantService, ParticipantService>();
             services.AddScoped<IPurchaseService, PurchaseService>();
@@ -53,6 +58,22 @@ namespace StuffyHelper.Core.Registration
             services.AddScoped<IPurchaseTagPipeline, PurchaseTagPipeline>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IDebtService, DebtService>();
+
+            return services;
+        }
+        
+        /// <summary>
+        /// Add automapper mappings
+        /// </summary>
+        private static IServiceCollection AddMapping(this IServiceCollection services)
+        {
+            services.AddAutoMapper(cfg =>
+            {
+                cfg.AddProfile(new FriendsRequestAutoMapperProfile());
+                cfg.AddProfile(new FriendAutoMapperProfile());
+                cfg.AddProfile(new UserAutoMapperProfile());
+                cfg.AddProfile(new AvatarAutoMapperProfile());
+            });
 
             return services;
         }

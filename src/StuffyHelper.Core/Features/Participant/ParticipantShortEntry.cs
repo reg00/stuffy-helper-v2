@@ -1,6 +1,7 @@
 ﻿using EnsureThat;
 using System.ComponentModel.DataAnnotations;
 using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Contracts.Entities;
 
 namespace StuffyHelper.Core.Features.Participant
 {

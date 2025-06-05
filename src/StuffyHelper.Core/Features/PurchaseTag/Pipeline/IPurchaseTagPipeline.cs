@@ -1,4 +1,7 @@
-﻿namespace StuffyHelper.Core.Features.PurchaseTag.Pipeline
+﻿using StuffyHelper.Contracts.Interfaces;
+using StuffyHelper.Contracts.Models;
+
+namespace StuffyHelper.Core.Features.PurchaseTag.Pipeline
 {
     public interface IPurchaseTagPipeline
     {

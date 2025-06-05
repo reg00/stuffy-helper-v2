@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using EnsureThat;
 using Reg00.Infrastructure.Errors;
+using StuffyHelper.Contracts.Entities;
+using StuffyHelper.Contracts.Enums;
 using StuffyHelper.Core.Extensions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Minio.Features.Common;

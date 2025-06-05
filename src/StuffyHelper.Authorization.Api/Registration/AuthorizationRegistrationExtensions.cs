@@ -1,8 +1,8 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using StuffyHelper.Authorization.Contracts.AutoMapper;
 using StuffyHelper.Authorization.Contracts.Entities;
-using StuffyHelper.Authorization.Core.AutoMapper;
 using StuffyHelper.Authorization.Core.Services;
 using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Authorization.Data;

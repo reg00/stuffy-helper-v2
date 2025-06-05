@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using Reg00.Infrastructure.Errors;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Features.Checkout;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.EntityFrameworkCore.Features.Schema;

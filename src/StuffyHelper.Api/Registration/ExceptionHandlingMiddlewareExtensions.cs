@@ -1,5 +1,4 @@
 ﻿using EnsureThat;
-using Microsoft.AspNetCore.Builder;
 using StuffyHelper.Api.Features.Middlewares;
 
 namespace StuffyHelper.Api.Registration

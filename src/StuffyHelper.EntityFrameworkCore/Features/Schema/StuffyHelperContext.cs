@@ -2,15 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using StuffyHelper.Core.Features.Checkout;
-using StuffyHelper.Core.Features.Debt;
-using StuffyHelper.Core.Features.Event;
-using StuffyHelper.Core.Features.Media;
-using StuffyHelper.Core.Features.Participant;
-using StuffyHelper.Core.Features.Purchase;
-using StuffyHelper.Core.Features.PurchaseTag;
-using StuffyHelper.Core.Features.PurchaseUsage;
-using StuffyHelper.Core.Features.UnitType;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.EntityFrameworkCore.Configs;
 using StuffyHelper.EntityFrameworkCore.Features.Common;
 

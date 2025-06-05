@@ -1,5 +1,6 @@
 ﻿using Moq;
 using Reg00.Infrastructure.Errors;
+using StuffyHelper.Contracts.Enums;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Media;
 using StuffyHelper.Tests.Common;

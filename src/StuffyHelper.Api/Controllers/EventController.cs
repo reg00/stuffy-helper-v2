@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Core.Features.Debt;
 using StuffyHelper.Core.Features.Event;
@@ -8,9 +7,8 @@ using StuffyHelper.Common.Contracts;
 using StuffyHelper.Common.Helpers;
 using StuffyHelper.Common.Messages;
 using StuffyHelper.Common.Web;
+using StuffyHelper.Contracts.Models;
 using StuffyHelper.Core.Helpers;
-using KnownContentTypes = StuffyHelper.Api.Web.KnownContentTypes;
-using KnownRoutes = StuffyHelper.Api.Web.KnownRoutes;
 
 namespace StuffyHelper.Api.Controllers
 {

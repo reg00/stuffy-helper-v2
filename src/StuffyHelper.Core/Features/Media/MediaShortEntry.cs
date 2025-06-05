@@ -1,4 +1,6 @@
 ﻿using EnsureThat;
+using StuffyHelper.Contracts.Entities;
+using StuffyHelper.Contracts.Enums;
 using StuffyHelper.Minio.Features.Common;
 
 namespace StuffyHelper.Core.Features.Media

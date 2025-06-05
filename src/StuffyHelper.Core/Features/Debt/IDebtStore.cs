@@ -1,4 +1,5 @@
-﻿using StuffyHelper.Core.Features.Common;
+﻿using StuffyHelper.Contracts.Entities;
+using StuffyHelper.Core.Features.Common;
 
 namespace StuffyHelper.Core.Features.Debt
 {

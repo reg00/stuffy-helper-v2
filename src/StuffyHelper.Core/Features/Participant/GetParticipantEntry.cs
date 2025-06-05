@@ -4,6 +4,7 @@ using StuffyHelper.Core.Features.Purchase;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using System.ComponentModel.DataAnnotations;
 using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Contracts.Entities;
 
 namespace StuffyHelper.Core.Features.Participant
 {

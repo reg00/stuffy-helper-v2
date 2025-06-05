@@ -1,11 +1,9 @@
 ﻿using EnsureThat;
-using Microsoft.Extensions.Options;
 using Minio;
 using Reg00.Infrastructure.Minio.Configs;
 using Reg00.Infrastructure.Minio.Extensions;
 using Reg00.Infrastructure.Minio.Features.Client;
 using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Minio.Configs;
 using StuffyHelper.Minio.Features.Exceptions;
 
 namespace StuffyHelper.Minio.Features.Storage

@@ -3,6 +3,7 @@ using EnsureThat;
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Checkout;
 using StuffyHelper.Core.Features.Common;

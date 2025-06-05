@@ -1,4 +1,5 @@
 ﻿using Moq;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Features.Purchase;
 using StuffyHelper.Core.Features.PurchaseTag.Pipeline;
 using StuffyHelper.Tests.UnitTests.Common;
