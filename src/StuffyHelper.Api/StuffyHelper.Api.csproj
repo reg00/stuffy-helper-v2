@@ -25,7 +25,7 @@
     <ItemGroup>
       <ProjectReference Include="..\StuffyHelper.Core\StuffyHelper.Core.csproj" />
       <ProjectReference Include="..\StuffyHelper.EmailService.Core\StuffyHelper.EmailService.Core.csproj" />
-      <ProjectReference Include="..\StuffyHelper.EntityFrameworkCore\StuffyHelper.EntityFrameworkCore.csproj" />
+      <ProjectReference Include="..\StuffyHelper.Data\StuffyHelper.Data.csproj" />
       <ProjectReference Include="..\StuffyHelper.Common\StuffyHelper.Common.csproj" />
       <ProjectReference Include="..\StuffyHelper.Core\StuffyHelper.Core.csproj" />
       <ProjectReference Include="..\StuffyHelper.EmailService.Core\StuffyHelper.EmailService.Core.csproj" />

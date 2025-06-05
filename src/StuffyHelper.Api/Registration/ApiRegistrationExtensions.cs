@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using StuffyHelper.EmailService.Core.Registration;
-using StuffyHelper.EntityFrameworkCore.Registration;
+using StuffyHelper.Data.Registration;
 using StuffyHelper.Minio.Registration;
 using System.Text.Json.Serialization;
 using StuffyHelper.Api.Features.Middlewares;

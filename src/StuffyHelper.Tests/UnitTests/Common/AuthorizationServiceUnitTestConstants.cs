@@ -114,21 +114,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 }
             };
         }
-        
-        public static AuthorizationConfiguration GetCorrectAuthorizationConfiguration()
-        {
-            return new()
-            {
-                ConnectionString = "connectionString",
-                JWT = new()
-                {
-                    ValidAudience = "audience",
-                    Secret = "secret",
-                    TokenExpireInHours = 1,
-                    ValidIssuer = "issuer"
-                }
-            };
-        }
 
         public static RegisterModel GetCorrectRegisterModel()
         {

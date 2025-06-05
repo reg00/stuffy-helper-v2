@@ -8,6 +8,7 @@ using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Enums;
 using StuffyHelper.Authorization.Core.Services;
 using StuffyHelper.Authorization.Core.Services.Interfaces;
+using StuffyHelper.Common.Configurations;
 using StuffyHelper.Common.Configurators;
 using StuffyHelper.Tests.Common;
 
@@ -27,14 +28,15 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var mapper = CommonTestConstants.GetMapperConfiguration().CreateMapper();
 
-            _configMoq.Setup(x => x.GetConfig())
-                .Returns(CommonTestConstants.GetCorrectStuffyConfiguration());
+            var configuration = new ConfigurationBuilder()
+                .AddInMemoryCollection(CommonTestConstants.GetCorrectStuffyConfigurationAsDictionary())
+                .Build();
             
             return new AuthorizationService(
                 _userManagerMoq.Object,
                 _roleManagerMoq.Object,
                 _avatarServiceMoq.Object,
-                _configMoq.Object,
+                configuration,
                 mapper);
         }
         

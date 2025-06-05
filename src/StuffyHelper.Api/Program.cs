@@ -3,8 +3,8 @@ using StuffyHelper.Common.Configurations;
 using StuffyHelper.Common.Configurators;
 using StuffyHelper.Common.Extensions;
 using StuffyHelper.Core.Registration;
-using StuffyHelper.EntityFrameworkCore.Features.Schema;
-using StuffyHelper.EntityFrameworkCore.Registration;
+using StuffyHelper.Data.Features.Schema;
+using StuffyHelper.Data.Registration;
 
 var builder = WebApplication.CreateBuilder(args);
 

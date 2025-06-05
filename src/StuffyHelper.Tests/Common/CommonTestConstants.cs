@@ -4,8 +4,6 @@ using Moq;
 using System.Security.Claims;
 using AutoMapper;
 using StuffyHelper.Authorization.Contracts.AutoMapper;
-using StuffyHelper.Common.Configurations;
-using StuffyHelper.Tests.UnitTests.Common;
 
 namespace StuffyHelper.Tests.Common
 {
@@ -48,12 +46,16 @@ namespace StuffyHelper.Tests.Common
                 cfg.AddProfile(new AvatarAutoMapperProfile());
             });
         }
-
-        public static StuffyConfiguration GetCorrectStuffyConfiguration()
+        
+        public static Dictionary<string, string> GetCorrectStuffyConfigurationAsDictionary()
         {
-            return new StuffyConfiguration()
+            return new Dictionary<string, string>()
             {
-                Authorization = AuthorizationServiceUnitTestConstants.GetCorrectAuthorizationConfiguration()
+                {"StuffyHelper:Authorization:ConnectionString", "connectionString"},
+                {"StuffyHelper:Authorization:JWT:ValidAudience", "audience"},
+                {"StuffyHelper:Authorization:JWT:Secret", "secret"},
+                {"StuffyHelper:Authorization:JWT:TokenExpireInHours", "1"},
+                {"StuffyHelper:Authorization:JWT:ValidIssuer", "issuer"},
             };
         }
     }
