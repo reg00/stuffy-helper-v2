@@ -3,15 +3,9 @@ using StuffyHelper.Authorization.Contracts.AutoMapper;
 using StuffyHelper.Authorization.Contracts.Clients;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Common.Configurators;
-using StuffyHelper.Core.Features.Debt;
-using StuffyHelper.Core.Features.Event;
-using StuffyHelper.Core.Features.Media;
-using StuffyHelper.Core.Features.Participant;
-using StuffyHelper.Core.Features.Purchase;
-using StuffyHelper.Core.Features.PurchaseTag;
-using StuffyHelper.Core.Features.PurchaseTag.Pipeline;
-using StuffyHelper.Core.Features.PurchaseUsage;
-using StuffyHelper.Core.Features.UnitType;
+using StuffyHelper.Contracts.AutoMapper;
+using StuffyHelper.Core.Services;
+using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Registration
 {
@@ -67,6 +61,7 @@ namespace StuffyHelper.Api.Registration
                 cfg.AddProfile(new FriendAutoMapperProfile());
                 cfg.AddProfile(new UserAutoMapperProfile());
                 cfg.AddProfile(new AvatarAutoMapperProfile());
+                cfg.AddProfile(new MediaAutoMapperProfile());
             });
 
             return services;

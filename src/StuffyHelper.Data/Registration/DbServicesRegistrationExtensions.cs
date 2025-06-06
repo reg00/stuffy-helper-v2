@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Data.Repository;
 using StuffyHelper.Data.Repository.Interfaces;
-using StuffyHelper.Data.Schema;
+using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Registration
 {

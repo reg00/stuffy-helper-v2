@@ -19,7 +19,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Checkout\" />
+    <Folder Include="Features\PurchaseUsage\" />
+    <Folder Include="Features\UnitType\" />
   </ItemGroup>
 
 </Project>

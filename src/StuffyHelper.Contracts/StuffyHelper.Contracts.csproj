@@ -7,7 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\StuffyHelper.Authorization.Contracts\StuffyHelper.Authorization.Contracts.csproj" />
       <ProjectReference Include="..\StuffyHelper.Minio\StuffyHelper.Minio.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AutoMapper" Version="13.0.1" />
     </ItemGroup>
 
 </Project>

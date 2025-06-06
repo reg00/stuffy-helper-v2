@@ -1,7 +1,7 @@
 ﻿using Moq;
 using StuffyHelper.Authorization.Core.Services;
 using StuffyHelper.Authorization.Data.Repository.Interfaces;
-using StuffyHelper.Core.Features.Common;
+using StuffyHelper.Minio.Features.Storage;
 using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
 

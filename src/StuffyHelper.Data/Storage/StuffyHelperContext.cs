@@ -7,7 +7,7 @@ using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Data.Common;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-namespace StuffyHelper.Data.Schema
+namespace StuffyHelper.Data.Storage
 {
     public partial class StuffyHelperContext : DbContext
     {

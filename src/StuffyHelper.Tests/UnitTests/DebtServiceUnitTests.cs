@@ -1,9 +1,8 @@
 ﻿using Moq;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Contracts.Entities;
-using StuffyHelper.Core.Features.Debt;
-using StuffyHelper.Core.Features.Event;
-using StuffyHelper.Core.Features.Purchase;
+using StuffyHelper.Core.Services;
+using StuffyHelper.Core.Services.Interfaces;
 using StuffyHelper.Data.Repository.Interfaces;
 using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;

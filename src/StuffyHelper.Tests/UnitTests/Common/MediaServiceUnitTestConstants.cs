@@ -1,6 +1,6 @@
 ﻿using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Enums;
-using StuffyHelper.Core.Features.Media;
+using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {

@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StuffyHelper.Core.Features.Debt;
-using StuffyHelper.Core.Features.Event;
 using System.Net;
 using StuffyHelper.Common.Contracts;
 using StuffyHelper.Common.Helpers;
@@ -9,6 +7,7 @@ using StuffyHelper.Common.Messages;
 using StuffyHelper.Common.Web;
 using StuffyHelper.Contracts.Models;
 using StuffyHelper.Core.Helpers;
+using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {

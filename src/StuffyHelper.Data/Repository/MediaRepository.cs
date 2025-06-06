@@ -5,7 +5,7 @@ using StuffyHelper.Common.Exceptions;
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Enums;
 using StuffyHelper.Data.Repository.Interfaces;
-using StuffyHelper.Data.Schema;
+using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Repository
 {

@@ -1,11 +1,12 @@
 ﻿using EnsureThat;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StuffyHelper.Core.Features.Media;
 using System.Net;
 using StuffyHelper.Common.Messages;
 using StuffyHelper.Common.Web;
 using StuffyHelper.Contracts.Enums;
+using StuffyHelper.Contracts.Models;
+using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {

@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using Reg00.Infrastructure.Minio.Configs;
-using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Minio.Configs;
 using StuffyHelper.Minio.Features.Storage;
 

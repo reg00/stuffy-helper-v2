@@ -1,4 +1,4 @@
-﻿namespace StuffyHelper.Core.Features.Common
+﻿namespace StuffyHelper.Minio.Features.Storage
 {
     public interface IFileStore
     {

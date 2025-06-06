@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using StuffyHelper.Core.Features.PurchaseTag;
 using System.Net;
 using StuffyHelper.Common.Messages;
 using StuffyHelper.Common.Web;
 using StuffyHelper.Contracts.Models;
+using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {

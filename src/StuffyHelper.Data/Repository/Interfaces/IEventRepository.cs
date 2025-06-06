@@ -1,7 +1,7 @@
 ﻿using StuffyHelper.Common.Messages;
 using StuffyHelper.Contracts.Entities;
 
-namespace StuffyHelper.Core.Features.Event
+namespace StuffyHelper.Data.Repository.Interfaces
 {
     public interface IEventRepository
     {

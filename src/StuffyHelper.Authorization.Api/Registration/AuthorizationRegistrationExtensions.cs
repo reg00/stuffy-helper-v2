@@ -11,6 +11,7 @@ using StuffyHelper.Authorization.Data.Repository.Interfaces;
 using StuffyHelper.Authorization.Data.Storage;
 using StuffyHelper.Common.Configurations;
 using StuffyHelper.Common.Configurators;
+using StuffyHelper.Contracts.AutoMapper;
 using StuffyHelper.EmailService.Contracts.Clients;
 using StuffyHelper.EmailService.Contracts.Clients.Interfaces;
 using StuffyHelper.Minio.Registration;
@@ -80,6 +81,7 @@ public static class AuthorizationRegistrationExtensions
             cfg.AddProfile(new FriendAutoMapperProfile());
             cfg.AddProfile(new UserAutoMapperProfile());
             cfg.AddProfile(new AvatarAutoMapperProfile());
+            cfg.AddProfile(new MediaAutoMapperProfile());
         });
 
         return services;

@@ -3,7 +3,7 @@ using StuffyHelper.Common.Configurations;
 using StuffyHelper.Common.Configurators;
 using StuffyHelper.Common.Extensions;
 using StuffyHelper.Data.Registration;
-using StuffyHelper.Data.Schema;
+using StuffyHelper.Data.Storage;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,9 +1,9 @@
 ﻿using Moq;
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Contracts.Enums;
-using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.Media;
+using StuffyHelper.Core.Services;
 using StuffyHelper.Data.Repository.Interfaces;
+using StuffyHelper.Minio.Features.Storage;
 using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
 

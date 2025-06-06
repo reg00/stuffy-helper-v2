@@ -1,6 +1,6 @@
 ﻿using Moq;
 using StuffyHelper.Contracts.Entities;
-using StuffyHelper.Core.Features.PurchaseUsage;
+using StuffyHelper.Core.Services;
 using StuffyHelper.Data.Repository.Interfaces;
 using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;

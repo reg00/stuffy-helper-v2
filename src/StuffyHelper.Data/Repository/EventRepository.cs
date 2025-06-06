@@ -4,8 +4,8 @@ using Npgsql;
 using StuffyHelper.Common.Exceptions;
 using StuffyHelper.Common.Messages;
 using StuffyHelper.Contracts.Entities;
-using StuffyHelper.Core.Features.Event;
-using StuffyHelper.Data.Schema;
+using StuffyHelper.Data.Repository.Interfaces;
+using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Repository
 {

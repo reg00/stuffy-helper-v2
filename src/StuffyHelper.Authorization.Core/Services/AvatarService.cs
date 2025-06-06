@@ -5,9 +5,9 @@ using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Authorization.Data.Repository.Interfaces;
 using StuffyHelper.Common.Exceptions;
-using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Minio.Features.Common;
 using StuffyHelper.Minio.Features.Helpers;
+using StuffyHelper.Minio.Features.Storage;
 
 namespace StuffyHelper.Authorization.Core.Services;
 

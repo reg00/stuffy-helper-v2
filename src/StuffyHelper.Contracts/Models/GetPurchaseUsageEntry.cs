@@ -1,0 +1,34 @@
+﻿using System.ComponentModel.DataAnnotations;
+using EnsureThat;
+using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Contracts.Entities;
+
+namespace StuffyHelper.Contracts.Models
+{
+    public class GetPurchaseUsageEntry
+    {
+        [Required]
+        public Guid Id { get; init; }
+        [Required]
+        public ParticipantShortEntry? Participant { get; init; }
+        [Required]
+        public PurchaseShortEntry? Purchase { get; init; }
+        public double Amount { get; init; }
+
+        public GetPurchaseUsageEntry()
+        {
+
+        }
+
+        public GetPurchaseUsageEntry(PurchaseUsageEntry entry, UserShortEntry user)
+        {
+            EnsureArg.IsNotNull(entry, nameof(entry));
+            EnsureArg.IsNotNull(user, nameof(user));
+
+            Id = entry.Id;
+            Amount = entry.Amount;
+            Participant = new ParticipantShortEntry(entry.Participant, user);
+            Purchase = new PurchaseShortEntry(entry.Purchase);
+        }
+    }
+}
