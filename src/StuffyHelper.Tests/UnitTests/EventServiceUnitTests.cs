@@ -15,7 +15,7 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class EventServiceUnitTests : UnitTestsBase
     {
-        private readonly Mock<IEventStore> _eventRepositoryMoq = new();
+        private readonly Mock<IEventRepository> _eventRepositoryMoq = new();
         private readonly Mock<IParticipantService> _participantServiceMoq = new();
         private readonly Mock<IAuthorizationClient> _authorizationClientMoq = new();
         private readonly Mock<IMediaService> _mediaServiceMoq = new();

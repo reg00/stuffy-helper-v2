@@ -1,7 +1,6 @@
 ﻿using EnsureThat;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Participant;
-using StuffyHelper.Core.Features.PurchaseTag;
 using StuffyHelper.Core.Features.PurchaseUsage;
 using StuffyHelper.Core.Features.UnitType;
 using System.ComponentModel.DataAnnotations;

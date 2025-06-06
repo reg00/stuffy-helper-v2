@@ -2,6 +2,7 @@
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Features.Participant;
+using StuffyHelper.Data.Repository.Interfaces;
 using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
 
@@ -10,7 +11,7 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class ParticipantServiceUnitTests : UnitTestsBase
     {
-        private readonly Mock<IParticipantStore> _participantRepositoryMoq = new();
+        private readonly Mock<IParticipantRepository> _participantRepositoryMoq = new();
         private readonly Mock<IAuthorizationClient> _authorizationClientMoq = new();
 
         private ParticipantService GetService()

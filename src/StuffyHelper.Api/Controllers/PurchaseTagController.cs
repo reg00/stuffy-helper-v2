@@ -22,7 +22,7 @@ namespace StuffyHelper.Api.Controllers
         /// Получение списка тэгов покупок
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Core.Features.Common.Response<PurchaseTagShortEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Response<PurchaseTagShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]

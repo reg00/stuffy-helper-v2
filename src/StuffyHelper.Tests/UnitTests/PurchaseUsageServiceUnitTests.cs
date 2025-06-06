@@ -1,6 +1,7 @@
 ﻿using Moq;
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Features.PurchaseUsage;
+using StuffyHelper.Data.Repository.Interfaces;
 using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
 
@@ -9,7 +10,7 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class PurchaseUsageServiceUnitTests : UnitTestsBase
     {
-        private readonly Mock<IPurchaseUsageStore> _purchaseUsageRepositoryMoq = new();
+        private readonly Mock<IPurchaseUsageRepository> _purchaseUsageRepositoryMoq = new();
 
         private PurchaseUsageService GetService()
         {

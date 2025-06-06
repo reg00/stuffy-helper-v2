@@ -1,6 +1,7 @@
 ﻿using Moq;
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Features.PurchaseTag;
+using StuffyHelper.Data.Repository.Interfaces;
 using StuffyHelper.Tests.UnitTests.Common;
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -8,7 +9,7 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class PurchaseTagServiceUnitTests : UnitTestsBase
     {
-        private readonly Mock<IPurchaseTagStore> _purchaseTagRepositoryMoq = new();
+        private readonly Mock<IPurchaseTagRepository> _purchaseTagRepositoryMoq = new();
 
         private PurchaseTagService GetService()
         {
@@ -87,7 +88,7 @@ namespace StuffyHelper.Tests.UnitTests
         public async Task DeletePurchaseTagAsync_EmptyInput()
         {
             var purchaseTagService = new PurchaseTagService(
-               new Mock<IPurchaseTagStore>().Object);
+               new Mock<IPurchaseTagRepository>().Object);
 
             await ThrowsTask(async () => await purchaseTagService.DeletePurchaseTagAsync(Guid.Empty, CancellationToken), VerifySettings);
         }

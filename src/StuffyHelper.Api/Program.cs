@@ -2,9 +2,8 @@ using StuffyHelper.Api.Registration;
 using StuffyHelper.Common.Configurations;
 using StuffyHelper.Common.Configurators;
 using StuffyHelper.Common.Extensions;
-using StuffyHelper.Core.Registration;
-using StuffyHelper.Data.Features.Schema;
 using StuffyHelper.Data.Registration;
+using StuffyHelper.Data.Schema;
 
 var builder = WebApplication.CreateBuilder(args);
 

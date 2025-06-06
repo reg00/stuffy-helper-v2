@@ -4,7 +4,7 @@ using StuffyHelper.EmailService.Core.Registration;
 using StuffyHelper.Data.Registration;
 using StuffyHelper.Minio.Registration;
 using System.Text.Json.Serialization;
-using StuffyHelper.Api.Features.Middlewares;
+using StuffyHelper.Api.Middlewares;
 using StuffyHelper.Common.Configurations;
 
 namespace StuffyHelper.Api.Registration

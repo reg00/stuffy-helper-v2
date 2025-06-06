@@ -1,5 +1,4 @@
-﻿using StuffyHelper.Core.Features.PurchaseTag;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Models;

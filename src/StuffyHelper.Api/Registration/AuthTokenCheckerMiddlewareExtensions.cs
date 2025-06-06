@@ -1,5 +1,5 @@
 ﻿using EnsureThat;
-using StuffyHelper.Api.Features.Middlewares;
+using StuffyHelper.Api.Middlewares;
 
 namespace StuffyHelper.Api.Registration
 {

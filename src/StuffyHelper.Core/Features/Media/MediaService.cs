@@ -3,19 +3,20 @@ using EnsureThat;
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Enums;
-using StuffyHelper.Core.Extensions;
 using StuffyHelper.Core.Features.Common;
+using StuffyHelper.Data.Repository.Interfaces;
+using StuffyHelper.Minio.Extensions;
 using StuffyHelper.Minio.Features.Common;
 
 namespace StuffyHelper.Core.Features.Media
 {
     public class MediaService : IMediaService
     {
-        private readonly IMediaStore _mediaStore;
+        private readonly IMediaRepository _mediaStore;
         private readonly IFileStore _fileStore;
         private readonly IMapper _mapper;
 
-        public MediaService(IMediaStore mediaStore, IFileStore fileStore, IMapper mapper)
+        public MediaService(IMediaRepository mediaStore, IFileStore fileStore, IMapper mapper)
         {
             _mediaStore = mediaStore;
             _fileStore = fileStore;
@@ -77,10 +78,6 @@ namespace StuffyHelper.Core.Features.Media
             {
                 return null;
             }
-            catch
-            {
-                throw;
-            }
         }
 
         public async Task<MediaBlobEntry> GetMediaFormFileAsync(Guid mediaId, CancellationToken cancellationToken = default)
@@ -124,10 +121,6 @@ namespace StuffyHelper.Core.Features.Media
             catch (EntityNotFoundException)
             {
                 return null;
-            }
-            catch
-            {
-                throw;
             }
         }
 
@@ -219,9 +212,9 @@ namespace StuffyHelper.Core.Features.Media
             EnsureArg.IsNotDefault(media.EventId, nameof(media.EventId));
 
             if (media.MediaType == MediaType.Link && string.IsNullOrWhiteSpace(media.Link))
-                throw new ArgumentNullException("link cannot be null");
+                throw new ArgumentNullException(nameof(media.Link), "link cannot be null");
             else if (media.MediaType != MediaType.Link && media.File is null)
-                throw new ArgumentNullException("file cannot be null");
+                throw new ArgumentNullException(nameof(media.File), "file cannot be null");
 
             var entry = media.ToCommonEntry(isPrimal);
 

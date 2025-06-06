@@ -2,6 +2,7 @@
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Features.Purchase;
 using StuffyHelper.Core.Features.PurchaseTag.Pipeline;
+using StuffyHelper.Data.Repository.Interfaces;
 using StuffyHelper.Tests.UnitTests.Common;
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -9,7 +10,7 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class PurchaseServiceUnitTests : UnitTestsBase
     {
-        private readonly Mock<IPurchaseStore> _purchaseRepositoryMoq = new();
+        private readonly Mock<IPurchaseRepository> _purchaseRepositoryMoq = new();
         private readonly Mock<IPurchaseTagPipeline> _purchaseTagPipelineMoq = new();
 
         private PurchaseService GetService()

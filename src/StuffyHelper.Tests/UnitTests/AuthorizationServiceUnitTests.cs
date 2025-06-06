@@ -8,8 +8,6 @@ using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Enums;
 using StuffyHelper.Authorization.Core.Services;
 using StuffyHelper.Authorization.Core.Services.Interfaces;
-using StuffyHelper.Common.Configurations;
-using StuffyHelper.Common.Configurators;
 using StuffyHelper.Tests.Common;
 
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.

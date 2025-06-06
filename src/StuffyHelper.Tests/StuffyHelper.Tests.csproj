@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\StuffyHelper.Authorization.Core\StuffyHelper.Authorization.Core.csproj" />
+    <ProjectReference Include="..\StuffyHelper.Data\StuffyHelper.Data.csproj" />
   </ItemGroup>
 
 </Project>

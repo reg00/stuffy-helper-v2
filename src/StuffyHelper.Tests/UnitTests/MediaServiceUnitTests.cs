@@ -3,6 +3,7 @@ using Reg00.Infrastructure.Errors;
 using StuffyHelper.Contracts.Enums;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Media;
+using StuffyHelper.Data.Repository.Interfaces;
 using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
 
@@ -11,7 +12,7 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class MediaServiceUnitTests : UnitTestsBase
     {
-        private readonly Mock<IMediaStore> _mediaRepositoryMoq = new();
+        private readonly Mock<IMediaRepository> _mediaRepositoryMoq = new();
         private readonly Mock<IFileStore> _fileRepositoryMoq = new();
 
         private MediaService GetService()

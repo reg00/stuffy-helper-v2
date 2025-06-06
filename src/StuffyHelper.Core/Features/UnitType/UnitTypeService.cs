@@ -1,15 +1,17 @@
 ﻿using EnsureThat;
 using Reg00.Infrastructure.Errors;
+using StuffyHelper.Common.Messages;
 using StuffyHelper.Contracts.Models;
 using StuffyHelper.Core.Features.Common;
+using StuffyHelper.Data.Repository.Interfaces;
 
 namespace StuffyHelper.Core.Features.UnitType
 {
     public class UnitTypeService : IUnitTypeService
     {
-        private readonly IUnitTypeStore _unitTypeStore;
+        private readonly IUnitTypeRepository _unitTypeStore;
 
-        public UnitTypeService(IUnitTypeStore UnitTypeStore)
+        public UnitTypeService(IUnitTypeRepository UnitTypeStore)
         {
             _unitTypeStore = UnitTypeStore;
         }

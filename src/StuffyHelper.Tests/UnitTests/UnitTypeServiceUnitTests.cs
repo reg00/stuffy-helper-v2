@@ -1,6 +1,7 @@
 ﻿using Moq;
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Features.UnitType;
+using StuffyHelper.Data.Repository.Interfaces;
 using StuffyHelper.Tests.UnitTests.Common;
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -8,7 +9,7 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class UnitTypeServiceUnitTests : UnitTestsBase
     {
-        private readonly Mock<IUnitTypeStore> _unitTypeRepositoryMoq = new();
+        private readonly Mock<IUnitTypeRepository> _unitTypeRepositoryMoq = new();
 
         private UnitTypeService GetService()
         {

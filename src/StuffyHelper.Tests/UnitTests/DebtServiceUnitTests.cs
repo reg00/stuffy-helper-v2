@@ -1,11 +1,10 @@
 ﻿using Moq;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Contracts.Entities;
-using StuffyHelper.Core.Features.Checkout;
 using StuffyHelper.Core.Features.Debt;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Purchase;
-using StuffyHelper.Core.Features.PurchaseUsage;
+using StuffyHelper.Data.Repository.Interfaces;
 using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
 
@@ -13,10 +12,10 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class DebtServiceUnitTests : UnitTestsBase
     {
-        private readonly Mock<IDebtStore> _debtRepositoryMoq = new();
-        private readonly Mock<IEventStore> _eventRepositoryMoq = new();
-        private readonly Mock<ICheckoutStore> _checkoutRepositoryMoq = new();
-        private readonly Mock<IPurchaseUsageStore> _purchaseUsageRepositoryMoq = new();
+        private readonly Mock<IDebtRepository> _debtRepositoryMoq = new();
+        private readonly Mock<IEventRepository> _eventRepositoryMoq = new();
+        private readonly Mock<ICheckoutRepository> _checkoutRepositoryMoq = new();
+        private readonly Mock<IPurchaseUsageRepository> _purchaseUsageRepositoryMoq = new();
         private readonly Mock<IPurchaseService> _purchaseServiceMoq = new();
         private readonly Mock<IAuthorizationClient> _authorizationClientMoq = new();
 

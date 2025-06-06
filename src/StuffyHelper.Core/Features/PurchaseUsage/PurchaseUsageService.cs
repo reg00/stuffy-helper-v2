@@ -3,17 +3,19 @@ using EnsureThat;
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Contracts;
+using StuffyHelper.Common.Messages;
 using StuffyHelper.Contracts.Models;
 using StuffyHelper.Core.Features.Common;
+using StuffyHelper.Data.Repository.Interfaces;
 
 namespace StuffyHelper.Core.Features.PurchaseUsage
 {
     public class PurchaseUsageService : IPurchaseUsageService
     {
-        private readonly IPurchaseUsageStore _purchaseUsageStore;
+        private readonly IPurchaseUsageRepository _purchaseUsageStore;
         private readonly IMapper _mapper;
         
-        public PurchaseUsageService(IPurchaseUsageStore purchaseUsageStore, IMapper mapper)
+        public PurchaseUsageService(IPurchaseUsageRepository purchaseUsageStore, IMapper mapper)
         {
             _purchaseUsageStore = purchaseUsageStore;
             _mapper = mapper;

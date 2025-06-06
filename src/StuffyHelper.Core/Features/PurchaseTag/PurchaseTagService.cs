@@ -1,17 +1,19 @@
 ﻿using EnsureThat;
 using Reg00.Infrastructure.Errors;
+using StuffyHelper.Common.Messages;
 using StuffyHelper.Contracts.Models;
 using StuffyHelper.Core.Features.Common;
+using StuffyHelper.Data.Repository.Interfaces;
 
 namespace StuffyHelper.Core.Features.PurchaseTag
 {
     public class PurchaseTagService : IPurchaseTagService
     {
-        private readonly IPurchaseTagStore _purchaseTagStore;
+        private readonly IPurchaseTagRepository _purchaseTagStore;
 
-        public PurchaseTagService(IPurchaseTagStore PurchaseTagStore)
+        public PurchaseTagService(IPurchaseTagRepository purchaseTagStore)
         {
-            _purchaseTagStore = PurchaseTagStore;
+            _purchaseTagStore = purchaseTagStore;
         }
 
         public async Task<GetPurchaseTagEntry> GetPurchaseTagAsync(Guid purchaseTagId, CancellationToken cancellationToken)

@@ -63,7 +63,7 @@ public static class AuthorizationRegistrationExtensions
             .AddDefaultTokenProviders();
 
         services.AddMapping()
-                .AddAuthentificationServices()
+                .AddAuthenticationServices()
                 .AddMinioBlobDataStores(configuration.GetSection(StuffyConfiguration.DefaultSection));
 
         return services;
@@ -88,7 +88,7 @@ public static class AuthorizationRegistrationExtensions
     /// <summary>
     /// Add services
     /// </summary>
-    private static IServiceCollection AddAuthentificationServices(this IServiceCollection services)
+    private static IServiceCollection AddAuthenticationServices(this IServiceCollection services)
     {
         services.AddScoped<IInitializer, DatabaseInitializer>();
         services.AddTransient<IFriendRequestRepository, FriendRequestRepository>();

@@ -3,14 +3,15 @@ using Reg00.Infrastructure.Errors;
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Interfaces;
 using StuffyHelper.Contracts.Models;
+using StuffyHelper.Data.Repository.Interfaces;
 
 namespace StuffyHelper.Core.Features.PurchaseTag.Pipeline
 {
     public class PurchaseTagPipeline : IPurchaseTagPipeline
     {
-        private readonly IPurchaseTagStore _tagStore;
+        private readonly IPurchaseTagRepository _tagStore;
 
-        public PurchaseTagPipeline(IPurchaseTagStore tagStore)
+        public PurchaseTagPipeline(IPurchaseTagRepository tagStore)
         {
             _tagStore = tagStore;
         }

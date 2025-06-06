@@ -5,7 +5,6 @@ using System.Text;
 using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Enums;
 using StuffyHelper.Authorization.Contracts.Models;
-using StuffyHelper.Common.Configurations;
 using StuffyHelper.Common.Contracts;
 
 namespace StuffyHelper.Tests.UnitTests.Common

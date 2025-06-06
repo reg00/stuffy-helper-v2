@@ -8,6 +8,7 @@ using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Contracts;
 using StuffyHelper.Common.Exceptions;
+using StuffyHelper.Common.Messages;
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Enums;
 using StuffyHelper.Contracts.Models;
@@ -19,14 +20,14 @@ namespace StuffyHelper.Core.Features.Event
 {
     public class EventService : IEventService
     {
-        private readonly IEventStore _eventStore;
+        private readonly IEventRepository _eventStore;
         private readonly IParticipantService _participantService;
         private readonly IMediaService _mediaService;
         private readonly IAuthorizationClient _authorizationClient;
         private readonly IMapper _mapper;
 
         public EventService(
-            IEventStore eventStore,
+            IEventRepository eventStore,
             IParticipantService participantService,
             IMediaService mediaService,
             IAuthorizationClient authorizationClient,

@@ -26,7 +26,7 @@ namespace StuffyHelper.Api.Controllers
         /// Получение списка того, какие участники какие продукты используют
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Core.Features.Common.Response<PurchaseUsageShortEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Response<PurchaseUsageShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]

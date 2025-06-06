@@ -26,7 +26,7 @@ namespace StuffyHelper.Api.Controllers
         /// Получение списка участников ивента
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Core.Features.Common.Response<ParticipantShortEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Response<ParticipantShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]

@@ -1,7 +1,7 @@
-﻿using StuffyHelper.Contracts.Entities;
+﻿using StuffyHelper.Common.Messages;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Models;
 using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.PurchaseUsage;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {

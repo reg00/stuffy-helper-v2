@@ -1,20 +1,22 @@
 ﻿using EnsureThat;
-using Reg00.Infrastructure.Errors;
+using StuffyHelper.Common.Exceptions;
+using StuffyHelper.Common.Messages;
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Models;
-using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.PurchaseTag.Pipeline;
+using StuffyHelper.Data.Repository.Interfaces;
+using EntityNotFoundException = Reg00.Infrastructure.Errors.EntityNotFoundException;
 
 namespace StuffyHelper.Core.Features.Purchase
 {
     public class PurchaseService : IPurchaseService
     {
-        private readonly IPurchaseStore _purchaseStore;
+        private readonly IPurchaseRepository _purchaseStore;
         private readonly IPurchaseTagPipeline _purchaseTagPipeline;
 
         public PurchaseService(
-            IPurchaseStore purchaseStore,
+            IPurchaseRepository purchaseStore,
             IPurchaseTagPipeline purchaseTagPipeline)
         {
             _purchaseStore = purchaseStore;

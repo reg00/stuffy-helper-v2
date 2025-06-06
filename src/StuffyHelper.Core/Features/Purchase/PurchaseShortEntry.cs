@@ -1,5 +1,4 @@
 ﻿using EnsureThat;
-using StuffyHelper.Core.Features.PurchaseTag;
 using StuffyHelper.Core.Features.UnitType;
 using System.ComponentModel.DataAnnotations;
 using StuffyHelper.Contracts.Entities;

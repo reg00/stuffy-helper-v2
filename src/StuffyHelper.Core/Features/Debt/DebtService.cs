@@ -1,33 +1,33 @@
 ﻿using AutoMapper;
 using EnsureThat;
-using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Common.Exceptions;
+using StuffyHelper.Common.Messages;
 using StuffyHelper.Contracts.Entities;
-using StuffyHelper.Core.Exceptions;
-using StuffyHelper.Core.Features.Checkout;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.Event;
 using StuffyHelper.Core.Features.Purchase;
-using StuffyHelper.Core.Features.PurchaseUsage;
+using StuffyHelper.Data.Repository.Interfaces;
+using EntityNotFoundException = Reg00.Infrastructure.Errors.EntityNotFoundException;
 
 namespace StuffyHelper.Core.Features.Debt
 {
     public class DebtService : IDebtService
     {
-        private readonly IDebtStore _debtStore;
-        private readonly IEventStore _eventStore;
-        private readonly ICheckoutStore _checkoutStore;
-        private readonly IPurchaseUsageStore _purchaseUsageStore;
+        private readonly IDebtRepository _debtStore;
+        private readonly IEventRepository _eventStore;
+        private readonly ICheckoutRepository _checkoutStore;
+        private readonly IPurchaseUsageRepository _purchaseUsageStore;
         private readonly IPurchaseService _purchaseService;
         private readonly IAuthorizationClient _authorizationClient;
         private readonly IMapper _mapper;
 
         public DebtService(
-            IDebtStore debtStore,
-            IEventStore eventStore,
-            ICheckoutStore checkoutStore,
-            IPurchaseUsageStore purchaseUsageStore,
+            IDebtRepository debtStore,
+            IEventRepository eventStore,
+            ICheckoutRepository checkoutStore,
+            IPurchaseUsageRepository purchaseUsageStore,
             IPurchaseService purchaseService, 
             IAuthorizationClient authorizationClient,
             IMapper mapper)

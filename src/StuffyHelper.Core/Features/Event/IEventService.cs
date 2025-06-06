@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Common.Contracts;
+using StuffyHelper.Common.Messages;
 using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Core.Features.Event

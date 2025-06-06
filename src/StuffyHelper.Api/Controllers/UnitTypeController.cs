@@ -22,7 +22,7 @@ namespace StuffyHelper.Api.Controllers
         /// Получение списка единиц измерения
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Core.Features.Common.Response<UnitTypeShortEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(Response<UnitTypeShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]

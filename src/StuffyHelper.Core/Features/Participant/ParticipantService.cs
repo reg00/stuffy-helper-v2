@@ -1,23 +1,26 @@
 ﻿using AutoMapper;
 using EnsureThat;
-using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Common.Exceptions;
+using StuffyHelper.Common.Messages;
 using StuffyHelper.Contracts.Models;
-using StuffyHelper.Core.Exceptions;
 using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Core.Features.PurchaseUsage;
+using StuffyHelper.Data.Repository.Interfaces;
+using EntityNotFoundException = Reg00.Infrastructure.Errors.EntityNotFoundException;
+using ForbiddenException = Reg00.Infrastructure.Errors.ForbiddenException;
 
 namespace StuffyHelper.Core.Features.Participant
 {
     public class ParticipantService : IParticipantService
     {
-        private readonly IParticipantStore _participantStore;
+        private readonly IParticipantRepository _participantStore;
         private readonly IAuthorizationClient _authorizationClient;
         private readonly IMapper _mapper;
 
         public ParticipantService(
-            IParticipantStore participantStore,
+            IParticipantRepository participantStore,
             IAuthorizationClient authorizationClient,
             IMapper mapper)
         {

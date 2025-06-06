@@ -75,6 +75,17 @@ services:
     command: server /data
     networks:
       - app-network
+      
+  gateway:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"  # Если нужен HTTPS
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # Основной конфиг
+    depends_on:
+      - stuffy-email
+      - stuffy-auth
 
 networks:
   app-network:
