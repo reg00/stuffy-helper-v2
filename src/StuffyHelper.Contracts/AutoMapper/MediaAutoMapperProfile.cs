@@ -5,8 +5,14 @@ using StuffyHelper.Minio.Features.Helpers;
 
 namespace StuffyHelper.Contracts.AutoMapper;
 
+/// <summary>
+/// Media auto mapper profile
+/// </summary>
 public class MediaAutoMapperProfile : Profile
 {
+    /// <summary>
+    /// Ctor.
+    /// </summary>
     public MediaAutoMapperProfile()
     {
         CreateMap<(Stream? Stream, MediaEntry Avatar), MediaBlobEntry>()

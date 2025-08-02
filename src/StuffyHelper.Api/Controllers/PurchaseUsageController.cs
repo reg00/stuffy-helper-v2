@@ -10,6 +10,9 @@ using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {
+    /// <summary>
+    /// Причастность к покупке
+    /// </summary>
     [Authorize]
     public class PurchaseUsageController : AuthorizedApiController
     {

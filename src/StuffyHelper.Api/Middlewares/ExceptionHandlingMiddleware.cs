@@ -16,6 +16,9 @@ using ForbiddenException = Reg00.Infrastructure.Errors.ForbiddenException;
 
 namespace StuffyHelper.Api.Middlewares
 {
+    /// <summary>
+    /// Exception handling middleware
+    /// </summary>
     public class ExceptionHandlingMiddleware
     {
         private readonly RequestDelegate _next;

@@ -9,13 +9,18 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients;
 
+/// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IEventClient" />
 public class EventClient: ApiClientBase, IEventClient
 {
+    /// <summary>
+    /// Ctor.
+    /// </summary>
     public EventClient(string baseUrl) : base(baseUrl)
     {
         
     }
     
+    /// <inheritdoc />
     public Task<Response<EventShortEntry>> GetEventsAsync(
         string token,
         int offset = 0,
@@ -56,6 +61,7 @@ public class EventClient: ApiClientBase, IEventClient
         return Get<Response<EventShortEntry>>(request, cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task<GetEventEntry> GetEventAsync(
         string token,
         Guid eventId,
@@ -67,6 +73,7 @@ public class EventClient: ApiClientBase, IEventClient
         return Get<GetEventEntry>(request, cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task<EventShortEntry> CreateEventAsync(
         string token,
         AddEventEntry body,
@@ -79,6 +86,7 @@ public class EventClient: ApiClientBase, IEventClient
         return Post<EventShortEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task DeleteEventAsync(
         string token,
         Guid eventId,
@@ -90,6 +98,7 @@ public class EventClient: ApiClientBase, IEventClient
         return Delete(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<EventShortEntry> UpdateEventAsync(
         string token,
         Guid eventId,
@@ -103,6 +112,7 @@ public class EventClient: ApiClientBase, IEventClient
         return Patch<EventShortEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task DeleteEventAvatarAsync(
         string token,
         Guid eventId,
@@ -114,6 +124,7 @@ public class EventClient: ApiClientBase, IEventClient
         return Delete(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<EventShortEntry> UpdateEventAvatarAsync(
         string token,
         Guid eventId,
@@ -127,6 +138,7 @@ public class EventClient: ApiClientBase, IEventClient
         return Patch<EventShortEntry>(request, cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task CompleteEventAsync(string token, Guid eventId, CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.CompleteEventRoute)
@@ -135,6 +147,7 @@ public class EventClient: ApiClientBase, IEventClient
         return Post(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task ReopenEventAsync(string token, Guid eventId, CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.ReopenEventRoute)
@@ -143,6 +156,7 @@ public class EventClient: ApiClientBase, IEventClient
         return Post(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task CheckoutEventAsync(string token, Guid eventId, CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.CheckoutEventRoute)

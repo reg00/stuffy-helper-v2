@@ -7,13 +7,18 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients;
 
+/// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IPurchaseTagClient" />
 public class PurchaseTagClient: ApiClientBase, IPurchaseTagClient
 {
+    /// <summary>
+    /// Ctor.
+    /// </summary>
     public PurchaseTagClient(string baseUrl) : base(baseUrl)
     {
         
     }
     
+    /// <inheritdoc />
      public Task<Response<PurchaseTagShortEntry>> GetPurchaseTagsAsync(
         string token,
         int offset = 0,
@@ -34,6 +39,7 @@ public class PurchaseTagClient: ApiClientBase, IPurchaseTagClient
         return Get<Response<PurchaseTagShortEntry>>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<GetPurchaseTagEntry> GetPurchaseTagAsync(
         string token,
         Guid purchaseTagId,
@@ -45,6 +51,7 @@ public class PurchaseTagClient: ApiClientBase, IPurchaseTagClient
         return Get<GetPurchaseTagEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<PurchaseTagShortEntry> CreatePurchaseTagAsync(
         string token,
         UpsertPurchaseTagEntry body,
@@ -57,6 +64,7 @@ public class PurchaseTagClient: ApiClientBase, IPurchaseTagClient
         return Post<PurchaseTagShortEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task DeletePurchaseTagAsync(
         string token,
         Guid purchaseTagId,
@@ -68,6 +76,7 @@ public class PurchaseTagClient: ApiClientBase, IPurchaseTagClient
         return Delete(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<PurchaseTagShortEntry> UpdatePurchaseTagAsync(
         string token,
         Guid purchaseTagId,

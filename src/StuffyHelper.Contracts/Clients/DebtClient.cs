@@ -7,13 +7,18 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients;
 
+/// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IDebtClient" />
 public class DebtClient: ApiClientBase, IDebtClient
 {
+    /// <summary>
+    /// Ctor.
+    /// </summary>
     public DebtClient(string baseUrl) : base(baseUrl)
     {
         
     }
     
+    /// <inheritdoc />
     public Task<Response<GetDebtEntry>> GetDebtsAsync(
         string token,
         int offset = 0,
@@ -28,6 +33,7 @@ public class DebtClient: ApiClientBase, IDebtClient
         return Get<Response<GetDebtEntry>>(request, cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task<GetDebtEntry> GetDebtAsync(
         string token,
         Guid debtId,
@@ -39,6 +45,7 @@ public class DebtClient: ApiClientBase, IDebtClient
         return Get<GetDebtEntry>(request, cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task SendDebtAsync(string token, Guid debtId, CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.SendDebtRoute)
@@ -47,6 +54,7 @@ public class DebtClient: ApiClientBase, IDebtClient
         return Post(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task ConfirmDebtAsync(string token, Guid debtId, CancellationToken cancellationToken = default)
     {
         var request = CreateRequest(KnownRoutes.ConfirmDebtRoute)

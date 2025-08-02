@@ -1,5 +1,8 @@
 ﻿namespace StuffyHelper.Contracts.Enums
 {
+    /// <summary>
+    /// Media types
+    /// </summary>
     public enum MediaType
     {
         Image,

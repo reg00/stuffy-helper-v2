@@ -8,6 +8,9 @@ using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {
+    /// <summary>
+    /// Тэги покупок
+    /// </summary>
     [Authorize]
     public class PurchaseTagController : Controller
     {

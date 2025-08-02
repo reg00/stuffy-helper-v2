@@ -10,6 +10,9 @@ using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {
+    /// <summary>
+    /// Участники ивента
+    /// </summary>
     [Authorize]
     public class ParticipantController : AuthorizedApiController
     {

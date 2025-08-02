@@ -8,6 +8,9 @@ using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {
+    /// <summary>
+    /// Удиницы измерения
+    /// </summary>
     [Authorize]
     public class UnitTypeController : Controller
     {

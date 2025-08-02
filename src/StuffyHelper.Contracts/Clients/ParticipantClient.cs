@@ -7,13 +7,18 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients;
 
+/// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IParticipantClient" />
 public class ParticipantClient: ApiClientBase, IParticipantClient
 {
+    /// <summary>
+    /// Ctor.
+    /// </summary>
     public ParticipantClient(string baseUrl) : base(baseUrl)
     {
         
     }
 
+    /// <inheritdoc />
     public Task<Response<ParticipantShortEntry>> GetParticipantsAsync(
         string token,
         int offset = 0,
@@ -32,6 +37,7 @@ public class ParticipantClient: ApiClientBase, IParticipantClient
         return Get<Response<ParticipantShortEntry>>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<GetParticipantEntry> GetParticipantAsync(
         string token,
         Guid participantId,
@@ -43,6 +49,7 @@ public class ParticipantClient: ApiClientBase, IParticipantClient
         return Get<GetParticipantEntry>(request, cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task<ParticipantShortEntry> CreateParticipantAsync(
         string token,
         UpsertParticipantEntry body,
@@ -55,6 +62,7 @@ public class ParticipantClient: ApiClientBase, IParticipantClient
         return Post<ParticipantShortEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task DeleteParticipantAsync(
         string token,
         Guid participantId,

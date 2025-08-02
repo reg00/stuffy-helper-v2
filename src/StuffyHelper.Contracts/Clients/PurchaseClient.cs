@@ -7,13 +7,18 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients;
 
+/// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IPurchaseClient" />
 public class PurchaseClient: ApiClientBase, IPurchaseClient
 {
+    /// <summary>
+    /// Ctor.
+    /// </summary>
     public PurchaseClient(string baseUrl) : base(baseUrl)
     {
         
     }
     
+    /// <inheritdoc />
     public Task<Response<GetPurchaseEntry>> GetPurchasesAsync(
         string token,
         int offset = 0,
@@ -42,6 +47,7 @@ public class PurchaseClient: ApiClientBase, IPurchaseClient
         return Get<Response<GetPurchaseEntry>>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<GetPurchaseEntry> GetPurchaseAsync(
         string token,
         Guid purchaseId,
@@ -53,6 +59,7 @@ public class PurchaseClient: ApiClientBase, IPurchaseClient
         return Get<GetPurchaseEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<PurchaseShortEntry> CreatePurchaseAsync(
         string token,
         AddPurchaseEntry body,
@@ -65,6 +72,7 @@ public class PurchaseClient: ApiClientBase, IPurchaseClient
         return Post<PurchaseShortEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task DeletePurchaseAsync(
         string token,
         Guid purchaseId,
@@ -76,6 +84,7 @@ public class PurchaseClient: ApiClientBase, IPurchaseClient
         return Delete(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<PurchaseShortEntry> UpdatePurchaseAsync(
         string token,
         Guid purchaseId,

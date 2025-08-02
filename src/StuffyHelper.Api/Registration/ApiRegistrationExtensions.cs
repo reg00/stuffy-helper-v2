@@ -9,6 +9,9 @@ using StuffyHelper.Common.Middlewares;
 
 namespace StuffyHelper.Api.Registration
 {
+    /// <summary>
+    /// API registration extensions
+    /// </summary>
     public static class ApiRegistrationExtensions
     {
         public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)

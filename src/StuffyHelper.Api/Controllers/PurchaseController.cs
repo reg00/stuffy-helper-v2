@@ -8,6 +8,9 @@ using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {
+    /// <summary>
+    /// Покупки
+    /// </summary>
     [Authorize]
     public class PurchaseController : Controller
     {

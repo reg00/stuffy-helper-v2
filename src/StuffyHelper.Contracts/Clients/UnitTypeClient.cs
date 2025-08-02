@@ -7,13 +7,18 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients;
 
+/// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IUnitTypeClient" />
 public class UnitTypeClient: ApiClientBase, IUnitTypeClient
 {
+    /// <summary>
+    /// Ctor.
+    /// </summary>
     public UnitTypeClient(string baseUrl) : base(baseUrl)
     {
         
     }
     
+    /// <inheritdoc />
     public Task<Response<UnitTypeShortEntry>> GetUnitTypesAsync(
         string token,
         int offset = 0,
@@ -34,6 +39,7 @@ public class UnitTypeClient: ApiClientBase, IUnitTypeClient
         return Get<Response<UnitTypeShortEntry>>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<GetUnitTypeEntry> GetUnitTypeAsync(
         string token,
         Guid unitTypeId,
@@ -45,6 +51,7 @@ public class UnitTypeClient: ApiClientBase, IUnitTypeClient
         return Get<GetUnitTypeEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<UnitTypeShortEntry> CreateUnitTypeAsync(
         string token,
         UpsertUnitTypeEntry body,
@@ -57,6 +64,7 @@ public class UnitTypeClient: ApiClientBase, IUnitTypeClient
         return Post<UnitTypeShortEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task DeleteUnitTypeAsync(
         string token,
         Guid unitTypeId,
@@ -68,6 +76,7 @@ public class UnitTypeClient: ApiClientBase, IUnitTypeClient
         return Delete(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<UnitTypeShortEntry> UpdateUnitTypeAsync(
         string token,
         Guid unitTypeId,

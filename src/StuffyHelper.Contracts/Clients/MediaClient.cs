@@ -7,13 +7,19 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients;
 
+/// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IMediaClient" />
 public class MediaClient: ApiClientBase, IMediaClient
 {
+    /// <summary>
+    /// Ctor.
+    /// </summary>
+    /// <param name="baseUrl"></param>
     public MediaClient(string baseUrl) : base(baseUrl)
     {
         
     }
 
+    /// <inheritdoc />
     public Task<MediaShortEntry> StoreMediaFormFileAsync(
         string token,
         AddMediaEntry body,
@@ -26,6 +32,7 @@ public class MediaClient: ApiClientBase, IMediaClient
         return Post<MediaShortEntry>(request, cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task<FileParam> RetrieveMediaFormFileAsync(
         string token,
         Guid mediaId,
@@ -37,6 +44,7 @@ public class MediaClient: ApiClientBase, IMediaClient
         return GetFile(request, cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task<GetMediaEntry> GetMediaMetadataAsync(
         string token,
         Guid mediaId,
@@ -48,6 +56,7 @@ public class MediaClient: ApiClientBase, IMediaClient
         return Get<GetMediaEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task DeleteMediaAsync(
         string token,
         Guid mediaId,
@@ -59,6 +68,7 @@ public class MediaClient: ApiClientBase, IMediaClient
         return Delete(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
         string token,
         int offset = 0,

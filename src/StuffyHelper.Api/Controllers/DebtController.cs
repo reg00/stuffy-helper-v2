@@ -10,6 +10,9 @@ using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {
+    /// <summary>
+    /// Долги
+    /// </summary>
     [Authorize]
     public class DebtController : AuthorizedApiController
     {

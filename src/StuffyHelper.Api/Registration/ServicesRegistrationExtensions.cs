@@ -9,6 +9,9 @@ using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Registration
 {
+    /// <summary>
+    /// Service DI registration extensions
+    /// </summary>
     public static class ServicesRegistrationExtensions
     {
         /// <summary>

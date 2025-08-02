@@ -10,6 +10,9 @@ using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {
+    /// <summary>
+    /// Медиа
+    /// </summary>
     [Authorize]
     public class MediaController : Controller
     {

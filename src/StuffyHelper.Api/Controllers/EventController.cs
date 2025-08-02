@@ -11,6 +11,9 @@ using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {
+    /// <summary>
+    /// Ивенты
+    /// </summary>
     [Authorize]
     public class EventController : AuthorizedApiController
     {
