@@ -2,6 +2,9 @@
 
 namespace StuffyHelper.Minio.Features.Helpers;
 
+/// <summary>
+/// File extensions
+/// </summary>
 public static class FormFileExtensions
 {
     public static bool IsImage(IFormFile file)

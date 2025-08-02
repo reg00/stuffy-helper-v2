@@ -2,10 +2,16 @@
 
 namespace StuffyHelper.Common.Middlewares
 {
+    /// <summary>
+    /// Auth token checker middleware
+    /// </summary>
     public class AuthTokenCheckerMiddleware
     {
         private readonly RequestDelegate _next;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public AuthTokenCheckerMiddleware(RequestDelegate next)
         {
             _next = next;

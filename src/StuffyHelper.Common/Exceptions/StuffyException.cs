@@ -1,5 +1,9 @@
 ﻿namespace StuffyHelper.Common.Exceptions
 {
+    /// <summary>
+    /// Stuffy helper exception
+    /// 500 status code
+    /// </summary>
     public class StuffyException : Exception
     {
         public IDictionary<string, string>? Errors { get; set; } = new Dictionary<string, string>();

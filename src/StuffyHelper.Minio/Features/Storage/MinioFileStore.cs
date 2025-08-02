@@ -7,11 +7,15 @@ using StuffyHelper.Minio.Features.Exceptions;
 
 namespace StuffyHelper.Minio.Features.Storage
 {
+    /// <inheritdoc />
     public class MinioFileStore : IFileStore
     {
         private readonly MinioBucketClient _bucket;
         private readonly MinioClient _client;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public MinioFileStore(MinioClient client,
             string bucketName,
             MinioClientOptions minioClientOptions)
@@ -24,15 +28,17 @@ namespace StuffyHelper.Minio.Features.Storage
             SetPublicPolicy(bucketName);
         }
 
+        
         private void SetPublicPolicy(string bucketName)
         {
-            string policyJson = $@"{{""Version"": ""2012-10-17"",""Statement"": [{{""Action"": [""s3:GetObject""], ""Effect"": ""Allow"", ""Principal"": {{ ""AWS"": [ ""*"" ] }}, ""Resource"": [ ""arn:aws:s3:::{bucketName}/*"" ] }} ] }}";
+            var policyJson = $@"{{""Version"": ""2012-10-17"",""Statement"": [{{""Action"": [""s3:GetObject""], ""Effect"": ""Allow"", ""Principal"": {{ ""AWS"": [ ""*"" ] }}, ""Resource"": [ ""arn:aws:s3:::{bucketName}/*"" ] }} ] }}";
             var policyArgs = new SetPolicyArgs()
                 .WithBucket(bucketName)
                 .WithPolicy(policyJson);
             _client.SetPolicyAsync(policyArgs).ConfigureAwait(false);
         }
 
+        /// <inheritdoc />
         public async Task DeleteFilesIfExistAsync(
             string objectName,
             CancellationToken cancellationToken = default)
@@ -49,6 +55,7 @@ namespace StuffyHelper.Minio.Features.Storage
             }
         }
 
+        /// <inheritdoc />
         public async Task<Stream> GetFileAsync(
             string objectName,
             CancellationToken cancellationToken = default)
@@ -65,6 +72,7 @@ namespace StuffyHelper.Minio.Features.Storage
             }
         }
 
+        /// <inheritdoc />
         public async Task StoreFileAsync(
             string objectName,
             Stream stream,
@@ -86,6 +94,7 @@ namespace StuffyHelper.Minio.Features.Storage
             }
         }
 
+        /// <inheritdoc />
         public async Task<Uri> ObtainGetPresignedUrl(
             string objectName,
             CancellationToken cancellationToken = default)
@@ -103,6 +112,7 @@ namespace StuffyHelper.Minio.Features.Storage
             }
         }
 
+        /// <inheritdoc />
         public Task<Uri> ObtainPutPresignedUrl(
             string objectName,
             CancellationToken cancellationToken = default)

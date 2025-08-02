@@ -2,6 +2,9 @@
 
 namespace StuffyHelper.Minio.Features.Helpers;
 
+/// <summary>
+/// File type mapper
+/// </summary>
 public static class FileTypeMapper
 {
     private static readonly Dictionary<string, FileType> FileTypeExtMap = new Dictionary<string, FileType>()

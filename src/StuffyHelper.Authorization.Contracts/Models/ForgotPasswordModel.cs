@@ -7,6 +7,9 @@ namespace StuffyHelper.Authorization.Contracts.Models;
 /// </summary>
 public class ForgotPasswordModel
 {
+    /// <summary>
+    /// Email
+    /// </summary>
     [Required]
     [EmailAddress]
     public string Email { get; init; } = string.Empty;

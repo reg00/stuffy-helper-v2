@@ -1,5 +1,8 @@
 ﻿namespace StuffyHelper.Minio.Configs
 {
+    /// <summary>
+    /// File store configuration
+    /// </summary>
     internal sealed class FileStoreConfiguration
     {
         public const string DefaultSection = "FileStore";

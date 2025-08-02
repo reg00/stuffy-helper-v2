@@ -7,13 +7,16 @@ using StuffyHelper.Common.Web;
 
 namespace StuffyHelper.Authorization.Contracts.Clients;
 
+/// <inheritdoc cref="StuffyHelper.Authorization.Contracts.Clients.Interface.IFriendClient" />
 public class FriendClient: ApiClientBase, IFriendClient
 {
+    /// <inheritdoc />
     public FriendClient(string baseUrl) : base(baseUrl)
     {
         
     }
     
+    /// <inheritdoc />
     public Task<Response<UserShortEntry>> GetAsync(
         string token,
         int limit = 20,

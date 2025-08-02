@@ -9,13 +9,16 @@ using StuffyHelper.Common.Web;
 
 namespace StuffyHelper.Authorization.Contracts.Clients;
 
+/// <inheritdoc cref="StuffyHelper.Authorization.Contracts.Clients.Interface.IAuthorizationClient" />
 public class AuthorizationClient : ApiClientBase, IAuthorizationClient
 {
+    /// <inheritdoc />
     public AuthorizationClient(string baseUrl) : base(baseUrl)
     {
         
     }
 
+    /// <inheritdoc />
     public Task<string> Register(
         RegisterModel body,
         CancellationToken cancellationToken = default)
@@ -26,6 +29,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Post<string>(request, cancellationToken);
     }
 
+    /// <inheritdoc />
     public Task ConfirmEmail(
         string login,
         string code,
@@ -38,6 +42,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Get(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<string> Login(
         LoginModel body,
         CancellationToken cancellationToken = default)
@@ -48,6 +53,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Post<string>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<string> ForgotPassword(
         ForgotPasswordModel body,
         CancellationToken cancellationToken = default)
@@ -58,6 +64,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Post<string>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<ResetPasswordResult> ResetPassword(
         string email,
         string code,
@@ -70,6 +77,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Get<ResetPasswordResult>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<string> ConfirmResetPassword(
         ResetPasswordModel body,
         CancellationToken cancellationToken = default)
@@ -80,6 +88,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Post<string>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<IReadOnlyList<IdentityRole>> GetRoles(
         string token,
         CancellationToken cancellationToken = default)
@@ -90,6 +99,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Get<IReadOnlyList<IdentityRole>>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<bool> CheckUserIsAdmin(
         string token,
         CancellationToken cancellationToken = default)
@@ -100,6 +110,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Get<bool>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<GetUserEntry> GetAccountInfoAsync(
         string token,
         CancellationToken cancellationToken = default)
@@ -110,6 +121,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Get<GetUserEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public async Task<GetUserEntry> GetUserById(
         string userId,
         CancellationToken cancellationToken = default)
@@ -119,6 +131,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return await Get<GetUserEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<IReadOnlyList<UserShortEntry>> GetUserLogins(
         string token,
         string? userName = null,
@@ -131,6 +144,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Get<IReadOnlyList<UserShortEntry>>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<GetUserEntry> EditUserAsync(
         string token,
         UpdateModel body,
@@ -143,6 +157,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Patch<GetUserEntry>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task EditAvatarAsync(
         string token,
         IFormFile file,
@@ -155,6 +170,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         return Post(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task RemoveAvatarAsync(
         string token,
         CancellationToken cancellationToken = default)

@@ -14,7 +14,7 @@ public interface IAuthorizationService
     /// <summary>
     /// Login into stuffy helper
     /// </summary>
-    /// <param name="model">Login nmodel</param>
+    /// <param name="model">Login model</param>
     /// <param name="httpContext">Http context</param>
     Task<JwtSecurityToken> Login(LoginModel model, HttpContext httpContext);
 

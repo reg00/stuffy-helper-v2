@@ -7,6 +7,9 @@ namespace StuffyHelper.Common.Helpers;
 /// </summary>
 public static class ExceptionHelper
 {
+    /// <summary>
+    /// Convert to string error
+    /// </summary>
     public static string ConvertToError(this ModelStateDictionary model)
     {
         var errors = model.Where(x => x.Value != null && x.Value.Errors.Count > 0)

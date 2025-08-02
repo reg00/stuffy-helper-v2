@@ -1,21 +1,18 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using StuffyHelper.ApiGateway.Core.Services.Interfaces;
 using StuffyHelper.Authorization.Contracts.Models;
-using StuffyHelper.Authorization.Core.Services.Interfaces;
 using StuffyHelper.Common.Messages;
 using StuffyHelper.Common.Web;
 
-namespace StuffyHelper.Authorization.Api.Controllers;
+namespace StuffyHelper.ApiGateway.Controllers;
 
 [Authorize]
-public class FriendController : Controller
+public class FriendController : AuthorizedApiController
 {
     private readonly IFriendService _friendshipService;
 
-    /// <summary>
-    /// Ctor.
-    /// </summary>
     public FriendController(IFriendService friendshipService)
     {
         _friendshipService = friendshipService;
@@ -32,6 +29,6 @@ public class FriendController : Controller
     [Route(KnownRoutes.GetFriendsRoute)]
     public async Task<Response<UserShortEntry>> GetAsync(int limit = 20, int offset = 0)
     {
-        return await _friendshipService.GetFriends(User, limit, offset, HttpContext.RequestAborted);
+        return await _friendshipService.GetFriends(Token, limit, offset, HttpContext.RequestAborted);
     }
 }

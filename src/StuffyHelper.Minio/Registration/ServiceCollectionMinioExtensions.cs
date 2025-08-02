@@ -8,6 +8,9 @@ using StuffyHelper.Minio.Features.Storage;
 
 namespace StuffyHelper.Minio.Registration
 {
+    /// <summary>
+    /// File store registration extensions
+    /// </summary>
     public static class ServiceCollectionMinioExtensions
     {
         public static IServiceCollection AddMinioBlobDataStores(this IServiceCollection services, IConfiguration configuration)

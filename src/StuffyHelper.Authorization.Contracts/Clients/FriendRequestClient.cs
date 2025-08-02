@@ -6,14 +6,17 @@ using StuffyHelper.Common.Web;
 
 namespace StuffyHelper.Authorization.Contracts.Clients;
 
+/// <inheritdoc cref="StuffyHelper.Authorization.Contracts.Clients.Interface.IFriendRequestClient" />
 public class FriendRequestClient : ApiClientBase, IFriendRequestClient
 {
+    /// <inheritdoc />
     public FriendRequestClient(string baseUrl) : base(baseUrl)
     {
         
     }
 
-    public Task<IReadOnlyList<FriendsRequestShort>> GetSendedRequestsAsync(
+    /// <inheritdoc />
+    public Task<IReadOnlyList<FriendsRequestShort>> GetSentRequestsAsync(
         string token,
         CancellationToken cancellationToken = default)
     {
@@ -23,6 +26,7 @@ public class FriendRequestClient : ApiClientBase, IFriendRequestClient
         return Get<IReadOnlyList<FriendsRequestShort>>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<IReadOnlyList<FriendsRequestShort>> GetIncomingRequestsAsync(
         string token,
         CancellationToken cancellationToken = default)
@@ -33,6 +37,7 @@ public class FriendRequestClient : ApiClientBase, IFriendRequestClient
         return Get<IReadOnlyList<FriendsRequestShort>>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<FriendsRequestShort> GetAsync(
         string token,
         Guid requestId,
@@ -44,6 +49,7 @@ public class FriendRequestClient : ApiClientBase, IFriendRequestClient
         return Get<FriendsRequestShort>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task ConfirmAsync(
         string token,
         Guid requestId,
@@ -55,6 +61,7 @@ public class FriendRequestClient : ApiClientBase, IFriendRequestClient
         return Post(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task<FriendsRequestShort> AddRequestAsync(
         string token,
         string userId,
@@ -67,6 +74,7 @@ public class FriendRequestClient : ApiClientBase, IFriendRequestClient
         return Post<FriendsRequestShort>(request, cancellationToken);
     }
     
+    /// <inheritdoc />
     public Task DeleteRequestAsync(
         string token,
         Guid requestId,

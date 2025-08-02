@@ -7,6 +7,9 @@ namespace StuffyHelper.Common.Client.Helpers;
 /// </summary>
 public static class FileHelper
 {
+    /// <summary>
+    /// Convert IFormFile to FileParam
+    /// </summary>
     public static FileParam ToFileParam(this IFormFile file)
     {
         using var stream = new MemoryStream();

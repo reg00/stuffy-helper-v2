@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace StuffyHelper.Common.Middlewares
 {
+    /// <summary>
+    /// CORS middleware
+    /// </summary>
     public class CorsHeaderMiddleware
     {
         private readonly RequestDelegate _next;

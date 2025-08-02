@@ -9,8 +9,14 @@ using StuffyHelper.EmailService.Core.Service.Interfaces;
 
 namespace StuffyHelper.EmailService.Core.Registration
 {
+    /// <summary>
+    /// Email service registration extensions
+    /// </summary>
     public static class EmailServiceRegistrationExtension
     {
+        /// <summary>
+        /// Add email service references
+        /// </summary>
         public static IServiceCollection AddEmailService(this IServiceCollection services, IConfiguration configuration)
         {
             EnsureArg.IsNotNull(services, nameof(services));

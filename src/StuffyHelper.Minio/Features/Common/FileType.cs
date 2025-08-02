@@ -1,5 +1,8 @@
 ﻿namespace StuffyHelper.Minio.Features.Common
 {
+    /// <summary>
+    /// File type
+    /// </summary>
     public enum FileType
     {
         Jpg,

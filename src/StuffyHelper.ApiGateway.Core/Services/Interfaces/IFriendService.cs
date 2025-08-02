@@ -1,12 +1,12 @@
 ﻿using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Messages;
 
-namespace StuffyHelper.Authorization.Contracts.Clients.Interface;
+namespace StuffyHelper.ApiGateway.Core.Services.Interfaces;
 
 /// <summary>
-/// Interface for work with friends
+/// Friend service
 /// </summary>
-public interface IFriendClient
+public interface IFriendService
 {
     /// <summary>
     /// Get user friends
@@ -15,9 +15,5 @@ public interface IFriendClient
     /// <param name="limit">Pagination limit</param>
     /// <param name="offset">Pagination offset</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    public Task<Response<UserShortEntry>> GetAsync(
-        string token,
-        int limit = 20,
-        int offset = 0,
-        CancellationToken cancellationToken = default);
+    Task<Response<UserShortEntry>> GetFriends(string token, int limit = 20, int offset = 0, CancellationToken cancellationToken = default);
 }

@@ -18,7 +18,7 @@ public static class TokenHelper
     private static readonly Regex BearerTokenRegex = new(@"Bearer\s+([^\s]+)");
     
     /// <summary>
-    /// Retrurn user claims from token
+    /// Return user claims from token
     /// </summary>
     /// <param name="token">JWT token</param>
     public static StuffyClaims GetUserClaims(this string token)
@@ -29,7 +29,7 @@ public static class TokenHelper
     }
     
     /// <summary>
-    /// Retrurn user claims from identity
+    /// Return user claims from identity
     /// </summary>
     /// <param name="identity">Identity</param>
     public static StuffyClaims GetUserClaims(this ClaimsIdentity? identity)
@@ -40,6 +40,9 @@ public static class TokenHelper
         return GetClaimsData(identity.Claims.ToList());
     }
 
+    /// <summary>
+    /// Convert claims data to Stuffy model
+    /// </summary>
     private static StuffyClaims GetClaimsData(IList<Claim> claims)
     {
         var imageUri = claims.FirstOrDefault(c => c.Type == ClaimTypes.Uri)?.Value;
@@ -53,6 +56,9 @@ public static class TokenHelper
         };
     }
 
+    /// <summary>
+    /// Try to get token from request
+    /// </summary>
     public static bool TryGetToken(this HttpRequest request, [MaybeNullWhen(false)] out string token)
     {
         token = null;
