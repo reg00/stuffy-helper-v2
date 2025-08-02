@@ -115,6 +115,7 @@ public static class KnownRoutes
         public const string GetFriendsRoute = $"{DefaultRouteSegment}/{FriendsSegment}";
 
         public const string GetDebtsRoute = $"{DefaultRouteSegment}/{DebtsSegment}";
+        public const string GetDebtRoute = $"{DefaultRouteSegment}/{DebtsSegment}/{DebtIdRouteSegment}";
         public const string SendDebtRoute = $"{GetDebtsRoute}/{DebtIdRouteSegment}/send";
         public const string ConfirmDebtRoute = $"{GetDebtsRoute}/{DebtIdRouteSegment}/confirm";
         

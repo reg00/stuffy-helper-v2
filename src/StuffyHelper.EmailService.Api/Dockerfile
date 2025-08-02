@@ -34,7 +34,7 @@ RUN dotnet restore src/StuffyHelper.EmailService.Core/StuffyHelper.EmailService.
 
 RUN dotnet restore src/StuffyHelper.EmailService.Api/StuffyHelper.EmailService.Api.csproj
 
-COPY ./ ./
+COPY . .
 
 RUN dotnet build src/StuffyHelper.EmailService.Api/StuffyHelper.EmailService.Api.csproj -c Release -o /app
 
@@ -44,6 +44,7 @@ RUN dotnet publish src/StuffyHelper.EmailService.Api/StuffyHelper.EmailService.A
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+USER 1000
 
 ENV ASPNETCORE_URLS=http://+:7755
 EXPOSE 7755

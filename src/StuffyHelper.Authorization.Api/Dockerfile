@@ -30,6 +30,12 @@ COPY src/StuffyHelper.EmailService.Contracts/StuffyHelper.EmailService.Contracts
 	 
 COPY src/StuffyHelper.Core/StuffyHelper.Core.csproj \
 	 src/StuffyHelper.Core/StuffyHelper.Core.csproj
+	 
+COPY src/StuffyHelper.Data/StuffyHelper.Data.csproj \
+	 src/StuffyHelper.Data/StuffyHelper.Data.csproj
+	 
+COPY src/StuffyHelper.Contracts/StuffyHelper.Contracts.csproj \
+	 src/StuffyHelper.Contracts/StuffyHelper.Contracts.csproj
 
 COPY src/StuffyHelper.Minio/StuffyHelper.Minio.csproj \
 	 src/StuffyHelper.Minio/StuffyHelper.Minio.csproj
@@ -52,9 +58,13 @@ RUN dotnet restore src/StuffyHelper.EmailService.Contracts/StuffyHelper.EmailSer
 
 RUN dotnet restore src/StuffyHelper.Core/StuffyHelper.Core.csproj
 
+RUN dotnet restore src/StuffyHelper.Data/StuffyHelper.Data.csproj
+
+RUN dotnet restore src/StuffyHelper.Contracts/StuffyHelper.Contracts.csproj
+
 RUN dotnet restore src/StuffyHelper.Minio/StuffyHelper.Minio.csproj
 
-COPY ./ ./
+COPY . .
 
 RUN dotnet build src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization.Api.csproj -c Release -o /app
 
@@ -64,6 +74,7 @@ RUN dotnet publish src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app .
+USER 1000
 
 ENV ASPNETCORE_URLS=http://+:7168
 EXPOSE 7168

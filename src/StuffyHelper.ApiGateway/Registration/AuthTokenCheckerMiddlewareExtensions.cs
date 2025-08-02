@@ -1,7 +1,7 @@
 ﻿using EnsureThat;
 using StuffyHelper.Common.Middlewares;
 
-namespace StuffyHelper.Api.Registration
+namespace StuffyHelper.ApiGateway.Registration
 {
     public static class AuthTokenCheckerMiddlewareExtensions
     {

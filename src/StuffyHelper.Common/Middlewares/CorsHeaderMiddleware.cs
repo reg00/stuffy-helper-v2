@@ -1,6 +1,7 @@
 ﻿using EnsureThat;
+using Microsoft.AspNetCore.Http;
 
-namespace StuffyHelper.Api.Middlewares
+namespace StuffyHelper.Common.Middlewares
 {
     public class CorsHeaderMiddleware
     {

@@ -1,15 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using StuffyHelper.EmailService.Core.Registration;
-using StuffyHelper.Data.Registration;
-using StuffyHelper.Minio.Registration;
 using System.Text.Json.Serialization;
-using StuffyHelper.Common.Configurations;
 using StuffyHelper.Common.Middlewares;
 
-namespace StuffyHelper.Api.Registration
+namespace StuffyHelper.ApiGateway.Registration
 {
-    public static class ApiRegistrationExtensions
+    public static class ApiGatewayRegistrationExtensions
     {
         public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
         {
@@ -41,11 +37,7 @@ namespace StuffyHelper.Api.Registration
                 });
             services.AddControllersWithViews();
             services.AddEndpointsApiExplorer();
-
-            services.AddMinioBlobDataStores(configuration.GetSection(StuffyConfiguration.DefaultSection));
-
-            services.AddEmailService(configuration);
-
+            
             return services;
         }
 
@@ -63,8 +55,6 @@ namespace StuffyHelper.Api.Registration
 
         private static IApplicationBuilder UseAuth(this IApplicationBuilder app)
         {
-            app.ApplicationServices.AddEfDatabaseMigration();
-
             app.UseAuthTokenChecker();
             app.UseAuthentication();
             app.UseAuthorization();

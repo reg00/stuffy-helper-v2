@@ -1,4 +1,6 @@
-﻿namespace StuffyHelper.Api.Middlewares
+﻿using Microsoft.AspNetCore.Http;
+
+namespace StuffyHelper.Common.Middlewares
 {
     public class AuthTokenCheckerMiddleware
     {
