@@ -1,22 +1,63 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["src/StuffyHelper.ApiGateway/StuffyHelper.ApiGateway.csproj", "src/StuffyHelper.ApiGateway/"]
-RUN dotnet restore "src/StuffyHelper.ApiGateway/StuffyHelper.ApiGateway.csproj"
+
+COPY src/StuffyHelper.ApiGateway/StuffyHelper.ApiGateway.csproj \
+	 src/StuffyHelper.ApiGateway/StuffyHelper.ApiGateway.csproj
+	 
+COPY src/StuffyHelper.ApiGateway.Core/StuffyHelper.ApiGateway.Core.csproj \
+	 src/StuffyHelper.ApiGateway.Core/StuffyHelper.ApiGateway.Core.csproj
+
+COPY src/StuffyHelper.Authorization.Contracts/StuffyHelper.Authorization.Contracts.csproj \
+	 src/StuffyHelper.Authorization.Contracts/StuffyHelper.Authorization.Contracts.csproj
+ 
+COPY src/StuffyHelper.Common/StuffyHelper.Common.csproj \
+	 src/StuffyHelper.Common/StuffyHelper.Common.csproj
+	 
+COPY src/StuffyHelper.Common.Client/StuffyHelper.Common.Client.csproj \
+	 src/StuffyHelper.Common.Client/StuffyHelper.Common.Client.csproj
+	 
+COPY src/StuffyHelper.Common.Contracts/StuffyHelper.Common.Contracts.csproj \
+	 src/StuffyHelper.Common.Contracts/StuffyHelper.Common.Contracts.csproj
+
+COPY src/StuffyHelper.Contracts/StuffyHelper.Contracts.csproj \
+	 src/StuffyHelper.Contracts/StuffyHelper.Contracts.csproj
+
+COPY src/StuffyHelper.Minio/StuffyHelper.Minio.csproj \
+	 src/StuffyHelper.Minio/StuffyHelper.Minio.csproj
+
+
+RUN dotnet restore src/StuffyHelper.ApiGateway.Core/StuffyHelper.ApiGateway.Core.csproj
+
+RUN dotnet restore src/StuffyHelper.ApiGateway/StuffyHelper.ApiGateway.csproj
+
+RUN dotnet restore src/StuffyHelper.Authorization.Contracts/StuffyHelper.Authorization.Contracts.csproj
+
+RUN dotnet restore src/StuffyHelper.Common/StuffyHelper.Common.csproj
+
+RUN dotnet restore src/StuffyHelper.Common.Client/StuffyHelper.Common.Client.csproj
+
+RUN dotnet restore src/StuffyHelper.Common.Contracts/StuffyHelper.Common.Contracts.csproj
+
+RUN dotnet restore src/StuffyHelper.Contracts/StuffyHelper.Contracts.csproj
+
+RUN dotnet restore src/StuffyHelper.Minio/StuffyHelper.Minio.csproj
+
 COPY . .
-WORKDIR "/src/src/StuffyHelper.ApiGateway"
-RUN dotnet build "StuffyHelper.ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/build
+
+RUN dotnet build src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization.Api.csproj -c Release -o /app
 
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "StuffyHelper.ApiGateway.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization.Api.csproj -c Release -o /app
 
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=publish /app .
+USER 1000
+
+ENV ASPNETCORE_URLS=http://+:7654
+EXPOSE 7654
+
 ENTRYPOINT ["dotnet", "StuffyHelper.ApiGateway.dll"]

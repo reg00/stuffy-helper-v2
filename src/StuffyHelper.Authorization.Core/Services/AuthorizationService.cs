@@ -234,6 +234,8 @@ public class AuthorizationService : IAuthorizationService
             try
             {
                 await _avatarService.DeleteAvatarAsync(existUser.Id);
+                existUser.ImageUri = null;
+                await _userManager.UpdateAsync(existUser);
             }
             catch (EntityNotFoundException)
             {

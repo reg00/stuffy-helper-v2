@@ -21,12 +21,12 @@ public class FriendsRequestAutoMapperProfile : Profile
         CreateMap<(string IncomingUserId, string friendId), FriendsRequest>()
             .ForMember(fr => fr.UserIdFrom, opt =>
             {
-                opt.PreCondition(src => string.IsNullOrWhiteSpace(src.IncomingUserId));
+                opt.PreCondition(src => !string.IsNullOrWhiteSpace(src.IncomingUserId));
                 opt.MapFrom(src => src.IncomingUserId);
             })
             .ForMember(fr => fr.UserIdTo, opt =>
             {
-                opt.PreCondition(src => string.IsNullOrWhiteSpace(src.friendId));
+                opt.PreCondition(src => !string.IsNullOrWhiteSpace(src.friendId));
                 opt.MapFrom(src => src.friendId);
             });
     }

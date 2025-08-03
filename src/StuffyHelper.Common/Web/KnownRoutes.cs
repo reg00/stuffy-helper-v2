@@ -5,7 +5,7 @@
 /// </summary>
 public static class KnownRoutes
 {
-    private const string DefaultRouteSegment = "api";
+    private const string DefaultRouteSegment = "api/v1";
 
         private const string AuthRoute = $"{DefaultRouteSegment}/{AuthRouteSegment}";
         private const string EmailRoute = $"{DefaultRouteSegment}/{EmailRouteSegment}";

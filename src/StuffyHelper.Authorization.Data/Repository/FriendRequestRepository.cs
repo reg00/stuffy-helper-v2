@@ -49,6 +49,18 @@ public class FriendRequestRepository : IFriendRequestRepository
         }
 
         /// <inheritdoc />
+        public async Task<FriendsRequest?> GetRequest(string userId, string friendId, CancellationToken cancellationToken = default)
+        {
+            var entry = await _context.FriendsRequests
+                .Include(x => x.UserTo)
+                .Include(x => x.UserFrom)
+                .FirstOrDefaultAsync(e => e.UserIdFrom == userId && e.UserIdTo == friendId ||
+                    e.UserIdFrom == friendId && e.UserIdTo == userId, cancellationToken);
+
+            return entry;
+        }
+
+        /// <inheritdoc />
         public async Task<IEnumerable<FriendsRequest>> GetSendedRequestsAsync(
             string userId,
             CancellationToken cancellationToken = default)

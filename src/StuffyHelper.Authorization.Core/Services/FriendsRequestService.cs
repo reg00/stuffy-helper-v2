@@ -109,6 +109,10 @@ namespace StuffyHelper.Authorization.Core.Services;
             if (incomingUser.Id == requestUser.Id)
                 throw new AuthorizationException("Can not request yourself.");
 
+            var existsRequest = await _requestRepository.GetRequest(requestUser.Id, incomingUser.Id, cancellationToken);
+            if (existsRequest != null)
+                throw new EntityAlreadyExistsException("Friend request already exists");
+            
             var request = _mapper.Map<FriendsRequest>((incomingUser.Id, requestUser.Id));
             var result = await _requestRepository.AddRequestAsync(request, cancellationToken);
             

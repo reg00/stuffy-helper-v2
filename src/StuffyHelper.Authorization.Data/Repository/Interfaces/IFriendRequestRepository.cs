@@ -10,10 +10,19 @@ public interface IFriendRequestRepository
     /// <summary>
     /// Get friend request by its id
     /// </summary>
-    /// <param name="requestId">Frined request id</param>
+    /// <param name="requestId">Friend request id</param>
     /// <param name="cancellationToken">Cancellation token</param>
     Task<FriendsRequest> GetRequest(Guid requestId, CancellationToken cancellationToken);
 
+    /// <summary>
+    /// Get friend request by userId and FriendId
+    /// </summary>
+    /// <param name="userId">User id</param>
+    /// <param name="friendId">Friend id</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns></returns>
+    Task<FriendsRequest?> GetRequest(string userId, string friendId, CancellationToken cancellationToken = default);
+    
     /// <summary>
     /// Get all sended friend requests by user id
     /// </summary>
