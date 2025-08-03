@@ -31,20 +31,18 @@ namespace StuffyHelper.Api.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
         [Consumes(KnownContentTypes.MultipartFormData)]
         [Produces(KnownContentTypes.ApplicationJson)]
-        [ProducesResponseType(typeof(GetMediaEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(MediaShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.UnsupportedMediaType)]
         [Route(KnownRoutes.StoreMediaFormFileRoute)]
-        public async Task<IActionResult> StoreMediaFormFileAsync(
+        public async Task<MediaShortEntry> StoreMediaFormFileAsync(
             [FromForm] AddMediaEntry media)
         {
             EnsureArg.IsNotNull(media, nameof(media));
 
-            var slide = await _mediaService.StoreMediaFormFileAsync(
+            return await _mediaService.StoreMediaFormFileAsync(
                 media,
                 cancellationToken: HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, slide);
         }
 
         /// <summary>
@@ -54,11 +52,11 @@ namespace StuffyHelper.Api.Controllers
         [RequestSizeLimit(int.MaxValue)]
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
         [Produces(KnownContentTypes.MultipartFormData)]
-        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(FileResult), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.RetrieveMediaFromFileRoute)]
-        public async Task<IActionResult> RetrieveMediaFormFileAsync(
+        public async Task<FileResult> RetrieveMediaFormFileAsync(
             Guid mediaId)
         {
             var slide =
@@ -78,14 +76,12 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetMediaMetadataRoute)]
-        public async Task<IActionResult> GetMediaMetadataAsync(
+        public async Task<GetMediaEntry> GetMediaMetadataAsync(
             Guid mediaId)
         {
-            var slide = await _mediaService.GetMediaMetadataAsync(
+            return await _mediaService.GetMediaMetadataAsync(
                 mediaId,
                 HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, slide);
         }
 
         /// <summary>
@@ -95,14 +91,12 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteMediaRoute)]
-        public async Task<IActionResult> DeleteMediaAsync(
+        public async Task DeleteMediaAsync(
             Guid mediaId)
         {
             await _mediaService.DeleteMediaAsync(
                 mediaId,
                 HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK);
         }
 
         //[HttpGet]
@@ -145,11 +139,11 @@ namespace StuffyHelper.Api.Controllers
         /// </summary>
         [HttpGet]
         [Produces(KnownContentTypes.ApplicationJson)]
-        [ProducesResponseType(typeof(IEnumerable<GetMediaEntry>), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(IEnumerable<MediaShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetMediasMetadatasRoute)]
-        public async Task<IActionResult> GetMediaMetadatasAsync(
+        public async Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
@@ -157,10 +151,8 @@ namespace StuffyHelper.Api.Controllers
             DateTimeOffset? createdDateEnd = null,
             MediaType? mediaType = null)
         {
-            var slide = await _mediaService.GetMediaMetadatasAsync(offset, limit, eventId, createdDateStart,
+            return await _mediaService.GetMediaMetadatasAsync(offset, limit, eventId, createdDateStart,
                                                                     createdDateEnd, mediaType, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, slide);
         }
     }
 }

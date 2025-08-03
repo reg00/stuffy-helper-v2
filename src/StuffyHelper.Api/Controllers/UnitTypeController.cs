@@ -30,16 +30,14 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetUnitTypesRoute)]
-        public async Task<IActionResult> GetAsync(
+        public async Task<Response<UnitTypeShortEntry>> GetAsync(
             int offset = 0,
             int limit = 10,
             string? name = null,
             Guid? purchaseId = null,
             bool? isActive = null)
         {
-            var unitTypeResponse = await _unitTypeService.GetUnitTypesAsync(offset, limit, name, purchaseId, isActive, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, unitTypeResponse);
+            return await _unitTypeService.GetUnitTypesAsync(offset, limit, name, purchaseId, isActive, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -51,11 +49,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetUnitTypeRoute)]
-        public async Task<IActionResult> GetAsync(Guid unitTypeId)
+        public async Task<GetUnitTypeEntry> GetAsync(Guid unitTypeId)
         {
-            var unitTypeEntry = await _unitTypeService.GetUnitTypeAsync(unitTypeId, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, unitTypeEntry);
+            return await _unitTypeService.GetUnitTypeAsync(unitTypeId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -66,11 +62,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(UnitTypeShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddUnitTypeRoute)]
-        public async Task<IActionResult> PostAsync([FromBody] UpsertUnitTypeEntry addEntry)
+        public async Task<UnitTypeShortEntry> PostAsync([FromBody] UpsertUnitTypeEntry addEntry)
         {
-            var unitType = await _unitTypeService.AddUnitTypeAsync(addEntry, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, unitType);
+            return await _unitTypeService.AddUnitTypeAsync(addEntry, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -80,11 +74,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteUnitTypeRoute)]
-        public async Task<IActionResult> DeleteAsync(Guid unitTypeId)
+        public async Task DeleteAsync(Guid unitTypeId)
         {
             await _unitTypeService.DeleteUnitTypeAsync(unitTypeId, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -95,11 +87,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(UnitTypeShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdateUnitTypeRoute)]
-        public async Task<IActionResult> PatchAsync(Guid unitTypeId, [FromBody] UpsertUnitTypeEntry updateEntry)
+        public async Task<UnitTypeShortEntry> PatchAsync(Guid unitTypeId, [FromBody] UpsertUnitTypeEntry updateEntry)
         {
-            var entry = await _unitTypeService.UpdateUnitTypeAsync(unitTypeId, updateEntry, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, entry);
+            return await _unitTypeService.UpdateUnitTypeAsync(unitTypeId, updateEntry, HttpContext.RequestAborted);
         }
     }
 

@@ -34,15 +34,13 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetParticipantsRoute)]
-        public async Task<IActionResult> GetAsync(
+        public async Task<Response<ParticipantShortEntry>> GetAsync(
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
             string? userId = null)
         {
-            var participantResponse = await _participantService.GetParticipantsAsync(offset, limit, eventId, userId, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, participantResponse);
+            return await _participantService.GetParticipantsAsync(offset, limit, eventId, userId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -54,11 +52,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetParticipantRoute)]
-        public async Task<IActionResult> GetAsync(Guid participantId)
+        public async Task<GetParticipantEntry> GetAsync(Guid participantId)
         {
-            var participantEntry = await _participantService.GetParticipantAsync(participantId, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, participantEntry);
+            return await _participantService.GetParticipantAsync(participantId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -69,11 +65,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ParticipantShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddParticipantRoute)]
-        public async Task<IActionResult> PostAsync([FromBody] UpsertParticipantEntry addEntry)
+        public async Task<ParticipantShortEntry> PostAsync([FromBody] UpsertParticipantEntry addEntry)
         {
-            var participant = await _participantService.AddParticipantAsync(addEntry, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, participant);
+            return await _participantService.AddParticipantAsync(addEntry, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -83,11 +77,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteParticipantRoute)]
-        public async Task<IActionResult> DeleteAsync(Guid participantId)
+        public async Task DeleteAsync(Guid participantId)
         {
             await _participantService.DeleteParticipantAsync(UserClaims.UserId, participantId, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK);
         }
 
         // <summary>

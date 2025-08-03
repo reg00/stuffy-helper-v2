@@ -34,16 +34,14 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetPurchaseUsagesRoute)]
-        public async Task<IActionResult> GetAsync(
+        public async Task<Response<PurchaseUsageShortEntry>> GetAsync(
             int offset = 0,
             int limit = 10,
             Guid? eventId = null,
             Guid? participantId = null,
             Guid? purchaseId = null)
         {
-            var purchaseUsageResponse = await _purchaseUsageService.GetPurchaseUsagesAsync(offset, limit, eventId, participantId, purchaseId, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, purchaseUsageResponse);
+            return await _purchaseUsageService.GetPurchaseUsagesAsync(offset, limit, eventId, participantId, purchaseId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -55,11 +53,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetPurchaseUsageRoute)]
-        public async Task<IActionResult> GetAsync(Guid purchaseUsageId)
+        public async Task<GetPurchaseUsageEntry> GetAsync(Guid purchaseUsageId)
         {
-            var purchaseUsageEntry = await _purchaseUsageService.GetPurchaseUsageAsync(UserClaims, purchaseUsageId, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, purchaseUsageEntry);
+            return await _purchaseUsageService.GetPurchaseUsageAsync(UserClaims, purchaseUsageId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -70,11 +66,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(PurchaseUsageShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddPurchaseUsageRoute)]
-        public async Task<IActionResult> PostAsync([FromBody] UpsertPurchaseUsageEntry addEntry)
+        public async Task<PurchaseUsageShortEntry> PostAsync([FromBody] UpsertPurchaseUsageEntry addEntry)
         {
-            var purchaseUsage = await _purchaseUsageService.AddPurchaseUsageAsync(addEntry, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, purchaseUsage);
+            return await _purchaseUsageService.AddPurchaseUsageAsync(addEntry, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -84,11 +78,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeletePurchaseUsageRoute)]
-        public async Task<IActionResult> DeleteAsync(Guid purchaseUsageId)
+        public async Task DeleteAsync(Guid purchaseUsageId)
         {
             await _purchaseUsageService.DeletePurchaseUsageAsync(purchaseUsageId, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK);
         }
 
         /// <summary>
@@ -99,11 +91,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(PurchaseUsageShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdatePurchaseUsageRoute)]
-        public async Task<IActionResult> PatchAsync(Guid purchaseUsageId, [FromBody] UpsertPurchaseUsageEntry updateEntry)
+        public async Task<PurchaseUsageShortEntry> PatchAsync(Guid purchaseUsageId, [FromBody] UpsertPurchaseUsageEntry updateEntry)
         {
-            var entry = await _purchaseUsageService.UpdatePurchaseUsageAsync(purchaseUsageId, updateEntry, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, entry);
+            return await _purchaseUsageService.UpdatePurchaseUsageAsync(purchaseUsageId, updateEntry, HttpContext.RequestAborted);
         }
     }
 }
