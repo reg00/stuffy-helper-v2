@@ -29,7 +29,7 @@ app.UseSwagger(c =>
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Stuffy helper API V1");
-    c.RoutePrefix = "api/swagger";
+    c.RoutePrefix = "swagger";
 });
 
 app.UseExceptionHandling();

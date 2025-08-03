@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using StuffyHelper.Common.Messages;
 using StuffyHelper.Common.Web;
@@ -11,8 +10,7 @@ namespace StuffyHelper.Api.Controllers
     /// <summary>
     /// Удиницы измерения
     /// </summary>
-    [Authorize]
-    public class UnitTypeController : Controller
+    public class UnitTypeController : AuthorizedApiController
     {
         private readonly IUnitTypeService _unitTypeService;
 

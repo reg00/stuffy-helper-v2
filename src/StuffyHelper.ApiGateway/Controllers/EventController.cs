@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using StuffyHelper.ApiGateway.Core.Services.Interfaces;
 using StuffyHelper.Common.Messages;
@@ -8,7 +7,6 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.ApiGateway.Controllers
 {
-    [Authorize]
     public class EventController : AuthorizedApiController
     {
         private readonly IEventService _eventService;

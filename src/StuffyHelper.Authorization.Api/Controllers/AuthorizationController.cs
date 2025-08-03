@@ -140,7 +140,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordRoute)]
-        public async Task<string> ForgotPassword(ForgotPasswordModel model)
+        public async Task<string> ForgotPassword([FromBody] ForgotPasswordModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
 
@@ -198,7 +198,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordConfirmRoute)]
-        public async Task<string> ResetPassword(ResetPasswordModel model)
+        public async Task<string> ResetPassword([FromBody] ResetPasswordModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
 

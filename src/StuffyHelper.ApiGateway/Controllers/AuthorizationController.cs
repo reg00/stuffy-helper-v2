@@ -9,7 +9,6 @@ using IAuthorizationService = StuffyHelper.ApiGateway.Core.Services.Interfaces.I
 
 namespace StuffyHelper.ApiGateway.Controllers
 {
-    [Authorize]
     public class AuthorizationController : AuthorizedApiController
     {
         private readonly IAuthorizationService _authorizationService;
@@ -74,7 +73,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordRoute)]
-        public async Task<string> ForgotPassword(ForgotPasswordModel model)
+        public async Task<string> ForgotPassword([FromBody] ForgotPasswordModel model)
         {
             return await _authorizationService.ForgotPasswordAsync(model, HttpContext.RequestAborted);
         }
@@ -101,7 +100,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route(KnownRoutes.ResetPasswordConfirmRoute)]
-        public async Task<string> ResetPassword(ResetPasswordModel model)
+        public async Task<string> ResetPassword([FromBody] ResetPasswordModel model)
         {
             return await _authorizationService.ConfirmResetPasswordAsync(model, HttpContext.RequestAborted);
         }

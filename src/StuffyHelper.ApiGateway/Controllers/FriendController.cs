@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.ApiGateway.Core.Services.Interfaces;
 using StuffyHelper.Authorization.Contracts.Models;
@@ -8,7 +7,6 @@ using StuffyHelper.Common.Web;
 
 namespace StuffyHelper.ApiGateway.Controllers;
 
-[Authorize]
 public class FriendController : AuthorizedApiController
 {
     private readonly IFriendService _friendshipService;

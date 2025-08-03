@@ -1,5 +1,4 @@
 ﻿using EnsureThat;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using StuffyHelper.ApiGateway.Core.Services.Interfaces;
@@ -10,7 +9,6 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.ApiGateway.Controllers
 {
-    [Authorize]
     public class MediaController : AuthorizedApiController
     {
         private readonly IMediaService _mediaService;

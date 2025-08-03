@@ -13,7 +13,7 @@ namespace StuffyHelper.Data.Repository.Interfaces
             Guid mediaId,
             CancellationToken cancellationToken = default);
 
-        Task<MediaEntry> GetPrimalEventMedia(
+        Task<MediaEntry?> GetPrimalEventMedia(
             Guid eventId,
             CancellationToken cancellationToken = default);
 

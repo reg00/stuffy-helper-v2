@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using StuffyHelper.Common.Contracts;
 using StuffyHelper.Common.Helpers;
@@ -14,7 +13,6 @@ namespace StuffyHelper.Api.Controllers
     /// <summary>
     /// Ивенты
     /// </summary>
-    [Authorize]
     public class EventController : AuthorizedApiController
     {
         private readonly IEventService _eventService;
@@ -75,7 +73,7 @@ namespace StuffyHelper.Api.Controllers
         public async Task<GetEventEntry> GetAsync(Guid eventId)
         {
             var userId = PermissionHelper.GetUserId(UserClaims);
-            return await _eventService.GetEventAsync(UserClaims, eventId, userId, HttpContext.RequestAborted);
+            return await _eventService.GetEventAsync(eventId, userId, HttpContext.RequestAborted);
         }
 
         /// <summary>

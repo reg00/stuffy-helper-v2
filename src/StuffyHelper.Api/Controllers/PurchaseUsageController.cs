@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using StuffyHelper.Common.Contracts;
 using StuffyHelper.Common.Helpers;
@@ -13,7 +12,6 @@ namespace StuffyHelper.Api.Controllers
     /// <summary>
     /// Причастность к покупке
     /// </summary>
-    [Authorize]
     public class PurchaseUsageController : AuthorizedApiController
     {
         private readonly IPurchaseUsageService _purchaseUsageService;

@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using StuffyHelper.ApiGateway.Core.Services.Interfaces;
+﻿using StuffyHelper.ApiGateway.Core.Services.Interfaces;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Authorization.Contracts.Models;
 

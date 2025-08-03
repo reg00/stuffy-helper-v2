@@ -1,17 +1,13 @@
-﻿
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Net;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Minio.Exceptions;
 using StuffyHelper.ApiGateway.Core.Services.Interfaces;
 using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Common.Messages;
 using StuffyHelper.Common.Web;
 
 namespace StuffyHelper.ApiGateway.Controllers;
 
-[Authorize]
 public class FriendsRequestController : AuthorizedApiController
 {
      private readonly IFriendsRequestService _requestService;

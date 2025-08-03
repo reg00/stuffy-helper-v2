@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using StuffyHelper.Common.Messages;
 using StuffyHelper.Common.Web;
@@ -11,8 +10,7 @@ namespace StuffyHelper.Api.Controllers
     /// <summary>
     /// Тэги покупок
     /// </summary>
-    [Authorize]
-    public class PurchaseTagController : Controller
+    public class PurchaseTagController : AuthorizedApiController
     {
         private readonly IPurchaseTagService _purchaseTagService;
 

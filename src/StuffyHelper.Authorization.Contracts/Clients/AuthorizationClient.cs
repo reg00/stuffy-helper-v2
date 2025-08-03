@@ -70,7 +70,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         string code,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.ResetPasswordRoute)
+        var request = CreateRequest(KnownRoutes.ResetPasswordConfirmRoute)
             .AddQueryParameter(nameof(email), email)
             .AddQueryParameter(nameof(code), code);
 

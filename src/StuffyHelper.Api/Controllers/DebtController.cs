@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using StuffyHelper.Common.Contracts;
 using StuffyHelper.Common.Helpers;
@@ -13,7 +12,6 @@ namespace StuffyHelper.Api.Controllers
     /// <summary>
     /// Долги
     /// </summary>
-    [Authorize]
     public class DebtController : AuthorizedApiController
     {
         private readonly IDebtService _debtService;

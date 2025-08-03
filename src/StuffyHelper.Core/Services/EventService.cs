@@ -39,7 +39,7 @@ namespace StuffyHelper.Core.Services
             _mapper = mapper;
         }
 
-        public async Task<GetEventEntry> GetEventAsync(StuffyClaims claims, Guid eventId, string? userId = null, CancellationToken cancellationToken = default)
+        public async Task<GetEventEntry> GetEventAsync(Guid eventId, string? userId = null, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
@@ -53,7 +53,9 @@ namespace StuffyHelper.Core.Services
                 participants.Add(new ParticipantShortEntry(item, _mapper.Map<UserShortEntry>(participantUser)));
             }
 
-            return new GetEventEntry(entry, _mapper.Map<UserShortEntry>(claims), participants);
+            var user = await _authorizationClient.GetUserById(entry.UserId, cancellationToken);
+
+            return new GetEventEntry(entry, _mapper.Map<UserShortEntry>(user), participants);
         }
 
         public async Task<Response<EventShortEntry>> GetEventsAsync(
@@ -146,10 +148,11 @@ namespace StuffyHelper.Core.Services
             var primalMedia = await _mediaService.GetPrimalEventMedia(eventId, cancellationToken);
 
             if (primalMedia is not null)
-                await _mediaService.DeleteMediaAsync(primalMedia.Id);
-
-            existingEvent.ImageUri = null;
-            await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
+            {
+                await _mediaService.DeleteMediaAsync(primalMedia.Id, cancellationToken);
+                existingEvent.ImageUri = null;
+                await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
+            }
         }
 
         public async Task<EventShortEntry> UpdatePrimalEventMediaAsync(Guid eventId, IFormFile file, string? userId, CancellationToken cancellationToken = default)
@@ -162,7 +165,7 @@ namespace StuffyHelper.Core.Services
             var primalMedia = await _mediaService.GetPrimalEventMedia(eventId, cancellationToken);
 
             if (primalMedia is not null)
-                await _mediaService.DeleteMediaAsync(primalMedia.Id);
+                await _mediaService.DeleteMediaAsync(primalMedia.Id, cancellationToken);
 
             var addMedia = new AddMediaEntry(eventId, file, MediaType.Image, string.Empty);
             await _mediaService.StoreMediaFormFileAsync(
@@ -170,7 +173,11 @@ namespace StuffyHelper.Core.Services
                     isPrimal: true,
                     cancellationToken: cancellationToken);
 
-            var mediaUri = await _mediaService.GetEventPrimalMediaUri(eventId);
+            var mediaUri = await _mediaService.GetEventPrimalMediaUri(eventId, cancellationToken);
+
+            if (mediaUri == null)
+                throw new BadRequestException("Cannot upload image");
+            
             existingEvent.ImageUri = mediaUri;
             existingEvent = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
 

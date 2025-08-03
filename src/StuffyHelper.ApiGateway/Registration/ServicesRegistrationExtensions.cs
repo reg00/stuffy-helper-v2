@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
+using StuffyHelper.ApiGateway.Core.Services;
+using StuffyHelper.ApiGateway.Core.Services.Interfaces;
 using StuffyHelper.Authorization.Contracts.Clients;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Common.Configurators;
@@ -43,15 +45,17 @@ namespace StuffyHelper.ApiGateway.Registration
 
             services.AddSingleton(Options.Create(frontEndOptions));
 
-            // services.AddScoped<IEventService, EventService>();
-            // services.AddScoped<IParticipantService, ParticipantService>();
-            // services.AddScoped<IPurchaseService, PurchaseService>();
-            // services.AddScoped<IPurchaseUsageService, PurchaseUsageService>();
-            // services.AddScoped<IPurchaseTagService, PurchaseTagService>();
-            // services.AddScoped<IUnitTypeService, UnitTypeService>();
-            // services.AddScoped<IPurchaseTagPipeline, PurchaseTagPipeline>();
-            // services.AddScoped<IMediaService, MediaService>();
-            // services.AddScoped<IDebtService, DebtService>();
+            services.AddScoped<IAuthorizationService, AuthorizationService>();
+            services.AddScoped<IFriendsRequestService, FriendsRequestService>();
+            services.AddScoped<IFriendService, FriendService>();
+            services.AddScoped<IEventService, EventService>();
+            services.AddScoped<IParticipantService, ParticipantService>();
+            services.AddScoped<IPurchaseService, PurchaseService>();
+            services.AddScoped<IPurchaseUsageService, PurchaseUsageService>();
+            services.AddScoped<IPurchaseTagService, PurchaseTagService>();
+            services.AddScoped<IUnitTypeService, UnitTypeService>();
+            services.AddScoped<IMediaService, MediaService>();
+            services.AddScoped<IDebtService, DebtService>();
 
             return services;
         }

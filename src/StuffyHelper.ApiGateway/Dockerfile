@@ -25,9 +25,6 @@ COPY src/StuffyHelper.Common.Contracts/StuffyHelper.Common.Contracts.csproj \
 COPY src/StuffyHelper.Contracts/StuffyHelper.Contracts.csproj \
 	 src/StuffyHelper.Contracts/StuffyHelper.Contracts.csproj
 
-COPY src/StuffyHelper.Minio/StuffyHelper.Minio.csproj \
-	 src/StuffyHelper.Minio/StuffyHelper.Minio.csproj
-
 
 RUN dotnet restore src/StuffyHelper.ApiGateway.Core/StuffyHelper.ApiGateway.Core.csproj
 
@@ -42,8 +39,6 @@ RUN dotnet restore src/StuffyHelper.Common.Client/StuffyHelper.Common.Client.csp
 RUN dotnet restore src/StuffyHelper.Common.Contracts/StuffyHelper.Common.Contracts.csproj
 
 RUN dotnet restore src/StuffyHelper.Contracts/StuffyHelper.Contracts.csproj
-
-RUN dotnet restore src/StuffyHelper.Minio/StuffyHelper.Minio.csproj
 
 COPY . .
 

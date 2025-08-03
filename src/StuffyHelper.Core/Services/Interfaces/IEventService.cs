@@ -7,7 +7,7 @@ namespace StuffyHelper.Core.Services.Interfaces
 {
     public interface IEventService
     {
-        Task<GetEventEntry> GetEventAsync(StuffyClaims claims, Guid eventId, string? userId = null, CancellationToken cancellationToken = default);
+        Task<GetEventEntry> GetEventAsync(Guid eventId, string? userId = null, CancellationToken cancellationToken = default);
 
         Task<Response<EventShortEntry>> GetEventsAsync(
             int offset = 0,

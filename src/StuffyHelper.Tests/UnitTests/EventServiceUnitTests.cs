@@ -36,29 +36,26 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task GetEventAsync_EmptyInput()
         {
-            var claims = AuthorizationServiceUnitTestConstants.GetCorrectStuffyClaims();
             var eventService = GetService();
 
-            await ThrowsTask(async () => await eventService.GetEventAsync(claims, Guid.Empty, string.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await eventService.GetEventAsync(Guid.Empty, string.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
         public async Task GetEventAsync_EventNotFound()
         {
-            var claims = AuthorizationServiceUnitTestConstants.GetCorrectStuffyClaims();
             var eventId = Guid.Parse("90c0fde5-5357-4274-9142-8c5eec2ee3b1");
             _eventRepositoryMoq.Setup(x => x.GetEventAsync(It.IsAny<Guid>(), It.IsAny<string>(), CancellationToken))
                 .ThrowsAsync(new EntityNotFoundException($"Event with Id '{eventId}' Not Found."));
 
             var eventService = GetService();
 
-            await ThrowsTask(async () => await eventService.GetEventAsync(claims, eventId, string.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await eventService.GetEventAsync(eventId, string.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
         public async Task GetEventAsync_Success()
         {
-            var claims = AuthorizationServiceUnitTestConstants.GetCorrectStuffyClaims();
             var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
 
             _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, eventEntry.UserId, CancellationToken))
@@ -68,7 +65,7 @@ namespace StuffyHelper.Tests.UnitTests
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
             var eventService = GetService();
-            var result = await eventService.GetEventAsync(claims, eventEntry.Id, eventEntry.UserId, CancellationToken);
+            var result = await eventService.GetEventAsync(eventEntry.Id, eventEntry.UserId, CancellationToken);
 
             await Verify(result, VerifySettings);
         }

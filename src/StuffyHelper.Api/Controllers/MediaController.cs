@@ -1,5 +1,4 @@
 ﻿using EnsureThat;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using StuffyHelper.Common.Messages;
@@ -13,8 +12,7 @@ namespace StuffyHelper.Api.Controllers
     /// <summary>
     /// Медиа
     /// </summary>
-    [Authorize]
-    public class MediaController : Controller
+    public class MediaController : AuthorizedApiController
     {
         private readonly IMediaService _mediaService;
 

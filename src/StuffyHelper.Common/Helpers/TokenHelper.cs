@@ -52,7 +52,7 @@ public static class TokenHelper
             UserId = claims.First(c => c.Type == ClaimTypes.Sid).Value,
             Username = claims.First(c => c.Type == ClaimTypes.Name).Value,
             Roles = claims.Where(c => c.Type == ClaimTypes.Role).Select(x => x.Value).ToList(),
-            ImageUri = string.IsNullOrWhiteSpace(imageUri) ? new Uri(imageUri!) : new Uri("about:blank")
+            ImageUri = !string.IsNullOrWhiteSpace(imageUri) ? new Uri(imageUri!) : null
         };
     }
 

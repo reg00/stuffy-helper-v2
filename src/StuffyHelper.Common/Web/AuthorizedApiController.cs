@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StuffyHelper.Common.Exceptions;
 using StuffyHelper.Common.Helpers;
@@ -6,8 +7,9 @@ using StuffyHelper.Common.Helpers;
 namespace StuffyHelper.Common.Web;
 
 /// <summary>
-/// Class for authorized API conmtrollers 
+/// Class for authorized API controllers 
 /// </summary>
+[Authorize]
 public abstract class AuthorizedApiController : Controller
 {
     /// <summary>

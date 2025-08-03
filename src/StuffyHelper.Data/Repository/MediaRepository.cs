@@ -108,30 +108,12 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
-        public async Task<MediaEntry> GetPrimalEventMedia(Guid eventId, CancellationToken cancellationToken = default)
+        public async Task<MediaEntry?> GetPrimalEventMedia(Guid eventId, CancellationToken cancellationToken = default)
         {
-            try
-            {
-                var media = await _context.Medias
-                    .Include(e => e.Event)
-                    .FirstOrDefaultAsync(e => e.EventId == eventId && e.IsPrimal == true,
+            return await _context.Medias
+                .Include(e => e.Event)
+                .FirstOrDefaultAsync(e => e.EventId == eventId && e.IsPrimal == true,
                     cancellationToken);
-
-                if (media is null)
-                {
-                    throw new EntityNotFoundException($"Media with id: {eventId} not found.");
-                }
-
-                return media;
-            }
-            catch (EntityNotFoundException)
-            {
-                throw;
-            }
-            catch (Exception ex)
-            {
-                throw new DbStoreException(ex);
-            }
         }
     }
 }
