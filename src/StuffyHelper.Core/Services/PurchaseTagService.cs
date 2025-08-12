@@ -1,6 +1,8 @@
-﻿using EnsureThat;
+﻿using AutoMapper;
+using EnsureThat;
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Common.Messages;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Models;
 using StuffyHelper.Core.Services.Interfaces;
 using StuffyHelper.Data.Repository.Interfaces;
@@ -10,10 +12,12 @@ namespace StuffyHelper.Core.Services
     public class PurchaseTagService : IPurchaseTagService
     {
         private readonly IPurchaseTagRepository _purchaseTagStore;
+        private readonly IMapper _mapper;
 
-        public PurchaseTagService(IPurchaseTagRepository purchaseTagStore)
+        public PurchaseTagService(IPurchaseTagRepository purchaseTagStore, IMapper mapper)
         {
             _purchaseTagStore = purchaseTagStore;
+            _mapper = mapper;
         }
 
         public async Task<GetPurchaseTagEntry> GetPurchaseTagAsync(Guid purchaseTagId, CancellationToken cancellationToken)
@@ -22,7 +26,7 @@ namespace StuffyHelper.Core.Services
 
             var entry = await _purchaseTagStore.GetPurchaseTagAsync(purchaseTagId, cancellationToken);
 
-            return new GetPurchaseTagEntry(entry);
+            return _mapper.Map<GetPurchaseTagEntry>(entry);
         }
 
         public async Task<Response<PurchaseTagShortEntry>> GetPurchaseTagsAsync(
@@ -37,7 +41,7 @@ namespace StuffyHelper.Core.Services
 
             return new Response<PurchaseTagShortEntry>()
             {
-                Data = resp.Data.Select(x => new PurchaseTagShortEntry(x)),
+                Data = resp.Data.Select(x => _mapper.Map<PurchaseTagShortEntry>(x)),
                 TotalPages = resp.TotalPages,
                 Total = resp.Total
             };
@@ -47,10 +51,10 @@ namespace StuffyHelper.Core.Services
         {
             EnsureArg.IsNotNull(purchaseTag, nameof(purchaseTag));
 
-            var entry = purchaseTag.ToCommonEntry();
+            var entry = _mapper.Map<PurchaseTagEntry>(purchaseTag);
             var result = await _purchaseTagStore.AddPurchaseTagAsync(entry, cancellationToken);
 
-            return new PurchaseTagShortEntry(result);
+            return _mapper.Map<PurchaseTagShortEntry>(result);
         }
 
         public async Task DeletePurchaseTagAsync(Guid purchaseTagId, CancellationToken cancellationToken = default)
@@ -75,7 +79,7 @@ namespace StuffyHelper.Core.Services
             existingPurchaseTag.PatchFrom(purchaseTag);
             var result = await _purchaseTagStore.UpdatePurchaseTagAsync(existingPurchaseTag, cancellationToken);
 
-            return new PurchaseTagShortEntry(result);
+            return _mapper.Map<PurchaseTagShortEntry>(result);
         }
     }
 }

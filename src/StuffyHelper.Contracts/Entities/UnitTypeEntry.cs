@@ -24,7 +24,7 @@ namespace StuffyHelper.Contracts.Entities
         /// <summary>
         /// Linked purchases
         /// </summary>
-        public virtual List<PurchaseEntry> Purchases { get; set; } = new List<PurchaseEntry>();
+        public virtual List<PurchaseEntry> Purchases { get; set; } = new();
 
         public void PatchFrom(UpsertUnitTypeEntry entry)
         {

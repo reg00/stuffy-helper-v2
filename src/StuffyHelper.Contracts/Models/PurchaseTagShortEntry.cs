@@ -8,19 +8,6 @@ namespace StuffyHelper.Contracts.Models
     {
         [Required] public Guid Id { get; init; }
         [Required] public string Name { get; init; } = string.Empty;
-
-        public PurchaseTagShortEntry()
-        {
-
-        }
-
-        public PurchaseTagShortEntry(PurchaseTagEntry entry)
-        {
-            EnsureArg.IsNotNull(entry, nameof(entry));
-
-            Id = entry.Id;
-            Name = entry.Name;
-        }
     }
 }
 

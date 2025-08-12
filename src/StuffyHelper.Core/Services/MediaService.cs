@@ -111,7 +111,7 @@ namespace StuffyHelper.Core.Services
                 mediaId,
                 cancellationToken);
 
-            return new GetMediaEntry(entry);
+            return _mapper.Map<GetMediaEntry>(entry);
         }
 
         public async Task<GetMediaEntry?> GetPrimalEventMedia(Guid eventId,
@@ -121,7 +121,7 @@ namespace StuffyHelper.Core.Services
 
             var entry = await _mediaStore.GetPrimalEventMedia(eventId, cancellationToken);
 
-            return entry != null ? new GetMediaEntry(entry) : null;
+            return _mapper.Map<GetMediaEntry>(entry);
         }
 
         public async Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
@@ -137,7 +137,7 @@ namespace StuffyHelper.Core.Services
             {
                 return (await _mediaStore.GetMediasAsync(
                 offset, limit, eventId, createdDateStart, createdDateEnd, mediaType, cancellationToken))
-                .Select(s => new MediaShortEntry(s));
+                .Select(s => _mapper.Map<MediaShortEntry>(s));
             }
             catch (EntityNotFoundException)
             {
@@ -213,10 +213,10 @@ namespace StuffyHelper.Core.Services
 
             if (media.MediaType == MediaType.Link && string.IsNullOrWhiteSpace(media.Link))
                 throw new ArgumentNullException(nameof(media.Link), "link cannot be null");
-            else if (media.MediaType != MediaType.Link && media.File is null)
+            if (media.MediaType != MediaType.Link && media.File is null)
                 throw new ArgumentNullException(nameof(media.File), "file cannot be null");
 
-            var entry = media.ToCommonEntry(isPrimal);
+            var entry = _mapper.Map<MediaEntry>((media, isPrimal));
 
             try
             {
@@ -232,7 +232,7 @@ namespace StuffyHelper.Core.Services
                             media.File!.OpenReadStream(),
                         cancellationToken);
 
-                return new MediaShortEntry(entry);
+                return _mapper.Map<MediaShortEntry>(entry);
             }
             catch (EntityAlreadyExistsException)
             {

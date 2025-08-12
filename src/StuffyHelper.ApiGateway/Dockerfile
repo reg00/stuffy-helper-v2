@@ -42,10 +42,10 @@ RUN dotnet restore src/StuffyHelper.Contracts/StuffyHelper.Contracts.csproj
 
 COPY . .
 
-RUN dotnet build src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization.Api.csproj -c Release -o /app
+RUN dotnet build src/StuffyHelper.ApiGateway/StuffyHelper.ApiGateway.csproj -c Release -o /app
 
 FROM build AS publish
-RUN dotnet publish src/StuffyHelper.Authorization.Api/StuffyHelper.Authorization.Api.csproj -c Release -o /app
+RUN dotnet publish src/StuffyHelper.ApiGateway/StuffyHelper.ApiGateway.csproj -c Release -o /app
 
 FROM base AS final
 WORKDIR /app

@@ -3,6 +3,7 @@ using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Services;
 using StuffyHelper.Core.Services.Interfaces;
 using StuffyHelper.Data.Repository.Interfaces;
+using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -15,9 +16,12 @@ namespace StuffyHelper.Tests.UnitTests
 
         private PurchaseService GetService()
         {
+            var mapper = CommonTestConstants.GetMapperConfiguration().CreateMapper();
+
             return new PurchaseService(
                 _purchaseRepositoryMoq.Object,
-                _purchaseTagPipelineMoq.Object);
+                _purchaseTagPipelineMoq.Object,
+                mapper);
         }
         
         [Fact]

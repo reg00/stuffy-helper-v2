@@ -34,16 +34,5 @@
         /// Linked debts
         /// </summary>
         public virtual List<DebtEntry> Debts { get; set; } = new();
-
-        public CheckoutEntry()
-        {
-            
-        }
-
-        public CheckoutEntry(Guid eventId)
-        {
-            EventId = eventId;
-            CreatedDate = DateTime.UtcNow;
-        }
     }
 }

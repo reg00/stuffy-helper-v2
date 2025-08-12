@@ -1,6 +1,8 @@
-﻿using EnsureThat;
+﻿using AutoMapper;
+using EnsureThat;
 using Reg00.Infrastructure.Errors;
 using StuffyHelper.Common.Messages;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Models;
 using StuffyHelper.Core.Services.Interfaces;
 using StuffyHelper.Data.Repository.Interfaces;
@@ -10,10 +12,12 @@ namespace StuffyHelper.Core.Services
     public class UnitTypeService : IUnitTypeService
     {
         private readonly IUnitTypeRepository _unitTypeStore;
+        private readonly IMapper _mapper;
 
-        public UnitTypeService(IUnitTypeRepository UnitTypeStore)
+        public UnitTypeService(IUnitTypeRepository unitTypeStore, IMapper mapper)
         {
-            _unitTypeStore = UnitTypeStore;
+            _unitTypeStore = unitTypeStore;
+            _mapper = mapper;
         }
 
         public async Task<GetUnitTypeEntry> GetUnitTypeAsync(Guid unitTypeId, CancellationToken cancellationToken)
@@ -22,7 +26,7 @@ namespace StuffyHelper.Core.Services
 
             var entry = await _unitTypeStore.GetUnitTypeAsync(unitTypeId, cancellationToken);
 
-            return new GetUnitTypeEntry(entry);
+            return _mapper.Map<GetUnitTypeEntry>(entry);
         }
 
         public async Task<Response<UnitTypeShortEntry>> GetUnitTypesAsync(
@@ -37,7 +41,7 @@ namespace StuffyHelper.Core.Services
 
             return new Response<UnitTypeShortEntry>()
             {
-                Data = resp.Data.Select(x => new UnitTypeShortEntry(x)),
+                Data = resp.Data.Select(x => _mapper.Map<UnitTypeShortEntry>(x)),
                 TotalPages = resp.TotalPages,
                 Total = resp.Total
             };
@@ -47,10 +51,10 @@ namespace StuffyHelper.Core.Services
         {
             EnsureArg.IsNotNull(unitType, nameof(unitType));
 
-            var entry = unitType.ToCommonEntry();
+            var entry = _mapper.Map<UnitTypeEntry>(unitType);
             var result = await _unitTypeStore.AddUnitTypeAsync(entry, cancellationToken);
 
-            return new UnitTypeShortEntry(result);
+            return _mapper.Map<UnitTypeShortEntry>(result);
         }
 
         public async Task DeleteUnitTypeAsync(Guid unitTypeId, CancellationToken cancellationToken = default)
@@ -75,7 +79,7 @@ namespace StuffyHelper.Core.Services
             existingUnitType.PatchFrom(unitType);
             var result = await _unitTypeStore.UpdateUnitTypeAsync(existingUnitType, cancellationToken);
 
-            return new UnitTypeShortEntry(result);
+            return _mapper.Map<UnitTypeShortEntry>(result);
         }
     }
 }

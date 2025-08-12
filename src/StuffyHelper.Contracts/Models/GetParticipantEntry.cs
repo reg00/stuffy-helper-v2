@@ -14,28 +14,7 @@ namespace StuffyHelper.Contracts.Models
         public GetUserEntry? User { get; init; }
         [Required]
         public EventShortEntry? Event { get; init; }
-        public List<PurchaseShortEntry> Purchases { get; init; }
-        public IEnumerable<PurchaseUsageShortEntry> PurchaseUsages { get; init; }
-
-
-        public GetParticipantEntry()
-        {
-            Purchases = new List<PurchaseShortEntry>();
-            PurchaseUsages = new List<PurchaseUsageShortEntry>();
-        }
-
-        public GetParticipantEntry(
-            ParticipantEntry entry,
-            GetUserEntry user,
-            IEnumerable<PurchaseUsageShortEntry> purchaseUsages)
-        {
-            EnsureArg.IsNotNull(entry, nameof(entry));
-
-            Id = entry.Id;
-            User = user;
-            Event = new EventShortEntry(entry.Event);
-            Purchases = entry.Purchases.Select(x => new PurchaseShortEntry(x)).ToList();
-            PurchaseUsages = purchaseUsages;
-        }
+        public List<PurchaseShortEntry> Purchases { get; init; } = new();
+        public IEnumerable<PurchaseUsageShortEntry> PurchaseUsages { get; init; } = new List<PurchaseUsageShortEntry>();
     }
 }

@@ -14,21 +14,5 @@ namespace StuffyHelper.Contracts.Models
         [Required]
         public PurchaseShortEntry? Purchase { get; init; }
         public double Amount { get; init; }
-
-        public GetPurchaseUsageEntry()
-        {
-
-        }
-
-        public GetPurchaseUsageEntry(PurchaseUsageEntry entry, UserShortEntry user)
-        {
-            EnsureArg.IsNotNull(entry, nameof(entry));
-            EnsureArg.IsNotNull(user, nameof(user));
-
-            Id = entry.Id;
-            Amount = entry.Amount;
-            Participant = new ParticipantShortEntry(entry.Participant, user);
-            Purchase = new PurchaseShortEntry(entry.Purchase);
-        }
     }
 }

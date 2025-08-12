@@ -53,28 +53,5 @@ namespace StuffyHelper.Contracts.Entities
         /// Linked event
         /// </summary>
         public virtual EventEntry Event { get; init; }
-
-        public MediaEntry()
-        {
-
-        }
-
-        public MediaEntry(
-            Guid eventId,
-            string fileName,
-            FileType fileType,
-            MediaType mediaType,
-            string link,
-            bool isPrimal)
-        {
-            EnsureArg.IsNotDefault(eventId, nameof(eventId));
-
-            EventId = eventId;
-            FileType = fileType;
-            FileName = fileName;
-            MediaType = mediaType;
-            Link = link;
-            IsPrimal = isPrimal;
-        }
     }
 }

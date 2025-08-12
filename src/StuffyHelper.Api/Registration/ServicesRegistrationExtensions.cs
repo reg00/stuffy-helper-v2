@@ -65,6 +65,16 @@ namespace StuffyHelper.Api.Registration
                 cfg.AddProfile(new UserAutoMapperProfile());
                 cfg.AddProfile(new AvatarAutoMapperProfile());
                 cfg.AddProfile(new MediaAutoMapperProfile());
+                
+                cfg.AddProfile(new DebtAutoMapperProfile());
+                cfg.AddProfile(new CheckoutAutoMapperProfile());
+                cfg.AddProfile(new EventAutoMapperProfile());
+                cfg.AddProfile(new MediaAutoMapperProfile());
+                cfg.AddProfile(new ParticipantAutoMapperProfile());
+                cfg.AddProfile(new PurchaseAutoMapperProfile());
+                cfg.AddProfile(new PurchaseTagAutoMapperProfile());
+                cfg.AddProfile(new PurchaseUsageAutoMapperProfile());
+                cfg.AddProfile(new UnitTypeAutoMapperProfile());
             });
 
             return services;

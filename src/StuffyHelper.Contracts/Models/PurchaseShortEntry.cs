@@ -21,19 +21,5 @@ namespace StuffyHelper.Contracts.Models
 
         public List<PurchaseTagShortEntry> PurchaseTags { get; init; }
         public UnitTypeShortEntry? UnitType { get; init; }
-
-        public PurchaseShortEntry(PurchaseEntry entry)
-        {
-            EnsureArg.IsNotNull(entry, nameof(entry));
-
-            Id = entry.Id;
-            Name = entry.Name;
-            Cost = entry.Cost;
-            Amount = entry.Amount;
-            IsPartial = entry.IsPartial;
-            IsComplete = entry.IsComplete;
-            UnitType = entry.UnitType == null ? null : new UnitTypeShortEntry(entry.UnitType);
-            PurchaseTags = entry.PurchaseTags.Select(x => new PurchaseTagShortEntry(x)).ToList();
-        }
     }
 }

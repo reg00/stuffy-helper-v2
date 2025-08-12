@@ -50,12 +50,12 @@ namespace StuffyHelper.Core.Services
             foreach (var item in entry.Participants)
             {
                 var participantUser = await _authorizationClient.GetUserById(item.UserId, cancellationToken);
-                participants.Add(new ParticipantShortEntry(item, _mapper.Map<UserShortEntry>(participantUser)));
+                participants.Add(_mapper.Map<ParticipantShortEntry>((item, _mapper.Map<UserShortEntry>(participantUser))));
             }
 
             var user = await _authorizationClient.GetUserById(entry.UserId, cancellationToken);
-
-            return new GetEventEntry(entry, _mapper.Map<UserShortEntry>(user), participants);
+            
+            return _mapper.Map<GetEventEntry>((entry, _mapper.Map<UserShortEntry>(user), participants));
         }
 
         public async Task<Response<EventShortEntry>> GetEventsAsync(
@@ -82,7 +82,7 @@ namespace StuffyHelper.Core.Services
 
             return new Response<EventShortEntry>()
             {
-                Data = resp.Data.Select(x => new EventShortEntry(x)),
+                Data = resp.Data.Select(x => _mapper.Map<EventShortEntry>(x)),
                 TotalPages = resp.TotalPages,
                 Total = resp.Total
             };
@@ -100,13 +100,8 @@ namespace StuffyHelper.Core.Services
                 throw new BadRequestException("End date must be later than start date.");
 
             var identityUser = await _authorizationClient.GetUserById(claims.UserId, cancellationToken);
-            var entry = new EventEntry(
-                eventEntry.Name,
-                eventEntry.Description,
-                eventEntry.EventDateStart,
-                eventEntry.EventDateEnd,
-                identityUser.Id);
-
+            var entry = _mapper.Map<EventEntry>((eventEntry, identityUser));
+            
             var result = await _eventStore.AddEventAsync(entry, cancellationToken);
 
             var addParticipant = new UpsertParticipantEntry()
@@ -117,7 +112,7 @@ namespace StuffyHelper.Core.Services
 
             await _participantService.AddParticipantAsync(addParticipant, cancellationToken);
 
-            return new EventShortEntry(result);
+            return _mapper.Map<EventShortEntry>(result);
         }
 
         public async Task DeleteEventAsync(Guid eventId, string? userId, CancellationToken cancellationToken = default)
@@ -138,7 +133,7 @@ namespace StuffyHelper.Core.Services
             existingEvent.PatchFrom(updateEvent);
             var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
 
-            return new EventShortEntry(result);
+            return _mapper.Map<EventShortEntry>(result);
         }
 
         public async Task DeletePrimalEventMedia(Guid eventId, string? userId, CancellationToken cancellationToken = default)
@@ -167,7 +162,7 @@ namespace StuffyHelper.Core.Services
             if (primalMedia is not null)
                 await _mediaService.DeleteMediaAsync(primalMedia.Id, cancellationToken);
 
-            var addMedia = new AddMediaEntry(eventId, file, MediaType.Image, string.Empty);
+            var addMedia = _mapper.Map<AddMediaEntry>((eventId, file));
             await _mediaService.StoreMediaFormFileAsync(
                     addMedia,
                     isPrimal: true,
@@ -181,7 +176,7 @@ namespace StuffyHelper.Core.Services
             existingEvent.ImageUri = mediaUri;
             existingEvent = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
 
-            return new EventShortEntry(existingEvent);
+            return _mapper.Map<EventShortEntry>(existingEvent);
         }
 
         public async Task<EventShortEntry> CompleteEventAsync(Guid eventId, string? userId, bool isComplete, CancellationToken cancellationToken = default)
@@ -191,7 +186,7 @@ namespace StuffyHelper.Core.Services
             existingEvent.IsCompleted = isComplete;
             var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
 
-            return new EventShortEntry(result);
+            return _mapper.Map<EventShortEntry>(result);
         }
 
         private async Task<EventEntry> ValidateEventAsync(

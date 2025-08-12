@@ -8,11 +8,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using StuffyHelper.Common.Exceptions;
 using StuffyHelper.Common.Messages;
-using BadRequestException = StuffyHelper.Common.Exceptions.BadRequestException;
-using DbStoreException = Reg00.Infrastructure.Errors.DbStoreException;
-using EntityAlreadyExistsException = Reg00.Infrastructure.Errors.EntityAlreadyExistsException;
-using EntityNotFoundException = Reg00.Infrastructure.Errors.EntityNotFoundException;
-using ForbiddenException = Reg00.Infrastructure.Errors.ForbiddenException;
 
 namespace StuffyHelper.Api.Middlewares
 {

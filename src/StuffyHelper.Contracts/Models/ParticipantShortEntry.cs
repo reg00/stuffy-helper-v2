@@ -11,14 +11,5 @@ namespace StuffyHelper.Contracts.Models
         public Guid Id { get; init; }
         public string Name { get; init; } = string.Empty;
         public Uri? ImageUri { get; init; }
-
-        public ParticipantShortEntry(ParticipantEntry entry, UserShortEntry? user = null)
-        {
-            EnsureArg.IsNotNull(entry, nameof(entry));
-
-            Id = entry.Id;
-            Name = user?.Name ?? string.Empty;
-            ImageUri = user?.ImageUri;
-        }
     }
 }

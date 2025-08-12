@@ -79,27 +79,6 @@ namespace StuffyHelper.Contracts.Entities
         /// </summary>
         public virtual List<DebtEntry> Debts { get; set; } = new List<DebtEntry>();
 
-        public EventEntry()
-        {
-        }
-
-        public EventEntry(
-            string name,
-            string description,
-            DateTime eventDateStart,
-            DateTime? eventDateEnd,
-            string userId)
-        {
-            Name = name;
-            Description = description;
-            EventDateStart = eventDateStart;
-            EventDateEnd = eventDateEnd;
-            UserId = userId;
-            CreatedDate = DateTime.UtcNow;
-            IsCompleted = false;
-            IsActive = true;
-        }
-
         public void PatchFrom(UpdateEventEntry entry)
         {
             EnsureArg.IsNotNull(entry, nameof(entry));

@@ -17,18 +17,5 @@ namespace StuffyHelper.Contracts.Models
         [Required]
         public bool IsCompleted { get; init; }
         public Uri? ImageUri { get; init; }
-
-        public EventShortEntry(EventEntry entry)
-        {
-            EnsureArg.IsNotNull(entry, nameof(entry));
-
-            Id = entry.Id;
-            Name = entry.Name;
-            Description = entry.Description;
-            EventDateStart = entry.EventDateStart;
-            EventDateEnd = entry.EventDateEnd;
-            IsCompleted = entry.IsCompleted;
-            ImageUri = entry.ImageUri;
-        }
     }
 }

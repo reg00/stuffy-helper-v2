@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using StuffyHelper.Contracts.Entities;
 
 namespace StuffyHelper.Contracts.Models
 {
@@ -25,20 +24,5 @@ namespace StuffyHelper.Contracts.Models
         public Guid UnitTypeId { get; init; }
         [Required]
         public bool IsPartial { get; init; }
-
-        public PurchaseEntry ToCommonEntry()
-        {
-            return new PurchaseEntry()
-            {
-                Name = Name,
-                Cost = Cost,
-                Amount = Amount,
-                EventId = EventId,
-                UnitTypeId = UnitTypeId,
-                IsPartial = IsPartial,
-                ParticipantId = ParticipantId,
-                CreatedDate = DateTime.UtcNow,
-            };
-        }
     }
 }

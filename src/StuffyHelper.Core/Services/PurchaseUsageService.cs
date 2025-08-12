@@ -4,6 +4,7 @@ using Reg00.Infrastructure.Errors;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Contracts;
 using StuffyHelper.Common.Messages;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Models;
 using StuffyHelper.Core.Services.Interfaces;
 using StuffyHelper.Data.Repository.Interfaces;
@@ -27,7 +28,7 @@ namespace StuffyHelper.Core.Services
 
             var entry = await _purchaseUsageStore.GetPurchaseUsageAsync(purchaseUsageId, cancellationToken);
 
-            return new GetPurchaseUsageEntry(entry, _mapper.Map<UserShortEntry>(claims));
+            return _mapper.Map<GetPurchaseUsageEntry>((entry, _mapper.Map<ParticipantShortEntry>((entry.Participant ,_mapper.Map<UserShortEntry>(claims)))));
         }
 
         public async Task<Response<PurchaseUsageShortEntry>> GetPurchaseUsagesAsync(
@@ -42,7 +43,7 @@ namespace StuffyHelper.Core.Services
 
             return new Response<PurchaseUsageShortEntry>()
             {
-                Data = resp.Data.Select(x => new PurchaseUsageShortEntry(x)),
+                Data = resp.Data.Select(x => _mapper.Map<PurchaseUsageShortEntry>(x)),
                 TotalPages = resp.TotalPages,
                 Total = resp.Total
             };
@@ -52,10 +53,10 @@ namespace StuffyHelper.Core.Services
         {
             EnsureArg.IsNotNull(purchaseUsage, nameof(purchaseUsage));
 
-            var entry = purchaseUsage.ToCommonEntry();
+            var entry = _mapper.Map<PurchaseUsageEntry>(purchaseUsage);
             var result = await _purchaseUsageStore.AddPurchaseUsageAsync(entry, cancellationToken);
 
-            return new PurchaseUsageShortEntry(result);
+            return _mapper.Map<PurchaseUsageShortEntry>(result);
         }
 
         public async Task DeletePurchaseUsageAsync(Guid purchaseUsageId, CancellationToken cancellationToken = default)
@@ -80,7 +81,7 @@ namespace StuffyHelper.Core.Services
             existingPurchaseUsage.PatchFrom(purchaseUsage);
             var result = await _purchaseUsageStore.UpdatePurchaseUsageAsync(existingPurchaseUsage, cancellationToken);
 
-            return new PurchaseUsageShortEntry(result);
+            return _mapper.Map<PurchaseUsageShortEntry>(result);
         }
     }
 }

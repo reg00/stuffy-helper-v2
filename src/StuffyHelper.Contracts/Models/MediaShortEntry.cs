@@ -12,16 +12,5 @@ namespace StuffyHelper.Contracts.Models
         public string FileName { get; set; } = string.Empty;
         public MediaType MediaType { get; set; }
         public string Link { get; set; } = string.Empty;
-
-        public MediaShortEntry(MediaEntry media)
-        {
-            EnsureArg.IsNotNull(media, nameof(media));
-
-            Id = media.Id;
-            FileType = media.FileType;
-            FileName = media.FileName;
-            MediaType = media.MediaType;
-            Link = media.Link;
-        }
     }
 }

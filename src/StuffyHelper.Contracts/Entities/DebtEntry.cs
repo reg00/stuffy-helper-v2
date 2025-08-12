@@ -38,17 +38,17 @@
         /// <summary>
         /// Is sent
         /// </summary>
-        public bool IsSent { get; set; }
-        
+        public bool IsSent { get; set; } = false;
+
         /// <summary>
         /// Is confirmed
         /// </summary>
-        public bool IsComfirmed { get; set; }
-        
+        public bool IsComfirmed { get; set; } = false;
+
         /// <summary>
         /// Created date
         /// </summary>
-        public DateTimeOffset CreatedDate { get; set; }
+        public DateTimeOffset CreatedDate { get; set; } = DateTime.UtcNow;
 
         /// <summary>
         /// Linked event
@@ -58,27 +58,5 @@
         /// Linked checkout
         /// </summary>
         public virtual CheckoutEntry Checkout { get; set; }
-
-        public DebtEntry()
-        {
-            IsSent = false;
-            IsComfirmed = false;
-            CreatedDate = DateTime.UtcNow;
-        }
-
-        public DebtEntry(
-            Guid eventId,
-            string lenderId,
-            string debtorId,
-            double amount)
-        {
-            EventId = eventId;
-            LenderId = lenderId;
-            DebtorId = debtorId;
-            Amount = amount;
-            IsSent = false;
-            IsComfirmed = false;
-            CreatedDate = DateTime.UtcNow;
-        }
     }
 }

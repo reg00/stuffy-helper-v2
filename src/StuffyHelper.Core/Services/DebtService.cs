@@ -48,7 +48,7 @@ namespace StuffyHelper.Core.Services
             var lender = await _authorizationClient.GetUserById(entry.LenderId, cancellationToken);
             var debtor = await _authorizationClient.GetUserById(entry.DebtorId, cancellationToken);
 
-            return new GetDebtEntry(entry,_mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor));
+            return _mapper.Map<GetDebtEntry>((entry,_mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor)));
         }
 
         public async Task<Response<GetDebtEntry>> GetDebtsAsync(
@@ -69,7 +69,7 @@ namespace StuffyHelper.Core.Services
                 var lender = await _authorizationClient.GetUserById(debt.LenderId, cancellationToken);
                 var debtor = await _authorizationClient.GetUserById(debt.DebtorId, cancellationToken);
 
-                debts.Add(new GetDebtEntry(debt, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor)));
+                debts.Add(_mapper.Map<GetDebtEntry>((debt,_mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor))));
             }
 
             return new Response<GetDebtEntry>()
@@ -96,7 +96,8 @@ namespace StuffyHelper.Core.Services
                 var lender = await _authorizationClient.GetUserById(dbDebt.LenderId, cancellationToken);
                 var debtor = await _authorizationClient.GetUserById(dbDebt.DebtorId, cancellationToken);
 
-                debts.Add(new GetDebtEntry(dbDebt, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor)));
+                debts.Add(_mapper.Map<GetDebtEntry>((dbDebt,_mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor))));
+
             }
 
             return new Response<GetDebtEntry>()
@@ -141,7 +142,7 @@ namespace StuffyHelper.Core.Services
             var lender = await _authorizationClient.GetUserById(result.LenderId, cancellationToken);
             var debtor = await _authorizationClient.GetUserById(result.DebtorId, cancellationToken);
 
-            return new GetDebtEntry(result, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor));
+            return _mapper.Map<GetDebtEntry>((result,_mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor)));
         }
 
         public async Task<GetDebtEntry> ConfirmDebtAsync(string userId, Guid debtId, CancellationToken cancellationToken = default)
@@ -163,7 +164,7 @@ namespace StuffyHelper.Core.Services
             var lender = await _authorizationClient.GetUserById(result.LenderId, cancellationToken);
             var debtor = await _authorizationClient.GetUserById(result.DebtorId, cancellationToken);
 
-            return new GetDebtEntry(result, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor));
+            return _mapper.Map<GetDebtEntry>((result,_mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor)));
         }
 
         public async Task CheckoutEvent(Guid eventId, string? userId, CancellationToken cancellationToken = default)
@@ -178,7 +179,8 @@ namespace StuffyHelper.Core.Services
                 throw new EntityNotFoundException($"Event Id '{eventId}' not found");
             }
 
-            var checkout = await _checkoutStore.AddCheckoutAsync(new CheckoutEntry(eventId), cancellationToken);
+            var checkout = _mapper.Map<CheckoutEntry>(eventId);
+            checkout = await _checkoutStore.AddCheckoutAsync(checkout, cancellationToken);
 
             foreach (var purchase in @event.Purchases.Where(x => x.IsComplete == false))
             {

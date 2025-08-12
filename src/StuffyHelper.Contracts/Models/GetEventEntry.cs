@@ -1,7 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using EnsureThat;
 using StuffyHelper.Authorization.Contracts.Models;
-using StuffyHelper.Contracts.Entities;
 
 namespace StuffyHelper.Contracts.Models
 {
@@ -24,37 +22,8 @@ namespace StuffyHelper.Contracts.Models
 
         [Required]
         public UserShortEntry? User { get; init; }
-        public List<ParticipantShortEntry> Participants { get; init; }
-        public List<PurchaseShortEntry> Purchases { get; init; }
-        public List<MediaShortEntry> Medias { get; init; }
-
-
-        public GetEventEntry()
-        {
-            Participants = new List<ParticipantShortEntry>();
-            Purchases = new List<PurchaseShortEntry>();
-            Medias = new List<MediaShortEntry>();
-        }
-
-        public GetEventEntry(
-            EventEntry entry,
-            UserShortEntry user,
-            List<ParticipantShortEntry> participants)
-        {
-            EnsureArg.IsNotNull(entry, nameof(entry));
-
-            Id = entry.Id;
-            Name = entry.Name;
-            Description = entry.Description;
-            CreatedDate = entry.CreatedDate;
-            EventDateEnd = entry.EventDateEnd;
-            EventDateStart = entry.EventDateStart;
-            IsCompleted = entry.IsCompleted;
-            User = user;
-            Participants = participants;
-            MediaUri = entry.ImageUri;
-            Purchases = entry.Purchases.Select(x => new PurchaseShortEntry(x)).ToList();
-            Medias = entry.Medias.Select(x => new MediaShortEntry(x)).ToList();
-        }
+        public List<ParticipantShortEntry> Participants { get; init; } = new();
+        public List<PurchaseShortEntry> Purchases { get; init; } = new();
+        public List<MediaShortEntry> Medias { get; init; } = new();
     }
 }

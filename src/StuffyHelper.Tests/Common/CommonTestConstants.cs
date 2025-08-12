@@ -4,6 +4,7 @@ using Moq;
 using System.Security.Claims;
 using AutoMapper;
 using StuffyHelper.Authorization.Contracts.AutoMapper;
+using StuffyHelper.Contracts.AutoMapper;
 
 namespace StuffyHelper.Tests.Common
 {
@@ -44,6 +45,15 @@ namespace StuffyHelper.Tests.Common
                 cfg.AddProfile(new FriendAutoMapperProfile());
                 cfg.AddProfile(new UserAutoMapperProfile());
                 cfg.AddProfile(new AvatarAutoMapperProfile());
+                cfg.AddProfile(new DebtAutoMapperProfile());
+                cfg.AddProfile(new CheckoutAutoMapperProfile());
+                cfg.AddProfile(new EventAutoMapperProfile());
+                cfg.AddProfile(new MediaAutoMapperProfile());
+                cfg.AddProfile(new ParticipantAutoMapperProfile());
+                cfg.AddProfile(new PurchaseAutoMapperProfile());
+                cfg.AddProfile(new PurchaseTagAutoMapperProfile());
+                cfg.AddProfile(new PurchaseUsageAutoMapperProfile());
+                cfg.AddProfile(new UnitTypeAutoMapperProfile());
             });
         }
         

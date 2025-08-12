@@ -4,6 +4,7 @@ using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Exceptions;
 using StuffyHelper.Common.Messages;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Models;
 using StuffyHelper.Core.Services.Interfaces;
 using StuffyHelper.Data.Repository.Interfaces;
@@ -35,7 +36,9 @@ namespace StuffyHelper.Core.Services
             var entry = await _participantStore.GetParticipantAsync(participantId, cancellationToken);
             var user = await _authorizationClient.GetUserById(entry.UserId, cancellationToken);
 
-            return new GetParticipantEntry(entry, _mapper.Map<GetUserEntry>(user), entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x)));
+            //return new GetParticipantEntry(entry, _mapper.Map<GetUserEntry>(user), entry.PurchaseUsages.Select(x => new PurchaseUsageShortEntry(x)));
+
+            return _mapper.Map<GetParticipantEntry>((entry, _mapper.Map<GetUserEntry>(user)));
         }
 
         public async Task<Response<ParticipantShortEntry>> GetParticipantsAsync(
@@ -51,7 +54,7 @@ namespace StuffyHelper.Core.Services
             foreach (var participant in resp.Data)
             {
                 var user = await _authorizationClient.GetUserById(participant.UserId, cancellationToken);
-                participants.Add(new ParticipantShortEntry(participant, _mapper.Map<UserShortEntry>(user)));
+                participants.Add(_mapper.Map<ParticipantShortEntry>((participant, _mapper.Map<UserShortEntry>(user))));
             }
 
             return new Response<ParticipantShortEntry>()
@@ -67,10 +70,10 @@ namespace StuffyHelper.Core.Services
             EnsureArg.IsNotNull(participant, nameof(participant));
 
             var user = await _authorizationClient.GetUserById(participant.UserId, cancellationToken);
-            var entry = participant.ToCommonEntry();
+            var entry = _mapper.Map<ParticipantEntry>(participant);
             var result = await _participantStore.AddParticipantAsync(entry, cancellationToken);
 
-            return new ParticipantShortEntry(result, _mapper.Map<UserShortEntry>(user));
+            return _mapper.Map<ParticipantShortEntry>((result, _mapper.Map<UserShortEntry>(user)));
         }
 
         public async Task DeleteParticipantAsync(string userId, Guid participantId, CancellationToken cancellationToken = default)
@@ -96,7 +99,7 @@ namespace StuffyHelper.Core.Services
                 throw new ForbiddenException("Cannot delete participant if you are not an owner of event");
             
             // Нельзя удалить участника, если у него есть рассчитанные покупки
-            if(participant.Purchases.Any(x => x.IsComplete == true))
+            if(participant.Purchases.Any(x => x.IsComplete))
                 throw new BadRequestException("Cannot remove participant with completed purchases");
 
             // Нельзя удалить участника, если у него есть долги
@@ -123,7 +126,7 @@ namespace StuffyHelper.Core.Services
             existingParticipant.PatchFrom(participant);
             var result = await _participantStore.UpdateParticipantAsync(existingParticipant, cancellationToken);
 
-            return new ParticipantShortEntry(result, _mapper.Map<UserShortEntry>(user));
+            return _mapper.Map<ParticipantShortEntry>((result, _mapper.Map<UserShortEntry>(user)));
         }
     }
 }

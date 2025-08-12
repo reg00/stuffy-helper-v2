@@ -2,6 +2,7 @@
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Core.Services;
 using StuffyHelper.Data.Repository.Interfaces;
+using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -13,7 +14,9 @@ namespace StuffyHelper.Tests.UnitTests
 
         private UnitTypeService GetService()
         {
-            return new UnitTypeService(_unitTypeRepositoryMoq.Object);
+            var mapper = CommonTestConstants.GetMapperConfiguration().CreateMapper();
+
+            return new UnitTypeService(_unitTypeRepositoryMoq.Object, mapper);
         }
         
         [Fact]
