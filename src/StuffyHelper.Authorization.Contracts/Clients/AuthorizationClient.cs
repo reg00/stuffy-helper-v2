@@ -5,13 +5,14 @@ using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Client;
 using StuffyHelper.Common.Client.Helpers;
-using StuffyHelper.Common.Web;
 
 namespace StuffyHelper.Authorization.Contracts.Clients;
 
 /// <inheritdoc cref="StuffyHelper.Authorization.Contracts.Clients.Interface.IAuthorizationClient" />
 public class AuthorizationClient : ApiClientBase, IAuthorizationClient
 {
+    private const string DefaultRoute = "api/v1/auth";
+    
     /// <inheritdoc />
     public AuthorizationClient(string baseUrl) : base(baseUrl)
     {
@@ -23,7 +24,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         RegisterModel body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.RegisterRoute)
+        var request = CreateRequest($"{DefaultRoute}/register")
             .AddJsonBody(body);
 
         return Post<string>(request, cancellationToken);
@@ -35,7 +36,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         string code,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.EmailConfirmRoute)
+        var request = CreateRequest($"{DefaultRoute}/email-confirm")
             .AddQueryParameter(nameof(login), login)
             .AddQueryParameter(nameof(code), code);
 
@@ -47,7 +48,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         LoginModel body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.LoginRoute)
+        var request = CreateRequest($"{DefaultRoute}/login")
             .AddJsonBody(body);
 
         return Post<string>(request, cancellationToken);
@@ -58,7 +59,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         ForgotPasswordModel body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.ResetPasswordRoute)
+        var request = CreateRequest($"{DefaultRoute}/reset-password")
             .AddJsonBody(body);
 
         return Post<string>(request, cancellationToken);
@@ -70,7 +71,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         string code,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.ResetPasswordConfirmRoute)
+        var request = CreateRequest($"{DefaultRoute}/reset-password-confirm")
             .AddQueryParameter(nameof(email), email)
             .AddQueryParameter(nameof(code), code);
 
@@ -82,7 +83,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         ResetPasswordModel body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.ResetPasswordConfirmRoute)
+        var request = CreateRequest($"{DefaultRoute}/reset-password-confirm")
             .AddJsonBody(body);
 
         return Post<string>(request, cancellationToken);
@@ -93,7 +94,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         string token,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.RolesRoute)
+        var request = CreateRequest($"{DefaultRoute}/roles")
             .AddBearerToken(token);
 
         return Get<IReadOnlyList<IdentityRole>>(request, cancellationToken);
@@ -104,7 +105,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         string token,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.IsAdminRoute)
+        var request = CreateRequest($"{DefaultRoute}/is-admin")
             .AddBearerToken(token);
 
         return Get<bool>(request, cancellationToken);
@@ -115,7 +116,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         string token,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.AccountRoute)
+        var request = CreateRequest($"{DefaultRoute}/account")
             .AddBearerToken(token);
 
         return Get<GetUserEntry>(request, cancellationToken);
@@ -126,7 +127,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         string userId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{KnownRoutes.UserLoginsRoute}/{userId}");
+        var request = CreateRequest($"{DefaultRoute}/users/{userId}");
 
         return await Get<GetUserEntry>(request, cancellationToken);
     }
@@ -137,7 +138,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         string? userName = null,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.UserLoginsRoute)
+        var request = CreateRequest($"{DefaultRoute}/users")
             .AddQueryParameter(nameof(userName), userName)
             .AddBearerToken(token);
 
@@ -150,7 +151,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         UpdateModel body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.EditUserRoute)
+        var request = CreateRequest($"{DefaultRoute}/edit")
             .AddJsonBody(body)
             .AddBearerToken(token);
 
@@ -163,7 +164,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         IFormFile file,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.AvatarRoute)
+        var request = CreateRequest($"{DefaultRoute}/avatar")
             .AddFile(nameof(file), file.ToFileParam())
             .AddBearerToken(token);
 
@@ -175,7 +176,7 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
         string token,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.AvatarRoute)
+        var request = CreateRequest($"{DefaultRoute}/avatar")
             .AddBearerToken(token);
 
         return Delete(request, cancellationToken);

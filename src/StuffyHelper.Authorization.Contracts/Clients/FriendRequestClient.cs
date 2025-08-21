@@ -2,13 +2,14 @@
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Client;
-using StuffyHelper.Common.Web;
 
 namespace StuffyHelper.Authorization.Contracts.Clients;
 
 /// <inheritdoc cref="StuffyHelper.Authorization.Contracts.Clients.Interface.IFriendRequestClient" />
 public class FriendRequestClient : ApiClientBase, IFriendRequestClient
 {
+    private const string DefaultRoute = "api/v1/requests";
+    
     /// <inheritdoc />
     public FriendRequestClient(string baseUrl) : base(baseUrl)
     {
@@ -20,7 +21,7 @@ public class FriendRequestClient : ApiClientBase, IFriendRequestClient
         string token,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.GetSendedRequestsRoute)
+        var request = CreateRequest($"{DefaultRoute}/sended")
             .AddBearerToken(token);
 
         return Get<IReadOnlyList<FriendsRequestShort>>(request, cancellationToken);
@@ -31,7 +32,7 @@ public class FriendRequestClient : ApiClientBase, IFriendRequestClient
         string token,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.GetIncomingRequestsRoute)
+        var request = CreateRequest($"{DefaultRoute}/incoming")
             .AddBearerToken(token);
 
         return Get<IReadOnlyList<FriendsRequestShort>>(request, cancellationToken);
@@ -43,7 +44,7 @@ public class FriendRequestClient : ApiClientBase, IFriendRequestClient
         Guid requestId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{KnownRoutes.RequestRoute}/{requestId}")
+        var request = CreateRequest($"{DefaultRoute}/{requestId}")
             .AddBearerToken(token);
         
         return Get<FriendsRequestShort>(request, cancellationToken);
@@ -55,7 +56,7 @@ public class FriendRequestClient : ApiClientBase, IFriendRequestClient
         Guid requestId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{KnownRoutes.RequestRoute}/{requestId}/accept")
+        var request = CreateRequest($"{DefaultRoute}/{requestId}/accept")
             .AddBearerToken(token);
         
         return Post(request, cancellationToken);
@@ -67,7 +68,7 @@ public class FriendRequestClient : ApiClientBase, IFriendRequestClient
         string userId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.RequestRoute)
+        var request = CreateRequest(DefaultRoute)
             .AddQueryParameter(nameof(userId), userId)
             .AddBearerToken(token);
         
@@ -80,7 +81,7 @@ public class FriendRequestClient : ApiClientBase, IFriendRequestClient
         Guid requestId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{KnownRoutes.RequestRoute}/{requestId}")
+        var request = CreateRequest($"{DefaultRoute}/{requestId}")
             .AddBearerToken(token);
         
         return Delete(request, cancellationToken);

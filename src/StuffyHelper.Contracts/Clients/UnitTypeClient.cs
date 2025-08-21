@@ -1,7 +1,6 @@
 using RestSharp;
 using StuffyHelper.Common.Client;
 using StuffyHelper.Common.Messages;
-using StuffyHelper.Common.Web;
 using StuffyHelper.Contracts.Clients.Interface;
 using StuffyHelper.Contracts.Models;
 
@@ -10,6 +9,8 @@ namespace StuffyHelper.Contracts.Clients;
 /// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IUnitTypeClient" />
 public class UnitTypeClient: ApiClientBase, IUnitTypeClient
 {
+    private const string DefaultRoute = "api/v1/unit-types";
+    
     /// <summary>
     /// Ctor.
     /// </summary>
@@ -28,7 +29,7 @@ public class UnitTypeClient: ApiClientBase, IUnitTypeClient
         bool? isActive = null,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.GetUnitTypesRoute)
+        var request = CreateRequest(DefaultRoute)
             .AddBearerToken(token)
             .AddQueryParameter("limit", limit)
             .AddQueryParameter("offset", offset)
@@ -45,7 +46,7 @@ public class UnitTypeClient: ApiClientBase, IUnitTypeClient
         Guid unitTypeId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.GetUnitTypeRoute)
+        var request = CreateRequest($"{DefaultRoute}/{unitTypeId}")
             .AddBearerToken(token);
 
         return Get<GetUnitTypeEntry>(request, cancellationToken);
@@ -57,7 +58,7 @@ public class UnitTypeClient: ApiClientBase, IUnitTypeClient
         UpsertUnitTypeEntry body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.AddUnitTypeRoute)
+        var request = CreateRequest(DefaultRoute)
             .AddBearerToken(token)
             .AddJsonBody(body);
 
@@ -70,7 +71,7 @@ public class UnitTypeClient: ApiClientBase, IUnitTypeClient
         Guid unitTypeId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.DeleteUnitTypeRoute)
+        var request = CreateRequest($"{DefaultRoute}/{unitTypeId}")
             .AddBearerToken(token);
 
         return Delete(request, cancellationToken);
@@ -83,7 +84,7 @@ public class UnitTypeClient: ApiClientBase, IUnitTypeClient
         UpsertUnitTypeEntry body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.UpdateUnitTypeRoute)
+        var request = CreateRequest($"{DefaultRoute}/{unitTypeId}")
             .AddBearerToken(token)
             .AddJsonBody(body);
 

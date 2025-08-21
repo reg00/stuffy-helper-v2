@@ -1,7 +1,6 @@
 using RestSharp;
 using StuffyHelper.Common.Client;
 using StuffyHelper.Common.Messages;
-using StuffyHelper.Common.Web;
 using StuffyHelper.Contracts.Clients.Interface;
 using StuffyHelper.Contracts.Models;
 
@@ -10,6 +9,8 @@ namespace StuffyHelper.Contracts.Clients;
 /// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IParticipantClient" />
 public class ParticipantClient: ApiClientBase, IParticipantClient
 {
+    private const string DefaultRoute = "api/v1/participants";
+    
     /// <summary>
     /// Ctor.
     /// </summary>
@@ -27,7 +28,7 @@ public class ParticipantClient: ApiClientBase, IParticipantClient
         string? userId = null,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.GetParticipantsRoute)
+        var request = CreateRequest(DefaultRoute)
             .AddBearerToken(token)
             .AddQueryParameter("limit", limit)
             .AddQueryParameter("offset", offset)
@@ -43,7 +44,7 @@ public class ParticipantClient: ApiClientBase, IParticipantClient
         Guid participantId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.GetParticipantRoute)
+        var request = CreateRequest($"{DefaultRoute}/{participantId}")
             .AddBearerToken(token);
 
         return Get<GetParticipantEntry>(request, cancellationToken);
@@ -55,7 +56,7 @@ public class ParticipantClient: ApiClientBase, IParticipantClient
         UpsertParticipantEntry body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.AddParticipantRoute)
+        var request = CreateRequest(DefaultRoute)
             .AddBearerToken(token)
             .AddJsonBody(body);
 
@@ -68,7 +69,7 @@ public class ParticipantClient: ApiClientBase, IParticipantClient
         Guid participantId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.DeleteParticipantRoute)
+        var request = CreateRequest($"{DefaultRoute}/{participantId}")
             .AddBearerToken(token);
 
         return Delete(request, cancellationToken);

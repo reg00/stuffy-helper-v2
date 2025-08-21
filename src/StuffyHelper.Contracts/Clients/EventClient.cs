@@ -3,7 +3,6 @@ using RestSharp;
 using StuffyHelper.Common.Client;
 using StuffyHelper.Common.Client.Helpers;
 using StuffyHelper.Common.Messages;
-using StuffyHelper.Common.Web;
 using StuffyHelper.Contracts.Clients.Interface;
 using StuffyHelper.Contracts.Models;
 
@@ -12,6 +11,8 @@ namespace StuffyHelper.Contracts.Clients;
 /// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IEventClient" />
 public class EventClient: ApiClientBase, IEventClient
 {
+    private const string DefaultRoute = "api/v1/events";
+    
     /// <summary>
     /// Ctor.
     /// </summary>
@@ -40,7 +41,7 @@ public class EventClient: ApiClientBase, IEventClient
         Guid? purchaseId = null,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.GetEventsRoute)
+        var request = CreateRequest(DefaultRoute)
             .AddBearerToken(token)
             .AddQueryParameter("limit", limit)
             .AddQueryParameter("offset", offset)
@@ -67,7 +68,7 @@ public class EventClient: ApiClientBase, IEventClient
         Guid eventId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.GetEventRoute)
+        var request = CreateRequest($"{DefaultRoute}/{eventId}")
             .AddBearerToken(token);
 
         return Get<GetEventEntry>(request, cancellationToken);
@@ -79,7 +80,7 @@ public class EventClient: ApiClientBase, IEventClient
         AddEventEntry body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.AddEventRoute)
+        var request = CreateRequest(DefaultRoute)
             .AddBearerToken(token)
             .AddJsonBody(body);
 
@@ -92,7 +93,7 @@ public class EventClient: ApiClientBase, IEventClient
         Guid eventId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.DeleteEventRoute)
+        var request = CreateRequest($"{DefaultRoute}/{eventId}")
             .AddBearerToken(token);
 
         return Delete(request, cancellationToken);
@@ -105,7 +106,7 @@ public class EventClient: ApiClientBase, IEventClient
         UpdateEventEntry body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.UpdateEventRoute)
+        var request = CreateRequest($"{DefaultRoute}/{eventId}")
             .AddBearerToken(token)
             .AddJsonBody(body);
 
@@ -118,7 +119,7 @@ public class EventClient: ApiClientBase, IEventClient
         Guid eventId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.DeleteEventPrimalMediaRoute)
+        var request = CreateRequest($"{DefaultRoute}/{eventId}/photo")
             .AddBearerToken(token);
 
         return Delete(request, cancellationToken);
@@ -131,7 +132,7 @@ public class EventClient: ApiClientBase, IEventClient
         IFormFile file,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.UpdateEventPrimalMediaRoute)
+        var request = CreateRequest($"{DefaultRoute}/{eventId}/photo")
             .AddBearerToken(token)
             .AddFile("file", file.ToFileParam());
 
@@ -141,7 +142,7 @@ public class EventClient: ApiClientBase, IEventClient
     /// <inheritdoc />
     public Task CompleteEventAsync(string token, Guid eventId, CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.CompleteEventRoute)
+        var request = CreateRequest($"{DefaultRoute}/{eventId}/complete")
             .AddBearerToken(token);
 
         return Post(request, cancellationToken);
@@ -150,7 +151,7 @@ public class EventClient: ApiClientBase, IEventClient
     /// <inheritdoc />
     public Task ReopenEventAsync(string token, Guid eventId, CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.ReopenEventRoute)
+        var request = CreateRequest($"{DefaultRoute}/{eventId}/reopen")
             .AddBearerToken(token);
 
         return Post(request, cancellationToken);
@@ -159,7 +160,7 @@ public class EventClient: ApiClientBase, IEventClient
     /// <inheritdoc />
     public Task CheckoutEventAsync(string token, Guid eventId, CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.CheckoutEventRoute)
+        var request = CreateRequest($"{DefaultRoute}/{eventId}/checkout")
             .AddBearerToken(token);
 
         return Post(request, cancellationToken);

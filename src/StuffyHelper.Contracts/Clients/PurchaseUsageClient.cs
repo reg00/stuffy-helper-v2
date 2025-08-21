@@ -1,7 +1,6 @@
 using RestSharp;
 using StuffyHelper.Common.Client;
 using StuffyHelper.Common.Messages;
-using StuffyHelper.Common.Web;
 using StuffyHelper.Contracts.Clients.Interface;
 using StuffyHelper.Contracts.Models;
 
@@ -10,6 +9,8 @@ namespace StuffyHelper.Contracts.Clients;
 /// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IPurchaseUsageClient" />
 public class PurchaseUsageClient: ApiClientBase, IPurchaseUsageClient
 {
+    private const string DefaultRoute = "api/v1/purchase-usages";
+    
     /// <summary>
     /// Ctor.
     /// </summary>
@@ -28,7 +29,7 @@ public class PurchaseUsageClient: ApiClientBase, IPurchaseUsageClient
         Guid? purchaseId = null,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.GetPurchaseUsagesRoute)
+        var request = CreateRequest(DefaultRoute)
             .AddBearerToken(token)
             .AddQueryParameter("limit", limit)
             .AddQueryParameter("offset", offset)
@@ -45,7 +46,7 @@ public class PurchaseUsageClient: ApiClientBase, IPurchaseUsageClient
         Guid purchaseUsageId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.GetPurchaseUsageRoute)
+        var request = CreateRequest($"{DefaultRoute}/{purchaseUsageId}")
             .AddBearerToken(token);
 
         return Get<GetPurchaseUsageEntry>(request, cancellationToken);
@@ -57,7 +58,7 @@ public class PurchaseUsageClient: ApiClientBase, IPurchaseUsageClient
         UpsertPurchaseUsageEntry body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.AddPurchaseUsageRoute)
+        var request = CreateRequest(DefaultRoute)
             .AddBearerToken(token)
             .AddJsonBody(body);
 
@@ -70,7 +71,7 @@ public class PurchaseUsageClient: ApiClientBase, IPurchaseUsageClient
         Guid purchaseUsageId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.DeletePurchaseUsageRoute)
+        var request = CreateRequest($"{DefaultRoute}/{purchaseUsageId}")
             .AddBearerToken(token);
 
         return Delete(request, cancellationToken);
@@ -83,7 +84,7 @@ public class PurchaseUsageClient: ApiClientBase, IPurchaseUsageClient
         UpsertPurchaseUsageEntry body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.UpdatePurchaseUsageRoute)
+        var request = CreateRequest($"{DefaultRoute}/{purchaseUsageId}")
             .AddBearerToken(token)
             .AddJsonBody(body);
 

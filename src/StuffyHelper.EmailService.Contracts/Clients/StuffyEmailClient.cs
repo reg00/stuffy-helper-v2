@@ -1,6 +1,5 @@
 ﻿using RestSharp;
 using StuffyHelper.Common.Client;
-using StuffyHelper.Common.Web;
 using StuffyHelper.EmailService.Contracts.Clients.Interfaces;
 using StuffyHelper.EmailService.Contracts.Models;
 
@@ -9,6 +8,8 @@ namespace StuffyHelper.EmailService.Contracts.Clients;
 /// <inheritdoc cref="StuffyHelper.EmailService.Contracts.Clients.Interfaces.IStuffyEmailClient" />
 public class StuffyEmailClient : ApiClientBase, IStuffyEmailClient
 {
+    private const string DefaultRoute = "api/v1/email";
+    
     /// <inheritdoc />
     public StuffyEmailClient(string baseUrl) : base(baseUrl)
     {
@@ -20,7 +21,7 @@ public class StuffyEmailClient : ApiClientBase, IStuffyEmailClient
         SendEmailRequest body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.SendEmailRoute)
+        var request = CreateRequest($"{DefaultRoute}/send")
             .AddJsonBody(body)
             .AddBearerToken(token);
 

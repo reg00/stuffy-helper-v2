@@ -1,6 +1,5 @@
 using RestSharp;
 using StuffyHelper.Common.Client;
-using StuffyHelper.Common.Web;
 using StuffyHelper.Contracts.Clients.Interface;
 using StuffyHelper.Contracts.Enums;
 using StuffyHelper.Contracts.Models;
@@ -10,6 +9,8 @@ namespace StuffyHelper.Contracts.Clients;
 /// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IMediaClient" />
 public class MediaClient: ApiClientBase, IMediaClient
 {
+    private const string DefaultRoute = "api/v1/media";
+    
     /// <summary>
     /// Ctor.
     /// </summary>
@@ -25,7 +26,7 @@ public class MediaClient: ApiClientBase, IMediaClient
         AddMediaEntry body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.StoreMediaFormFileRoute)
+        var request = CreateRequest($"{DefaultRoute}/form-file")
             .AddBearerToken(token)
             .AddJsonBody(body);
 
@@ -38,7 +39,7 @@ public class MediaClient: ApiClientBase, IMediaClient
         Guid mediaId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.RetrieveMediaFromFileRoute)
+        var request = CreateRequest($"{DefaultRoute}/{mediaId}/form-file")
             .AddBearerToken(token);
 
         return GetFile(request, cancellationToken);
@@ -50,7 +51,7 @@ public class MediaClient: ApiClientBase, IMediaClient
         Guid mediaId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.GetMediaMetadataRoute)
+        var request = CreateRequest($"{DefaultRoute}/{mediaId}/metadata")
             .AddBearerToken(token);
 
         return Get<GetMediaEntry>(request, cancellationToken);
@@ -62,7 +63,7 @@ public class MediaClient: ApiClientBase, IMediaClient
         Guid mediaId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.DeleteMediaRoute)
+        var request = CreateRequest($"{DefaultRoute}/{mediaId}")
             .AddBearerToken(token);
 
         return Delete(request, cancellationToken);
@@ -79,7 +80,7 @@ public class MediaClient: ApiClientBase, IMediaClient
         MediaType? mediaType = null,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(KnownRoutes.DeleteMediaRoute)
+        var request = CreateRequest($"{DefaultRoute}/metadata")
             .AddBearerToken(token)
             .AddQueryParameter("limit", limit)
             .AddQueryParameter("offset", offset)
