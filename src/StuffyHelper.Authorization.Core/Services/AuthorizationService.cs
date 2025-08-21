@@ -90,7 +90,7 @@ public class AuthorizationService : IAuthorizationService
             var result = await _userManager.CreateAsync(identityUser, model.Password);
 
             if (!result.Succeeded)
-                throw new Exception($"Ошибка создания пользователя! Детали: {string.Join(' ', result.Errors.Select(x => x.Description))}");
+                throw new BadRequestException($"Ошибка создания пользователя! Детали: {string.Join(' ', result.Errors.Select(x => x.Description))}");
 
             await _roleManager.CreateRolesIfNotExists();
             await identityUser.AddRoleToUser(_roleManager, _userManager, UserType.User);

@@ -25,6 +25,6 @@ app.UseSwaggerUI(c =>
 
 app.UseAuthentication();
 app.UseAuthorization();
-
+app.UseExceptionHandling();
 app.MapControllers();
 app.Run();

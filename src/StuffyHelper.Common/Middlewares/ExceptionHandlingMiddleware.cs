@@ -6,10 +6,12 @@ using System.Net.Http.Headers;
 using System.Runtime.ExceptionServices;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using StuffyHelper.Common.Exceptions;
 using StuffyHelper.Common.Messages;
 
-namespace StuffyHelper.Api.Middlewares
+namespace StuffyHelper.Common.Middlewares
 {
     /// <summary>
     /// Exception handling middleware
@@ -75,7 +77,6 @@ namespace StuffyHelper.Api.Middlewares
             {
                 case ValidationException _:
                 case NotSupportedException _:
-                case Reg00.Infrastructure.Errors.NotSupportedException _:
                 case ArgumentNullException _:
                 case BadRequestException _:
                     statusCode = HttpStatusCode.BadRequest;

@@ -1,7 +1,8 @@
 ﻿using EnsureThat;
+using Microsoft.AspNetCore.Builder;
 using StuffyHelper.Common.Middlewares;
 
-namespace StuffyHelper.Api.Registration
+namespace StuffyHelper.Common.Extensions
 {
     /// <summary>
     /// Auth middleware registration extensions

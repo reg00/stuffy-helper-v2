@@ -27,6 +27,7 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseApi();
+app.UseExceptionHandling();
 app.MapControllers();
 
 app.Run();

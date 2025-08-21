@@ -5,6 +5,7 @@ using StuffyHelper.Data.Registration;
 using StuffyHelper.Minio.Registration;
 using System.Text.Json.Serialization;
 using StuffyHelper.Common.Configurations;
+using StuffyHelper.Common.Extensions;
 using StuffyHelper.Common.Middlewares;
 
 namespace StuffyHelper.Api.Registration

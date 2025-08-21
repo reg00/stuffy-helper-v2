@@ -177,14 +177,18 @@ public abstract class ApiClientBase
 
         if (!response.IsSuccessful)
         {
-            if (response.Content == null)
+            try
             {
-                throw CreateHttpException(request, response);
+                var error = await _client.Deserialize<ErrorResponse>(response, cancellationToken);
+                throw new HttpException(error.Data.Message);
             }
-
-            throw CreateHttpException(request, response);
+            catch
+            {
+                throw new HttpException(response.ErrorMessage);
+            }
+            throw new HttpRequestException($"HTTP Error: {response.StatusCode}, {response.ErrorMessage}");
         }
-
+        
         return response;
     }
 

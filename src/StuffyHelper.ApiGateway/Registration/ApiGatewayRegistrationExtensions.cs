@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Text.Json.Serialization;
+using StuffyHelper.Common.Extensions;
 using StuffyHelper.Common.Middlewares;
 
 namespace StuffyHelper.ApiGateway.Registration
