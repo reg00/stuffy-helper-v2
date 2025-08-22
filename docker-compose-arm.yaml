@@ -28,7 +28,7 @@ x-common-variables: &common
 
 services:
   stuffy-gateway:
-    image: slavadno/stuffy-gateway:latest
+    image: slavadno/stuffy-gateway-arm:latest
     ports:
       - 7654:7654
     environment: 
@@ -39,7 +39,7 @@ services:
       - app-network
 
   stuffy:
-    image: slavadno/stuffy-core:latest
+    image: slavadno/stuffy-core-arm:latest
     # ports:
       # - 7777:7777
     environment: 
@@ -54,7 +54,7 @@ services:
       - app-network
 
   stuffy-auth:
-    image: slavadno/stuffy-auth:latest
+    image: slavadno/stuffy-auth-arm:latest
     # ports:
       # - 7168:7168
     environment: 
@@ -68,7 +68,7 @@ services:
       - app-network
   
   stuffy-email:
-    image: slavadno/stuffy-email:latest
+    image: slavadno/stuffy-email-arm:latest
     # ports:
       # - 7755:7755
     environment: 

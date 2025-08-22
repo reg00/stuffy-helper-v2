@@ -31,8 +31,8 @@ namespace StuffyHelper.Data.Repository
                     .FirstOrDefaultAsync(e => e.Id == purchaseId, cancellationToken);
 
                 if (entry is null)
-                    throw new EntityNotFoundException($"Purchase with Id '{purchaseId}' Not Found.");
-
+                    throw new EntityNotFoundException("Purchase {PurchaseId} not found.", purchaseId);
+                
                 entry.PurchaseTags = entry.PurchaseTags.Where(x => x.IsActive == true).ToList();
 
                 return entry;
@@ -118,7 +118,7 @@ namespace StuffyHelper.Data.Repository
 
                 if (purchase is null)
                 {
-                    throw new EntityNotFoundException($"Purchase with Id '{purchaseId}' not found.");
+                    throw new EntityNotFoundException("Purchase {PurchaseId} not found.", purchaseId);
                 }
 
                 _context.Purchases.Remove(purchase);
@@ -142,7 +142,7 @@ namespace StuffyHelper.Data.Repository
 
                 if (purchase is null)
                 {
-                    throw new EntityNotFoundException($"Purchase with Id '{purchaseId}' not found.");
+                    throw new EntityNotFoundException("Purchase {PurchaseId} not found.", purchaseId);
                 }
 
                 purchase.IsComplete = true;

@@ -36,13 +36,13 @@ public class FriendRepository : IFriendRepository
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new EntityAlreadyExistsException($"Request already exists", ex);
+                    throw new EntityAlreadyExistsException("Request for User {UserId} already exists", ex, friendEntry.UserId);
 
-                else throw new AuthorizationException(ex.Message);
+                throw new DbStoreException(ex);
             }
             catch (Exception ex)
             {
-                throw new AuthorizationException(ex.Message);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -59,7 +59,8 @@ public class FriendRepository : IFriendRepository
 
                 if (friendship is null)
                 {
-                    throw new EntityNotFoundException($"Friendship with Id '{friendId}' not found.");
+                    
+                    throw new EntityNotFoundException("Friendship {FriendId} not found.", friendId);
                 }
 
 
@@ -68,7 +69,7 @@ public class FriendRepository : IFriendRepository
             }
             catch (Exception ex)
             {
-                throw new AuthorizationException(ex.Message);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -92,7 +93,7 @@ public class FriendRepository : IFriendRepository
             }
             catch (Exception ex)
             {
-                throw new AuthorizationException(ex.Message);
+                throw new DbStoreException(ex);
             }
         }
     }

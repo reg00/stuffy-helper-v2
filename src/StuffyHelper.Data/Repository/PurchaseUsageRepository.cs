@@ -27,7 +27,7 @@ namespace StuffyHelper.Data.Repository
                     .FirstOrDefaultAsync(e => e.Id == purchaseUsageId, cancellationToken);
 
                 if (entry is null)
-                    throw new EntityNotFoundException($"PurchaseUsage with Id '{purchaseUsageId}' Not Found.");
+                    throw new EntityNotFoundException("Purchase Usage {PurchaseUsageId} not found.", purchaseUsageId);
 
                 return entry;
             }
@@ -102,7 +102,7 @@ namespace StuffyHelper.Data.Repository
 
                 if (PurchaseUsage is null)
                 {
-                    throw new EntityNotFoundException($"PurchaseUsage with Id '{purchaseUsageId}' not found.");
+                    throw new EntityNotFoundException("Purchase Usage {PurchaseUsageId} not found.", purchaseUsageId);
                 }
 
                 //PurchaseUsage.IsActive = false;

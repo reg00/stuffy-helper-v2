@@ -53,7 +53,7 @@ public class AuthorizationService : IAuthorizationService
             var user = await _userManager.FindByNameAsync(model.Username);
 
             if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
-                throw new ForbiddenException("Вы не подтвердили свой email");
+                throw new ForbiddenException("Email not confirmed!");
 
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
@@ -71,8 +71,8 @@ public class AuthorizationService : IAuthorizationService
 
                 return token;
             }
-            else
-                throw new EntityNotFoundException($"Неверный логин/пароль");
+
+            throw new BadRequestException($"Wrong username/password");
         }
 
         /// <inheritdoc />
@@ -83,14 +83,14 @@ public class AuthorizationService : IAuthorizationService
             var userExists = await _userManager.FindByNameAsync(model.Username);
 
             if (userExists != null)
-                throw new EntityAlreadyExistsException($"Пользователь с логином {model.Username} уже существует");
+                throw new EntityAlreadyExistsException("User with login {Login} already exists.", model.Username);
 
             var identityUser = model.InitializeUser();
 
             var result = await _userManager.CreateAsync(identityUser, model.Password);
 
             if (!result.Succeeded)
-                throw new BadRequestException($"Ошибка создания пользователя! Детали: {string.Join(' ', result.Errors.Select(x => x.Description))}");
+                throw new BadRequestException("User creating error! Details: {Details}", string.Join(' ', result.Errors.Select(x => x.Description)));
 
             await _roleManager.CreateRolesIfNotExists();
             await identityUser.AddRoleToUser(_roleManager, _userManager, UserType.User);
@@ -112,7 +112,7 @@ public class AuthorizationService : IAuthorizationService
             var stuffyUser = await _userManager.FindByNameAsync(userName);
 
             if (stuffyUser == null)
-                throw new EntityNotFoundException($"Cannot find user with name: {userName}");
+                throw new EntityNotFoundException("Cannot find username: {UserName}", userName);
             
             return await _userManager.IsInRoleAsync(stuffyUser, nameof(UserType.Admin));
         }
@@ -128,7 +128,7 @@ public class AuthorizationService : IAuthorizationService
             var identityUser = await _userManager.FindByNameAsync(userName);
             
             if (identityUser == null)
-                throw new EntityNotFoundException($"Cannot find user with name: {userName}");
+                throw new EntityNotFoundException("Cannot find username: {UserName}", userName);
             
             var rolesList = await _userManager.GetRolesAsync(identityUser);
 
@@ -149,7 +149,7 @@ public class AuthorizationService : IAuthorizationService
         public async Task DeleteUser(string? userName = null, string? userId = null)
         {
             if (string.IsNullOrWhiteSpace(userName) && string.IsNullOrWhiteSpace(userId))
-                throw new Exception("UserName or UserId required");
+                throw new BadRequestException("UserName or UserId required");
 
             StuffyUser? userToDelete;
 
@@ -159,7 +159,7 @@ public class AuthorizationService : IAuthorizationService
                 userToDelete = await _userManager.FindByIdAsync(userId!);
 
             if (userToDelete is null)
-                throw new EntityNotFoundException($"Пользователь с логином {userName} отсутствует");
+                throw new EntityNotFoundException("Cannot find User by username: {UserName} or userId: {UserId}", userName ?? string.Empty, userId ?? string.Empty);
 
             var rolesList = await _userManager.GetRolesAsync(userToDelete);
 
@@ -180,7 +180,7 @@ public class AuthorizationService : IAuthorizationService
 
             var userToUpdate = await _userManager.FindByNameAsync(userName);
             if (userToUpdate is null)
-                throw new EntityNotFoundException($"Пользователь с логином {userName} отсутствует");
+                throw new EntityNotFoundException("Cannot find username: {UserName}", userName);
 
             userToUpdate.PatchFrom(model);
 
@@ -189,7 +189,7 @@ public class AuthorizationService : IAuthorizationService
             updateUserResult.HandleIdentityResult();
             
             if (updatedUser is null)
-                throw new EntityNotFoundException($"Пользователь с Id {userToUpdate.Id} отсутствует");
+                throw new EntityNotFoundException("Cannot find User: {UserId}", userToUpdate.Id);
             
             var rolesList = await _userManager.GetRolesAsync(updatedUser);
 
@@ -206,7 +206,7 @@ public class AuthorizationService : IAuthorizationService
 
             var existUser = await _userManager.FindByNameAsync(userName);
             if (existUser is null)
-                throw new EntityNotFoundException($"Пользователь с логином {userName} отсутствует");
+                throw new EntityNotFoundException("Cannot find username: {UserName}", userName);
 
             if (file != null)
             {
@@ -230,7 +230,7 @@ public class AuthorizationService : IAuthorizationService
 
             var existUser = await _userManager.FindByNameAsync(userName);
             if (existUser is null)
-                throw new EntityNotFoundException($"Пользователь с логином {userName} отсутствует");
+                throw new EntityNotFoundException("Cannot find username: {UserName}", userName);
             try
             {
                 await _avatarService.DeleteAvatarAsync(existUser.Id);
@@ -252,8 +252,7 @@ public class AuthorizationService : IAuthorizationService
 
             if (user == null)
             {
-                var error = $"Пользователь с логином {userName} отсутствует";
-                throw new EntityNotFoundException(error);
+                throw new EntityNotFoundException("Cannot find username: {UserName}", userName);
             }
 
             var rolesList = await _userManager.GetRolesAsync(user);
@@ -270,8 +269,7 @@ public class AuthorizationService : IAuthorizationService
 
             if (user == null)
             {
-                var error = $"Пользователь с идентификатором {userId} отсутствует";
-                throw new EntityNotFoundException(error);
+                throw new EntityNotFoundException("Cannot find User: {UserId}", userId);
             }
 
             var rolesList = await _userManager.GetRolesAsync(user);
@@ -291,7 +289,7 @@ public class AuthorizationService : IAuthorizationService
 
             if (user == null)
             {
-                throw new EntityNotFoundException($"Пользователь с логином {login} отсутствует");
+                throw new EntityNotFoundException("Cannot find username: {UserName}", login);
             }
 
             var result = await _userManager.ConfirmEmailAsync(user, code);
@@ -302,8 +300,8 @@ public class AuthorizationService : IAuthorizationService
 
                 return _mapper.Map<GetUserEntry>((user, rolesList));
             }
-            else
-                throw new ForbiddenException("Неверный код");
+
+            throw new ForbiddenException("Wrong code");
         }
 
         /// <inheritdoc />
@@ -313,7 +311,7 @@ public class AuthorizationService : IAuthorizationService
 
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
-                throw new ForbiddenException("Неправильно введен email");
+                throw new ForbiddenException("Wrong email");
 
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
 
@@ -328,7 +326,7 @@ public class AuthorizationService : IAuthorizationService
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
-                throw new EntityNotFoundException("Пользователь не найден");
+                throw new EntityNotFoundException("Cannot find User by email");
             }
 
             var result = await _userManager.ResetPasswordAsync(user, model.Code, model.Password);

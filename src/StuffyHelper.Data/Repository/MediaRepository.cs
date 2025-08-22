@@ -32,7 +32,7 @@ namespace StuffyHelper.Data.Repository
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new EntityAlreadyExistsException($"Media with id '{media.Id}' and event name '{media.Event!.Name}' already exists", ex);
+                    throw new EntityAlreadyExistsException("Media: {MediaId} for Event: {EventId} already exists", ex, media.Id, media.EventId);
 
                 else throw new DbStoreException(ex);
             }
@@ -66,8 +66,7 @@ namespace StuffyHelper.Data.Repository
 
                 if (media is null)
                 {
-                    throw new EntityNotFoundException($"Media with id: {mediaId} not found.");
-                }
+                    throw new EntityNotFoundException("Media {MediaId} not found.", mediaId);                }
 
                 return media;
             }

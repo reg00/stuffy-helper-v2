@@ -1,18 +1,21 @@
-﻿namespace StuffyHelper.Common.Exceptions;
+﻿using System.Net;
+using StuffyHelper.Common.Constants;
+
+namespace StuffyHelper.Common.Exceptions;
 
 /// <summary>
 /// Entity already exists exception
 /// 409 status code
 /// </summary>
-public class EntityAlreadyExistsException : Exception
+public class EntityAlreadyExistsException : BaseException
 {
-    public EntityAlreadyExistsException(string message)
-        : base(message)
+    public EntityAlreadyExistsException(string messageTemplate, params object[] args)
+        : base(messageTemplate, HttpStatusCode.Conflict, ErrorCodeConstants.EntityAlreadyExistsErrorCode, args)
     {
     }
 
-    public EntityAlreadyExistsException(string message, Exception innerException)
-        : base(message, innerException)
+    public EntityAlreadyExistsException(string messageTemplate, Exception innerException, params object[] args)
+        : base(messageTemplate, HttpStatusCode.Conflict, ErrorCodeConstants.EntityAlreadyExistsErrorCode, innerException, args)
     {
     }
 }

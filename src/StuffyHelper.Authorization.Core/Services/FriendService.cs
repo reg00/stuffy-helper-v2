@@ -40,7 +40,7 @@ public class FriendService : IFriendService
             var friend = await _authorizationService.GetUserById(friendId);
 
             if (stuffyUser.Id == friend.Id)
-                throw new AuthorizationException("Can not request yourself.");
+                throw new BadRequestException("Can not request yourself. UserId: {UserId}", userId);
 
             var request = _mapper.Map<FriendEntry>((stuffyUser.Id, friend.Id));
 

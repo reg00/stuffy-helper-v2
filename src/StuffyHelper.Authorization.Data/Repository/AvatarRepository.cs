@@ -36,7 +36,7 @@ public class AvatarRepository : IAvatarRepository
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new EntityAlreadyExistsException($"User {avatar.UserId} already have avatar", ex);
+                    throw new EntityAlreadyExistsException("User: {UserId} already have avatar", ex, avatar.UserId);
 
                 throw new DbStoreException(ex);
             }
@@ -89,7 +89,7 @@ public class AvatarRepository : IAvatarRepository
 
                 if (avatar is null)
                 {
-                    throw new EntityNotFoundException($"Avatar with id: {avatarId} not found.");
+                    throw new EntityNotFoundException("Avatar: {AvatarId} not found.", avatarId);
                 }
 
                 return avatar;
@@ -116,7 +116,7 @@ public class AvatarRepository : IAvatarRepository
 
                 if (avatar is null)
                 {
-                    throw new EntityNotFoundException($"Avatar not found.");
+                    throw new EntityNotFoundException("Avatar for User: {UserId} not found.", userId);
                 }
 
                 return avatar;

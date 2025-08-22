@@ -27,7 +27,7 @@ namespace StuffyHelper.Data.Repository
                     .FirstOrDefaultAsync(e => e.Id == purchaseTagId, cancellationToken);
 
                 if (entry is null)
-                    throw new EntityNotFoundException($"PurchaseTag with Id '{purchaseTagId}' Not Found.");
+                    throw new EntityNotFoundException("Purchase Tag {PurchaseTagId} not found.", purchaseTagId);
 
                 return entry;
             }
@@ -50,7 +50,7 @@ namespace StuffyHelper.Data.Repository
 
                 if (tag is null)
                 {
-                    throw new EntityNotFoundException($"Purchase tag with name: {name} not found.");
+                    throw new EntityNotFoundException("Purchase Tag {PurchaseTagName} not found.", name);
                 }
 
                 return tag;
@@ -123,7 +123,7 @@ namespace StuffyHelper.Data.Repository
 
                 if (purchaseTag is null)
                 {
-                    throw new EntityNotFoundException($"PurchaseTag with Id '{purchaseTagId}' not found.");
+                    throw new EntityNotFoundException("Purchase Tag {PurchaseTagId} not found.", purchaseTagId);
                 }
 
                 purchaseTag.IsActive = false;

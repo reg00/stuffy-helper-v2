@@ -29,7 +29,7 @@ namespace StuffyHelper.Data.Repository
                     cancellationToken);
 
                 if (entry is null)
-                    throw new EntityNotFoundException($"Debt with Id '{debtId}' Not Found.");
+                    throw new EntityNotFoundException("Debt {DebtId} not found.", debtId);
 
                 return entry;
             }
@@ -164,7 +164,7 @@ namespace StuffyHelper.Data.Repository
 
                 if (debt is null)
                 {
-                    throw new EntityNotFoundException($"Debt with Id '{debtId}' not found.");
+                    throw new EntityNotFoundException("Debt {DebtId} not found.", debtId);
                 }
 
                 _context.Debts.Remove(debt);

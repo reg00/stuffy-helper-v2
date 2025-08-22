@@ -31,7 +31,7 @@ namespace StuffyHelper.Data.Repository
                     cancellationToken);
 
                 if (entry is null)
-                    throw new EntityNotFoundException($"Event with Id '{eventId}' Not Found.");
+                    throw new EntityNotFoundException("Event {EventId} not found.", eventId);
 
                 return entry;
             }
@@ -111,7 +111,7 @@ namespace StuffyHelper.Data.Repository
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new EntityAlreadyExistsException($"Event with name '{@event.Name}' and event date '{@event.EventDateStart}' already exists", ex);
+                    throw new EntityAlreadyExistsException("Event with name '{EventName}' and event date '{EventDateStart}' already exists", ex, @event.Name, @event.EventDateStart);
 
                 else throw new DbStoreException(ex);
             }
@@ -133,8 +133,7 @@ namespace StuffyHelper.Data.Repository
 
                 if (@event is null)
                 {
-                    throw new EntityNotFoundException($"Event with Id '{eventId}' not found.");
-                }
+                    throw new EntityNotFoundException("Event {EventId} not found.", eventId);                }
 
                 @event.IsActive = false;
 
@@ -160,7 +159,7 @@ namespace StuffyHelper.Data.Repository
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new EntityAlreadyExistsException($"Event with name '{@event.Name}' and event date '{@event.EventDateStart}' already exists", ex);
+                    throw new EntityAlreadyExistsException("Event with name '{EventName}' and event date '{EventDateStart}' already exists", ex, @event.Name, @event.EventDateStart);
 
                 else throw new DbStoreException(ex);
             }

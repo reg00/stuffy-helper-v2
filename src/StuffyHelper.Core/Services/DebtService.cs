@@ -156,7 +156,7 @@ namespace StuffyHelper.Core.Services
                 throw new EntityNotFoundException($"Debt Id '{debtId}' not found!");
 
             if (!debt.IsSent)
-                throw new BadRequestException("Cannot confirm not sented debt");
+                throw new BadRequestException("Cannot confirm not sent debt {DebtId}. User: {UserId}", debtId, userId);
 
             debt.IsComfirmed = true;
 

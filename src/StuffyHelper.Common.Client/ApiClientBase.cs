@@ -131,7 +131,7 @@ public abstract class ApiClientBase
     {
         var response = await ExecuteInternal(request, Method.Get, cancellationToken);
 
-        var bytes = response.RawBytes ?? throw new HttpException("Failed to extract file from response");
+        var bytes = response.RawBytes ?? throw new ClientException("Failed to extract file from response");
         
         var fileName = "file";
         if (response.TryExtractFileName(out var name))
@@ -149,7 +149,7 @@ public abstract class ApiClientBase
     {
         var response = await ExecuteInternal(request, Method.Post, cancellationToken);
 
-        var bytes = response.RawBytes ?? throw new HttpException("Failed to extract file from response");
+        var bytes = response.RawBytes ?? throw new ClientException("Failed to extract file from response");
         
         var fileName = "file";
         if (response.TryExtractFileName(out var name))
@@ -177,16 +177,22 @@ public abstract class ApiClientBase
 
         if (!response.IsSuccessful)
         {
+            if (response.Content == null)
+            {
+                throw CreateHttpException(request, response);
+            }
+
+            ApiError? apiError;
             try
             {
-                var error = await _client.Deserialize<ErrorResponse>(response, cancellationToken);
-                throw new HttpException(error.Data.Message);
+                apiError = JsonSerializer.Deserialize<ApiError>(response.Content, JsonOptionsFactory.DefaultOptions);
             }
             catch
             {
-                throw new HttpException(response.ErrorMessage);
+                throw CreateHttpException(request, response);
             }
-            throw new HttpRequestException($"HTTP Error: {response.StatusCode}, {response.ErrorMessage}");
+
+            throw apiError == null ? CreateHttpException(request, response) : BaseException.FromApiError(apiError);
         }
         
         return response;
@@ -205,12 +211,11 @@ public abstract class ApiClientBase
         RestRequest request,
         RestResponse response)
     {
-        return new SerializationException(
-            string.Format("Failed to deserialize response from {Resource}: {Content}", request.Resource,
-            response.Content ?? "<empty>"), exception);
+        return new SerializationException("Failed to deserialize response from {Resource}: {Content}", exception, request.Resource,
+            response.Content ?? "<empty>");
     }
 
-    private HttpException CreateHttpException(RestRequest request, RestResponse response)
+    private ClientException CreateHttpException(RestRequest request, RestResponse response)
     {
         var args = new List<object> {request.Resource, (int) response.StatusCode, response.StatusCode};
         var builder = new StringBuilder("Error while calling {Resource}: {ErrorCode} {ErrorName}");
@@ -229,7 +234,7 @@ public abstract class ApiClientBase
             builder.Append(" Raw response: {Raw}");
         }
 
-        return new HttpException(string.Format(builder.ToString(), args.ToArray()));
+        return new ClientException(string.Format(builder.ToString(), args.ToArray()));
     }
 }
 

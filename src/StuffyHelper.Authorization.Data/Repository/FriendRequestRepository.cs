@@ -34,7 +34,7 @@ public class FriendRequestRepository : IFriendRequestRepository
                     .FirstOrDefaultAsync(e => e.Id == requestId, cancellationToken);
 
                 if (entry is null)
-                    throw new EntityNotFoundException($"Friend request with Id '{requestId}' Not Found.");
+                    throw new EntityNotFoundException("Friend request {FriendRequestId} not found.", requestId);
 
                 return entry;
             }
@@ -44,7 +44,7 @@ public class FriendRequestRepository : IFriendRequestRepository
             }
             catch (Exception ex)
             {
-                throw new AuthorizationException(ex.Message);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -76,7 +76,7 @@ public class FriendRequestRepository : IFriendRequestRepository
             }
             catch (Exception ex)
             {
-                throw new AuthorizationException(ex.Message);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -96,7 +96,7 @@ public class FriendRequestRepository : IFriendRequestRepository
             }
             catch (Exception ex)
             {
-                throw new AuthorizationException(ex.Message);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -114,13 +114,13 @@ public class FriendRequestRepository : IFriendRequestRepository
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new EntityAlreadyExistsException($"Request already exists", ex);
+                    throw new EntityAlreadyExistsException("Request for User: {UserId} already exists", ex, request.UserIdFrom);
 
-                else throw new AuthorizationException(ex.Message);
+                throw new DbStoreException(ex);
             }
             catch (Exception ex)
             {
-                throw new AuthorizationException(ex.Message);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -137,7 +137,7 @@ public class FriendRequestRepository : IFriendRequestRepository
 
                 if (request is null)
                 {
-                    throw new EntityNotFoundException($"Request with Id '{requestId}' not found.");
+                    throw new EntityNotFoundException("Friend request {FriendRequestId} not found.", requestId);
                 }
 
                 _context.FriendsRequests.Remove(request);
@@ -145,7 +145,7 @@ public class FriendRequestRepository : IFriendRequestRepository
             }
             catch (Exception ex)
             {
-                throw new AuthorizationException(ex.Message);
+                throw new DbStoreException(ex);
             }
         }
 
@@ -162,7 +162,7 @@ public class FriendRequestRepository : IFriendRequestRepository
 
                 if (request is null)
                 {
-                    throw new EntityNotFoundException($"Request with Id '{requestId}' not found.");
+                    throw new EntityNotFoundException("Friend request {FriendRequestId} not found.", requestId);
                 }
 
                 request.IsComfirmed = true;
@@ -171,7 +171,7 @@ public class FriendRequestRepository : IFriendRequestRepository
             }
             catch (Exception ex)
             {
-                throw new AuthorizationException(ex.Message);
+                throw new DbStoreException(ex);
             }
         }
     }

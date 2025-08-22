@@ -1,18 +1,21 @@
-﻿namespace StuffyHelper.Common.Exceptions;
+﻿using System.Net;
+using StuffyHelper.Common.Constants;
+
+namespace StuffyHelper.Common.Exceptions;
 
 /// <summary>
 /// Serialization exception
 /// 400 status code
 /// </summary>
-public class SerializationException : Exception
+public class SerializationException : BaseException
 {
-    public SerializationException(string message)
-        : base(message)
+    public SerializationException(string messageTemplate, params object[] args)
+        : base(messageTemplate, HttpStatusCode.BadRequest, ErrorCodeConstants.SerializationErrorCode, args)
     {
     }
 
-    public SerializationException(string message, Exception? innerException)
-        : base(message, innerException)
+    public SerializationException(string messageTemplate, Exception? innerException, params object[] args)
+        : base(messageTemplate, HttpStatusCode.BadRequest, ErrorCodeConstants.SerializationErrorCode, innerException, args)
     {
     }
 }

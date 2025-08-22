@@ -1,15 +1,8 @@
 ﻿using EnsureThat;
-using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 using System.Net;
-using System.Net.Http.Headers;
-using System.Runtime.ExceptionServices;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using StuffyHelper.Common.Exceptions;
-using StuffyHelper.Common.Messages;
 
 namespace StuffyHelper.Common.Middlewares
 {
@@ -20,7 +13,6 @@ namespace StuffyHelper.Common.Middlewares
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<ExceptionHandlingMiddleware> _logger;
-        private readonly JsonSerializerOptions _jsonSerializerOptions;
 
         public ExceptionHandlingMiddleware(RequestDelegate next, ILogger<ExceptionHandlingMiddleware> logger)
         {
@@ -29,12 +21,6 @@ namespace StuffyHelper.Common.Middlewares
 
             _next = next;
             _logger = logger;
-            _jsonSerializerOptions = new JsonSerializerOptions
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                WriteIndented = true
-            };
         }
 
         public async Task Invoke(HttpContext context)
@@ -53,75 +39,45 @@ namespace StuffyHelper.Common.Middlewares
                     throw;
                 }
 
-                var exceptionDispatchInfo = ExceptionDispatchInfo.Capture(exception);
-                if (exceptionDispatchInfo != null)
-                {
-                    var statusCode = MapStatusCodeToResult(exceptionDispatchInfo.SourceException);
-                    context.Response.ContentType = new MediaTypeHeaderValue("application/json").ToString();
-                    context.Response.StatusCode = (int)statusCode;
-                    var result = JsonSerializer.Serialize(new ErrorResponse() { Message = exception.Message }, _jsonSerializerOptions);
-                    await context.Response.WriteAsync(result);
-                }
+                await HandleExceptionAsync(context, exception, context.RequestAborted);
             }
         }
 
-        private HttpStatusCode MapStatusCodeToResult(Exception exception)
+        private async Task HandleExceptionAsync(HttpContext context, Exception exception, CancellationToken cancellationToken = default)
         {
-            EnsureArg.IsNotNull(exception, nameof(exception));
-
-            var statusCode = HttpStatusCode.InternalServerError;
-
-            // TODO: Register all possible exceptions in exception handler middleware.
-
-            switch (exception)
+            if (exception is BaseException baseException)
             {
-                case ValidationException _:
-                case NotSupportedException _:
-                case ArgumentNullException _:
-                case BadRequestException _:
-                    statusCode = HttpStatusCode.BadRequest;
-                    break;
-                case EntityNotFoundException _:
-                    statusCode = HttpStatusCode.NotFound;
-                    break;
-                case ForbiddenException _:
-                    statusCode = HttpStatusCode.Forbidden;
-                    break;
-                case DbStoreException _:
-                case StuffyException _:
-                    statusCode = HttpStatusCode.InternalServerError;
-                    break;
-                case EntityAlreadyExistsException _:
-                    statusCode = HttpStatusCode.Conflict;
-                    break;
-                case UnauthorizedAccessException _:
-                case AuthorizationException _:
-                    statusCode = HttpStatusCode.Unauthorized;
-                    break;
+                // Логируем с исходным шаблоном и значениями
+                _logger.LogWarning(
+                    "Exception: {ErrorCode}, Template: {MessageTemplate}, Args: {Args}",
+                    baseException.ErrorCode,
+                    baseException.MessageTemplate,
+                    baseException.Args);
+
+                context.Response.StatusCode = (int)baseException.HttpStatus;
+                context.Response.ContentType = "application/json";
+            
+                await context.Response.WriteAsJsonAsync(
+                    baseException.ToApiError(), 
+                    cancellationToken);
+
+                return;
             }
 
-            // Log the exception and possibly modify the user message
-            switch (statusCode)
+            // Обработка других типов исключений
+            _logger.LogError(exception, "Unhandled exception occurred");
+
+            var genericError = new
             {
-                case HttpStatusCode.ServiceUnavailable:
-                    _logger.LogWarning(exception, "Service exception.");
-                    break;
-                case HttpStatusCode.InternalServerError:
-                    _logger.LogCritical(exception, "Unexpected service exception.");
-                    break;
-                default:
-                    _logger.LogWarning(exception, "Unhandled exception");
-                    break;
-            }
+                errorCode = "UNEXPECTED_ERROR",
+                message = "An unexpected error occurred",
+                httpStatus = (int)HttpStatusCode.InternalServerError
+            };
 
-            return statusCode;
-        }
-
-        protected internal virtual async Task ExecuteResultAsync(HttpContext context, IActionResult result)
-        {
-            EnsureArg.IsNotNull(context, nameof(context));
-            EnsureArg.IsNotNull(result, nameof(result));
-            await result.ExecuteResultAsync(new ActionContext { HttpContext = context });
+            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.ContentType = "application/json";
+        
+            await context.Response.WriteAsJsonAsync(genericError, cancellationToken);
         }
     }
 }

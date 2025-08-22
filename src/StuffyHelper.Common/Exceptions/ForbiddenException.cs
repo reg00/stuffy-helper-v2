@@ -1,18 +1,21 @@
-﻿namespace StuffyHelper.Common.Exceptions;
+﻿using System.Net;
+using StuffyHelper.Common.Constants;
+
+namespace StuffyHelper.Common.Exceptions;
 
 /// <summary>
 /// Forbidden exception
 /// 403 status code
 /// </summary>
-public class ForbiddenException : Exception
+public class ForbiddenException : BaseException
 {
-    public ForbiddenException(string message)
-        : base(message)
+    public ForbiddenException(string messageTemplate, params object[] args)
+        : base(messageTemplate, HttpStatusCode.Forbidden, ErrorCodeConstants.ForbiddenErrorCode, args)
     {
     }
 
-    public ForbiddenException(string message, Exception innerException)
-        : base(message, innerException)
+    public ForbiddenException(string messageTemplate, Exception innerException, params object[] args)
+        : base(messageTemplate, HttpStatusCode.Forbidden, ErrorCodeConstants.ForbiddenErrorCode, innerException, args)
     {
     }
 }

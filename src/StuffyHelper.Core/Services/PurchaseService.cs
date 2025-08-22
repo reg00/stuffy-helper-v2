@@ -112,7 +112,7 @@ namespace StuffyHelper.Core.Services
 
             if (existingPurchase.IsComplete)
             {
-                throw new BadRequestException("Cannot edit completed purchase");
+                throw new BadRequestException("Cannot edit completed purchase {PurchaseId}", purchaseId);
             }
 
             return existingPurchase;

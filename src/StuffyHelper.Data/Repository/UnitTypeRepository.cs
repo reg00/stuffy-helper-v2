@@ -27,7 +27,7 @@ namespace StuffyHelper.Data.Repository
                     .FirstOrDefaultAsync(e => e.Id == unitTypeId, cancellationToken);
 
                 if (entry is null)
-                    throw new EntityNotFoundException($"UnitType with Id '{unitTypeId}' Not Found.");
+                    throw new EntityNotFoundException("UnitType {UnitTypeId} not found.", unitTypeId);
 
                 return entry;
             }
@@ -100,7 +100,7 @@ namespace StuffyHelper.Data.Repository
 
                 if (unitType is null)
                 {
-                    throw new EntityNotFoundException($"UnitType with Id '{unitTypeId}' not found.");
+                    throw new EntityNotFoundException("UnitType {UnitTypeId} not found.", unitTypeId);
                 }
 
                 unitType.IsActive = false;

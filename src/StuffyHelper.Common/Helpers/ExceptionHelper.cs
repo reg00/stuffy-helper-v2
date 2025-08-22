@@ -18,6 +18,6 @@ public static class ExceptionHelper
                 kvp => kvp.Value!.Errors.Select(e => e.ErrorMessage).ToArray()
             );
 
-        return string.Join('\n', errors);
+        return $"Validation model error. Details: {string.Join('\n', errors)}";
     }
 }

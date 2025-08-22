@@ -29,7 +29,7 @@ namespace StuffyHelper.Data.Repository
                     cancellationToken);
 
                 if (entry is null)
-                    throw new EntityNotFoundException($"Checkout with Id '{checkoutId}' Not Found.");
+                    throw new EntityNotFoundException("Checkout {CheckoutId} not found.", checkoutId);
 
                 return entry;
             }
@@ -103,7 +103,7 @@ namespace StuffyHelper.Data.Repository
 
                 if (checkout is null)
                 {
-                    throw new EntityNotFoundException($"Checkout with Id '{checkoutId}' not found.");
+                    throw new EntityNotFoundException("Checkout {CheckoutId} not found.", checkoutId);
                 }
 
                 _context.Checkouts.Remove(checkout);

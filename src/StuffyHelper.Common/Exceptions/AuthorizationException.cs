@@ -1,18 +1,21 @@
-﻿namespace StuffyHelper.Common.Exceptions;
+﻿using System.Net;
+using StuffyHelper.Common.Constants;
+
+namespace StuffyHelper.Common.Exceptions;
 
 /// <summary>
 /// Authorization exception
 /// 401 status code
 /// </summary>
-public class AuthorizationException : Exception
+public class AuthorizationException : BaseException
 {
-    public AuthorizationException(string message)
-        : base(message)
+    public AuthorizationException(string messageTemplate, params object[] args)
+        : base(messageTemplate, HttpStatusCode.Unauthorized, ErrorCodeConstants.AuthorizationErrorCode, args)
     {
     }
 
-    public AuthorizationException(string message, Exception innerException)
-        : base(message, innerException)
+    public AuthorizationException(string messageTemplate, Exception innerException, params object[] args)
+        : base(messageTemplate, HttpStatusCode.Unauthorized, ErrorCodeConstants.AuthorizationErrorCode, innerException, args)
     {
     }
 }

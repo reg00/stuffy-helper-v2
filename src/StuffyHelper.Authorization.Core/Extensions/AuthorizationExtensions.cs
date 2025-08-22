@@ -102,8 +102,8 @@ public static class AuthorizationExtensions
             var errors = string.Join(' ', identityResult.Errors.Select(y => y.Description));
 
             if (identityResult.Errors.Any(x => x.Code == "DuplicateUserName"))
-                throw new EntityAlreadyExistsException(errors);
+                throw new EntityAlreadyExistsException("Username already exists. Details : {Details}", errors);
 
-            throw new AuthorizationException($"Ошибка обновления пользователя!. Детали: {errors}");
+            throw new DbStoreException("Error while updating user!. Details: {Details}", errors);
         }
     }

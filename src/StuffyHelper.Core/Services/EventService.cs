@@ -7,13 +7,10 @@ using StuffyHelper.Common.Contracts;
 using StuffyHelper.Common.Exceptions;
 using StuffyHelper.Common.Messages;
 using StuffyHelper.Contracts.Entities;
-using StuffyHelper.Contracts.Enums;
 using StuffyHelper.Contracts.Models;
 using StuffyHelper.Core.Services.Interfaces;
 using StuffyHelper.Data.Repository.Interfaces;
 using StuffyHelper.Minio.Features.Helpers;
-using BadRequestException = StuffyHelper.Common.Exceptions.BadRequestException;
-using EntityNotFoundException = Reg00.Infrastructure.Errors.EntityNotFoundException;
 
 namespace StuffyHelper.Core.Services
 {
@@ -97,7 +94,7 @@ namespace StuffyHelper.Core.Services
             EnsureArg.IsNotNull(eventEntry, nameof(eventEntry));
 
             if (eventEntry.EventDateEnd != null && eventEntry.EventDateEnd < eventEntry.EventDateStart)
-                throw new BadRequestException("End date must be later than start date.");
+                throw new BadRequestException("End date {EndDate} must be later than start date {StartDate}.", eventEntry.EventDateEnd, eventEntry.EventDateStart);
 
             var identityUser = await _authorizationClient.GetUserById(claims.UserId, cancellationToken);
             var entry = _mapper.Map<EventEntry>((eventEntry, identityUser));
@@ -171,7 +168,7 @@ namespace StuffyHelper.Core.Services
             var mediaUri = await _mediaService.GetEventPrimalMediaUri(eventId, cancellationToken);
 
             if (mediaUri == null)
-                throw new BadRequestException("Cannot upload image");
+                throw new BadRequestException("Error while uploading image {ImageName}. Event: {EventId}", file.FileName, eventId);
             
             existingEvent.ImageUri = mediaUri;
             existingEvent = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
@@ -201,20 +198,20 @@ namespace StuffyHelper.Core.Services
 
             if (existingEvent is null)
             {
-                throw new EntityNotFoundException($"Event Id '{eventId}' not found");
+                throw new EntityNotFoundException("Event {EventId} not found.", eventId);
             }
 
             if (checkIsComplete && existingEvent.IsCompleted)
             {
-                throw new BadRequestException("Cannot edit completed event");
+                throw new BadRequestException("Cannot edit completed event {EventId}. User: {UserId}", eventId, userId);
             }
 
-            CheckEventPermissionsAsync(existingEvent.UserId, userId);
+            CheckEventPermissionsAsync(eventId, existingEvent.UserId, userId);
 
             return existingEvent;
         }
 
-        private static void CheckEventPermissionsAsync(string eventUserId, string? userId)
+        private static void CheckEventPermissionsAsync(Guid eventId, string eventUserId, string? userId)
         {
             EnsureArg.IsNotNullOrWhiteSpace(eventUserId, nameof(eventUserId));
 
@@ -223,7 +220,7 @@ namespace StuffyHelper.Core.Services
 
             if (eventUserId != userId)
             {
-                throw new AuthorizationException($"You don't have permission to complete/uncomplete event.");
+                throw new ForbiddenException("You don't have permission to complete/uncomplete event. {EventId}", eventId);
             }
         }
     }

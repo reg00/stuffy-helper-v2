@@ -28,8 +28,7 @@ namespace StuffyHelper.Data.Repository
                     .FirstOrDefaultAsync(e => e.Id == participantId, cancellationToken);
 
                 if (entry is null)
-                    throw new EntityNotFoundException($"Participant with Id '{participantId}' Not Found.");
-
+                    throw new EntityNotFoundException("Participant {ParticipantId} not found.", participantId);
                 return entry;
             }
             catch (EntityNotFoundException)
@@ -84,7 +83,7 @@ namespace StuffyHelper.Data.Repository
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new EntityAlreadyExistsException($"Participant with userId '{participant.UserId}' and eventId '{participant.EventId}' already exists", ex);
+                    throw new EntityAlreadyExistsException("Participant with User: {UserId} for Event: {EventId} already exists", ex, participant.UserId, participant.EventId);
 
                 else throw new DbStoreException(ex);
             }
@@ -122,7 +121,7 @@ namespace StuffyHelper.Data.Repository
             catch (DbUpdateException ex)
             {
                 if ((ex.InnerException as PostgresException)?.SqlState == "23505")
-                    throw new EntityAlreadyExistsException($"Participant with userId '{participant.UserId}' and eventId '{participant.EventId}' already exists", ex);
+                    throw new EntityAlreadyExistsException("Participant with User: {UserId} for Event: {EventId} already exists", ex, participant.UserId, participant.EventId);
 
                 else throw new DbStoreException(ex);
             }
