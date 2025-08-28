@@ -22,8 +22,8 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Response<EventShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetEventsRoute)]
         public async Task<Response<EventShortEntry>> GetAsync(
             int offset = 0,
@@ -53,8 +53,8 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(GetEventEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetEventRoute)]
         public async Task<GetEventEntry> GetAsync(Guid eventId)
         {
@@ -66,7 +66,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddEventRoute)]
         public async Task<EventShortEntry> PostAsync([FromBody] AddEventEntry entry)
         {
@@ -78,7 +78,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         /// </summary>
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteEventRoute)]
         public async Task DeleteAsync(Guid eventId)
         {
@@ -91,7 +91,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdateEventRoute)]
         public async Task<EventShortEntry> PatchAsync(Guid eventId, [FromBody] UpdateEventEntry updateEntry)
         {
@@ -122,7 +122,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdateEventPrimalMediaRoute)]
         public async Task<EventShortEntry> PatchPrimalMediaAsync([FromRoute] Guid eventId, IFormFile file)
         {
@@ -137,7 +137,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.CompleteEventRoute)]
         public async Task CompleteEventAsync([FromRoute] Guid eventId)
         {
@@ -152,7 +152,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.ReopenEventRoute)]
         public async Task ReopenEventAsync([FromRoute] Guid eventId)
         {
@@ -166,7 +166,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         /// <returns></returns>
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.CheckoutEventRoute)]
         public async Task CheckoutEventAsync([FromRoute] Guid eventId)
         {

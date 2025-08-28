@@ -1,6 +1,4 @@
-﻿using EnsureThat;
-using StuffyHelper.Authorization.Contracts.Models;
-using StuffyHelper.Contracts.Entities;
+﻿using StuffyHelper.Authorization.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Models
 {

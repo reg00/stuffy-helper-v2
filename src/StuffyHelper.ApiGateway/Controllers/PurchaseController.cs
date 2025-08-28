@@ -22,8 +22,8 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Response<GetPurchaseEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetPurchasesRoute)]
         public async Task<Response<GetPurchaseEntry>> GetAsync(
             int offset = 0,
@@ -46,8 +46,8 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(GetPurchaseEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetPurchaseRoute)]
         public async Task<GetPurchaseEntry> GetAsync(Guid purchaseId)
         {
@@ -60,7 +60,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(PurchaseShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddPurchaseRoute)]
         public async Task<PurchaseShortEntry> PostAsync([FromBody] AddPurchaseEntry addEntry)
         {
@@ -72,7 +72,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         /// </summary>
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeletePurchaseRoute)]
         public async Task DeleteAsync(Guid purchaseId)
         {
@@ -85,7 +85,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(PurchaseShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdatePurchaseRoute)]
         public async Task<PurchaseShortEntry> PatchAsync(Guid purchaseId, [FromBody] UpdatePurchaseEntry updateEntry)
         {

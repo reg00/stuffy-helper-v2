@@ -22,8 +22,8 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Response<GetDebtEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetDebtsRoute)]
         public async Task<Response<GetDebtEntry>> GetDebtsAsync(int offset = 0, int limit = 10)
         {
@@ -39,8 +39,8 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(GetDebtEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetDebtRoute)]
         public async Task<GetDebtEntry?> GetDebtAsync([FromRoute] Guid debtId)
         {
@@ -57,7 +57,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
         [Route(KnownRoutes.SendDebtRoute)]
         public async Task SendDebtAsync([FromRoute] Guid debtId)
         {
@@ -72,7 +72,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
         [Route(KnownRoutes.ConfirmDebtRoute)]
         public async Task ConfirmDebtAsync([FromRoute] Guid debtId)
         {

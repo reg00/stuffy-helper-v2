@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reflection;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
 namespace StuffyHelper.Common.Extensions;
@@ -40,8 +41,15 @@ public static class ApiExtensions
                 }
             });
 
-            //var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+            var assembly = Assembly.GetEntryAssembly()?.GetName().Name;
+            if (!string.IsNullOrWhiteSpace(assembly))
+            {
+                var xmlFilename = $"{assembly}.xml";
+                var fullPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+                
+                if (File.Exists(fullPath))
+                    options.IncludeXmlComments(fullPath);
+            }
         });
         
         return services;

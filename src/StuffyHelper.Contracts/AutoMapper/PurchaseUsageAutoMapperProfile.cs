@@ -1,5 +1,4 @@
 using AutoMapper;
-using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Models;
 

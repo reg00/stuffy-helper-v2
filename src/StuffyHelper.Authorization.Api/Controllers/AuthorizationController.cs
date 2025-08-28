@@ -53,7 +53,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.RegisterRoute)]
         public async Task<string> Register([FromBody] RegisterModel model)
         {
@@ -102,7 +102,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.EmailConfirmRoute)]
         public async Task ConfirmEmail(string login, string code)
         {
@@ -117,8 +117,8 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Unauthorized)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.LoginRoute)]
         public async Task<string> Login([FromBody] LoginModel model)
         {
@@ -215,7 +215,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(IdentityRole), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.Forbidden)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.Forbidden)]
         [Route(KnownRoutes.RolesRoute)]
         public async Task<IReadOnlyList<IdentityRole>> GetRoles()
         {
@@ -232,7 +232,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.IsAdminRoute)]
         public async Task<bool> CheckUserIsAdmin()
         {
@@ -244,7 +244,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// </summary>
         [HttpGet]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AccountRoute)]
         public async Task<GetUserEntry> GetAccountInfoAsync()
         {
@@ -257,7 +257,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         [HttpGet]
         [AllowAnonymous]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetUserByIdRoute)]
         public async Task<GetUserEntry> GetUserById(string userId)
         {
@@ -271,7 +271,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [ProducesResponseType(typeof(IReadOnlyList<UserShortEntry>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UserLoginsRoute)]
         public IReadOnlyList<UserShortEntry> GetUserLogins(string? userName = null)
         {
@@ -285,7 +285,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// <returns></returns>
         [HttpPatch]
         [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.EditUserRoute)]
         public async Task<GetUserEntry> EditUserAsync([FromBody] UpdateModel updateModel)
         {
@@ -303,7 +303,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// <param name="file">Новый аватар</param>
         /// <returns></returns>
         [HttpPost]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AvatarRoute)]
         public async Task EditAvatarAsync(IFormFile file)
         {
@@ -316,7 +316,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// Удаление аватара пользователя
         /// </summary>
         [HttpDelete]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AvatarRoute)]
         public async Task RemoveAvatarAsync()
         {

@@ -1,6 +1,4 @@
-﻿using EnsureThat;
-using System.ComponentModel.DataAnnotations;
-using StuffyHelper.Contracts.Entities;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StuffyHelper.Contracts.Models
 {

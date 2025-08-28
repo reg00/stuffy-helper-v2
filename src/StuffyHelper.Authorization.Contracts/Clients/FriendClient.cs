@@ -3,7 +3,6 @@ using StuffyHelper.Authorization.Contracts.Clients.Interface;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Client;
 using StuffyHelper.Common.Messages;
-using StuffyHelper.Common.Web;
 
 namespace StuffyHelper.Authorization.Contracts.Clients;
 

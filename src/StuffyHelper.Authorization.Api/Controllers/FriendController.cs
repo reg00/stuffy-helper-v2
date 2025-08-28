@@ -27,8 +27,8 @@ public class FriendController : Controller
     [HttpGet]
     [ProducesResponseType(typeof(Response<UserShortEntry>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
     [Route(KnownRoutes.GetFriendsRoute)]
     public async Task<Response<UserShortEntry>> GetAsync(int limit = 20, int offset = 0)
     {

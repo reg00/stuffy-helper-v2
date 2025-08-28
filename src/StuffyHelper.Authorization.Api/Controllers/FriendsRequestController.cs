@@ -28,8 +28,8 @@ public class FriendsRequestController : Controller
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<FriendsRequestShort>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
     [Route(KnownRoutes.GetSendedRequestsRoute)]
     public async Task<IReadOnlyList<FriendsRequestShort>> GetSendedRequestsAsync()
     {
@@ -44,8 +44,8 @@ public class FriendsRequestController : Controller
     [HttpGet]
     [ProducesResponseType(typeof(IEnumerable<FriendsRequestShort>), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
     [Route(KnownRoutes.GetIncomingRequestsRoute)]
     public async Task<IReadOnlyList<FriendsRequestShort>> GetIncomingRequestsAsync()
     {
@@ -60,8 +60,8 @@ public class FriendsRequestController : Controller
     [HttpGet]
     [ProducesResponseType(typeof(FriendsRequestShort), (int)HttpStatusCode.OK)]
     [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+    [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
     [Route(KnownRoutes.GetRequestRoute)]
     public async Task<FriendsRequestShort> GetAsync(Guid requestId)
     {
@@ -78,7 +78,7 @@ public class FriendsRequestController : Controller
     [RequestSizeLimit(int.MaxValue)]
     [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
     [ProducesResponseType((int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
     [Route(KnownRoutes.AcceptRequestRoute)]
     public async Task ConfirmAsync(Guid requestId)
     {
@@ -93,7 +93,7 @@ public class FriendsRequestController : Controller
     [RequestSizeLimit(int.MaxValue)]
     [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
     [ProducesResponseType(typeof(FriendsRequestShort), (int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
     [Route(KnownRoutes.AddRequestRoute)]
     public async Task<FriendsRequestShort> PostAsync([Required] string userId)
     {
@@ -107,7 +107,7 @@ public class FriendsRequestController : Controller
     /// </summary>
     [HttpDelete]
     [ProducesResponseType((int)HttpStatusCode.OK)]
-    [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+    [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
     [Route(KnownRoutes.DeleteRequestRoute)]
     public async Task DeleteAsync(Guid requestId)
     {

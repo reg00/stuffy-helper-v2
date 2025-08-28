@@ -22,8 +22,8 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Response<ParticipantShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetParticipantsRoute)]
         public async Task<Response<ParticipantShortEntry>> GetAsync(
             int offset = 0,
@@ -40,8 +40,8 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(GetParticipantEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetParticipantRoute)]
         public async Task<GetParticipantEntry> GetAsync(Guid participantId)
         {
@@ -54,7 +54,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(ParticipantShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddParticipantRoute)]
         public async Task<ParticipantShortEntry> PostAsync([FromBody] UpsertParticipantEntry addEntry)
         {
@@ -66,7 +66,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         /// </summary>
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteParticipantRoute)]
         public async Task DeleteAsync(Guid participantId)
         {

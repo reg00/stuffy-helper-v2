@@ -1,6 +1,4 @@
-﻿using EnsureThat;
-using StuffyHelper.Contracts.Entities;
-using StuffyHelper.Contracts.Enums;
+﻿using StuffyHelper.Contracts.Enums;
 using StuffyHelper.Minio.Features.Common;
 
 namespace StuffyHelper.Contracts.Models

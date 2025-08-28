@@ -27,8 +27,8 @@ namespace StuffyHelper.ApiGateway.Controllers
         [Consumes(KnownContentTypes.MultipartFormData)]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(MediaShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.UnsupportedMediaType)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.UnsupportedMediaType)]
         [Route(KnownRoutes.StoreMediaFormFileRoute)]
         public async Task<MediaShortEntry> StoreMediaFormFileAsync(
             [FromForm] AddMediaEntry media)
@@ -46,8 +46,8 @@ namespace StuffyHelper.ApiGateway.Controllers
         [RequestFormLimits(MultipartBodyLengthLimit = int.MaxValue)]
         [Produces(KnownContentTypes.MultipartFormData)]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.RetrieveMediaFromFileRoute)]
         public async Task<FileResult> RetrieveMediaFormFileAsync(
             Guid mediaId)
@@ -63,8 +63,8 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpGet]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(GetMediaEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetMediaMetadataRoute)]
         public async Task<GetMediaEntry> GetMediaMetadataAsync(
             Guid mediaId)
@@ -77,7 +77,7 @@ namespace StuffyHelper.ApiGateway.Controllers
         /// </summary>
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteMediaRoute)]
         public async Task DeleteMediaAsync(
             Guid mediaId)
@@ -91,8 +91,8 @@ namespace StuffyHelper.ApiGateway.Controllers
         [HttpGet]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(IEnumerable<MediaShortEntry>), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetMediasMetadatasRoute)]
         public async Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
             int offset = 0,
