@@ -14,33 +14,38 @@ using StuffyHelper.Minio.Features.Helpers;
 
 namespace StuffyHelper.Core.Services
 {
+    /// <inheritdoc />
     public class EventService : IEventService
     {
-        private readonly IEventRepository _eventStore;
+        private readonly IEventRepository _eventRepository;
         private readonly IParticipantService _participantService;
         private readonly IMediaService _mediaService;
         private readonly IAuthorizationClient _authorizationClient;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public EventService(
-            IEventRepository eventStore,
+            IEventRepository eventRepository,
             IParticipantService participantService,
             IMediaService mediaService,
             IAuthorizationClient authorizationClient,
             IMapper mapper)
         {
-            _eventStore = eventStore;
+            _eventRepository = eventRepository;
             _participantService = participantService;
             _mediaService = mediaService;
             _authorizationClient = authorizationClient;
             _mapper = mapper;
         }
 
+        /// <inheritdoc />
         public async Task<GetEventEntry> GetEventAsync(Guid eventId, string? userId = null, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
-            var entry = await _eventStore.GetEventAsync(eventId, userId, cancellationToken);
+            var entry = await _eventRepository.GetEventAsync(eventId, userId, cancellationToken);
 
             var participants = new List<ParticipantShortEntry>();
 
@@ -55,6 +60,7 @@ namespace StuffyHelper.Core.Services
             return _mapper.Map<GetEventEntry>((entry, _mapper.Map<UserShortEntry>(user), participants));
         }
 
+        /// <inheritdoc />
         public async Task<Response<EventShortEntry>> GetEventsAsync(
             int offset = 0,
             int limit = 10,
@@ -73,7 +79,7 @@ namespace StuffyHelper.Core.Services
             Guid? purchaseId = null,
             CancellationToken cancellationToken = default)
         {
-            var resp = await _eventStore.GetEventsAsync(offset, limit, name, description, createdDateStart,
+            var resp = await _eventRepository.GetEventsAsync(offset, limit, name, description, createdDateStart,
                                                         createdDateEnd, eventDateStartMin, eventDateStartMax, eventDateEndMin, eventDateEndMax,
                                                         userId, isCompleted, isActive, participantId, purchaseId, cancellationToken);
 
@@ -85,6 +91,7 @@ namespace StuffyHelper.Core.Services
             };
         }
 
+        /// <inheritdoc />
         public async Task<EventShortEntry> AddEventAsync(
             AddEventEntry eventEntry,
             StuffyClaims claims,
@@ -99,7 +106,7 @@ namespace StuffyHelper.Core.Services
             var identityUser = await _authorizationClient.GetUserById(claims.UserId, cancellationToken);
             var entry = _mapper.Map<EventEntry>((eventEntry, identityUser));
             
-            var result = await _eventStore.AddEventAsync(entry, cancellationToken);
+            var result = await _eventRepository.AddEventAsync(entry, cancellationToken);
 
             var addParticipant = new UpsertParticipantEntry()
             {
@@ -112,15 +119,17 @@ namespace StuffyHelper.Core.Services
             return _mapper.Map<EventShortEntry>(result);
         }
 
+        /// <inheritdoc />
         public async Task DeleteEventAsync(Guid eventId, string? userId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             await ValidateEventAsync(eventId, userId, true, cancellationToken);
 
-            await _eventStore.DeleteEventAsync(eventId, cancellationToken);
+            await _eventRepository.DeleteEventAsync(eventId, cancellationToken);
         }
 
+        /// <inheritdoc />
         public async Task<EventShortEntry> UpdateEventAsync(Guid eventId, UpdateEventEntry updateEvent, string? userId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(updateEvent, nameof(updateEvent));
@@ -128,11 +137,12 @@ namespace StuffyHelper.Core.Services
             var existingEvent = await ValidateEventAsync(eventId, userId, true, cancellationToken);
 
             existingEvent.PatchFrom(updateEvent);
-            var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
+            var result = await _eventRepository.UpdateEventAsync(existingEvent, cancellationToken);
 
             return _mapper.Map<EventShortEntry>(result);
         }
 
+        /// <inheritdoc />
         public async Task DeletePrimalEventMedia(Guid eventId, string? userId, CancellationToken cancellationToken = default)
         {
             var existingEvent = await ValidateEventAsync(eventId, userId, true, cancellationToken);
@@ -143,10 +153,11 @@ namespace StuffyHelper.Core.Services
             {
                 await _mediaService.DeleteMediaAsync(primalMedia.Id, cancellationToken);
                 existingEvent.ImageUri = null;
-                await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
+                await _eventRepository.UpdateEventAsync(existingEvent, cancellationToken);
             }
         }
 
+        /// <inheritdoc />
         public async Task<EventShortEntry> UpdatePrimalEventMediaAsync(Guid eventId, IFormFile file, string? userId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(file, nameof(file));
@@ -171,21 +182,25 @@ namespace StuffyHelper.Core.Services
                 throw new BadRequestException("Error while uploading image {ImageName}. Event: {EventId}", file.FileName, eventId);
             
             existingEvent.ImageUri = mediaUri;
-            existingEvent = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
+            existingEvent = await _eventRepository.UpdateEventAsync(existingEvent, cancellationToken);
 
             return _mapper.Map<EventShortEntry>(existingEvent);
         }
 
+        /// <inheritdoc />
         public async Task<EventShortEntry> CompleteEventAsync(Guid eventId, string? userId, bool isComplete, CancellationToken cancellationToken = default)
         {
             var existingEvent = await ValidateEventAsync(eventId, userId, false, cancellationToken);
 
             existingEvent.IsCompleted = isComplete;
-            var result = await _eventStore.UpdateEventAsync(existingEvent, cancellationToken);
+            var result = await _eventRepository.UpdateEventAsync(existingEvent, cancellationToken);
 
             return _mapper.Map<EventShortEntry>(result);
         }
 
+        /// <summary>
+        /// Validate event
+        /// </summary>
         private async Task<EventEntry> ValidateEventAsync(
             Guid eventId,
             string? userId,
@@ -194,7 +209,7 @@ namespace StuffyHelper.Core.Services
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
-            var existingEvent = await _eventStore.GetEventAsync(eventId, userId, cancellationToken);
+            var existingEvent = await _eventRepository.GetEventAsync(eventId, userId, cancellationToken);
 
             if (existingEvent is null)
             {
@@ -211,6 +226,9 @@ namespace StuffyHelper.Core.Services
             return existingEvent;
         }
 
+        /// <summary>
+        /// Check event permissions
+        /// </summary>
         private static void CheckEventPermissionsAsync(Guid eventId, string eventUserId, string? userId)
         {
             EnsureArg.IsNotNullOrWhiteSpace(eventUserId, nameof(eventUserId));

@@ -2,8 +2,15 @@
 
 namespace StuffyHelper.Data.Common
 {
+    /// <summary>
+    /// Seed helper
+    /// </summary>
     public static class SeedHelper
     {
+        /// <summary>
+        /// Initial values of unit types
+        /// </summary>
+        /// <returns></returns>
         public static IList<UnitTypeEntry> GetSeedUnitTypes()
         {
             return new List<UnitTypeEntry>()

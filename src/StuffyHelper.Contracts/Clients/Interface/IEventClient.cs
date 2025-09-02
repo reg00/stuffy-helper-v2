@@ -5,12 +5,12 @@ using StuffyHelper.Contracts.Models;
 namespace StuffyHelper.Contracts.Clients.Interface;
 
 /// <summary>
-/// Клиент для работы с ивентами
+/// Interface for work with events
 /// </summary>
 public interface IEventClient
 {
     /// <summary>
-    /// Получение списка ивентов
+    /// Return lit of events
     /// </summary>
     public Task<Response<EventShortEntry>> GetEventsAsync(
         string token,
@@ -32,7 +32,7 @@ public interface IEventClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Получение ивента по его идентификатору
+    /// Return event by id
     /// </summary>
     public Task<GetEventEntry> GetEventAsync(
         string token,
@@ -40,7 +40,7 @@ public interface IEventClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Добавление ивента
+    /// Create new event
     /// </summary>
     public Task<EventShortEntry> CreateEventAsync(
         string token,
@@ -48,7 +48,7 @@ public interface IEventClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Удаление ивента
+    /// Soft delete event
     /// </summary>
     public Task DeleteEventAsync(
         string token,
@@ -56,7 +56,7 @@ public interface IEventClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Извенение данных по ивенту
+    /// Update event data
     /// </summary>
     public Task<EventShortEntry> UpdateEventAsync(
         string token,
@@ -65,7 +65,7 @@ public interface IEventClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Удаление обложки ивента
+    /// Remove event avatar
     /// </summary>
     public Task DeleteEventAvatarAsync(
         string token,
@@ -73,7 +73,7 @@ public interface IEventClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Обновление обложки ивента
+    /// Update event avatar
     /// </summary>
     public Task<EventShortEntry> UpdateEventAvatarAsync(
         string token,
@@ -82,17 +82,17 @@ public interface IEventClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Завершение ивента
+    /// Complete event
     /// </summary>
     public Task CompleteEventAsync(string token, Guid eventId, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Переоткрытие ивента
+    /// Reopen event
     /// </summary>
     public Task ReopenEventAsync(string token, Guid eventId, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Расчет долгов по ивенту
+    /// Checkout event
     /// </summary>
     public Task CheckoutEventAsync(string token, Guid eventId, CancellationToken cancellationToken = default);
 }

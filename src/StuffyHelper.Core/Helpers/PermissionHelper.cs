@@ -8,6 +8,9 @@ namespace StuffyHelper.Core.Helpers;
 /// </summary>
 public static class PermissionHelper
 {
+    /// <summary>
+    /// Get user claims id
+    /// </summary>
     public static string? GetUserId(StuffyClaims claims, string? userId = null)
     {
         return claims.Roles.Contains(nameof(UserType.Admin)) ? userId : claims.UserId;

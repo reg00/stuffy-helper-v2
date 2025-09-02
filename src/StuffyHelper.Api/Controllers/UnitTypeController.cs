@@ -14,6 +14,9 @@ namespace StuffyHelper.Api.Controllers
     {
         private readonly IUnitTypeService _unitTypeService;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public UnitTypeController(IUnitTypeService unitTypeService)
         {
             _unitTypeService = unitTypeService;

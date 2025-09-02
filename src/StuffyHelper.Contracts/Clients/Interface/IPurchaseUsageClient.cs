@@ -3,10 +3,13 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients.Interface;
 
+/// <summary>
+/// Interface for work with purchase usages
+/// </summary>
 public interface IPurchaseUsageClient
 {
     /// <summary>
-    /// Получение списка того, какие участники какие продукты используют
+    /// Return list of purchase usages in event
     /// </summary>
     public Task<Response<PurchaseUsageShortEntry>> GetPurchaseUsagesAsync(
         string token,
@@ -18,7 +21,7 @@ public interface IPurchaseUsageClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Получение данных об использовании участником продукта по идентификатору
+    /// Return purchase usage by id
     /// </summary>
     public Task<GetPurchaseUsageEntry> GetPurchaseUsageAsync(
         string token,
@@ -26,7 +29,7 @@ public interface IPurchaseUsageClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Добавление использования участником продукта
+    /// Create new purchase usage
     /// </summary>
     public Task<PurchaseUsageShortEntry> CreatePurchaseUsageAsync(
         string token,
@@ -34,7 +37,7 @@ public interface IPurchaseUsageClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Удаление использования участником продукта
+    /// Remove purchase usage from event
     /// </summary>
     public Task DeletePurchaseUsageAsync(
         string token,
@@ -42,7 +45,7 @@ public interface IPurchaseUsageClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Узменение использования участником продукта (а надо ли??)
+    /// Update purchase usage data
     /// </summary>
     public Task<PurchaseUsageShortEntry> UpdatePurchaseUsageAsync(
         string token,

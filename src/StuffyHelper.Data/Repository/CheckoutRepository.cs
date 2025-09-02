@@ -9,15 +9,20 @@ using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Repository
 {
+    /// <inheritdoc />
     public class CheckoutRepository : ICheckoutRepository
     {
         private readonly StuffyHelperContext _context;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public CheckoutRepository(StuffyHelperContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc />
         public async Task<CheckoutEntry> GetCheckoutAsync(Guid checkoutId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(checkoutId, nameof(checkoutId));
@@ -43,6 +48,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<Response<CheckoutEntry>> GetCheckoutsByEventIdAsync(Guid eventId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
@@ -67,6 +73,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<CheckoutEntry> AddCheckoutAsync(CheckoutEntry checkout, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(checkout, nameof(checkout));
@@ -91,6 +98,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task DeleteCheckoutAsync(Guid checkoutId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(checkoutId, nameof(checkoutId));

@@ -1,7 +1,7 @@
 ﻿namespace StuffyHelper.Minio.Features.Common
 {
     /// <summary>
-    /// Extensions
+    /// File extensions
     /// </summary>
     public static class KnownFileTypes
     {

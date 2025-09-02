@@ -18,9 +18,4 @@
     <ProjectReference Include="..\StuffyHelper.Minio\StuffyHelper.Minio.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\PurchaseUsage\" />
-    <Folder Include="Features\UnitType\" />
-  </ItemGroup>
-
 </Project>

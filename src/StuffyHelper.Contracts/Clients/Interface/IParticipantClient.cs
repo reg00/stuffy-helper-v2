@@ -3,10 +3,13 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients.Interface;
 
+/// <summary>
+/// Interface for work with participants
+/// </summary>
 public interface IParticipantClient
 {
     /// <summary>
-    /// Получение списка участников ивента
+    /// Return list of participants from event
     /// </summary>
     public Task<Response<ParticipantShortEntry>> GetParticipantsAsync(
         string token,
@@ -17,7 +20,7 @@ public interface IParticipantClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Получение участника ивента по идентификатору
+    /// Return participant by id
     /// </summary>
     public Task<GetParticipantEntry> GetParticipantAsync(
         string token,
@@ -25,7 +28,7 @@ public interface IParticipantClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Добавление участника
+    /// Add new participant into event
     /// </summary>
     public Task<ParticipantShortEntry> CreateParticipantAsync(
         string token,
@@ -33,7 +36,7 @@ public interface IParticipantClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Удаление участника
+    /// Remove participant from event
     /// </summary>
     public Task DeleteParticipantAsync(
         string token,

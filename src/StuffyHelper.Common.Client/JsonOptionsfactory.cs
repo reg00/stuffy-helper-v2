@@ -13,6 +13,9 @@ public static class JsonOptionsFactory
         private static readonly Lazy<JsonSerializerOptions> OptionsIndent;
         private static readonly List<JsonConverter> CustomConverters = new();
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         static JsonOptionsFactory()
         {
             Options = new Lazy<JsonSerializerOptions>(() => new JsonSerializerOptions().ConfigureDefaultOptions());

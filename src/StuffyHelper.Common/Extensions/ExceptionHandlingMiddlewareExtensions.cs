@@ -9,6 +9,11 @@ namespace StuffyHelper.Common.Extensions
     /// </summary>
     public static class ExceptionHandlingMiddlewareExtensions
     {
+        /// <summary>
+        /// Add exception handling
+        /// </summary>
+        /// <param name="builder"></param>
+        /// <returns></returns>
         public static IApplicationBuilder UseExceptionHandling(this IApplicationBuilder builder)
         {
             EnsureArg.IsNotNull(builder);

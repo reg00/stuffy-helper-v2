@@ -4,12 +4,12 @@ using StuffyHelper.Contracts.Models;
 namespace StuffyHelper.Contracts.Clients.Interface;
 
 /// <summary>
-/// Клиент для работы с долгами
+/// Interface for work with debts
 /// </summary>
 public interface IDebtClient
 {
     /// <summary>
-    /// Получение списка долгов
+    /// Return list of debts
     /// </summary>
     public Task<Response<GetDebtEntry>> GetDebtsAsync(
         string token,
@@ -18,7 +18,7 @@ public interface IDebtClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Получение информации о долге
+    /// Return debt by id
     /// </summary>
     public Task<GetDebtEntry> GetDebtAsync(
         string token,
@@ -26,12 +26,12 @@ public interface IDebtClient
         CancellationToken cancellationToken = default);
     
     /// <summary>
-    /// Оплатить долг
+    /// Pay debt
     /// </summary>
     public Task SendDebtAsync(string token, Guid debtId, CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Подтвердить оплату долга
+    /// Confirm payment for debt
     /// </summary>
     public Task ConfirmDebtAsync(string token, Guid debtId, CancellationToken cancellationToken = default);
 }

@@ -8,15 +8,20 @@ using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Repository
 {
+    /// <inheritdoc />
     public class UnitTypeRepository : IUnitTypeRepository
     {
         private readonly StuffyHelperContext _context;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public UnitTypeRepository(StuffyHelperContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc />
         public async Task<UnitTypeEntry> GetUnitTypeAsync(Guid unitTypeId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(unitTypeId, nameof(unitTypeId));
@@ -42,6 +47,7 @@ namespace StuffyHelper.Data.Repository
 
         }
 
+        /// <inheritdoc />
         public async Task<Response<UnitTypeEntry>> GetUnitTypesAsync(
             int offset = 0,
             int limit = 10,
@@ -72,6 +78,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<UnitTypeEntry> AddUnitTypeAsync(UnitTypeEntry unitType, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(unitType, nameof(unitType));
@@ -88,6 +95,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task DeleteUnitTypeAsync(Guid unitTypeId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(unitTypeId, nameof(unitTypeId));
@@ -114,6 +122,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<UnitTypeEntry> UpdateUnitTypeAsync(UnitTypeEntry unitType, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(unitType, nameof(unitType));

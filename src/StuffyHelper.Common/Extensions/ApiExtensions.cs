@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 
@@ -53,5 +54,23 @@ public static class ApiExtensions
         });
         
         return services;
+    }
+
+    /// <summary>
+    /// Use swagger support
+    /// </summary>
+    public static IApplicationBuilder UseSwagger(this IApplicationBuilder builder, string name)
+    {
+        builder.UseSwagger(c =>
+        {
+            c.RouteTemplate = "api/swagger/{documentname}/swagger.json";
+        });
+        builder.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/api/swagger/v1/swagger.json", name);
+            c.RoutePrefix = "swagger";
+        });
+
+        return builder;
     }
 }

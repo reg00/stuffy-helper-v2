@@ -1,5 +1,8 @@
 namespace StuffyHelper.Common.Constants;
 
+/// <summary>
+/// Exception status codes
+/// </summary>
 public static class ErrorCodeConstants
 {
     public const string AuthorizationErrorCode = "AUTHORIZATION_ERROR";

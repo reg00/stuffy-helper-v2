@@ -9,15 +9,20 @@ using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Repository
 {
+    /// <inheritdoc />
     public class MediaRepository : IMediaRepository
     {
         private readonly StuffyHelperContext _context;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public MediaRepository(StuffyHelperContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc />
         public async Task<MediaEntry> AddMediaAsync(MediaEntry media, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(media, nameof(media));
@@ -42,6 +47,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task DeleteMediaAsync(MediaEntry media, CancellationToken cancellationToken = default)
         {
             try
@@ -55,6 +61,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<MediaEntry> GetMediaAsync(Guid mediaId, CancellationToken cancellationToken = default)
         {
             try
@@ -80,6 +87,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<IEnumerable<MediaEntry>> GetMediasAsync(
             int offset,
             int limit,
@@ -107,6 +115,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<MediaEntry?> GetPrimalEventMedia(Guid eventId, CancellationToken cancellationToken = default)
         {
             return await _context.Medias

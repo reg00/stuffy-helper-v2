@@ -35,7 +35,7 @@ public static class TokenHelper
     public static StuffyClaims GetUserClaims(this ClaimsIdentity? identity)
     {
         if (identity == null)
-            throw new ArgumentNullException("Identity not found");
+            throw new  ArgumentNullException(nameof(identity), "Identity not found");
         
         return GetClaimsData(identity.Claims.ToList());
     }
@@ -52,7 +52,7 @@ public static class TokenHelper
             UserId = claims.First(c => c.Type == ClaimTypes.Sid).Value,
             Username = claims.First(c => c.Type == ClaimTypes.Name).Value,
             Roles = claims.Where(c => c.Type == ClaimTypes.Role).Select(x => x.Value).ToList(),
-            ImageUri = !string.IsNullOrWhiteSpace(imageUri) ? new Uri(imageUri!) : null
+            ImageUri = !string.IsNullOrWhiteSpace(imageUri) ? new Uri(imageUri) : null
         };
     }
 

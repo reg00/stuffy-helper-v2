@@ -17,6 +17,9 @@ namespace StuffyHelper.Api.Controllers
         private readonly IDebtService _debtService;
         private StuffyClaims UserClams => IdentityClaims.GetUserClaims();
         
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public DebtController(IDebtService debtService)
         {
             _debtService = debtService;

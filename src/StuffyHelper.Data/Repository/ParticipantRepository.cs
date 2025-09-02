@@ -9,15 +9,20 @@ using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Repository
 {
+    /// <inheritdoc />
     public class ParticipantRepository : IParticipantRepository
     {
         private readonly StuffyHelperContext _context;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public ParticipantRepository(StuffyHelperContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc />
         public async Task<ParticipantEntry> GetParticipantAsync(Guid participantId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(participantId, nameof(participantId));
@@ -42,6 +47,7 @@ namespace StuffyHelper.Data.Repository
 
         }
 
+        /// <inheritdoc />
         public async Task<Response<ParticipantEntry>> GetParticipantsAsync(
             int offset = 0,
             int limit = 10,
@@ -70,6 +76,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<ParticipantEntry> AddParticipantAsync(ParticipantEntry participant, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(participant, nameof(participant));
@@ -93,6 +100,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task DeleteParticipantAsync(ParticipantEntry participant, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(participant, nameof(participant));
@@ -108,6 +116,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<ParticipantEntry> UpdateParticipantAsync(ParticipantEntry participant, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(participant, nameof(participant));

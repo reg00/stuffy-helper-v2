@@ -13,5 +13,5 @@ public static class KnownContentTypes
     public const string TextHtml = "text/html";
     public const string ApplicationGzip = "application/gzip";
 
-    public const string Undifined = "";
+    public const string Undefined = "";
 }

@@ -4,10 +4,13 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients.Interface;
 
+/// <summary>
+/// Interface for work with media
+/// </summary>
 public interface IMediaClient
 {
     /// <summary>
-    /// Добавление файла к ивенту
+    /// Add media for event
     /// </summary>
     public Task<MediaShortEntry> StoreMediaFormFileAsync(
         string token,
@@ -15,7 +18,7 @@ public interface IMediaClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Получение файла
+    /// Download file by od
     /// </summary>
     public Task<FileParam> RetrieveMediaFormFileAsync(
         string token,
@@ -23,7 +26,7 @@ public interface IMediaClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Получение метаданных файла
+    /// Get file metadata by id
     /// </summary>
     public Task<GetMediaEntry> GetMediaMetadataAsync(
         string token,
@@ -31,7 +34,7 @@ public interface IMediaClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Удаление файла
+    /// Remove media
     /// </summary>
     public Task DeleteMediaAsync(
         string token,
@@ -39,7 +42,7 @@ public interface IMediaClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Получение списка метаданных файлов
+    /// Retuirn list of metadata
     /// </summary>
     public Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
         string token,

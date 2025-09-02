@@ -6,8 +6,14 @@ using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Registration
 {
+    /// <summary>
+    /// Stuffy database service extensions
+    /// </summary>
     public static class DbServicesRegistrationExtensions
     {
+        /// <summary>
+        /// Add database services
+        /// </summary>
         public static IServiceCollection AddEfDbServices(this IServiceCollection services)
         {
             services.AddScoped<IEventRepository, EventRepository>();
@@ -25,14 +31,15 @@ namespace StuffyHelper.Data.Registration
             return services;
         }
 
+        /// <summary>
+        /// Add database migrations
+        /// </summary>
         public static IServiceProvider AddEfDatabaseMigration(this IServiceProvider services)
         {
-            using (var scope = services.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<StuffyHelperContext>();
+            using var scope = services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<StuffyHelperContext>();
 
-                dbContext.Database.Migrate();
-            }
+            dbContext.Database.Migrate();
 
             return services;
         }

@@ -8,8 +8,14 @@ using StuffyHelper.Common.Configurations;
 
 namespace StuffyHelper.Data.Registration
 {
+    /// <summary>
+    /// EF service extensions
+    /// </summary>
     public static class EntityFrameworkCoreServiceCollectionExtensions
     {
+        /// <summary>
+        /// Add db store if EF
+        /// </summary>
         public static IServiceCollection AddDbStore<TDbContext>(
             this IServiceCollection services,
             IConfiguration configuration,

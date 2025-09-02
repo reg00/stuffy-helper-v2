@@ -9,15 +9,20 @@ using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Repository
 {
+    /// <inheritdoc />
     public class DebtRepository : IDebtRepository
     {
         private readonly StuffyHelperContext _context;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public DebtRepository(StuffyHelperContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc />
         public async Task<DebtEntry> GetDebtAsync(Guid debtId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(debtId, nameof(debtId));
@@ -44,6 +49,7 @@ namespace StuffyHelper.Data.Repository
 
         }
 
+        /// <inheritdoc />
         public async Task<DebtEntry?> GetDebtAsync(string lenderId, string debtorId, Guid eventId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNullOrWhiteSpace(lenderId, nameof(lenderId));
@@ -67,6 +73,7 @@ namespace StuffyHelper.Data.Repository
 
         }
 
+        /// <inheritdoc />
         public async Task<Response<DebtEntry>> GetDebtsAsync(
             int offset = 0,
             int limit = 10,
@@ -100,6 +107,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<Response<DebtEntry>> GetDebtsByUserAsync(
            string userId,
            int offset = 0,
@@ -128,6 +136,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<DebtEntry> AddDebtAsync(DebtEntry debt, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(debt, nameof(debt));
@@ -152,6 +161,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task DeleteDebtAsync(Guid debtId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(debtId, nameof(debtId));
@@ -176,6 +186,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<DebtEntry> UpdateDebtAsync(DebtEntry debt, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(debt, nameof(debt));

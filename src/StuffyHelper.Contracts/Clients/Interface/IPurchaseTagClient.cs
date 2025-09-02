@@ -3,10 +3,13 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients.Interface;
 
+/// <summary>
+/// Interface for work with purchase tags
+/// </summary>
 public interface IPurchaseTagClient
 {
     /// <summary>
-    /// Получение списка тэгов покупок
+    /// Return list of purchase tags
     /// </summary>
     public Task<Response<PurchaseTagShortEntry>> GetPurchaseTagsAsync(
         string token,
@@ -18,7 +21,7 @@ public interface IPurchaseTagClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Получение данных тэга покупки
+    /// Return purchase tag by id
     /// </summary>
     public Task<GetPurchaseTagEntry> GetPurchaseTagAsync(
         string token,
@@ -26,7 +29,7 @@ public interface IPurchaseTagClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Добавление тэга покупки
+    /// Create new purchase tag
     /// </summary>
     public Task<PurchaseTagShortEntry> CreatePurchaseTagAsync(
         string token,
@@ -34,7 +37,7 @@ public interface IPurchaseTagClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Удаление тэга покупки
+    /// Remove purchase tag
     /// </summary>
     public Task DeletePurchaseTagAsync(
         string token,
@@ -42,7 +45,7 @@ public interface IPurchaseTagClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Изменение тэга покупки
+    /// Update purchase tag data
     /// </summary>
     public Task<PurchaseTagShortEntry> UpdatePurchaseTagAsync(
         string token,

@@ -9,6 +9,9 @@ namespace StuffyHelper.Common.Extensions
     /// </summary>
     public static class AuthTokenCheckerMiddlewareExtensions
     {
+        /// <summary>
+        /// Add auth token checker middleware
+        /// </summary>
         public static IApplicationBuilder UseAuthTokenChecker(this IApplicationBuilder builder)
         {
             EnsureArg.IsNotNull(builder);

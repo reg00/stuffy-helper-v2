@@ -35,8 +35,4 @@
       <ProjectReference Include="..\StuffyHelper.Minio\StuffyHelper.Minio.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Middlewares\" />
-    </ItemGroup>
-
 </Project>

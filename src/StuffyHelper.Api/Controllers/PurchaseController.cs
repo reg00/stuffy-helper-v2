@@ -15,6 +15,9 @@ namespace StuffyHelper.Api.Controllers
     {
         private readonly IPurchaseService _purchaseService;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public PurchaseController(IPurchaseService purchaseService)
         {
             _purchaseService = purchaseService;

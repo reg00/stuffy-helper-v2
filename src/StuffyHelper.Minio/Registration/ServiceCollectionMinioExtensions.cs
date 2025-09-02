@@ -13,6 +13,9 @@ namespace StuffyHelper.Minio.Registration
     /// </summary>
     public static class ServiceCollectionMinioExtensions
     {
+        /// <summary>
+        /// Add minio support
+        /// </summary>
         public static IServiceCollection AddMinioBlobDataStores(this IServiceCollection services, IConfiguration configuration)
         {
             EnsureArg.IsNotNull(services, nameof(services));
@@ -29,6 +32,9 @@ namespace StuffyHelper.Minio.Registration
             return services;
         }
 
+        /// <summary>
+        /// Add minio client
+        /// </summary>
         private static IServiceCollection AddMinioClient(this IServiceCollection services, MinioClientOptions minioClientOptions)
         {
             EnsureArg.IsNotNull(minioClientOptions, nameof(minioClientOptions));
@@ -43,6 +49,9 @@ namespace StuffyHelper.Minio.Registration
             return services;
         }
 
+        /// <summary>
+        /// Add minio data store
+        /// </summary>
         private static IServiceCollection AddMinioBlobStore(this IServiceCollection services, IConfiguration configuration, MinioClientOptions minioClientOptions)
         {
             EnsureArg.IsNotNull(minioClientOptions, nameof(minioClientOptions));

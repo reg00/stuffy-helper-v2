@@ -8,15 +8,20 @@ using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Repository
 {
+    /// <inheritdoc />
     public class EfPurchaseTagRepository : IPurchaseTagRepository
     {
         private readonly StuffyHelperContext _context;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public EfPurchaseTagRepository(StuffyHelperContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc />
         public async Task<PurchaseTagEntry> GetPurchaseTagAsync(Guid purchaseTagId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(purchaseTagId, nameof(purchaseTagId));
@@ -41,6 +46,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<PurchaseTagEntry> GetPurchaseTagAsync(string name, CancellationToken cancellationToken = default)
         {
             try
@@ -65,6 +71,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<Response<PurchaseTagEntry>> GetPurchaseTagsAsync(
             int offset = 0,
             int limit = 10,
@@ -95,6 +102,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<PurchaseTagEntry> AddPurchaseTagAsync(PurchaseTagEntry purchaseTag, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchaseTag, nameof(purchaseTag));
@@ -111,6 +119,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task DeletePurchaseTagAsync(Guid purchaseTagId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(purchaseTagId, nameof(purchaseTagId));
@@ -137,6 +146,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<PurchaseTagEntry> UpdatePurchaseTagAsync(PurchaseTagEntry purchaseTag, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchaseTag, nameof(purchaseTag));

@@ -9,26 +9,32 @@ using StuffyHelper.Data.Repository.Interfaces;
 
 namespace StuffyHelper.Core.Services
 {
+    /// <inheritdoc />
     public class UnitTypeService : IUnitTypeService
     {
-        private readonly IUnitTypeRepository _unitTypeStore;
+        private readonly IUnitTypeRepository _unitTypeRepository;
         private readonly IMapper _mapper;
 
-        public UnitTypeService(IUnitTypeRepository unitTypeStore, IMapper mapper)
+        /// <summary>
+        /// Ctor.
+        /// </summary>
+        public UnitTypeService(IUnitTypeRepository unitTypeRepository, IMapper mapper)
         {
-            _unitTypeStore = unitTypeStore;
+            _unitTypeRepository = unitTypeRepository;
             _mapper = mapper;
         }
 
+        /// <inheritdoc />
         public async Task<GetUnitTypeEntry> GetUnitTypeAsync(Guid unitTypeId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(unitTypeId, nameof(unitTypeId));
 
-            var entry = await _unitTypeStore.GetUnitTypeAsync(unitTypeId, cancellationToken);
+            var entry = await _unitTypeRepository.GetUnitTypeAsync(unitTypeId, cancellationToken);
 
             return _mapper.Map<GetUnitTypeEntry>(entry);
         }
 
+        /// <inheritdoc />
         public async Task<Response<UnitTypeShortEntry>> GetUnitTypesAsync(
             int offset = 0,
             int limit = 10,
@@ -37,7 +43,7 @@ namespace StuffyHelper.Core.Services
             bool? isActive = null,
             CancellationToken cancellationToken = default)
         {
-            var resp = await _unitTypeStore.GetUnitTypesAsync(offset, limit, name, purchaseId, isActive, cancellationToken);
+            var resp = await _unitTypeRepository.GetUnitTypesAsync(offset, limit, name, purchaseId, isActive, cancellationToken);
 
             return new Response<UnitTypeShortEntry>()
             {
@@ -47,29 +53,32 @@ namespace StuffyHelper.Core.Services
             };
         }
 
+        /// <inheritdoc />
         public async Task<UnitTypeShortEntry> AddUnitTypeAsync(UpsertUnitTypeEntry unitType, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(unitType, nameof(unitType));
 
             var entry = _mapper.Map<UnitTypeEntry>(unitType);
-            var result = await _unitTypeStore.AddUnitTypeAsync(entry, cancellationToken);
+            var result = await _unitTypeRepository.AddUnitTypeAsync(entry, cancellationToken);
 
             return _mapper.Map<UnitTypeShortEntry>(result);
         }
 
+        /// <inheritdoc />
         public async Task DeleteUnitTypeAsync(Guid unitTypeId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(unitTypeId, nameof(unitTypeId));
 
-            await _unitTypeStore.DeleteUnitTypeAsync(unitTypeId, cancellationToken);
+            await _unitTypeRepository.DeleteUnitTypeAsync(unitTypeId, cancellationToken);
         }
 
+        /// <inheritdoc />
         public async Task<UnitTypeShortEntry> UpdateUnitTypeAsync(Guid unitTypeId, UpsertUnitTypeEntry unitType, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(unitType, nameof(unitType));
             EnsureArg.IsNotDefault(unitTypeId, nameof(unitTypeId));
 
-            var existingUnitType = await _unitTypeStore.GetUnitTypeAsync(unitTypeId, cancellationToken);
+            var existingUnitType = await _unitTypeRepository.GetUnitTypeAsync(unitTypeId, cancellationToken);
 
             if (existingUnitType is null)
             {
@@ -77,7 +86,7 @@ namespace StuffyHelper.Core.Services
             }
 
             existingUnitType.PatchFrom(unitType);
-            var result = await _unitTypeStore.UpdateUnitTypeAsync(existingUnitType, cancellationToken);
+            var result = await _unitTypeRepository.UpdateUnitTypeAsync(existingUnitType, cancellationToken);
 
             return _mapper.Map<UnitTypeShortEntry>(result);
         }

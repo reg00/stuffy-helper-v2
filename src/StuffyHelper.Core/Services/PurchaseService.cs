@@ -10,31 +10,37 @@ using EntityNotFoundException = Reg00.Infrastructure.Errors.EntityNotFoundExcept
 
 namespace StuffyHelper.Core.Services
 {
+    /// <inheritdoc />
     public class PurchaseService : IPurchaseService
     {
-        private readonly IPurchaseRepository _purchaseStore;
+        private readonly IPurchaseRepository _purchaseRepository;
         private readonly IPurchaseTagPipeline _purchaseTagPipeline;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public PurchaseService(
-            IPurchaseRepository purchaseStore,
+            IPurchaseRepository purchaseRepository,
             IPurchaseTagPipeline purchaseTagPipeline,
             IMapper mapper)
         {
-            _purchaseStore = purchaseStore;
+            _purchaseRepository = purchaseRepository;
             _purchaseTagPipeline = purchaseTagPipeline;
             _mapper = mapper;
         }
 
+        /// <inheritdoc />
         public async Task<GetPurchaseEntry> GetPurchaseAsync(Guid purchaseId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
 
-            var entry = await _purchaseStore.GetPurchaseAsync(purchaseId, cancellationToken);
+            var entry = await _purchaseRepository.GetPurchaseAsync(purchaseId, cancellationToken);
 
             return _mapper.Map<GetPurchaseEntry>(entry);
         }
 
+        /// <inheritdoc />
         public async Task<Response<GetPurchaseEntry>> GetPurchasesAsync(
             int offset = 0,
             int limit = 10,
@@ -47,7 +53,7 @@ namespace StuffyHelper.Core.Services
             bool? isComplete = null,
             CancellationToken cancellationToken = default)
         {
-            var resp = await _purchaseStore.GetPurchasesAsync(offset, limit, name, costMin, costMax,
+            var resp = await _purchaseRepository.GetPurchasesAsync(offset, limit, name, costMin, costMax,
                                                               eventId, purchaseTags, unitTypeId, isComplete, cancellationToken);
 
             return new Response<GetPurchaseEntry>()
@@ -58,35 +64,39 @@ namespace StuffyHelper.Core.Services
             };
         }
 
+        /// <inheritdoc />
         public async Task<PurchaseShortEntry> AddPurchaseAsync(AddPurchaseEntry purchase, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchase, nameof(purchase));
 
             var entry = _mapper.Map<PurchaseEntry>(purchase);
             await _purchaseTagPipeline.ProcessAsync(entry, purchase.PurchaseTags, cancellationToken);
-            var result = await _purchaseStore.AddPurchaseAsync(entry, cancellationToken);
+            var result = await _purchaseRepository.AddPurchaseAsync(entry, cancellationToken);
 
             return _mapper.Map<PurchaseShortEntry>(result);
         }
 
+        /// <inheritdoc />
         public async Task DeletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
 
             await ValidatePurchase(purchaseId, cancellationToken);
 
-            await _purchaseStore.DeletePurchaseAsync(purchaseId, cancellationToken);
+            await _purchaseRepository.DeletePurchaseAsync(purchaseId, cancellationToken);
         }
 
+        /// <inheritdoc />
         public async Task CompletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
 
             await ValidatePurchase(purchaseId, cancellationToken);
 
-            await _purchaseStore.CompletePurchaseAsync(purchaseId, cancellationToken);
+            await _purchaseRepository.CompletePurchaseAsync(purchaseId, cancellationToken);
         }
 
+        /// <inheritdoc />
         public async Task<PurchaseShortEntry> UpdatePurchaseAsync(Guid purchaseId, UpdatePurchaseEntry purchase, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchase, nameof(purchase));
@@ -96,14 +106,17 @@ namespace StuffyHelper.Core.Services
 
             existingPurchase.PatchFrom(purchase);
             await _purchaseTagPipeline.ProcessAsync(existingPurchase, purchase.PurchaseTags, cancellationToken);
-            var result = await _purchaseStore.UpdatePurchaseAsync(existingPurchase, cancellationToken);
+            var result = await _purchaseRepository.UpdatePurchaseAsync(existingPurchase, cancellationToken);
 
             return _mapper.Map<PurchaseShortEntry>(result);
         }
 
+        /// <summary>
+        /// Validate purchase
+        /// </summary>
         private async Task<PurchaseEntry> ValidatePurchase(Guid purchaseId, CancellationToken cancellationToken = default)
         {
-            var existingPurchase = await _purchaseStore.GetPurchaseAsync(purchaseId, cancellationToken);
+            var existingPurchase = await _purchaseRepository.GetPurchaseAsync(purchaseId, cancellationToken);
 
             if (existingPurchase is null)
             {

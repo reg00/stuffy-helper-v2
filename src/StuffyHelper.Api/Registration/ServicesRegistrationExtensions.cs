@@ -31,6 +31,9 @@ namespace StuffyHelper.Api.Registration
             return services;
         }
         
+        /// <summary>
+        /// Add services
+        /// </summary>
         public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             var config = configuration.GetConfig();

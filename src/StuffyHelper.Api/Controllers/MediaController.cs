@@ -16,6 +16,9 @@ namespace StuffyHelper.Api.Controllers
     {
         private readonly IMediaService _mediaService;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public MediaController(IMediaService mediaService)
         {
             _mediaService = mediaService;

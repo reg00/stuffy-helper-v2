@@ -14,16 +14,7 @@ builder.Services.AddClients(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseSwagger(c =>
-{
-    c.RouteTemplate = "api/swagger/{documentname}/swagger.json";
-});
-app.UseSwaggerUI(c =>
-{
-    c.SwaggerEndpoint("/api/swagger/v1/swagger.json", "Stuffy Authorization Service API V1");
-    c.RoutePrefix = "swagger";
-});
-
+app.UseSwagger("Stuffy Authorization Service API V1");
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseExceptionHandling();

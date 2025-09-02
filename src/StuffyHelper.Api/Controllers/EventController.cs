@@ -20,6 +20,9 @@ namespace StuffyHelper.Api.Controllers
 
         private StuffyClaims UserClaims => IdentityClaims.GetUserClaims();
         
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public EventController(
             IEventService eventService,
             IDebtService debtService)

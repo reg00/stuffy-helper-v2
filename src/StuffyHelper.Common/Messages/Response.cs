@@ -1,7 +1,7 @@
 ﻿namespace StuffyHelper.Common.Messages;
 
 /// <summary>
-/// Generic Auth response
+/// Generic response
 /// </summary>
 public class Response<T>
 {

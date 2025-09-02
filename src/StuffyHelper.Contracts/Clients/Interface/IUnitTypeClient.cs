@@ -3,10 +3,13 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients.Interface;
 
+/// <summary>
+/// Interface for work with unit types
+/// </summary>
 public interface IUnitTypeClient
 {
     /// <summary>
-    /// Получение списка единиц измерения
+    /// Return list of unit types
     /// </summary>
     public Task<Response<UnitTypeShortEntry>> GetUnitTypesAsync(
         string token,
@@ -18,7 +21,7 @@ public interface IUnitTypeClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Получение информации о единице измерения по идентификатору
+    /// Return unit type by id
     /// </summary>
     public Task<GetUnitTypeEntry> GetUnitTypeAsync(
         string token,
@@ -26,7 +29,7 @@ public interface IUnitTypeClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Добавление единицы измерения
+    /// Create new unit type
     /// </summary>
     public Task<UnitTypeShortEntry> CreateUnitTypeAsync(
         string token,
@@ -34,7 +37,7 @@ public interface IUnitTypeClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Удаление единицы измерения
+    /// Remove unit type
     /// </summary>
     public Task DeleteUnitTypeAsync(
         string token,
@@ -42,7 +45,7 @@ public interface IUnitTypeClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Изменение единицы измерения
+    /// Update unit type data
     /// </summary>
     public Task<UnitTypeShortEntry> UpdateUnitTypeAsync(
         string token,

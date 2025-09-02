@@ -15,6 +15,9 @@ public abstract class ApiClientBase
 {
     private static readonly Lazy<JsonSerializerOptions> SerializerOptions;
 
+    /// <summary>
+    /// Ctor.
+    /// </summary>
     static ApiClientBase()
     {
         SerializerOptions = new Lazy<JsonSerializerOptions>(() => JsonOptionsFactory.DefaultOptions);
@@ -22,6 +25,10 @@ public abstract class ApiClientBase
 
     private readonly RestClient _client;
 
+    /// <summary>
+    /// Ctor,
+    /// </summary>
+    /// <param name="baseUrl">Base url</param>
     protected ApiClientBase(string baseUrl)
     {
         _client = new RestClient(new RestClientOptions(baseUrl)

@@ -15,6 +15,9 @@ namespace StuffyHelper.Api.Registration
     /// </summary>
     public static class ApiRegistrationExtensions
     {
+        /// <summary>
+        /// Add API services
+        /// </summary>
         public static IServiceCollection AddApi(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddCors(options =>
@@ -53,6 +56,9 @@ namespace StuffyHelper.Api.Registration
             return services;
         }
 
+        /// <summary>
+        /// Use API service
+        /// </summary>
         public static IApplicationBuilder UseApi(this IApplicationBuilder app)
         {
             app.UseMiddleware<CorsHeaderMiddleware>();
@@ -65,6 +71,9 @@ namespace StuffyHelper.Api.Registration
             return app;
         }
 
+        /// <summary>
+        /// Use auth services
+        /// </summary>
         private static IApplicationBuilder UseAuth(this IApplicationBuilder app)
         {
             app.ApplicationServices.AddEfDatabaseMigration();

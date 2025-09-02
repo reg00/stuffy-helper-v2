@@ -18,6 +18,9 @@ namespace StuffyHelper.Api.Controllers
 
         private StuffyClaims UserClaims => IdentityClaims.GetUserClaims();
         
+        /// <summary>
+        /// Ctor
+        /// </summary>
         public ParticipantController(IParticipantService participantService)
         {
             _participantService = participantService;

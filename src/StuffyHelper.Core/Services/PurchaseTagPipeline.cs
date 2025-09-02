@@ -10,13 +10,18 @@ namespace StuffyHelper.Core.Services
 {
     public class PurchaseTagPipeline : IPurchaseTagPipeline
     {
-        private readonly IPurchaseTagRepository _tagStore;
+        /// <inheritdoc />
+        private readonly IPurchaseTagRepository _tagRepository;
 
-        public PurchaseTagPipeline(IPurchaseTagRepository tagStore)
+        /// <summary>
+        /// Ctor.
+        /// </summary>
+        public PurchaseTagPipeline(IPurchaseTagRepository tagRepository)
         {
-            _tagStore = tagStore;
+            _tagRepository = tagRepository;
         }
 
+        /// <inheritdoc />
         public async Task ProcessAsync(
             ITaggableEntry entry,
             IEnumerable<PurchaseTagShortEntry> tags,
@@ -33,19 +38,15 @@ namespace StuffyHelper.Core.Services
             {
                 try
                 {
-                    var existsTag = await _tagStore.GetPurchaseTagAsync(tag.Name, cancellationToken);
+                    var existsTag = await _tagRepository.GetPurchaseTagAsync(tag.Name, cancellationToken);
 
                     entry.PurchaseTags.Add(existsTag);
                 }
                 catch (EntityNotFoundException)
                 {
-                    var newTag = await _tagStore.AddPurchaseTagAsync(new PurchaseTagEntry(tag.Name), cancellationToken);
+                    var newTag = await _tagRepository.AddPurchaseTagAsync(new PurchaseTagEntry(tag.Name), cancellationToken);
 
                     entry.PurchaseTags.Add(newTag);
-                }
-                catch (Exception)
-                {
-                    throw;
                 }
             }
         }

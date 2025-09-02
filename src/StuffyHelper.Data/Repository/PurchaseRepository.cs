@@ -8,15 +8,20 @@ using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Repository
 {
+    /// <inheritdoc />
     public class PurchaseRepository : IPurchaseRepository
     {
         private readonly StuffyHelperContext _context;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public PurchaseRepository(StuffyHelperContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc />
         public async Task<PurchaseEntry> GetPurchaseAsync(Guid purchaseId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
@@ -33,7 +38,7 @@ namespace StuffyHelper.Data.Repository
                 if (entry is null)
                     throw new EntityNotFoundException("Purchase {PurchaseId} not found.", purchaseId);
                 
-                entry.PurchaseTags = entry.PurchaseTags.Where(x => x.IsActive == true).ToList();
+                entry.PurchaseTags = entry.PurchaseTags.Where(x => x.IsActive).ToList();
 
                 return entry;
             }
@@ -45,9 +50,9 @@ namespace StuffyHelper.Data.Repository
             {
                 throw new DbStoreException(ex);
             }
-
         }
 
+        /// <inheritdoc />
         public async Task<Response<PurchaseEntry>> GetPurchasesAsync(
             int offset = 0,
             int limit = 10,
@@ -88,6 +93,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<PurchaseEntry> AddPurchaseAsync(PurchaseEntry purchase, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchase, nameof(purchase));
@@ -106,6 +112,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task DeletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
@@ -130,6 +137,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task CompletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
@@ -155,6 +163,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<PurchaseEntry> UpdatePurchaseAsync(PurchaseEntry purchase, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchase, nameof(purchase));

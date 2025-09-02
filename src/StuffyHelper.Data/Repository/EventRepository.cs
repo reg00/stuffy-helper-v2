@@ -9,15 +9,20 @@ using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Repository
 {
+    /// <inheritdoc />
     public class EventRepository : IEventRepository
     {
         private readonly StuffyHelperContext _context;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public EventRepository(StuffyHelperContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc />
         public async Task<EventEntry> GetEventAsync(Guid eventId, string? userId = null, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
@@ -46,6 +51,7 @@ namespace StuffyHelper.Data.Repository
 
         }
 
+        /// <inheritdoc />
         public async Task<Response<EventEntry>> GetEventsAsync(
             int offset = 0,
             int limit = 10,
@@ -97,6 +103,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<EventEntry> AddEventAsync(EventEntry @event, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(@event, nameof(@event));
@@ -121,6 +128,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task DeleteEventAsync(Guid eventId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
@@ -146,6 +154,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<EventEntry> UpdateEventAsync(EventEntry @event, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(@event, nameof(@event));

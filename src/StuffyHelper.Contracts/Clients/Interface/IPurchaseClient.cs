@@ -3,10 +3,13 @@ using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Clients.Interface;
 
+/// <summary>
+/// Interface for work with purchases
+/// </summary>
 public interface IPurchaseClient
 {
     /// <summary>
-    /// Получение списка покупок
+    /// Return list of purchases from event
     /// </summary>
     public Task<Response<GetPurchaseEntry>> GetPurchasesAsync(
         string token,
@@ -22,7 +25,7 @@ public interface IPurchaseClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Получение данных о покупке по идентификатору
+    /// Return purchase by id
     /// </summary>
     public Task<GetPurchaseEntry> GetPurchaseAsync(
         string token,
@@ -30,7 +33,7 @@ public interface IPurchaseClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Добавление покупки
+    /// Create new purchase into event
     /// </summary>
     public Task<PurchaseShortEntry> CreatePurchaseAsync(
         string token,
@@ -38,7 +41,7 @@ public interface IPurchaseClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Удаление покупки
+    /// Remove purchase from event
     /// </summary>
     public Task DeletePurchaseAsync(
         string token,
@@ -46,7 +49,7 @@ public interface IPurchaseClient
         CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Изменение данных о покупке
+    /// Update event purchase by id
     /// </summary>
     public Task<PurchaseShortEntry> UpdatePurchaseAsync(
         string token,

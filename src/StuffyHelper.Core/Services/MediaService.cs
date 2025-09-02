@@ -12,19 +12,24 @@ using StuffyHelper.Minio.Features.Storage;
 
 namespace StuffyHelper.Core.Services
 {
+    /// <inheritdoc />
     public class MediaService : IMediaService
     {
-        private readonly IMediaRepository _mediaStore;
-        private readonly IFileStore _fileStore;
+        private readonly IMediaRepository _mediaRepository;
+        private readonly IFileStore _fileRepository;
         private readonly IMapper _mapper;
 
-        public MediaService(IMediaRepository mediaStore, IFileStore fileStore, IMapper mapper)
+        /// <summary>
+        /// Ctor.
+        /// </summary>
+        public MediaService(IMediaRepository mediaRepository, IFileStore fileRepository, IMapper mapper)
         {
-            _mediaStore = mediaStore;
-            _fileStore = fileStore;
+            _mediaRepository = mediaRepository;
+            _fileRepository = fileRepository;
             _mapper = mapper;
         }
 
+        /// <inheritdoc />
         public async Task DeleteMediaAsync(Guid mediaId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(mediaId, nameof(mediaId));
@@ -33,7 +38,7 @@ namespace StuffyHelper.Core.Services
 
             try
             {
-                entry = await _mediaStore.GetMediaAsync(
+                entry = await _mediaRepository.GetMediaAsync(
                 mediaId,
                 cancellationToken);
             }
@@ -45,11 +50,11 @@ namespace StuffyHelper.Core.Services
             {
                 if (entry is not null)
                 {
-                    await _mediaStore.DeleteMediaAsync(
+                    await _mediaRepository.DeleteMediaAsync(
                         entry,
                         cancellationToken);
 
-                    await _fileStore.DeleteFilesIfExistAsync(
+                    await _fileRepository.DeleteFilesIfExistAsync(
                         StuffyMinioExtensions.GetStuffyObjectName(
                             entry.EventId.ToString(),
                             mediaId.ToString(),
@@ -59,20 +64,21 @@ namespace StuffyHelper.Core.Services
             }
         }
 
+        /// <inheritdoc />
         public async Task<Uri?> GetEventPrimalMediaUri(Guid eventId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             try
             {
-                var entry = await _mediaStore.GetPrimalEventMedia(
+                var entry = await _mediaRepository.GetPrimalEventMedia(
                     eventId,
                     cancellationToken);
 
                 if (entry == null)
                     return null;
                 
-                return await _fileStore.ObtainGetPresignedUrl(
+                return await _fileRepository.ObtainGetPresignedUrl(
                     StuffyMinioExtensions.GetStuffyObjectName(
                         entry.EventId.ToString(),
                         entry.Id.ToString(),
@@ -85,15 +91,16 @@ namespace StuffyHelper.Core.Services
             }
         }
 
+        /// <inheritdoc />
         public async Task<MediaBlobEntry> GetMediaFormFileAsync(Guid mediaId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(mediaId, nameof(mediaId));
 
-            var entry = await _mediaStore.GetMediaAsync(
+            var entry = await _mediaRepository.GetMediaAsync(
                 mediaId,
                 cancellationToken);
 
-            var stream = await _fileStore.GetFileAsync(
+            var stream = await _fileRepository.GetFileAsync(
                 StuffyMinioExtensions.GetStuffyObjectName(
                     entry.EventId.ToString(),
                     mediaId.ToString(),
@@ -103,27 +110,30 @@ namespace StuffyHelper.Core.Services
             return _mapper.Map<MediaBlobEntry>((stream, entry));
         }
 
+        /// <inheritdoc />
         public async Task<GetMediaEntry> GetMediaMetadataAsync(Guid mediaId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(mediaId, nameof(mediaId));
 
-            var entry = await _mediaStore.GetMediaAsync(
+            var entry = await _mediaRepository.GetMediaAsync(
                 mediaId,
                 cancellationToken);
 
             return _mapper.Map<GetMediaEntry>(entry);
         }
 
+        /// <inheritdoc />
         public async Task<GetMediaEntry?> GetPrimalEventMedia(Guid eventId,
             CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
-            var entry = await _mediaStore.GetPrimalEventMedia(eventId, cancellationToken);
+            var entry = await _mediaRepository.GetPrimalEventMedia(eventId, cancellationToken);
 
             return _mapper.Map<GetMediaEntry>(entry);
         }
 
+        /// <inheritdoc />
         public async Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
             int offset,
             int limit,
@@ -135,7 +145,7 @@ namespace StuffyHelper.Core.Services
         {
             try
             {
-                return (await _mediaStore.GetMediasAsync(
+                return (await _mediaRepository.GetMediasAsync(
                 offset, limit, eventId, createdDateStart, createdDateEnd, mediaType, cancellationToken))
                 .Select(s => _mapper.Map<MediaShortEntry>(s));
             }
@@ -150,12 +160,12 @@ namespace StuffyHelper.Core.Services
         //    EnsureArg.IsNotDefault(eventId, nameof(eventId));
         //    EnsureArg.IsNotNullOrWhiteSpace(mediaUid, nameof(mediaUid));
 
-        //    var entry = await _mediaStore.GetMediaAsync(
+        //    var entry = await _mediaRepository.GetMediaAsync(
         //       eventId,
         //       mediaUid,
         //       cancellationToken);
 
-        //    return await _fileStore.ObtainGetPresignedUrl(
+        //    return await _fileRepository.ObtainGetPresignedUrl(
         //        eventId.ToString(),
         //        mediaUid,
         //        entry.FileType,
@@ -171,9 +181,9 @@ namespace StuffyHelper.Core.Services
 
         //    try
         //    {
-        //        await _mediaStore.AddMediaAsync(entry, cancellationToken);
+        //        await _mediaRepository.AddMediaAsync(entry, cancellationToken);
 
-        //        return await _fileStore.ObtainPutPresignedUrl(
+        //        return await _fileRepository.ObtainPutPresignedUrl(
         //        eventId.ToString(),
         //        mediaUid,
         //        fileType,
@@ -189,11 +199,11 @@ namespace StuffyHelper.Core.Services
         //    }
         //    catch (Exception)
         //    {
-        //        await _mediaStore.DeleteMediaAsync(
+        //        await _mediaRepository.DeleteMediaAsync(
         //            entry,
         //            cancellationToken);
 
-        //        await _fileStore.DeleteFilesIfExistAsync(
+        //        await _fileRepository.DeleteFilesIfExistAsync(
         //            eventId.ToString(),
         //            mediaUid,
         //            fileType,
@@ -203,6 +213,7 @@ namespace StuffyHelper.Core.Services
         //    }
         //}
 
+        /// <inheritdoc />
         public async Task<MediaShortEntry> StoreMediaFormFileAsync(
             AddMediaEntry media,
             bool isPrimal = false,
@@ -220,11 +231,11 @@ namespace StuffyHelper.Core.Services
 
             try
             {
-                var mediaEntry = await _mediaStore.AddMediaAsync(
+                var mediaEntry = await _mediaRepository.AddMediaAsync(
                     entry, cancellationToken);
 
                 if (media.MediaType != MediaType.Link)
-                    await _fileStore.StoreFileAsync(
+                    await _fileRepository.StoreFileAsync(
                         StuffyMinioExtensions.GetStuffyObjectName(
                             entry.EventId.ToString(),
                             mediaEntry.Id.ToString(),
@@ -240,12 +251,12 @@ namespace StuffyHelper.Core.Services
             }
             catch (Exception)
             {
-                await _mediaStore.DeleteMediaAsync(
+                await _mediaRepository.DeleteMediaAsync(
                     entry,
                     cancellationToken);
 
                 if (media.MediaType != MediaType.Link)
-                    await _fileStore.DeleteFilesIfExistAsync(
+                    await _fileRepository.DeleteFilesIfExistAsync(
                         StuffyMinioExtensions.GetStuffyObjectName(
                             media.EventId.ToString(),
                             entry.Id.ToString(),

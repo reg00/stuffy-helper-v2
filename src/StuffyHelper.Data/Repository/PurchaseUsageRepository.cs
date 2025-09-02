@@ -8,15 +8,20 @@ using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Repository
 {
+    /// <inheritdoc />
     public class PurchaseUsageRepository : IPurchaseUsageRepository
     {
         private readonly StuffyHelperContext _context;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public PurchaseUsageRepository(StuffyHelperContext context)
         {
             _context = context;
         }
 
+        /// <inheritdoc />
         public async Task<PurchaseUsageEntry> GetPurchaseUsageAsync(Guid purchaseUsageId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(purchaseUsageId, nameof(purchaseUsageId));
@@ -42,6 +47,7 @@ namespace StuffyHelper.Data.Repository
 
         }
 
+        /// <inheritdoc />
         public async Task<Response<PurchaseUsageEntry>> GetPurchaseUsagesAsync(
             int offset = 0,
             int limit = 10,
@@ -74,6 +80,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<PurchaseUsageEntry> AddPurchaseUsageAsync(PurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchaseUsage, nameof(purchaseUsage));
@@ -90,24 +97,25 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task DeletePurchaseUsageAsync(Guid purchaseUsageId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(purchaseUsageId, nameof(purchaseUsageId));
 
             try
             {
-                var PurchaseUsage = await _context.PurchaseUsages
+                var purchaseUsage = await _context.PurchaseUsages
                     .FirstOrDefaultAsync(
                     s => s.Id == purchaseUsageId, cancellationToken);
 
-                if (PurchaseUsage is null)
+                if (purchaseUsage is null)
                 {
                     throw new EntityNotFoundException("Purchase Usage {PurchaseUsageId} not found.", purchaseUsageId);
                 }
 
                 //PurchaseUsage.IsActive = false;
 
-                _context.PurchaseUsages.Remove(PurchaseUsage);
+                _context.PurchaseUsages.Remove(purchaseUsage);
                 await _context.SaveChangesAsync(cancellationToken);
             }
             catch (Exception ex)
@@ -116,6 +124,7 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        /// <inheritdoc />
         public async Task<PurchaseUsageEntry> UpdatePurchaseUsageAsync(PurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchaseUsage, nameof(purchaseUsage));
