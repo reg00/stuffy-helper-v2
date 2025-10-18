@@ -9,7 +9,7 @@ namespace StuffyHelper.Contracts.Clients;
 /// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IMediaClient" />
 public class MediaClient: ApiClientBase, IMediaClient
 {
-    private const string DefaultRoute = "api/v1/media";
+    private const string DefaultRoute = "api/v1";
     
     /// <summary>
     /// Ctor.
@@ -23,10 +23,11 @@ public class MediaClient: ApiClientBase, IMediaClient
     /// <inheritdoc />
     public Task<MediaShortEntry> StoreMediaFormFileAsync(
         string token,
+        Guid eventId,
         AddMediaEntry body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/form-file")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/media/form-file")
             .AddBearerToken(token)
             .AddJsonBody(body);
 
@@ -36,10 +37,11 @@ public class MediaClient: ApiClientBase, IMediaClient
     /// <inheritdoc />
     public Task<FileParam> RetrieveMediaFormFileAsync(
         string token,
+        Guid eventId,
         Guid mediaId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/{mediaId}/form-file")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/media/{mediaId}/form-file")
             .AddBearerToken(token);
 
         return GetFile(request, cancellationToken);
@@ -48,10 +50,11 @@ public class MediaClient: ApiClientBase, IMediaClient
     /// <inheritdoc />
     public Task<GetMediaEntry> GetMediaMetadataAsync(
         string token,
+        Guid eventId,
         Guid mediaId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/{mediaId}/metadata")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/media/{mediaId}/metadata")
             .AddBearerToken(token);
 
         return Get<GetMediaEntry>(request, cancellationToken);
@@ -60,10 +63,11 @@ public class MediaClient: ApiClientBase, IMediaClient
     /// <inheritdoc />
     public Task DeleteMediaAsync(
         string token,
+        Guid eventId,
         Guid mediaId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/{mediaId}")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/media/{mediaId}")
             .AddBearerToken(token);
 
         return Delete(request, cancellationToken);
@@ -72,19 +76,18 @@ public class MediaClient: ApiClientBase, IMediaClient
     /// <inheritdoc />
     public Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
         string token,
+        Guid? eventId,
         int offset = 0,
         int limit = 10,
-        Guid? eventId = null,
         DateTimeOffset? createdDateStart = null,
         DateTimeOffset? createdDateEnd = null,
         MediaType? mediaType = null,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/metadata")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/media/metadata")
             .AddBearerToken(token)
             .AddQueryParameter("limit", limit)
             .AddQueryParameter("offset", offset)
-            .AddOptionalQueryParameter(nameof(eventId), eventId)
             .AddOptionalQueryParameter(nameof(createdDateStart), createdDateStart)
             .AddOptionalQueryParameter(nameof(createdDateEnd), createdDateEnd)
             .AddOptionalQueryParameter(nameof(mediaType), mediaType);

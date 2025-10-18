@@ -11,10 +11,11 @@ namespace StuffyHelper.Data.Repository.Interfaces
         /// <summary>
         /// Get debt by identifier
         /// </summary>
+        /// <param name="eventId">Event identifier</param>
         /// <param name="debtId">Debt identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Debt entry</returns>
-        Task<DebtEntry> GetDebtAsync(Guid debtId, CancellationToken cancellationToken = default);
+        Task<DebtEntry> GetDebtAsync(Guid eventId, Guid debtId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get debt by lender, debtor and event identifiers
@@ -50,12 +51,14 @@ namespace StuffyHelper.Data.Repository.Interfaces
         /// Get debts for specific user
         /// </summary>
         /// <param name="userId">User identifier</param>
+        /// <param name="eventId">Event identifier</param>
         /// <param name="offset">Number of records to skip</param>
         /// <param name="limit">Maximum number of records to return</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Paginated list of user debts</returns>
         Task<Response<DebtEntry>> GetDebtsByUserAsync(
             string userId,
+            Guid eventId,
             int offset = 0,
             int limit = 10,
             CancellationToken cancellationToken = default);

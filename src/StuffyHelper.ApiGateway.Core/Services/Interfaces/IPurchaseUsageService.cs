@@ -12,27 +12,28 @@ namespace StuffyHelper.ApiGateway.Core.Services.Interfaces
         /// Get purchase usage by identifier
         /// </summary>
         /// <param name="token">Authentication token</param>
+        /// <param name="eventId">Event id</param>
         /// <param name="purchaseUsageId">Purchase usage identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Detailed purchase usage information</returns>
-        Task<GetPurchaseUsageEntry> GetPurchaseUsageAsync(string token, Guid purchaseUsageId, CancellationToken cancellationToken);
+        Task<GetPurchaseUsageEntry> GetPurchaseUsageAsync(string token, Guid eventId, Guid purchaseUsageId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get filtered list of purchase usages
         /// </summary>
         /// <param name="token">Authentication token</param>
+        /// <param name="eventId">Event id</param>
         /// <param name="offset">Number of records to skip</param>
         /// <param name="limit">Maximum number of records to return</param>
-        /// <param name="eventId">Event identifier filter</param>
         /// <param name="participantId">Participant identifier filter</param>
         /// <param name="purchaseId">Purchase identifier filter</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Paginated list of purchase usages</returns>
         Task<Response<PurchaseUsageShortEntry>> GetPurchaseUsagesAsync(
             string token,
+            Guid eventId,
             int offset = 0,
             int limit = 10,
-            Guid? eventId = null,
             Guid? participantId = null,
             Guid? purchaseId = null,
             CancellationToken cancellationToken = default);
@@ -41,27 +42,30 @@ namespace StuffyHelper.ApiGateway.Core.Services.Interfaces
         /// Add new purchase usage
         /// </summary>
         /// <param name="token">Authentication token</param>
+        /// <param name="eventId">Event id</param>
         /// <param name="purchaseUsage">Purchase usage data to add</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Created purchase usage information</returns>
-        Task<PurchaseUsageShortEntry> AddPurchaseUsageAsync(string token, UpsertPurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default);
+        Task<PurchaseUsageShortEntry> AddPurchaseUsageAsync(string token, Guid eventId, UpsertPurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Delete purchase usage by identifier
         /// </summary>
         /// <param name="token">Authentication token</param>
+        /// <param name="eventId">Event id</param>
         /// <param name="purchaseUsageId">Purchase usage identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        Task DeletePurchaseUsageAsync(string token, Guid purchaseUsageId, CancellationToken cancellationToken = default);
+        Task DeletePurchaseUsageAsync(string token, Guid eventId, Guid purchaseUsageId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Update purchase usage information
         /// </summary>
         /// <param name="token">Authentication token</param>
+        /// <param name="eventId">Event id</param>
         /// <param name="purchaseUsageId">Purchase usage identifier</param>
         /// <param name="purchaseUsage">Updated purchase usage data</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Updated purchase usage information</returns>
-        Task<PurchaseUsageShortEntry> UpdatePurchaseUsageAsync(string token, Guid purchaseUsageId, UpsertPurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default);
+        Task<PurchaseUsageShortEntry> UpdatePurchaseUsageAsync(string token, Guid eventId, Guid purchaseUsageId, UpsertPurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default);
     }
 }

@@ -14,41 +14,41 @@ namespace StuffyHelper.ApiGateway.Core.Services
             _purchaseClient = purchaseClient;
         }
 
-        public async Task<GetPurchaseEntry> GetPurchaseAsync(string token, Guid purchaseId, CancellationToken cancellationToken)
+        public async Task<GetPurchaseEntry> GetPurchaseAsync(string token, Guid eventId, Guid purchaseId, CancellationToken cancellationToken)
         {
-            return await _purchaseClient.GetPurchaseAsync(token, purchaseId, cancellationToken);
+            return await _purchaseClient.GetPurchaseAsync(token, eventId, purchaseId, cancellationToken);
         }
 
         public async Task<Response<GetPurchaseEntry>> GetPurchasesAsync(
             string token, 
+            Guid eventId,
             int offset = 0,
             int limit = 10,
             string? name = null,
             double? costMin = null,
             double? costMax = null,
-            Guid? eventId = null,
             string[]? purchaseTags = null,
             Guid? unitTypeId = null,
             bool? isComplete = null,
             CancellationToken cancellationToken = default)
         {
-            return await _purchaseClient.GetPurchasesAsync(token, offset, limit, name, costMin, costMax,
-                                                              eventId, purchaseTags, unitTypeId, isComplete, cancellationToken);
+            return await _purchaseClient.GetPurchasesAsync(token, eventId, offset, limit, name, costMin, costMax,
+                                                              purchaseTags, unitTypeId, isComplete, cancellationToken);
         }
 
-        public async Task<PurchaseShortEntry> AddPurchaseAsync(string token, AddPurchaseEntry purchase, CancellationToken cancellationToken = default)
+        public async Task<PurchaseShortEntry> AddPurchaseAsync(string token, Guid eventId, AddPurchaseEntry purchase, CancellationToken cancellationToken = default)
         {
-            return await _purchaseClient.CreatePurchaseAsync(token, purchase, cancellationToken);
+            return await _purchaseClient.CreatePurchaseAsync(token, eventId, purchase, cancellationToken);
         }
 
-        public async Task DeletePurchaseAsync(string token, Guid purchaseId, CancellationToken cancellationToken = default)
+        public async Task DeletePurchaseAsync(string token, Guid eventId, Guid purchaseId, CancellationToken cancellationToken = default)
         {
-            await _purchaseClient.DeletePurchaseAsync(token, purchaseId, cancellationToken);
+            await _purchaseClient.DeletePurchaseAsync(token, eventId, purchaseId, cancellationToken);
         }
 
-        public async Task<PurchaseShortEntry> UpdatePurchaseAsync(string token, Guid purchaseId, UpdatePurchaseEntry purchase, CancellationToken cancellationToken = default)
+        public async Task<PurchaseShortEntry> UpdatePurchaseAsync(string token, Guid eventId, Guid purchaseId, UpdatePurchaseEntry purchase, CancellationToken cancellationToken = default)
         {
-            return await _purchaseClient.UpdatePurchaseAsync(token, purchaseId, purchase, cancellationToken);
+            return await _purchaseClient.UpdatePurchaseAsync(token, eventId, purchaseId, purchase, cancellationToken);
         }
     }
 }

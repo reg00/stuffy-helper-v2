@@ -9,11 +9,11 @@ namespace StuffyHelper.Contracts.Models
     /// </summary>
     public class AddMediaEntry
     {
-        /// <summary>
-        /// Event id
-        /// </summary>
-        [Required]
-        public Guid EventId { get; init; }
+        ///// <summary>
+        ///// Event id
+        ///// </summary>
+        //[Required]
+        //public Guid EventId { get; init; }
         
         /// <summary>
         /// File

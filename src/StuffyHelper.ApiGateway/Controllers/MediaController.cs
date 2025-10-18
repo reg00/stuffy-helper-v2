@@ -30,12 +30,12 @@ namespace StuffyHelper.ApiGateway.Controllers
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.UnsupportedMediaType)]
         [Route(KnownRoutes.StoreMediaFormFileRoute)]
-        public async Task<MediaShortEntry> StoreMediaFormFileAsync(
+        public async Task<MediaShortEntry> StoreMediaFormFileAsync([FromRoute] Guid eventId,
             [FromForm] AddMediaEntry media)
         {
             EnsureArg.IsNotNull(media, nameof(media));
 
-            return await _mediaService.StoreMediaFormFileAsync(Token, media, cancellationToken: HttpContext.RequestAborted);
+            return await _mediaService.StoreMediaFormFileAsync(Token, eventId, media, cancellationToken: HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -49,10 +49,10 @@ namespace StuffyHelper.ApiGateway.Controllers
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.RetrieveMediaFromFileRoute)]
-        public async Task<FileResult> RetrieveMediaFormFileAsync(
+        public async Task<FileResult> RetrieveMediaFormFileAsync([FromRoute] Guid eventId,
             Guid mediaId)
         {
-            var fileParam = await _mediaService.GetMediaFormFileAsync(Token, mediaId, HttpContext.RequestAborted);
+            var fileParam = await _mediaService.GetMediaFormFileAsync(Token, eventId, mediaId, HttpContext.RequestAborted);
             var mimeType = MimeTypes.GetMimeType(fileParam.FileName);
             return File(fileParam.Content, mimeType, fileParam.FileName);
         }
@@ -66,10 +66,10 @@ namespace StuffyHelper.ApiGateway.Controllers
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetMediaMetadataRoute)]
-        public async Task<GetMediaEntry> GetMediaMetadataAsync(
+        public async Task<GetMediaEntry> GetMediaMetadataAsync([FromRoute] Guid eventId,
             Guid mediaId)
         {
-            return await _mediaService.GetMediaMetadataAsync(Token, mediaId, HttpContext.RequestAborted);
+            return await _mediaService.GetMediaMetadataAsync(Token, eventId, mediaId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -79,10 +79,10 @@ namespace StuffyHelper.ApiGateway.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteMediaRoute)]
-        public async Task DeleteMediaAsync(
+        public async Task DeleteMediaAsync([FromRoute] Guid eventId,
             Guid mediaId)
         {
-            await _mediaService.DeleteMediaAsync(Token, mediaId, HttpContext.RequestAborted);
+            await _mediaService.DeleteMediaAsync(Token, eventId, mediaId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -95,14 +95,14 @@ namespace StuffyHelper.ApiGateway.Controllers
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetMediasMetadatasRoute)]
         public async Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
+            [FromRoute] Guid eventId,
             int offset = 0,
             int limit = 10,
-            Guid? eventId = null,
             DateTimeOffset? createdDateStart = null,
             DateTimeOffset? createdDateEnd = null,
             MediaType? mediaType = null)
         {
-            return await _mediaService.GetMediaMetadatasAsync(Token, offset, limit, eventId, createdDateStart,
+            return await _mediaService.GetMediaMetadatasAsync(Token, eventId, offset, limit, createdDateStart,
                                                                     createdDateEnd, mediaType, HttpContext.RequestAborted);
         }
     }

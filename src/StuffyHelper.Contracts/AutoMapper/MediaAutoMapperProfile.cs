@@ -19,7 +19,7 @@ public class MediaAutoMapperProfile : Profile
     public MediaAutoMapperProfile()
     {
         CreateMap<(Guid EventId, IFormFile File), AddMediaEntry>()
-            .ForMember(ame => ame.EventId, opt => opt.MapFrom(src => src.EventId))
+            //.ForMember(ame => ame.EventId, opt => opt.MapFrom(src => src.EventId))
             .ForMember(ame => ame.File, opt => opt.MapFrom(src => src.File))
             .ForMember(ame => ame.MediaType, opt => opt.MapFrom(_ => MediaType.Image))
             .ForMember(ame => ame.Link, opt => opt.MapFrom(_ => string.Empty));
@@ -38,7 +38,7 @@ public class MediaAutoMapperProfile : Profile
                 dest.Stream = src.Stream;
             });
         CreateMap<(AddMediaEntry Media, bool IsPrimal), MediaEntry>()
-            .ForMember(me => me.EventId, opt => opt.MapFrom(src => src.Media.EventId))
+            //.ForMember(me => me.EventId, opt => opt.MapFrom(src => src.Media.EventId))
             .ForMember(me => me.FileName, opt => opt.MapFrom(src => src.Media.File != null ? Path.GetFileNameWithoutExtension(src.Media.File.FileName) : string.Empty))
             .ForMember(me => me.FileType, opt => opt.MapFrom(src => src.Media.File != null ? FileTypeMapper.MapFileTypeFromExt(Path.GetExtension(src.Media.File.FileName)) : FileType.Link))
             .ForMember(me => me.MediaType, opt => opt.MapFrom(src => src.Media.MediaType))

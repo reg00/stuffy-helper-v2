@@ -11,32 +11,33 @@ namespace StuffyHelper.Data.Repository.Interfaces
         /// <summary>
         /// Get purchase by identifier
         /// </summary>
+        /// <param name="eventId">Event identifier</param>
         /// <param name="purchaseId">Purchase identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Purchase entry</returns>
-        Task<PurchaseEntry> GetPurchaseAsync(Guid purchaseId, CancellationToken cancellationToken);
+        Task<PurchaseEntry> GetPurchaseAsync(Guid eventId, Guid purchaseId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get filtered list of purchases
         /// </summary>
+        /// <param name="eventId">Event identifier</param>
         /// <param name="offset">Number of records to skip</param>
         /// <param name="limit">Maximum number of records to return</param>
         /// <param name="name">Purchase name filter</param>
         /// <param name="costMin">Minimum cost filter</param>
         /// <param name="costMax">Maximum cost filter</param>
-        /// <param name="eventId">Event identifier filter</param>
         /// <param name="purchaseTags">Purchase tags filter</param>
         /// <param name="unitTypeId">Unit type identifier filter</param>
         /// <param name="isComplete">Purchase completion status filter</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Paginated list of purchases</returns>
         Task<Response<PurchaseEntry>> GetPurchasesAsync(
+            Guid eventId,
             int offset = 0,
             int limit = 10,
             string? name = null,
             double? costMin = null,
             double? costMax = null,
-            Guid? eventId = null,
             IEnumerable<string>? purchaseTags = null,
             Guid? unitTypeId = null,
             bool? isComplete = null,
@@ -53,9 +54,10 @@ namespace StuffyHelper.Data.Repository.Interfaces
         /// <summary>
         /// Delete purchase by identifier
         /// </summary>
+        /// <param name="eventId">Event identifier</param>
         /// <param name="purchaseId">Purchase identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        Task DeletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default);
+        Task DeletePurchaseAsync(Guid eventId, Guid purchaseId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Update purchase information
@@ -68,8 +70,9 @@ namespace StuffyHelper.Data.Repository.Interfaces
         /// <summary>
         /// Mark purchase as completed
         /// </summary>
+        /// <param name="eventId">Event identifier</param>
         /// <param name="purchaseId">Purchase identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        Task CompletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default);
+        Task CompletePurchaseAsync(Guid eventId, Guid purchaseId, CancellationToken cancellationToken = default);
     }
 }

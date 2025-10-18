@@ -27,25 +27,25 @@ namespace StuffyHelper.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<GetPurchaseUsageEntry> GetPurchaseUsageAsync(StuffyClaims claims, Guid purchaseUsageId, CancellationToken cancellationToken)
+        public async Task<GetPurchaseUsageEntry> GetPurchaseUsageAsync(StuffyClaims claims, Guid eventId, Guid purchaseUsageId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(purchaseUsageId, nameof(purchaseUsageId));
 
-            var entry = await _purchaseUsageRepository.GetPurchaseUsageAsync(purchaseUsageId, cancellationToken);
+            var entry = await _purchaseUsageRepository.GetPurchaseUsageAsync(eventId, purchaseUsageId, cancellationToken);
 
             return _mapper.Map<GetPurchaseUsageEntry>((entry, _mapper.Map<ParticipantShortEntry>((entry.Participant ,_mapper.Map<UserShortEntry>(claims)))));
         }
 
         /// <inheritdoc />
         public async Task<Response<PurchaseUsageShortEntry>> GetPurchaseUsagesAsync(
+            Guid eventId,
             int offset = 0,
             int limit = 10,
-            Guid? eventId = null,
             Guid? participantId = null,
             Guid? purchaseId = null,
             CancellationToken cancellationToken = default)
         {
-            var resp = await _purchaseUsageRepository.GetPurchaseUsagesAsync(offset, limit, eventId, participantId, purchaseId, cancellationToken);
+            var resp = await _purchaseUsageRepository.GetPurchaseUsagesAsync(eventId, offset, limit, participantId, purchaseId, cancellationToken);
 
             return new Response<PurchaseUsageShortEntry>()
             {
@@ -56,7 +56,7 @@ namespace StuffyHelper.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<PurchaseUsageShortEntry> AddPurchaseUsageAsync(UpsertPurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default)
+        public async Task<PurchaseUsageShortEntry> AddPurchaseUsageAsync(Guid eventId, UpsertPurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchaseUsage, nameof(purchaseUsage));
 
@@ -67,20 +67,20 @@ namespace StuffyHelper.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task DeletePurchaseUsageAsync(Guid purchaseUsageId, CancellationToken cancellationToken = default)
+        public async Task DeletePurchaseUsageAsync(Guid eventId, Guid purchaseUsageId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(purchaseUsageId, nameof(purchaseUsageId));
 
-            await _purchaseUsageRepository.DeletePurchaseUsageAsync(purchaseUsageId, cancellationToken);
+            await _purchaseUsageRepository.DeletePurchaseUsageAsync(eventId, purchaseUsageId, cancellationToken);
         }
 
         /// <inheritdoc />
-        public async Task<PurchaseUsageShortEntry> UpdatePurchaseUsageAsync(Guid purchaseUsageId, UpsertPurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default)
+        public async Task<PurchaseUsageShortEntry> UpdatePurchaseUsageAsync(Guid eventId, Guid purchaseUsageId, UpsertPurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(purchaseUsage, nameof(purchaseUsage));
             EnsureArg.IsNotDefault(purchaseUsageId, nameof(purchaseUsageId));
 
-            var existingPurchaseUsage = await _purchaseUsageRepository.GetPurchaseUsageAsync(purchaseUsageId, cancellationToken);
+            var existingPurchaseUsage = await _purchaseUsageRepository.GetPurchaseUsageAsync(eventId, purchaseUsageId, cancellationToken);
 
             if (existingPurchaseUsage is null)
             {

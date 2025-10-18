@@ -13,6 +13,7 @@ public interface IDebtClient
     /// </summary>
     public Task<Response<GetDebtEntry>> GetDebtsAsync(
         string token,
+        Guid eventId,
         int offset = 0,
         int limit = 10,
         CancellationToken cancellationToken = default);
@@ -22,16 +23,17 @@ public interface IDebtClient
     /// </summary>
     public Task<GetDebtEntry> GetDebtAsync(
         string token,
+        Guid eventId,
         Guid debtId,
         CancellationToken cancellationToken = default);
     
     /// <summary>
     /// Pay debt
     /// </summary>
-    public Task SendDebtAsync(string token, Guid debtId, CancellationToken cancellationToken = default);
+    public Task SendDebtAsync(string token, Guid eventId, Guid debtId, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Confirm payment for debt
     /// </summary>
-    public Task ConfirmDebtAsync(string token, Guid debtId, CancellationToken cancellationToken = default);
+    public Task ConfirmDebtAsync(string token, Guid eventId, Guid debtId, CancellationToken cancellationToken = default);
 }

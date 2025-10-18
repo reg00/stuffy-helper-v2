@@ -16,7 +16,7 @@ namespace StuffyHelper.Contracts.Entities
         /// <summary>
         /// Event id
         /// </summary>
-        public Guid EventId { get; init; }
+        public Guid EventId { get; set; }
         
         /// <summary>
         /// File name

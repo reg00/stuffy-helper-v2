@@ -37,7 +37,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var debtService = GetService();
 
-            await ThrowsTask(async () => await debtService.GetDebtAsync(Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.GetDebtAsync(Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -45,7 +45,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var debtEntry = DebtServiceUnitTestConstants.GetCorrectDebtEntry();
 
-            _debtRepositoryMoq.Setup(x => x.GetDebtAsync(debtEntry.Id, CancellationToken))
+            _debtRepositoryMoq.Setup(x => x.GetDebtAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), debtEntry.Id, CancellationToken))
                 .ReturnsAsync(debtEntry);
 
             _authorizationClientMoq.Setup(x => x.GetUserById(debtEntry.DebtorId, It.IsAny<CancellationToken>()))
@@ -54,57 +54,7 @@ namespace StuffyHelper.Tests.UnitTests
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectSecondUserEntry());
             
             var debtService = GetService();
-            var result = await debtService.GetDebtAsync(debtEntry.Id, CancellationToken);
-
-            await Verify(result, VerifySettings);
-        }
-
-        [Fact]
-        public async Task GetDebtsAsync_ReturnEmpty()
-        {
-            _debtRepositoryMoq.Setup(x =>
-            x.GetDebtsAsync(
-                0,
-                10,
-                null,
-                null,
-                null,
-                null,
-                It.IsAny<CancellationToken>()))
-                .ReturnsAsync(DebtServiceUnitTestConstants.GetEmptyDebstResponse());
-
-            var debtService = GetService();
-            var result = await debtService.GetDebtsAsync(cancellationToken: CancellationToken);
-
-            await Verify(result, VerifySettings);
-        }
-
-        [Fact]
-        public async Task GetDebtsAsync_Success()
-        {
-            var debts = DebtServiceUnitTestConstants.GetCorrectDebstResponse();
-            _debtRepositoryMoq.Setup(x =>
-            x.GetDebtsAsync(
-                It.IsAny<int>(),
-                It.IsAny<int>(),
-                It.IsAny<string?>(),
-                It.IsAny<string?>(),
-                It.IsAny<bool?>(),
-                It.IsAny<bool?>(),
-                It.IsAny<CancellationToken>()))
-                .ReturnsAsync(debts);
-
-            foreach (var debt in debts.Data)
-            {
-                _authorizationClientMoq.Setup(x => x.GetUserById(debt.DebtorId, It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
-                _authorizationClientMoq.Setup(x => x.GetUserById(debt.LenderId, It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectSecondUserEntry());
-            }
-            
-            var debtService = GetService();
-
-            var result = await debtService.GetDebtsAsync(0, 10, null, null, null, null, cancellationToken: CancellationToken);
+            var result = await debtService.GetDebtAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), debtEntry.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -114,7 +64,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var debtService = GetService();
 
-            await ThrowsTask(async () => await debtService.SendDebtAsync(string.Empty, Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.SendDebtAsync(string.Empty, Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -122,7 +72,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var debtService = GetService();
 
-            await ThrowsTask(async () => await debtService.SendDebtAsync(string.Empty, Guid.NewGuid(), CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.SendDebtAsync(string.Empty, Guid.NewGuid(), Guid.NewGuid(), CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -130,7 +80,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var debtService = GetService();
 
-            await ThrowsTask(async () => await debtService.SendDebtAsync("123", Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.SendDebtAsync("123", Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -138,7 +88,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var debtEntry = DebtServiceUnitTestConstants.GetCorrectDebtEntry();
 
-            _debtRepositoryMoq.Setup(x => x.GetDebtAsync(debtEntry.Id, CancellationToken))
+            _debtRepositoryMoq.Setup(x => x.GetDebtAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), debtEntry.Id, CancellationToken))
                 .ReturnsAsync(debtEntry);
             _debtRepositoryMoq.Setup(x => x.UpdateDebtAsync(It.IsAny<DebtEntry>(), CancellationToken))
                 .ReturnsAsync(debtEntry);
@@ -149,7 +99,7 @@ namespace StuffyHelper.Tests.UnitTests
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectSecondUserEntry());
             
             var debtService = GetService();
-            var result = await debtService.SendDebtAsync("321", debtEntry.Id, CancellationToken);
+            var result = await debtService.SendDebtAsync("321", Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), debtEntry.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -159,7 +109,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var debtService = GetService();
 
-            await ThrowsTask(async () => await debtService.ConfirmDebtAsync(string.Empty, Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.ConfirmDebtAsync(string.Empty, Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -167,7 +117,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var debtService = GetService();
 
-            await ThrowsTask(async () => await debtService.SendDebtAsync("123", Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.SendDebtAsync("123", Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -175,12 +125,12 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var debtEntry = DebtServiceUnitTestConstants.GetNotSendedDebtEntry();
 
-            _debtRepositoryMoq.Setup(x => x.GetDebtAsync(debtEntry.Id, CancellationToken))
+            _debtRepositoryMoq.Setup(x => x.GetDebtAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), debtEntry.Id, CancellationToken))
                 .ReturnsAsync(debtEntry);
 
             var debtService = GetService();
 
-            await ThrowsTask(async () => await debtService.ConfirmDebtAsync("123", debtEntry.Id, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await debtService.ConfirmDebtAsync("123", Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), debtEntry.Id, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -188,7 +138,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var debtEntry = DebtServiceUnitTestConstants.GetCorrectDebtEntry();
 
-            _debtRepositoryMoq.Setup(x => x.GetDebtAsync(debtEntry.Id, CancellationToken))
+            _debtRepositoryMoq.Setup(x => x.GetDebtAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), debtEntry.Id, CancellationToken))
                 .ReturnsAsync(debtEntry);
             _debtRepositoryMoq.Setup(x => x.UpdateDebtAsync(It.IsAny<DebtEntry>(), CancellationToken))
                .ReturnsAsync(debtEntry);
@@ -199,7 +149,7 @@ namespace StuffyHelper.Tests.UnitTests
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectSecondUserEntry());
             
             var debtService = GetService();
-            var result = await debtService.ConfirmDebtAsync("123", debtEntry.Id, CancellationToken);
+            var result = await debtService.ConfirmDebtAsync("123", Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), debtEntry.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }

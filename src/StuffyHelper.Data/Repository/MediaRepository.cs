@@ -62,13 +62,13 @@ namespace StuffyHelper.Data.Repository
         }
 
         /// <inheritdoc />
-        public async Task<MediaEntry> GetMediaAsync(Guid mediaId, CancellationToken cancellationToken = default)
+        public async Task<MediaEntry> GetMediaAsync(Guid eventId, Guid mediaId, CancellationToken cancellationToken = default)
         {
             try
             {
                 var media = await _context.Medias
                     .Include(e => e.Event)
-                    .FirstOrDefaultAsync(e => e.Id == mediaId,
+                    .FirstOrDefaultAsync(e => e.Id == mediaId && e.EventId == eventId,
                     cancellationToken);
 
                 if (media is null)
@@ -89,9 +89,9 @@ namespace StuffyHelper.Data.Repository
 
         /// <inheritdoc />
         public async Task<IEnumerable<MediaEntry>> GetMediasAsync(
+            Guid eventId,
             int offset,
             int limit,
-            Guid? eventId = null,
             DateTimeOffset? createdDateStart = null,
             DateTimeOffset? createdDateEnd = null,
             MediaType? mediaType = null,
@@ -102,7 +102,7 @@ namespace StuffyHelper.Data.Repository
                 return await _context.Medias
                     .Include(e => e.Event)
                     .Where(e =>
-                    (eventId == null || e.EventId == eventId) &&
+                    e.EventId == eventId &&
                     (createdDateStart == null || e.CreatedDate >= createdDateStart) &&
                     (createdDateEnd == null || e.CreatedDate <= createdDateEnd) &&
                     (mediaType == null || e.MediaType == mediaType))

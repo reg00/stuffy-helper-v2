@@ -110,11 +110,10 @@ namespace StuffyHelper.Core.Services
 
             var addParticipant = new UpsertParticipantEntry()
             {
-                EventId = result.Id,
                 UserId = entry.UserId
             };
 
-            await _participantService.AddParticipantAsync(addParticipant, cancellationToken);
+            await _participantService.AddParticipantAsync(result.Id, addParticipant, cancellationToken);
 
             return _mapper.Map<EventShortEntry>(result);
         }
@@ -151,7 +150,7 @@ namespace StuffyHelper.Core.Services
 
             if (primalMedia is not null)
             {
-                await _mediaService.DeleteMediaAsync(primalMedia.Id, cancellationToken);
+                await _mediaService.DeleteMediaAsync(eventId, primalMedia.Id, cancellationToken);
                 existingEvent.ImageUri = null;
                 await _eventRepository.UpdateEventAsync(existingEvent, cancellationToken);
             }
@@ -168,13 +167,14 @@ namespace StuffyHelper.Core.Services
             var primalMedia = await _mediaService.GetPrimalEventMedia(eventId, cancellationToken);
 
             if (primalMedia is not null)
-                await _mediaService.DeleteMediaAsync(primalMedia.Id, cancellationToken);
+                await _mediaService.DeleteMediaAsync(eventId, primalMedia.Id, cancellationToken);
 
             var addMedia = _mapper.Map<AddMediaEntry>((eventId, file));
             await _mediaService.StoreMediaFormFileAsync(
-                    addMedia,
-                    isPrimal: true,
-                    cancellationToken: cancellationToken);
+                eventId,    
+                addMedia,
+                isPrimal: true,
+                cancellationToken: cancellationToken);
 
             var mediaUri = await _mediaService.GetEventPrimalMediaUri(eventId, cancellationToken);
 

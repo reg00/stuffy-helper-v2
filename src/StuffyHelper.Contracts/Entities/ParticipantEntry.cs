@@ -35,13 +35,5 @@ namespace StuffyHelper.Contracts.Entities
         /// Linked purchase usages
         /// </summary>
         public virtual List<PurchaseUsageEntry> PurchaseUsages { get; set; } = new List<PurchaseUsageEntry>();
-
-
-        public void PatchFrom(UpsertParticipantEntry entry)
-        {
-            EnsureArg.IsNotNull(entry, nameof(entry));
-
-            EventId = entry.EventId;
-        }
     }
 }

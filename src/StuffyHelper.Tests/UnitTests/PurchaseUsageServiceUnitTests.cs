@@ -27,7 +27,7 @@ namespace StuffyHelper.Tests.UnitTests
             var claims = AuthorizationServiceUnitTestConstants.GetCorrectStuffyClaims();
             var purchaseUsageService = GetService();
 
-            await ThrowsTask(async () => await purchaseUsageService.GetPurchaseUsageAsync(claims, Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await purchaseUsageService.GetPurchaseUsageAsync(claims, Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -36,11 +36,11 @@ namespace StuffyHelper.Tests.UnitTests
             var claims = AuthorizationServiceUnitTestConstants.GetCorrectStuffyClaims();
             var purchaseUsage = PurchaseUsageServiceUnitTestConstants.GetCorrectPurchaseUsageEntry();
 
-            _purchaseUsageRepositoryMoq.Setup(x => x.GetPurchaseUsageAsync(purchaseUsage.Id, CancellationToken))
+            _purchaseUsageRepositoryMoq.Setup(x => x.GetPurchaseUsageAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), purchaseUsage.Id, CancellationToken))
                 .ReturnsAsync(purchaseUsage);
 
             var purchaseUsageService = GetService();
-            var result = await purchaseUsageService.GetPurchaseUsageAsync(claims, purchaseUsage.Id, CancellationToken);
+            var result = await purchaseUsageService.GetPurchaseUsageAsync(claims,Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"),  purchaseUsage.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -52,16 +52,16 @@ namespace StuffyHelper.Tests.UnitTests
 
             _purchaseUsageRepositoryMoq.Setup(x =>
             x.GetPurchaseUsagesAsync(
+                It.IsAny<Guid>(),
                 It.IsAny<int>(),
                 It.IsAny<int>(),
-                It.IsAny<Guid?>(),
                 It.IsAny<Guid?>(),
                 It.IsAny<Guid?>(),
                 It.IsAny<CancellationToken>()))
                 .ReturnsAsync(purchaseUsageResponse);
 
             var purchaseUsageService = GetService();
-            var result = await purchaseUsageService.GetPurchaseUsagesAsync(
+            var result = await purchaseUsageService.GetPurchaseUsagesAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), 
                 cancellationToken: CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -72,7 +72,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchaseUsageService = GetService();
 
-            await ThrowsTask(async () => await purchaseUsageService.AddPurchaseUsageAsync(null, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await purchaseUsageService.AddPurchaseUsageAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), null, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace StuffyHelper.Tests.UnitTests
                 .ReturnsAsync(purchaseUsage);
 
             var purchaseUsageService = GetService();
-            var result = await purchaseUsageService.AddPurchaseUsageAsync(addPurchaseUsage, CancellationToken);
+            var result = await purchaseUsageService.AddPurchaseUsageAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), addPurchaseUsage, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -95,7 +95,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchaseUsageService = GetService();
 
-            await ThrowsTask(async () => await purchaseUsageService.DeletePurchaseUsageAsync(Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await purchaseUsageService.DeletePurchaseUsageAsync(Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -103,13 +103,13 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchaseUsage = PurchaseUsageServiceUnitTestConstants.GetCorrectPurchaseUsageEntry();
 
-            _purchaseUsageRepositoryMoq.Setup(x => x.DeletePurchaseUsageAsync(It.IsAny<Guid>(), CancellationToken))
+            _purchaseUsageRepositoryMoq.Setup(x => x.DeletePurchaseUsageAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), CancellationToken))
                 .Returns(Task.CompletedTask);
 
             var purchaseUsageService = GetService();
-            await purchaseUsageService.DeletePurchaseUsageAsync(purchaseUsage.Id, CancellationToken);
+            await purchaseUsageService.DeletePurchaseUsageAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), purchaseUsage.Id, CancellationToken);
 
-            _purchaseUsageRepositoryMoq.Verify(x => x.DeletePurchaseUsageAsync(It.IsAny<Guid>(), CancellationToken), Times.Once());
+            _purchaseUsageRepositoryMoq.Verify(x => x.DeletePurchaseUsageAsync(It.IsAny<Guid>(), It.IsAny<Guid>(), CancellationToken), Times.Once());
         }
 
         [Fact]
@@ -117,7 +117,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchaseUsageService = GetService();
 
-            await ThrowsTask(async () => await purchaseUsageService.UpdatePurchaseUsageAsync(Guid.Empty, null, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await purchaseUsageService.UpdatePurchaseUsageAsync(Guid.Empty, Guid.Empty,  null, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -125,7 +125,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var purchaseUsageService = GetService();
 
-            await ThrowsTask(async () => await purchaseUsageService.UpdatePurchaseUsageAsync(Guid.Parse("e9aa0073-5de0-4227-a5f6-4d6c47d5f9e6"), new(), CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await purchaseUsageService.UpdatePurchaseUsageAsync(Guid.Parse("e9aa0073-5de0-4227-a5f6-4d6c47d5f9e6"), Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), new(), CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -136,11 +136,11 @@ namespace StuffyHelper.Tests.UnitTests
 
             _purchaseUsageRepositoryMoq.Setup(x => x.UpdatePurchaseUsageAsync(It.IsAny<PurchaseUsageEntry>(), CancellationToken))
                 .ReturnsAsync(purchaseUsage);
-            _purchaseUsageRepositoryMoq.Setup(x => x.GetPurchaseUsageAsync(purchaseUsage.Id, CancellationToken))
+            _purchaseUsageRepositoryMoq.Setup(x => x.GetPurchaseUsageAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), purchaseUsage.Id, CancellationToken))
                 .ReturnsAsync(purchaseUsage);
 
             var purchaseUsageService = GetService();
-            var result = await purchaseUsageService.UpdatePurchaseUsageAsync(purchaseUsage.Id, updatePurchaseUsage, CancellationToken);
+            var result = await purchaseUsageService.UpdatePurchaseUsageAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), purchaseUsage.Id, updatePurchaseUsage, CancellationToken);
 
             await Verify(result, VerifySettings);
         }

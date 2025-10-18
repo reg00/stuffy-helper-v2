@@ -24,7 +24,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
         {
             return new()
             {
-                EventId = Guid.NewGuid(),
                 MediaType = MediaType.Link
             };
         }
@@ -33,7 +32,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
         {
             return new()
             {
-                EventId = Guid.NewGuid(),
                 MediaType = MediaType.Image
             };
         }
@@ -42,7 +40,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
         {
             return new()
             {
-                EventId = Guid.NewGuid(),
                 MediaType = MediaType.Link,
                 Link = "test"
             };

@@ -21,7 +21,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
         {
             return new()
             {
-                EventId = Guid.NewGuid(),
                 UserId = "123"
             };
         }

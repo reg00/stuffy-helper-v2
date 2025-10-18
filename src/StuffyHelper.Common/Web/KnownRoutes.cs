@@ -64,19 +64,19 @@ public static class KnownRoutes
         public const string ReopenEventRoute = $"{GetEventRoute}/reopen";
         public const string CheckoutEventRoute = $"{GetEventRoute}/checkout";
 
-        public const string AddParticipantRoute = $"{DefaultRouteSegment}/{ParticipantsSegment}";
+        public const string AddParticipantRoute = $"{GetEventRoute}/{ParticipantsSegment}";
         public const string GetParticipantRoute = $"{AddParticipantRoute}/{ParticipantIdRouteSegment}";
         public const string GetParticipantsRoute = AddParticipantRoute;
         public const string DeleteParticipantRoute = GetParticipantRoute;
         public const string UpdateParticipantRoute = GetParticipantRoute;
 
-        public const string AddPurchaseRoute = $"{DefaultRouteSegment}/{PurchasesSegment}";
+        public const string AddPurchaseRoute = $"{GetEventRoute}/{PurchasesSegment}";
         public const string GetPurchaseRoute = $"{AddPurchaseRoute}/{PurchaseIdRouteSegment}";
         public const string GetPurchasesRoute = AddPurchaseRoute;
         public const string DeletePurchaseRoute = GetPurchaseRoute;
         public const string UpdatePurchaseRoute = GetPurchaseRoute;
 
-        public const string AddPurchaseUsageRoute = $"{DefaultRouteSegment}/{PurchaseUsagesSegment}";
+        public const string AddPurchaseUsageRoute = $"{GetEventRoute}/{PurchaseUsagesSegment}";
         public const string GetPurchaseUsageRoute = $"{AddPurchaseUsageRoute}/{PurchaseUsageIdRouteSegment}";
         public const string GetPurchaseUsagesRoute = AddPurchaseUsageRoute;
         public const string DeletePurchaseUsageRoute = GetPurchaseUsageRoute;
@@ -94,13 +94,13 @@ public static class KnownRoutes
         public const string DeleteUnitTypeRoute = GetUnitTypeRoute;
         public const string UpdateUnitTypeRoute = GetUnitTypeRoute;
 
-        private const string GetMediaRouteSegment = $"{DefaultRouteSegment}/{MediaSegment}/{MediaIdRouteSegment}";
+        private const string GetMediaRouteSegment = $"{GetEventRoute}/{MediaSegment}/{MediaIdRouteSegment}";
         public const string RetrieveMediaFromFileRoute = $"{GetMediaRouteSegment}/{FormFileSegment}";
         public const string RetrieveMediaPresignedUrlRoute = $"{GetMediaRouteSegment}/{PresignedUrlSegment}";
         public const string GetMediaMetadataRoute = $"{GetMediaRouteSegment}/{MetadataSegment}";
-        public const string GetMediasMetadatasRoute = $"{DefaultRouteSegment}/{MediaSegment}/{MetadataSegment}";
-        public const string StoreMediaFormFileRoute = $"{DefaultRouteSegment}/{MediaSegment}/{FormFileSegment}";
-        public const string StoreMediaPresignedUrlRoute = $"{DefaultRouteSegment}/{MediaSegment}/{PresignedUrlSegment}";
+        public const string GetMediasMetadatasRoute = $"{GetEventRoute}/{MediaSegment}/{MetadataSegment}";
+        public const string StoreMediaFormFileRoute = $"{GetEventRoute}/{MediaSegment}/{FormFileSegment}";
+        public const string StoreMediaPresignedUrlRoute = $"{GetEventRoute}/{MediaSegment}/{PresignedUrlSegment}";
         public const string DeleteMediaRoute = GetMediaRouteSegment;
 
         public const string RequestRoute = $"{DefaultRouteSegment}/{RequestSegment}";
@@ -114,10 +114,10 @@ public static class KnownRoutes
 
         public const string GetFriendsRoute = $"{DefaultRouteSegment}/{FriendsSegment}";
 
-        public const string GetDebtsRoute = $"{DefaultRouteSegment}/{DebtsSegment}";
-        public const string GetDebtRoute = $"{DefaultRouteSegment}/{DebtsSegment}/{DebtIdRouteSegment}";
-        public const string SendDebtRoute = $"{GetDebtsRoute}/{DebtIdRouteSegment}/send";
-        public const string ConfirmDebtRoute = $"{GetDebtsRoute}/{DebtIdRouteSegment}/confirm";
+        public const string GetDebtsRoute = $"{GetEventRoute}/{DebtsSegment}";
+        public const string GetDebtRoute = $"{GetDebtsRoute}/{DebtIdRouteSegment}";
+        public const string SendDebtRoute = $"{GetDebtRoute}/send";
+        public const string ConfirmDebtRoute = $"{GetDebtRoute}/confirm";
         
         public const string SendEmailRoute = $"{EmailRoute}/send";
 }

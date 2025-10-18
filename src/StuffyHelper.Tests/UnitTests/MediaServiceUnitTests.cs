@@ -30,7 +30,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var mediaService = GetService();
 
-            await ThrowsTask(async () => await mediaService.DeleteMediaAsync(Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await mediaService.DeleteMediaAsync(Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -38,11 +38,11 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var media = MediaServiceUnitTestConstants.GetCorrectMediaEntry();
 
-            _mediaRepositoryMoq.Setup(x => x.GetMediaAsync(media.Id, CancellationToken))
+            _mediaRepositoryMoq.Setup(x => x.GetMediaAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media.Id, CancellationToken))
                 .ReturnsAsync(media);
 
             var mediaService = GetService();
-            await mediaService.DeleteMediaAsync(media.Id, CancellationToken);
+            await mediaService.DeleteMediaAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media.Id, CancellationToken);
 
             _mediaRepositoryMoq.Verify(x => x.DeleteMediaAsync(media, CancellationToken), Times.Once());
         }
@@ -77,7 +77,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var mediaService = GetService();
 
-            await ThrowsTask(async () => await mediaService.GetMediaFormFileAsync(Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await mediaService.GetMediaFormFileAsync(Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var media = MediaServiceUnitTestConstants.GetCorrectMediaEntry();
 
-            _mediaRepositoryMoq.Setup(x => x.GetMediaAsync(media.Id, CancellationToken))
+            _mediaRepositoryMoq.Setup(x => x.GetMediaAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media.Id, CancellationToken))
                 .ReturnsAsync(media);
 
             _fileRepositoryMoq.Setup(x => x.GetFileAsync(It.IsAny<string>(), CancellationToken))
@@ -93,7 +93,7 @@ namespace StuffyHelper.Tests.UnitTests
 
             var mediaService = GetService();
 
-            var result = await mediaService.GetMediaFormFileAsync(media.Id, CancellationToken);
+            var result = await mediaService.GetMediaFormFileAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -103,7 +103,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var mediaService = GetService();
 
-            await ThrowsTask(async () => await mediaService.GetMediaMetadataAsync(Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await mediaService.GetMediaMetadataAsync(Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -111,11 +111,11 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var media = MediaServiceUnitTestConstants.GetCorrectMediaEntry();
 
-            _mediaRepositoryMoq.Setup(x => x.GetMediaAsync(media.Id, CancellationToken))
+            _mediaRepositoryMoq.Setup(x => x.GetMediaAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media.Id, CancellationToken))
                 .ReturnsAsync(media);
 
             var mediaService = GetService();
-            var result = await mediaService.GetMediaMetadataAsync(media.Id, CancellationToken);
+            var result = await mediaService.GetMediaMetadataAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -147,9 +147,9 @@ namespace StuffyHelper.Tests.UnitTests
         {
             _mediaRepositoryMoq.Setup(x =>
             x.GetMediasAsync(
+                It.IsAny<Guid>(),
                 It.IsAny<int>(),
                 It.IsAny<int>(),
-                It.IsAny<Guid?>(),
                 It.IsAny<DateTimeOffset?>(),
                 It.IsAny<DateTimeOffset?>(),
                 It.IsAny<MediaType?>(),
@@ -157,7 +157,7 @@ namespace StuffyHelper.Tests.UnitTests
                 .ThrowsAsync(new EntityNotFoundException("Media not found"));
 
             var mediaService = GetService();
-            var result = await mediaService.GetMediaMetadatasAsync(0, 10, cancellationToken: CancellationToken);
+            var result = await mediaService.GetMediaMetadatasAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"),0, 10, cancellationToken: CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -169,9 +169,9 @@ namespace StuffyHelper.Tests.UnitTests
 
             _mediaRepositoryMoq.Setup(x =>
             x.GetMediasAsync(
+                It.IsAny<Guid>(),
                 It.IsAny<int>(),
                 It.IsAny<int>(),
-                It.IsAny<Guid?>(),
                 It.IsAny<DateTimeOffset?>(),
                 It.IsAny<DateTimeOffset?>(),
                 It.IsAny<MediaType?>(),
@@ -179,7 +179,7 @@ namespace StuffyHelper.Tests.UnitTests
                 .ReturnsAsync(medias);
 
             var mediaService = GetService();
-            var result = await mediaService.GetMediaMetadatasAsync(0, 10, cancellationToken: CancellationToken);
+            var result = await mediaService.GetMediaMetadatasAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), 0, 10, cancellationToken: CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -189,7 +189,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var mediaService = GetService();
 
-            await ThrowsTask(async () => await mediaService.StoreMediaFormFileAsync(null, false, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await mediaService.StoreMediaFormFileAsync(Guid.Empty, null, false, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -198,7 +198,7 @@ namespace StuffyHelper.Tests.UnitTests
             var media = MediaServiceUnitTestConstants.GetEmptyLinkMediaEntry();
             var mediaService = GetService();
 
-            await ThrowsTask(async () => await mediaService.StoreMediaFormFileAsync(media, false, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await mediaService.StoreMediaFormFileAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media, false, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -207,7 +207,7 @@ namespace StuffyHelper.Tests.UnitTests
             var media = MediaServiceUnitTestConstants.GetEmptyFileMediaEntry();
             var mediaService = GetService();
 
-            await ThrowsTask(async () => await mediaService.StoreMediaFormFileAsync(media, false, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await mediaService.StoreMediaFormFileAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media, false, CancellationToken), VerifySettings);
         }
 
 
@@ -216,7 +216,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var media = MediaServiceUnitTestConstants.GetCorrectAddMediaEntry();
             var mediaService = GetService();
-            var result = await mediaService.StoreMediaFormFileAsync(media, false, CancellationToken);
+            var result = await mediaService.StoreMediaFormFileAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media, false, CancellationToken);
 
             await Verify(result, VerifySettings);
         }

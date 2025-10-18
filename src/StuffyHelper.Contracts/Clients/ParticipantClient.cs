@@ -9,7 +9,7 @@ namespace StuffyHelper.Contracts.Clients;
 /// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IParticipantClient" />
 public class ParticipantClient: ApiClientBase, IParticipantClient
 {
-    private const string DefaultRoute = "api/v1/participants";
+    private const string DefaultRoute = "api/v1";
     
     /// <summary>
     /// Ctor.
@@ -22,17 +22,16 @@ public class ParticipantClient: ApiClientBase, IParticipantClient
     /// <inheritdoc />
     public Task<Response<ParticipantShortEntry>> GetParticipantsAsync(
         string token,
+        Guid eventId,
         int offset = 0,
         int limit = 10,
-        Guid? eventId = null,
         string? userId = null,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(DefaultRoute)
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/participants")
             .AddBearerToken(token)
             .AddQueryParameter("limit", limit)
             .AddQueryParameter("offset", offset)
-            .AddOptionalQueryParameter(nameof(eventId), eventId)
             .AddOptionalQueryParameter(nameof(userId), userId);
 
         return Get<Response<ParticipantShortEntry>>(request, cancellationToken);
@@ -41,10 +40,11 @@ public class ParticipantClient: ApiClientBase, IParticipantClient
     /// <inheritdoc />
     public Task<GetParticipantEntry> GetParticipantAsync(
         string token,
+        Guid eventId,
         Guid participantId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/{participantId}")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/participants/{participantId}")
             .AddBearerToken(token);
 
         return Get<GetParticipantEntry>(request, cancellationToken);
@@ -53,10 +53,11 @@ public class ParticipantClient: ApiClientBase, IParticipantClient
     /// <inheritdoc />
     public Task<ParticipantShortEntry> CreateParticipantAsync(
         string token,
+        Guid eventId,
         UpsertParticipantEntry body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(DefaultRoute)
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/participants")
             .AddBearerToken(token)
             .AddJsonBody(body);
 
@@ -66,10 +67,11 @@ public class ParticipantClient: ApiClientBase, IParticipantClient
     /// <inheritdoc />
     public Task DeleteParticipantAsync(
         string token,
+        Guid eventId,
         Guid participantId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/{participantId}")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/participants/{participantId}")
             .AddBearerToken(token);
 
         return Delete(request, cancellationToken);

@@ -23,14 +23,15 @@ namespace StuffyHelper.Data.Repository
         }
 
         /// <inheritdoc />
-        public async Task<DebtEntry> GetDebtAsync(Guid debtId, CancellationToken cancellationToken = default)
+        public async Task<DebtEntry> GetDebtAsync(Guid eventId, Guid debtId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(debtId, nameof(debtId));
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             try
             {
                 var entry = await _context.Debts
-                    .FirstOrDefaultAsync(e => e.Id == debtId,
+                    .FirstOrDefaultAsync(e => e.Id == debtId && e.EventId == eventId,
                     cancellationToken);
 
                 if (entry is null)
@@ -110,6 +111,7 @@ namespace StuffyHelper.Data.Repository
         /// <inheritdoc />
         public async Task<Response<DebtEntry>> GetDebtsByUserAsync(
            string userId,
+           Guid eventId,
            int offset = 0,
            int limit = 10,
            CancellationToken cancellationToken = default)
@@ -119,7 +121,7 @@ namespace StuffyHelper.Data.Repository
             try
             {
                 var searchedData = await _context.Debts
-                    .Where(e => e.DebtorId == userId || e.LenderId == userId)
+                    .Where(e => (e.DebtorId == userId || e.LenderId == userId) && e.EventId == eventId)
                     .OrderByDescending(e => e.CreatedDate)
                     .ToListAsync(cancellationToken);
 

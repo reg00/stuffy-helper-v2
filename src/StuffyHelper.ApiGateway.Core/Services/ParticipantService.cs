@@ -14,30 +14,30 @@ namespace StuffyHelper.ApiGateway.Core.Services
             _participantClient = participantClient;
         }
 
-        public async Task<GetParticipantEntry> GetParticipantAsync(string token, Guid participantId, CancellationToken cancellationToken)
+        public async Task<GetParticipantEntry> GetParticipantAsync(string token, Guid eventId, Guid participantId, CancellationToken cancellationToken)
         {
-            return await _participantClient.GetParticipantAsync(token, participantId, cancellationToken);
+            return await _participantClient.GetParticipantAsync(token, eventId, participantId, cancellationToken);
         }
 
         public async Task<Response<ParticipantShortEntry>> GetParticipantsAsync(
             string token, 
+            Guid eventId,
             int offset = 0,
             int limit = 10,
-            Guid? eventId = null,
             string? userId = null,
             CancellationToken cancellationToken = default)
         {
-            return await _participantClient.GetParticipantsAsync(token, offset, limit, eventId, userId, cancellationToken);
+            return await _participantClient.GetParticipantsAsync(token, eventId, offset, limit, userId, cancellationToken);
         }
 
-        public async Task<ParticipantShortEntry> AddParticipantAsync(string token, UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
+        public async Task<ParticipantShortEntry> AddParticipantAsync(string token, Guid eventId, UpsertParticipantEntry participant, CancellationToken cancellationToken = default)
         {
-            return await _participantClient.CreateParticipantAsync(token, participant, cancellationToken);
+            return await _participantClient.CreateParticipantAsync(token, eventId, participant, cancellationToken);
         }
 
-        public async Task DeleteParticipantAsync(string token, Guid participantId, CancellationToken cancellationToken = default)
+        public async Task DeleteParticipantAsync(string token, Guid eventId, Guid participantId, CancellationToken cancellationToken = default)
         {
-            await _participantClient.DeleteParticipantAsync(token, participantId, cancellationToken);
+            await _participantClient.DeleteParticipantAsync(token, eventId, participantId, cancellationToken);
         }
     }
 }

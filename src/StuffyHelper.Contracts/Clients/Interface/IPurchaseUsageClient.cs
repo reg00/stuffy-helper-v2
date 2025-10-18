@@ -13,9 +13,9 @@ public interface IPurchaseUsageClient
     /// </summary>
     public Task<Response<PurchaseUsageShortEntry>> GetPurchaseUsagesAsync(
         string token,
+        Guid eventId,
         int offset = 0,
         int limit = 10,
-        Guid? eventId = null,
         Guid? participantId = null,
         Guid? purchaseId = null,
         CancellationToken cancellationToken = default);
@@ -25,6 +25,7 @@ public interface IPurchaseUsageClient
     /// </summary>
     public Task<GetPurchaseUsageEntry> GetPurchaseUsageAsync(
         string token,
+        Guid eventId,
         Guid purchaseUsageId,
         CancellationToken cancellationToken = default);
 
@@ -33,6 +34,7 @@ public interface IPurchaseUsageClient
     /// </summary>
     public Task<PurchaseUsageShortEntry> CreatePurchaseUsageAsync(
         string token,
+        Guid eventId,
         UpsertPurchaseUsageEntry body,
         CancellationToken cancellationToken = default);
 
@@ -41,6 +43,7 @@ public interface IPurchaseUsageClient
     /// </summary>
     public Task DeletePurchaseUsageAsync(
         string token,
+        Guid eventId,
         Guid purchaseUsageId,
         CancellationToken cancellationToken = default);
 
@@ -49,6 +52,7 @@ public interface IPurchaseUsageClient
     /// </summary>
     public Task<PurchaseUsageShortEntry> UpdatePurchaseUsageAsync(
         string token,
+        Guid eventId,
         Guid purchaseUsageId,
         UpsertPurchaseUsageEntry body,
         CancellationToken cancellationToken = default);

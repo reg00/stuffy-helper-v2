@@ -33,17 +33,17 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetPurchasesRoute)]
         public async Task<Response<GetPurchaseEntry>> GetAsync(
+            Guid eventId,
             int offset = 0,
             int limit = 10,
             string? name = null,
             double? costMin = null,
             double? costMax = null,
-            Guid? eventId = null,
             IEnumerable<string>? purchaseTags = null,
             Guid? unitTypeId = null,
             bool? isComplete = null)
         {
-            return await _purchaseService.GetPurchasesAsync(offset, limit, name, costMin, costMax, eventId,
+            return await _purchaseService.GetPurchasesAsync(eventId, offset, limit, name, costMin, costMax,
                                                                             purchaseTags, unitTypeId, isComplete, HttpContext.RequestAborted);
         }
 
@@ -56,9 +56,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetPurchaseRoute)]
-        public async Task<GetPurchaseEntry> GetAsync(Guid purchaseId)
+        public async Task<GetPurchaseEntry> GetAsync([FromRoute] Guid eventId, [FromRoute] Guid purchaseId)
         {
-             return await _purchaseService.GetPurchaseAsync(purchaseId, HttpContext.RequestAborted);
+             return await _purchaseService.GetPurchaseAsync(eventId, purchaseId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -69,14 +69,14 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(PurchaseShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddPurchaseRoute)]
-        public async Task<PurchaseShortEntry> PostAsync([FromBody] AddPurchaseEntry addEntry)
+        public async Task<PurchaseShortEntry> PostAsync([FromRoute] Guid eventId, [FromBody] AddPurchaseEntry addEntry)
         {
             if (!ModelState.IsValid)
             {
                 throw new BadRequestException(ModelState);
             }
 
-            return await _purchaseService.AddPurchaseAsync(addEntry, HttpContext.RequestAborted);
+            return await _purchaseService.AddPurchaseAsync(eventId, addEntry, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -86,9 +86,9 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeletePurchaseRoute)]
-        public async Task DeleteAsync(Guid purchaseId)
+        public async Task DeleteAsync([FromRoute] Guid eventId, [FromRoute] Guid purchaseId)
         {
-            await _purchaseService.DeletePurchaseAsync(purchaseId, HttpContext.RequestAborted);
+            await _purchaseService.DeletePurchaseAsync(eventId, purchaseId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -99,14 +99,14 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType(typeof(PurchaseShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdatePurchaseRoute)]
-        public async Task<PurchaseShortEntry> PatchAsync(Guid purchaseId, [FromBody] UpdatePurchaseEntry updateEntry)
+        public async Task<PurchaseShortEntry> PatchAsync([FromRoute] Guid eventId, [FromRoute] Guid purchaseId, [FromBody] UpdatePurchaseEntry updateEntry)
         {
             if (!ModelState.IsValid)
             {
                 throw new BadRequestException(ModelState);
             }
 
-            return await _purchaseService.UpdatePurchaseAsync(purchaseId, updateEntry, HttpContext.RequestAborted);
+            return await _purchaseService.UpdatePurchaseAsync(eventId, purchaseId, updateEntry, HttpContext.RequestAborted);
         }
     }
 }

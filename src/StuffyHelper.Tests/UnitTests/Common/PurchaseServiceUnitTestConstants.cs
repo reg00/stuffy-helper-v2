@@ -31,7 +31,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
             {
                 Amount = 1,
                 Cost = 1,
-                EventId = Guid.NewGuid(),
                 IsPartial = true,
                 Name = "Test",
                 ParticipantId = Guid.NewGuid(),

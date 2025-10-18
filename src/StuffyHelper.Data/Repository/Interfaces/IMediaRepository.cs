@@ -21,10 +21,12 @@ namespace StuffyHelper.Data.Repository.Interfaces
         /// <summary>
         /// Get media by identifier
         /// </summary>
+        /// <param name="eventId">Event identifier</param>
         /// <param name="mediaId">Media identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Media entry</returns>
         Task<MediaEntry> GetMediaAsync(
+            Guid eventId, 
             Guid mediaId,
             CancellationToken cancellationToken = default);
 
@@ -41,18 +43,18 @@ namespace StuffyHelper.Data.Repository.Interfaces
         /// <summary>
         /// Get filtered list of media
         /// </summary>
+        /// <param name="eventId">Event identifier</param>
         /// <param name="offset">Number of records to skip</param>
         /// <param name="limit">Maximum number of records to return</param>
-        /// <param name="eventId">Event identifier filter</param>
         /// <param name="createdDateStart">Minimum creation date filter</param>
         /// <param name="createdDateEnd">Maximum creation date filter</param>
         /// <param name="mediaType">Media type filter</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>List of media entries</returns>
         Task<IEnumerable<MediaEntry>> GetMediasAsync(
+            Guid eventId,
             int offset,
             int limit,
-            Guid? eventId = null,
             DateTimeOffset? createdDateStart = null,
             DateTimeOffset? createdDateEnd = null,
             MediaType? mediaType = null,

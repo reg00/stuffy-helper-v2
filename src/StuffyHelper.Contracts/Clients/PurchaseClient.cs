@@ -9,7 +9,7 @@ namespace StuffyHelper.Contracts.Clients;
 /// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IPurchaseClient" />
 public class PurchaseClient: ApiClientBase, IPurchaseClient
 {
-    private const string DefaultRoute = "api/v1/purchases";
+    private const string DefaultRoute = "api/v1";
     
     /// <summary>
     /// Ctor.
@@ -22,22 +22,21 @@ public class PurchaseClient: ApiClientBase, IPurchaseClient
     /// <inheritdoc />
     public Task<Response<GetPurchaseEntry>> GetPurchasesAsync(
         string token,
+        Guid eventId,
         int offset = 0,
         int limit = 10,
         string? name = null,
         double? costMin = null,
         double? costMax = null,
-        Guid? eventId = null,
         string[]? purchaseTags = null,
         Guid? unitTypeId = null,
         bool? isComplete = null,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(DefaultRoute)
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/purchases")
             .AddBearerToken(token)
             .AddQueryParameter("limit", limit)
             .AddQueryParameter("offset", offset)
-            .AddOptionalQueryParameter(nameof(eventId), eventId)
             .AddOptionalQueryParameter(nameof(name), name)
             .AddOptionalQueryParameter(nameof(costMin), costMin)
             .AddOptionalQueryParameter(nameof(costMax), costMax)
@@ -51,10 +50,11 @@ public class PurchaseClient: ApiClientBase, IPurchaseClient
     /// <inheritdoc />
     public Task<GetPurchaseEntry> GetPurchaseAsync(
         string token,
+        Guid eventId,
         Guid purchaseId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/{purchaseId}")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/purchases/{purchaseId}")
             .AddBearerToken(token);
 
         return Get<GetPurchaseEntry>(request, cancellationToken);
@@ -63,10 +63,11 @@ public class PurchaseClient: ApiClientBase, IPurchaseClient
     /// <inheritdoc />
     public Task<PurchaseShortEntry> CreatePurchaseAsync(
         string token,
+        Guid eventId,
         AddPurchaseEntry body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest(DefaultRoute)
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/purchases")
             .AddBearerToken(token)
             .AddJsonBody(body);
 
@@ -76,10 +77,11 @@ public class PurchaseClient: ApiClientBase, IPurchaseClient
     /// <inheritdoc />
     public Task DeletePurchaseAsync(
         string token,
+        Guid eventId,
         Guid purchaseId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/{purchaseId}")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/purchases/{purchaseId}")
             .AddBearerToken(token);
 
         return Delete(request, cancellationToken);
@@ -88,11 +90,12 @@ public class PurchaseClient: ApiClientBase, IPurchaseClient
     /// <inheritdoc />
     public Task<PurchaseShortEntry> UpdatePurchaseAsync(
         string token,
+        Guid eventId,
         Guid purchaseId,
         UpdatePurchaseEntry body,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/{purchaseId}")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/purchases/{purchaseId}")
             .AddBearerToken(token)
             .AddJsonBody(body);
 

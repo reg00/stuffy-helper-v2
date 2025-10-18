@@ -14,6 +14,7 @@ public interface IMediaClient
     /// </summary>
     public Task<MediaShortEntry> StoreMediaFormFileAsync(
         string token,
+        Guid eventId,
         AddMediaEntry body,
         CancellationToken cancellationToken = default);
 
@@ -22,6 +23,7 @@ public interface IMediaClient
     /// </summary>
     public Task<FileParam> RetrieveMediaFormFileAsync(
         string token,
+        Guid eventId,
         Guid mediaId,
         CancellationToken cancellationToken = default);
 
@@ -30,6 +32,7 @@ public interface IMediaClient
     /// </summary>
     public Task<GetMediaEntry> GetMediaMetadataAsync(
         string token,
+        Guid eventId,
         Guid mediaId,
         CancellationToken cancellationToken = default);
 
@@ -38,6 +41,7 @@ public interface IMediaClient
     /// </summary>
     public Task DeleteMediaAsync(
         string token,
+        Guid eventId,
         Guid mediaId,
         CancellationToken cancellationToken = default);
 
@@ -46,9 +50,9 @@ public interface IMediaClient
     /// </summary>
     public Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
         string token,
+        Guid? eventId,
         int offset = 0,
         int limit = 10,
-        Guid? eventId = null,
         DateTimeOffset? createdDateStart = null,
         DateTimeOffset? createdDateEnd = null,
         MediaType? mediaType = null,

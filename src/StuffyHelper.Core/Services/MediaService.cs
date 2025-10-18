@@ -30,7 +30,7 @@ namespace StuffyHelper.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task DeleteMediaAsync(Guid mediaId, CancellationToken cancellationToken = default)
+        public async Task DeleteMediaAsync(Guid eventId, Guid mediaId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(mediaId, nameof(mediaId));
 
@@ -39,7 +39,7 @@ namespace StuffyHelper.Core.Services
             try
             {
                 entry = await _mediaRepository.GetMediaAsync(
-                mediaId,
+                eventId, mediaId,
                 cancellationToken);
             }
             catch (Exception)
@@ -92,12 +92,12 @@ namespace StuffyHelper.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<MediaBlobEntry> GetMediaFormFileAsync(Guid mediaId, CancellationToken cancellationToken = default)
+        public async Task<MediaBlobEntry> GetMediaFormFileAsync(Guid eventId, Guid mediaId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(mediaId, nameof(mediaId));
 
             var entry = await _mediaRepository.GetMediaAsync(
-                mediaId,
+                eventId, mediaId,
                 cancellationToken);
 
             var stream = await _fileRepository.GetFileAsync(
@@ -111,12 +111,12 @@ namespace StuffyHelper.Core.Services
         }
 
         /// <inheritdoc />
-        public async Task<GetMediaEntry> GetMediaMetadataAsync(Guid mediaId, CancellationToken cancellationToken = default)
+        public async Task<GetMediaEntry> GetMediaMetadataAsync(Guid eventId, Guid mediaId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(mediaId, nameof(mediaId));
 
             var entry = await _mediaRepository.GetMediaAsync(
-                mediaId,
+                eventId, mediaId,
                 cancellationToken);
 
             return _mapper.Map<GetMediaEntry>(entry);
@@ -135,9 +135,9 @@ namespace StuffyHelper.Core.Services
 
         /// <inheritdoc />
         public async Task<IEnumerable<MediaShortEntry>> GetMediaMetadatasAsync(
+            Guid eventId, 
             int offset,
             int limit,
-            Guid? eventId = null,
             DateTimeOffset? createdDateStart = null,
             DateTimeOffset? createdDateEnd = null,
             MediaType? mediaType = null,
@@ -145,8 +145,8 @@ namespace StuffyHelper.Core.Services
         {
             try
             {
-                return (await _mediaRepository.GetMediasAsync(
-                offset, limit, eventId, createdDateStart, createdDateEnd, mediaType, cancellationToken))
+                return (await _mediaRepository.GetMediasAsync(eventId,
+                offset, limit, createdDateStart, createdDateEnd, mediaType, cancellationToken))
                 .Select(s => _mapper.Map<MediaShortEntry>(s));
             }
             catch (EntityNotFoundException)
@@ -215,12 +215,13 @@ namespace StuffyHelper.Core.Services
 
         /// <inheritdoc />
         public async Task<MediaShortEntry> StoreMediaFormFileAsync(
+            Guid eventId, 
             AddMediaEntry media,
             bool isPrimal = false,
             CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotNull(media, nameof(media));
-            EnsureArg.IsNotDefault(media.EventId, nameof(media.EventId));
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             if (media.MediaType == MediaType.Link && string.IsNullOrWhiteSpace(media.Link))
                 throw new ArgumentNullException(nameof(media.Link), "link cannot be null");
@@ -228,7 +229,8 @@ namespace StuffyHelper.Core.Services
                 throw new ArgumentNullException(nameof(media.File), "file cannot be null");
 
             var entry = _mapper.Map<MediaEntry>((media, isPrimal));
-
+            entry.EventId = eventId;
+            
             try
             {
                 var mediaEntry = await _mediaRepository.AddMediaAsync(
@@ -258,7 +260,7 @@ namespace StuffyHelper.Core.Services
                 if (media.MediaType != MediaType.Link)
                     await _fileRepository.DeleteFilesIfExistAsync(
                         StuffyMinioExtensions.GetStuffyObjectName(
-                            media.EventId.ToString(),
+                            eventId.ToString(),
                             entry.Id.ToString(),
                             entry.FileType),
                         cancellationToken: cancellationToken);

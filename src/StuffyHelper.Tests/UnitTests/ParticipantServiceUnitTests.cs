@@ -29,7 +29,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var participantService = GetService();
 
-            await ThrowsTask(async () => await participantService.GetParticipantAsync(Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await participantService.GetParticipantAsync(Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -37,14 +37,14 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var participant = ParticipantServiceUnitTestConstants.GetCorrectParticipantEntry();
 
-            _participantRepositoryMoq.Setup(x => x.GetParticipantAsync(participant.Id, CancellationToken))
+            _participantRepositoryMoq.Setup(x => x.GetParticipantAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), participant.Id, CancellationToken))
                 .ReturnsAsync(participant);
 
             _authorizationClientMoq.Setup(x => x.GetUserById(participant.UserId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
             var participantService = GetService();
-            var result = await participantService.GetParticipantAsync(participant.Id, CancellationToken);
+            var result = await participantService.GetParticipantAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), participant.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -56,9 +56,9 @@ namespace StuffyHelper.Tests.UnitTests
 
             _participantRepositoryMoq.Setup(x =>
             x.GetParticipantsAsync(
+                It.IsAny<Guid>(),
                 It.IsAny<int>(),
                 It.IsAny<int>(),
-                It.IsAny<Guid?>(),
                 It.IsAny<string?>(),
                 It.IsAny<CancellationToken>()))
                 .ReturnsAsync(participantResponse);
@@ -67,7 +67,7 @@ namespace StuffyHelper.Tests.UnitTests
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
             var participantService = GetService();
-            var result = await participantService.GetParticipantsAsync(
+            var result = await participantService.GetParticipantsAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), 
                 cancellationToken: CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -78,7 +78,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var participantService = GetService();
 
-            await ThrowsTask(async () => await participantService.AddParticipantAsync(null, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await participantService.AddParticipantAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), null, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -94,43 +94,7 @@ namespace StuffyHelper.Tests.UnitTests
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
             var participantService = GetService();
-            var result = await participantService.AddParticipantAsync(addParticipant, CancellationToken);
-
-            await Verify(result, VerifySettings);
-        }
-
-        [Fact]
-        public async Task UpdateParticipantAsync_EmptyInput()
-        {
-            var participantService = GetService();
-
-            await ThrowsTask(async () => await participantService.UpdateParticipantAsync(Guid.Empty, null, CancellationToken), VerifySettings);
-        }
-
-        [Fact]
-        public async Task UpdateParticipantAsync_ParticipantNotFound()
-        {
-            var participantService = GetService();
-
-            await ThrowsTask(async () => await participantService.UpdateParticipantAsync(Guid.Parse("e9aa0073-5de0-4227-a5f6-4d6c47d5f9e6"), new(), CancellationToken), VerifySettings);
-        }
-
-        [Fact]
-        public async Task UpdateParticipantAsync_Success()
-        {
-            var participant = ParticipantServiceUnitTestConstants.GetCorrectParticipantEntry();
-            var updateParticipant = ParticipantServiceUnitTestConstants.GetCorrectUpsertParticipantEntry();
-
-            _participantRepositoryMoq.Setup(x => x.UpdateParticipantAsync(It.IsAny<ParticipantEntry>(), CancellationToken))
-                .ReturnsAsync(participant);
-            _participantRepositoryMoq.Setup(x => x.GetParticipantAsync(participant.Id, CancellationToken))
-                .ReturnsAsync(participant);
-
-            _authorizationClientMoq.Setup(x => x.GetUserById(participant.UserId, It.IsAny<CancellationToken>()))
-                .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
-
-            var participantService = GetService();
-            var result = await participantService.UpdateParticipantAsync(participant.Id, updateParticipant, CancellationToken);
+            var result = await participantService.AddParticipantAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), addParticipant, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -140,7 +104,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var participantService = GetService();
 
-            await ThrowsTask(async () => await participantService.DeleteParticipantAsync(string.Empty, Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await participantService.DeleteParticipantAsync(string.Empty, Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
     }
 }

@@ -23,14 +23,14 @@ namespace StuffyHelper.Data.Repository
         }
 
         /// <inheritdoc />
-        public async Task<ParticipantEntry> GetParticipantAsync(Guid participantId, CancellationToken cancellationToken)
+        public async Task<ParticipantEntry> GetParticipantAsync(Guid eventId, Guid participantId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(participantId, nameof(participantId));
 
             try
             {
                 var entry = await _context.Participants
-                    .FirstOrDefaultAsync(e => e.Id == participantId, cancellationToken);
+                    .FirstOrDefaultAsync(e => e.Id == participantId && e.EventId == eventId, cancellationToken);
 
                 if (entry is null)
                     throw new EntityNotFoundException("Participant {ParticipantId} not found.", participantId);
@@ -49,9 +49,9 @@ namespace StuffyHelper.Data.Repository
 
         /// <inheritdoc />
         public async Task<Response<ParticipantEntry>> GetParticipantsAsync(
+            Guid eventId,
             int offset = 0,
             int limit = 10,
-            Guid? eventId = null,
             string? userId = null,
             CancellationToken cancellationToken = default)
         {
@@ -59,7 +59,7 @@ namespace StuffyHelper.Data.Repository
             {
                 var searchedData = await _context.Participants
                     .Where(e => (string.IsNullOrWhiteSpace(userId) || e.UserId.ToLower().Equals(userId.ToLower())) &&
-                    (eventId == null || e.EventId == eventId))
+                     e.EventId == eventId)
                     .OrderByDescending(e => e.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
 

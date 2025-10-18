@@ -9,7 +9,7 @@ namespace StuffyHelper.Contracts.Clients;
 /// <inheritdoc cref="StuffyHelper.Contracts.Clients.Interface.IDebtClient" />
 public class DebtClient: ApiClientBase, IDebtClient
 {
-    private const string DefaultRoute = "api/v1/debts";
+    private const string DefaultRoute = "api/v1";
     
     /// <summary>
     /// Ctor.
@@ -22,11 +22,12 @@ public class DebtClient: ApiClientBase, IDebtClient
     /// <inheritdoc />
     public Task<Response<GetDebtEntry>> GetDebtsAsync(
         string token,
+        Guid eventId,
         int offset = 0,
         int limit = 10,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/debts")
             .AddBearerToken(token)
             .AddQueryParameter("limit", limit)
             .AddQueryParameter("offset", offset);
@@ -37,28 +38,29 @@ public class DebtClient: ApiClientBase, IDebtClient
     /// <inheritdoc />
     public Task<GetDebtEntry> GetDebtAsync(
         string token,
+        Guid eventId,
         Guid debtId,
         CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/{debtId}")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/debts/{debtId}")
             .AddBearerToken(token);
 
         return Get<GetDebtEntry>(request, cancellationToken);
     }
 
     /// <inheritdoc />
-    public Task SendDebtAsync(string token, Guid debtId, CancellationToken cancellationToken = default)
+    public Task SendDebtAsync(string token, Guid eventId, Guid debtId, CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/{debtId}/send")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/debts/{debtId}/send")
             .AddBearerToken(token);
 
         return Post(request, cancellationToken);
     }
     
     /// <inheritdoc />
-    public Task ConfirmDebtAsync(string token, Guid debtId, CancellationToken cancellationToken = default)
+    public Task ConfirmDebtAsync(string token, Guid eventId, Guid debtId, CancellationToken cancellationToken = default)
     {
-        var request = CreateRequest($"{DefaultRoute}/{debtId}/confirm")
+        var request = CreateRequest($"{DefaultRoute}/events/{eventId}/debts/{debtId}/confirm")
             .AddBearerToken(token);
 
         return Post(request, cancellationToken);

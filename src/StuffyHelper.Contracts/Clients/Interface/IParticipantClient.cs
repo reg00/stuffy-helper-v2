@@ -13,9 +13,9 @@ public interface IParticipantClient
     /// </summary>
     public Task<Response<ParticipantShortEntry>> GetParticipantsAsync(
         string token,
+        Guid eventId,
         int offset = 0,
         int limit = 10,
-        Guid? eventId = null,
         string? userId = null,
         CancellationToken cancellationToken = default);
 
@@ -24,6 +24,7 @@ public interface IParticipantClient
     /// </summary>
     public Task<GetParticipantEntry> GetParticipantAsync(
         string token,
+        Guid eventId,
         Guid participantId,
         CancellationToken cancellationToken = default);
 
@@ -32,6 +33,7 @@ public interface IParticipantClient
     /// </summary>
     public Task<ParticipantShortEntry> CreateParticipantAsync(
         string token,
+        Guid eventId,
         UpsertParticipantEntry body,
         CancellationToken cancellationToken = default);
 
@@ -40,6 +42,7 @@ public interface IParticipantClient
     /// </summary>
     public Task DeleteParticipantAsync(
         string token,
+        Guid eventId,
         Guid participantId,
         CancellationToken cancellationToken = default);
 }

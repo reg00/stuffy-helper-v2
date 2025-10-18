@@ -26,12 +26,12 @@ namespace StuffyHelper.ApiGateway.Controllers
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetParticipantsRoute)]
         public async Task<Response<ParticipantShortEntry>> GetAsync(
+            [FromRoute] Guid eventId,
             int offset = 0,
             int limit = 10,
-            Guid? eventId = null,
             string? userId = null)
         {
-            return await _participantService.GetParticipantsAsync(Token, offset, limit, eventId, userId, HttpContext.RequestAborted);
+            return await _participantService.GetParticipantsAsync(Token, eventId, offset, limit, userId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -43,9 +43,9 @@ namespace StuffyHelper.ApiGateway.Controllers
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetParticipantRoute)]
-        public async Task<GetParticipantEntry> GetAsync(Guid participantId)
+        public async Task<GetParticipantEntry> GetAsync([FromRoute] Guid eventId, [FromRoute] Guid participantId)
         {
-            return await _participantService.GetParticipantAsync(Token, participantId, HttpContext.RequestAborted);
+            return await _participantService.GetParticipantAsync(Token, eventId, participantId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -56,9 +56,9 @@ namespace StuffyHelper.ApiGateway.Controllers
         [ProducesResponseType(typeof(ParticipantShortEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddParticipantRoute)]
-        public async Task<ParticipantShortEntry> PostAsync([FromBody] UpsertParticipantEntry addEntry)
+        public async Task<ParticipantShortEntry> PostAsync([FromRoute] Guid eventId, [FromBody] UpsertParticipantEntry addEntry)
         {
-            return await _participantService.AddParticipantAsync(Token, addEntry, HttpContext.RequestAborted);
+            return await _participantService.AddParticipantAsync(Token, eventId, addEntry, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -68,9 +68,9 @@ namespace StuffyHelper.ApiGateway.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteParticipantRoute)]
-        public async Task DeleteAsync(Guid participantId)
+        public async Task DeleteAsync([FromRoute] Guid eventId, [FromRoute] Guid participantId)
         {
-            await _participantService.DeleteParticipantAsync(Token, participantId, HttpContext.RequestAborted);
+            await _participantService.DeleteParticipantAsync(Token, eventId, participantId, HttpContext.RequestAborted);
         }
     }
 }

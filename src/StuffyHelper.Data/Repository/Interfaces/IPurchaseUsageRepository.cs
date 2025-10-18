@@ -11,25 +11,26 @@ namespace StuffyHelper.Data.Repository.Interfaces
         /// <summary>
         /// Get purchase usage by identifier
         /// </summary>
+        /// <param name="eventId">Event identifier</param>
         /// <param name="purchaseUsageId">Purchase usage identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Purchase usage entry</returns>
-        Task<PurchaseUsageEntry> GetPurchaseUsageAsync(Guid purchaseUsageId, CancellationToken cancellationToken);
+        Task<PurchaseUsageEntry> GetPurchaseUsageAsync(Guid eventId, Guid purchaseUsageId, CancellationToken cancellationToken);
 
         /// <summary>
         /// Get filtered list of purchase usages
         /// </summary>
+        /// <param name="eventId">Event identifier</param>
         /// <param name="offset">Number of records to skip</param>
         /// <param name="limit">Maximum number of records to return</param>
-        /// <param name="eventId">Event identifier filter</param>
         /// <param name="participantId">Participant identifier filter</param>
         /// <param name="purchaseId">Purchase identifier filter</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Paginated list of purchase usages</returns>
         Task<Response<PurchaseUsageEntry>> GetPurchaseUsagesAsync(
+            Guid eventId,
             int offset = 0,
             int limit = 10,
-            Guid? eventId = null,
             Guid? participantId = null,
             Guid? purchaseId = null,
             CancellationToken cancellationToken = default);
@@ -45,9 +46,10 @@ namespace StuffyHelper.Data.Repository.Interfaces
         /// <summary>
         /// Delete purchase usage by identifier
         /// </summary>
+        /// <param name="eventId">Event identifier</param>
         /// <param name="purchaseUsageId">Purchase usage identifier</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        Task DeletePurchaseUsageAsync(Guid purchaseUsageId, CancellationToken cancellationToken = default);
+        Task DeletePurchaseUsageAsync(Guid eventId, Guid purchaseUsageId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Update purchase usage information

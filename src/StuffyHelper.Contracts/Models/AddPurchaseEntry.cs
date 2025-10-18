@@ -31,12 +31,6 @@ namespace StuffyHelper.Contracts.Models
         public double Amount { get; init; }
         
         /// <summary>
-        /// Event id
-        /// </summary>
-        [Required]
-        public Guid EventId { get; init; }
-        
-        /// <summary>
         /// Participant id
         /// </summary>
         [Required]

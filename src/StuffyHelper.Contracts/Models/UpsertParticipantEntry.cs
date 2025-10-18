@@ -9,8 +9,8 @@ namespace StuffyHelper.Contracts.Models{
         /// <summary>
         /// Identifier of the event to associate with the participant
         /// </summary>
-        [Required]
-        public Guid EventId { get; init; }
+        //[Required]
+        //public Guid EventId { get; init; }
         
         /// <summary>
         /// Identifier of the user to add as a participant

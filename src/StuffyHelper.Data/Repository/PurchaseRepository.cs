@@ -22,9 +22,10 @@ namespace StuffyHelper.Data.Repository
         }
 
         /// <inheritdoc />
-        public async Task<PurchaseEntry> GetPurchaseAsync(Guid purchaseId, CancellationToken cancellationToken)
+        public async Task<PurchaseEntry> GetPurchaseAsync(Guid eventId, Guid purchaseId, CancellationToken cancellationToken)
         {
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             try
             {
@@ -33,7 +34,7 @@ namespace StuffyHelper.Data.Repository
                     .Include(e => e.PurchaseUsages)
                     .Include(e => e.UnitType)
                     .Include(e => e.PurchaseTags)
-                    .FirstOrDefaultAsync(e => e.Id == purchaseId, cancellationToken);
+                    .FirstOrDefaultAsync(e => e.Id == purchaseId && e.EventId == eventId, cancellationToken);
 
                 if (entry is null)
                     throw new EntityNotFoundException("Purchase {PurchaseId} not found.", purchaseId);
@@ -54,12 +55,12 @@ namespace StuffyHelper.Data.Repository
 
         /// <inheritdoc />
         public async Task<Response<PurchaseEntry>> GetPurchasesAsync(
+            Guid eventId,
             int offset = 0,
             int limit = 10,
             string? name = null,
             double? costMin = null,
             double? costMax = null,
-            Guid? eventId = null,
             IEnumerable<string>? purchaseTags = null,
             Guid? unitTypeId = null,
             bool? isComplete = null,
@@ -71,12 +72,12 @@ namespace StuffyHelper.Data.Repository
                     .Include(e => e.PurchaseTags)
                     .Include(e => e.UnitType)
                     .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.ToLower().Contains(name.ToLower())) &&
+                    e.EventId == eventId &&
                     (costMin == null || costMin <= e.Cost) &&
                     (costMax == null || costMax >= e.Cost) &&
-                    (eventId == null || e.EventId == eventId) &&
                     (unitTypeId == null || e.UnitTypeId == unitTypeId) &&
                     (isComplete == null || e.IsComplete == isComplete) &&
-                    (purchaseTags == null || !purchaseTags.Any() || e.PurchaseTags.Any(tag => purchaseTags.Select(tag => tag.ToLower()).Contains(tag.Name.ToLower()))))
+                    (purchaseTags == null || !purchaseTags.Any() || e.PurchaseTags.Any(tag => purchaseTags.Select(s => s.ToLower()).Contains(tag.Name.ToLower()))))
                     .OrderByDescending(e => e.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
 
@@ -102,8 +103,8 @@ namespace StuffyHelper.Data.Repository
             {
                 var entry = await _context.Purchases.AddAsync(purchase, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
-                _context.Entry(entry.Entity).Reference(x => x.UnitType).Load();
-                entry.Entity.PurchaseTags = entry.Entity.PurchaseTags.Where(x => x.IsActive == true).ToList();
+                await _context.Entry(entry.Entity).Reference(x => x.UnitType).LoadAsync(cancellationToken);
+                entry.Entity.PurchaseTags = entry.Entity.PurchaseTags.Where(x => x.IsActive).ToList();
                 return entry.Entity;
             }
             catch (Exception ex)
@@ -113,15 +114,16 @@ namespace StuffyHelper.Data.Repository
         }
 
         /// <inheritdoc />
-        public async Task DeletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default)
+        public async Task DeletePurchaseAsync(Guid eventId, Guid purchaseId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             try
             {
                 var purchase = await _context.Purchases
                     .FirstOrDefaultAsync(
-                    s => s.Id == purchaseId, cancellationToken);
+                    s => s.Id == purchaseId && s.EventId == eventId, cancellationToken);
 
                 if (purchase is null)
                 {
@@ -138,15 +140,16 @@ namespace StuffyHelper.Data.Repository
         }
 
         /// <inheritdoc />
-        public async Task CompletePurchaseAsync(Guid purchaseId, CancellationToken cancellationToken = default)
+        public async Task CompletePurchaseAsync(Guid eventId, Guid purchaseId, CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(purchaseId, nameof(purchaseId));
+            EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             try
             {
                 var purchase = await _context.Purchases
                     .FirstOrDefaultAsync(
-                    s => s.Id == purchaseId, cancellationToken);
+                    s => s.Id == purchaseId && eventId == s.EventId, cancellationToken);
 
                 if (purchase is null)
                 {
@@ -172,7 +175,7 @@ namespace StuffyHelper.Data.Repository
             {
                 var entry = _context.Purchases.Update(purchase);
                 await _context.SaveChangesAsync(cancellationToken);
-                entry.Entity.PurchaseTags = entry.Entity.PurchaseTags.Where(x => x.IsActive == true).ToList();
+                entry.Entity.PurchaseTags = entry.Entity.PurchaseTags.Where(x => x.IsActive).ToList();
                 return entry.Entity;
             }
             catch (EntityNotFoundException)
