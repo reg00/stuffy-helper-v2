@@ -44,10 +44,10 @@ namespace StuffyHelper.Contracts.Models
         public bool IsComplete { get; init; }
 
         /// <summary>
-        /// Event associated with the purchase
+        /// Event Id associated with the purchase
         /// </summary>
         [Required]
-        public EventShortEntry? Event { get; init; }
+        public Guid EventId { get; init; }
         
         /// <summary>
         /// List of tags associated with the purchase

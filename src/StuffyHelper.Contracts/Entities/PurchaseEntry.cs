@@ -62,7 +62,7 @@ namespace StuffyHelper.Contracts.Entities
         /// <summary>
         /// Linked purchase tags
         /// </summary>
-        public virtual List<PurchaseTagEntry> PurchaseTags { get; set; } = new List<PurchaseTagEntry>();
+        public virtual List<PurchaseTagEntry> PurchaseTags { get; set; } = new();
         /// <summary>
         /// Linked unit type
         /// </summary>
@@ -70,7 +70,7 @@ namespace StuffyHelper.Contracts.Entities
         /// <summary>
         /// Linked purchase usages 
         /// </summary>
-        public virtual List<PurchaseUsageEntry> PurchaseUsages { get; init; } = new List<PurchaseUsageEntry>();
+        public virtual List<PurchaseUsageEntry> PurchaseUsages { get; init; } = new();
         /// <summary>
         /// Linked event
         /// </summary>

@@ -1,5 +1,6 @@
 using AutoMapper;
 using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Contracts.Entities;
 using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.AutoMapper;
@@ -14,7 +15,7 @@ public class DebtAutoMapperProfile : Profile
     /// </summary>
     public DebtAutoMapperProfile()
     {
-        CreateMap<(GetDebtEntry Debt, UserShortEntry Lender, UserShortEntry Debtor), GetDebtEntry>()
+        CreateMap<(DebtEntry Debt, UserShortEntry Lender, UserShortEntry Debtor), GetDebtEntry>()
             .ForMember(gbe => gbe.Id, opt => opt.MapFrom(src => src.Debt.Id))
             .ForMember(gbe => gbe.Amount, opt => opt.MapFrom(src => src.Debt.Amount))
             .ForMember(gbe => gbe.IsSent, opt => opt.MapFrom(src => src.Debt.IsSent))

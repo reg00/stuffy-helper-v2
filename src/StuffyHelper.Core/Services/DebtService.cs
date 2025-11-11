@@ -74,8 +74,7 @@ namespace StuffyHelper.Core.Services
                 var lender = await _authorizationClient.GetUserById(dbDebt.LenderId, cancellationToken);
                 var debtor = await _authorizationClient.GetUserById(dbDebt.DebtorId, cancellationToken);
 
-                debts.Add(_mapper.Map<GetDebtEntry>((dbDebt,_mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor))));
-
+                debts.Add(_mapper.Map<GetDebtEntry>((dbDebt, _mapper.Map<UserShortEntry>(lender), _mapper.Map<UserShortEntry>(debtor))));
             }
 
             return new Response<GetDebtEntry>()

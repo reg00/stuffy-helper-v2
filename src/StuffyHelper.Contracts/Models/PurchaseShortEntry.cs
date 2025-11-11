@@ -14,6 +14,12 @@ namespace StuffyHelper.Contracts.Models
         public Guid Id { get; init; }
         
         /// <summary>
+        /// Event id
+        /// </summary>
+        [Required]
+        public Guid EventId { get; init; }
+        
+        /// <summary>
         /// Name of the purchase
         /// </summary>
         [Required]

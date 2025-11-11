@@ -67,7 +67,6 @@ namespace StuffyHelper.Api.Registration
                 cfg.AddProfile(new FriendAutoMapperProfile());
                 cfg.AddProfile(new UserAutoMapperProfile());
                 cfg.AddProfile(new AvatarAutoMapperProfile());
-                cfg.AddProfile(new MediaAutoMapperProfile());
                 
                 cfg.AddProfile(new DebtAutoMapperProfile());
                 cfg.AddProfile(new CheckoutAutoMapperProfile());

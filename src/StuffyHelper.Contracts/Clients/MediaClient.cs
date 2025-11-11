@@ -1,5 +1,6 @@
 using RestSharp;
 using StuffyHelper.Common.Client;
+using StuffyHelper.Common.Client.Helpers;
 using StuffyHelper.Contracts.Clients.Interface;
 using StuffyHelper.Contracts.Enums;
 using StuffyHelper.Contracts.Models;
@@ -29,7 +30,9 @@ public class MediaClient: ApiClientBase, IMediaClient
     {
         var request = CreateRequest($"{DefaultRoute}/events/{eventId}/media/form-file")
             .AddBearerToken(token)
-            .AddJsonBody(body);
+            .AddFile("file", body.File.ToFileParam())
+            .AddParameter("mediaType", body.MediaType)
+            .AddParameter("link", body.Link);
 
         return Post<MediaShortEntry>(request, cancellationToken);
     }
