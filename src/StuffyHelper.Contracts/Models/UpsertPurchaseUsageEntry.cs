@@ -25,7 +25,7 @@ namespace StuffyHelper.Contracts.Models
         /// </summary>
         [Required]
         [Column(TypeName = "decimal(18,2)")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Значение должно быть больше 0")]
-        public double Amount { get; init; }
+        [Range(1, long.MaxValue, ErrorMessage = "Значение должно быть больше 0")]
+        public long Amount { get; init; }
     }
 }

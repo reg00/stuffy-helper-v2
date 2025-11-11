@@ -28,6 +28,6 @@ namespace StuffyHelper.Contracts.Models
         /// <summary>
         /// Amount of the purchase that was used
         /// </summary>
-        public double Amount { get; init; }
+        public long Amount { get; init; }
     }
 }

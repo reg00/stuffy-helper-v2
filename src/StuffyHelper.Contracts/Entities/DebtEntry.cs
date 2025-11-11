@@ -33,7 +33,7 @@
         /// <summary>
         /// Amount of debt
         /// </summary>
-        public double Amount { get; set; }
+        public long Amount { get; set; }
         
         /// <summary>
         /// Is sent

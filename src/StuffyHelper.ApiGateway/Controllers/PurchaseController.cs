@@ -30,8 +30,8 @@ namespace StuffyHelper.ApiGateway.Controllers
             int offset = 0,
             int limit = 10,
             string? name = null,
-            double? costMin = null,
-            double? costMax = null,
+            long? costMin = null,
+            long? costMax = null,
             string[]? purchaseTags = null,
             Guid? unitTypeId = null,
             bool? isComplete = null)

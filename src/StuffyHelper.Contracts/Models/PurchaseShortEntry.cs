@@ -29,13 +29,13 @@ namespace StuffyHelper.Contracts.Models
         /// Cost of the purchase
         /// </summary>
         [Required]
-        public double Cost { get; init; }
+        public long Cost { get; init; }
         
         /// <summary>
         /// Amount/quantity of the purchase
         /// </summary>
         [Required]
-        public double Amount { get; init; }
+        public long Amount { get; init; }
         
         /// <summary>
         /// Indicates whether the purchase can be partially used

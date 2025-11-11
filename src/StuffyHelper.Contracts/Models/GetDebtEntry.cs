@@ -15,7 +15,7 @@ namespace StuffyHelper.Contracts.Models
         /// <summary>
         /// Amount
         /// </summary>
-        public double Amount { get; set; }
+        public long Amount { get; set; }
         
         /// <summary>
         /// Is debt paid

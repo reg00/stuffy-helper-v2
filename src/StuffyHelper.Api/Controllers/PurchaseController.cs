@@ -37,8 +37,8 @@ namespace StuffyHelper.Api.Controllers
             int offset = 0,
             int limit = 10,
             string? name = null,
-            double? costMin = null,
-            double? costMax = null,
+            long? costMin = null,
+            long? costMax = null,
             IEnumerable<string>? purchaseTags = null,
             Guid? unitTypeId = null,
             bool? isComplete = null)

@@ -22,12 +22,12 @@ namespace StuffyHelper.Contracts.Entities
         /// <summary>
         /// Purchase cost
         /// </summary>
-        public double Cost { get; set; }
+        public long Cost { get; set; }
         
         /// <summary>
         /// Purchase amount
         /// </summary>
-        public double Amount { get; set; }
+        public long Amount { get; set; }
         
         /// <summary>
         /// Is purchase partial

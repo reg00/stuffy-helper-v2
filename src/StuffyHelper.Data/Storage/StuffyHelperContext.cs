@@ -11,16 +11,12 @@ namespace StuffyHelper.Data.Storage
 {
     public partial class StuffyHelperContext : DbContext
     {
-        public static readonly ILoggerFactory MyLoggerFactory = LoggerFactory.Create(builder => { builder.AddConsole(); });
-
-        private readonly EntityFrameworkConfiguration _configuration;
-
-        public StuffyHelperContext(IOptions<EntityFrameworkConfiguration> configuration)
+        public StuffyHelperContext()
         {
-            EnsureArg.IsNotNull(configuration, nameof(configuration));
-
-            _configuration = configuration.Value;
+            
         }
+        public StuffyHelperContext(DbContextOptions<StuffyHelperContext> options) : base(options)
+        { }
 
         public virtual DbSet<EventEntry> Events { get; set; }
         public virtual DbSet<ParticipantEntry> Participants { get; set; }
@@ -34,13 +30,13 @@ namespace StuffyHelper.Data.Storage
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            EnsureArg.IsNotNull(optionsBuilder, nameof(optionsBuilder));
-
-            optionsBuilder.UseLazyLoadingProxies();
-            optionsBuilder.UseNpgsql(_configuration.ConnectionString);
-            optionsBuilder.EnableDetailedErrors();
-            optionsBuilder.EnableSensitiveDataLogging();
-            optionsBuilder.UseLoggerFactory(MyLoggerFactory);
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseLazyLoadingProxies();
+                optionsBuilder.UseNpgsql("ConnectionString");
+                optionsBuilder.EnableDetailedErrors();
+                optionsBuilder.EnableSensitiveDataLogging();
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -98,13 +94,9 @@ namespace StuffyHelper.Data.Storage
                 entity.Property(e => e.EventId).IsRequired();
                 entity.Property(e => e.UnitTypeId).IsRequired(false);
                 entity.Property(e => e.Amount).IsRequired()
-                    .HasAnnotation("Range", new[] { 0.01, double.MaxValue })
-                    .HasPrecision(18, 2)
-                    .HasConversion(v => Math.Ceiling(v * 100) / 100, v => v);
+                    .HasAnnotation("Range", new[] { 1, long.MaxValue });
                 entity.Property(e => e.Cost).IsRequired()
-                    .HasAnnotation("Range", new[] { 0.01, double.MaxValue })
-                    .HasPrecision(18, 2)
-                    .HasConversion(v => Math.Ceiling(v * 100) / 100, v => v);
+                    .HasAnnotation("Range", new[] { 1, long.MaxValue });
                 entity.Property(e => e.IsPartial).IsRequired().HasDefaultValue(false);
                 entity.Property(e => e.IsComplete).IsRequired().HasDefaultValue(false);
             });
@@ -124,9 +116,7 @@ namespace StuffyHelper.Data.Storage
                 entity.Property(e => e.PurchaseId).IsRequired();
                 entity.Property(e => e.ParticipantId).IsRequired();
                 entity.Property(e => e.Amount).IsRequired()
-                    .HasPrecision(18, 2)
-                    .HasConversion(v => Math.Ceiling(v * 100) / 100, v => v)
-                    .HasAnnotation("Range", new[] { 0.01, double.MaxValue });
+                    .HasAnnotation("Range", new[] { 1, long.MaxValue });
             });
 
             modelBuilder.Entity<PurchaseTagEntry>(entity =>

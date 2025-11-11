@@ -18,17 +18,15 @@ namespace StuffyHelper.Contracts.Models
         /// Cost
         /// </summary>
         [Required]
-        [Column(TypeName = "decimal(18,2)")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Значение должно быть больше 0")]
-        public double Cost { get; init; }
+        [Range(1, long.MaxValue, ErrorMessage = "Значение должно быть больше 0")]
+        public long Cost { get; init; }
         
         /// <summary>
         /// Amount
         /// </summary>
         [Required]
-        [Column(TypeName = "decimal(18,2)")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Значение должно быть больше 0")]
-        public double Amount { get; init; }
+        [Range(1, long.MaxValue, ErrorMessage = "Значение должно быть больше 0")]
+        public long Amount { get; init; }
         
         /// <summary>
         /// Participant id

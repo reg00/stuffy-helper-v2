@@ -27,7 +27,7 @@ namespace StuffyHelper.Contracts.Entities
         /// <summary>
         /// Amount
         /// </summary>
-        public double Amount { get; set; }
+        public long Amount { get; set; }
 
         
         /// <summary>

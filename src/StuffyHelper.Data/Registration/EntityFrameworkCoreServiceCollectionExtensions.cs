@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 using StuffyHelper.Common.Configurations;
+using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Registration
 {
@@ -31,7 +32,10 @@ namespace StuffyHelper.Data.Registration
             services.AddSingleton(Options.Create(entityFrameworkConfiguration));
             services.AddDbContext<TDbContext>(options =>
             {
-                options.UseNpgsql(entityFrameworkConfiguration.ConnectionString, configurePostgreSql);
+                options.UseLazyLoadingProxies()
+                    .UseNpgsql(entityFrameworkConfiguration.ConnectionString, configurePostgreSql)
+                    .EnableDetailedErrors()
+                    .EnableSensitiveDataLogging();
             });
 
             return services;
