@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Models;
 
 namespace StuffyHelper.ApiGateway.Core.Services.Interfaces;
@@ -14,7 +15,17 @@ public interface IAuthorizationService
     /// </summary>
     /// <param name="model">Login model</param>
     /// <param name="cancellationToken">Cancellation token</param>
-    Task<string> Login(LoginModel model, CancellationToken cancellationToken = default);
+    Task<LoginResponse> Login(LoginModel model, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Выход из системы
+    /// </summary>
+    Task Logout(string token, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Получение новой пары токенов по рефреш токену
+    /// </summary>
+    Task<LoginResponse> Refresh(CancellationToken cancellationToken = default);
     
     /// <summary>
     /// Регистрация пользователя

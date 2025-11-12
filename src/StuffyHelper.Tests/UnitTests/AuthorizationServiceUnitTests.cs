@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using StuffyHelper.Tests.UnitTests.Common;
 using System.Security.Claims;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Enums;
@@ -21,6 +22,7 @@ namespace StuffyHelper.Tests.UnitTests
         private readonly Mock<RoleManager<IdentityRole>> _roleManagerMoq = new(new Mock<IRoleStore<IdentityRole>>().Object, Array.Empty<IRoleValidator<IdentityRole>>(), new Mock<ILookupNormalizer>().Object, new Mock<IdentityErrorDescriber>().Object, new Mock<ILogger<RoleManager<IdentityRole>>>().Object);
         private readonly Mock<IAvatarService> _avatarServiceMoq = new();
         private readonly Mock<IConfiguration> _configMoq = new();
+        private readonly Mock<IMemoryCache> _cacheMoq = new();
 
         private AuthorizationService GetService()
         {
@@ -35,7 +37,8 @@ namespace StuffyHelper.Tests.UnitTests
                 _roleManagerMoq.Object,
                 _avatarServiceMoq.Object,
                 configuration,
-                mapper);
+                mapper,
+                _cacheMoq.Object);
         }
         
         [Fact]

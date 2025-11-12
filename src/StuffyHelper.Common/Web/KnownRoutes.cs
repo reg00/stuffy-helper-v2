@@ -42,6 +42,7 @@ public static class KnownRoutes
         public const string RegisterRoute = $"{AuthRoute}/register";
         public const string RolesRoute = $"{AuthRoute}/roles";
         public const string LoginRoute = $"{AuthRoute}/login";
+        public const string RefreshRoute = $"{AuthRoute}/refresh";
         public const string EmailConfirmRoute = $"{AuthRoute}/email-confirm";
         public const string EditUserRoute = $"{AuthRoute}/edit";
         public const string AvatarRoute = $"{AuthRoute}/avatar";

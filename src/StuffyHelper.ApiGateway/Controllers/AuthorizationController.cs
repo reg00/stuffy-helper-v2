@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Messages;
 using StuffyHelper.Common.Web;
@@ -55,13 +56,38 @@ namespace StuffyHelper.ApiGateway.Controllers
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(GetUserEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.LoginRoute)]
-        public async Task<string> Login([FromBody] LoginModel model)
+        public async Task<LoginResponse> Login([FromBody] LoginModel model)
         {
             return await _authorizationService.Login(model, HttpContext.RequestAborted);
+        }
+        
+        /// <summary>
+        /// Получение нового токена
+        /// </summary>
+        [HttpPost]
+        [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.RefreshRoute)]
+        public async Task<LoginResponse> Refresh()
+        {
+            return await _authorizationService.Refresh(HttpContext.RequestAborted);
+        }
+
+        /// <summary>
+        /// Выход
+        /// </summary>
+        [HttpPost]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.LogoutRoute)]
+        public async Task Logout()
+        {
+            await _authorizationService.Logout(Token, HttpContext.RequestAborted);
         }
 
         // /// <summary>

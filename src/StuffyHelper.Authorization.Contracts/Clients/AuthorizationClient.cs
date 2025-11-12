@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using RestSharp;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
+using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Client;
 using StuffyHelper.Common.Client.Helpers;
@@ -44,14 +45,33 @@ public class AuthorizationClient : ApiClientBase, IAuthorizationClient
     }
     
     /// <inheritdoc />
-    public Task<string> Login(
+    public Task<LoginResponse> Login(
         LoginModel body,
         CancellationToken cancellationToken = default)
     {
         var request = CreateRequest($"{DefaultRoute}/login")
             .AddJsonBody(body);
 
-        return Post<string>(request, cancellationToken);
+        return Post<LoginResponse>(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task Logout(
+        string token,
+        CancellationToken cancellationToken = default)
+    {
+        var request = CreateRequest($"{DefaultRoute}/logout")
+            .AddBearerToken(token);
+
+        return Post(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public Task<LoginResponse> Refresh(CancellationToken cancellationToken = default)
+    {
+        var request = CreateRequest($"{DefaultRoute}/refresh");
+
+        return Post<LoginResponse>(request, cancellationToken);
     }
     
     /// <inheritdoc />

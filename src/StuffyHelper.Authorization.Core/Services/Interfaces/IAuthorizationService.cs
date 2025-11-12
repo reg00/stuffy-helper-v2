@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Models;
 
 namespace StuffyHelper.Authorization.Core.Services.Interfaces;
@@ -16,8 +17,23 @@ public interface IAuthorizationService
     /// </summary>
     /// <param name="model">Login model</param>
     /// <param name="httpContext">Http context</param>
-    Task<JwtSecurityToken> Login(LoginModel model, HttpContext httpContext);
+    Task<LoginResponse> Login(LoginModel model, HttpContext httpContext);
 
+    /// <summary>
+    /// Logout
+    /// </summary>
+    /// <param name="httpContext">Http context</param>
+    Task Logout(HttpContext httpContext);
+
+    /// <summary>
+    /// Make new pair of acces and refresh token using input refresh token
+    /// </summary>
+    /// <param name="user">User claims</param>
+    /// <param name="httpContext">Http context</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    Task<LoginResponse> Refresh(ClaimsPrincipal user, HttpContext httpContext,
+        CancellationToken cancellationToken = default);
+    
     /// <summary>
     /// Register user in stuffy helper
     /// </summary>

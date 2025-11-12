@@ -1,7 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 using EnsureThat;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Enums;
@@ -24,6 +27,7 @@ public static class AuthorizationExtensions
             var token = new JwtSecurityToken(
                 issuer: authorizationConfiguration.JWT.ValidIssuer,
                 audience: authorizationConfiguration.JWT.ValidAudience,
+                notBefore: DateTime.UtcNow,
                 expires: DateTime.UtcNow.AddHours(authorizationConfiguration.JWT.TokenExpireInHours),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authorizationConfiguration.JWT.GetSecurityKey(), SecurityAlgorithms.HmacSha256)
@@ -35,12 +39,16 @@ public static class AuthorizationExtensions
         /// <summary>
         /// Creates JWT token
         /// </summary>
-        public static JwtSecurityToken CreateToken(this StuffyUser user, IEnumerable<string> roles, AuthorizationConfiguration authorizationConfiguration)
+        public static (string, DateTime) CreateAccessToken(this StuffyUser user, IEnumerable<string> roles, AuthorizationConfiguration authorizationConfiguration)
         {
+            var now = DateTime.UtcNow;
+            var exp = now.AddHours(authorizationConfiguration.JWT.TokenExpireInHours);
+            
             var authClaims = new List<Claim>
                 {
                     new (ClaimTypes.Sid, user.Id),
                     new(ClaimTypes.Name, user.UserName ?? string.Empty),
+                    new Claim(JwtRegisteredClaimNames.Iat, ((long)(now - DateTime.UnixEpoch).TotalSeconds).ToString(), ClaimValueTypes.Integer64),
                     new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                     new(ClaimTypes.Uri, user.ImageUri?.AbsoluteUri ?? string.Empty)
                 };
@@ -48,7 +56,36 @@ public static class AuthorizationExtensions
             foreach (var userRole in roles)
                 authClaims.Add(new Claim(ClaimTypes.Role, userRole));
 
-            return authClaims.GetToken(authorizationConfiguration);
+            var token = authClaims.GetToken(authorizationConfiguration);
+            return (new JwtSecurityTokenHandler().WriteToken(token), exp);
+        }
+
+        /// <summary>
+        /// Creates refresh token entity
+        /// </summary>
+        public static RefreshEntity CreateRefreshToken(string userId)
+        {
+            var bytes = RandomNumberGenerator.GetBytes(64);
+            var token = WebEncoders.Base64UrlEncode(bytes);
+            
+            return new RefreshEntity()
+            {
+                Id =  Guid.NewGuid(),
+                UserId = userId,
+                Hash = HashToken(token),
+                ExpiresAt = DateTime.UtcNow.AddDays(30),
+                CreatedAt = DateTime.UtcNow,
+                Revoked = false
+            };
+        }
+        
+        /// <summary>
+        /// Hash token
+        /// </summary>
+        private static string HashToken(string token)
+        {
+            // В хранилище сохраняем только hash RT
+            return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token)));
         }
 
         /// <summary>

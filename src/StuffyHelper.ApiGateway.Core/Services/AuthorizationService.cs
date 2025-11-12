@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using StuffyHelper.ApiGateway.Core.Services.Interfaces;
 using StuffyHelper.Authorization.Contracts.Clients.Interface;
+using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Models;
 
 namespace StuffyHelper.ApiGateway.Core.Services;
@@ -20,9 +21,21 @@ public class AuthorizationService : IAuthorizationService
     }
 
     /// <inheritdoc />
-    public async Task<string> Login(LoginModel model, CancellationToken cancellationToken = default)
+    public async Task<LoginResponse> Login(LoginModel model, CancellationToken cancellationToken = default)
     {
         return await _authorizationClient.Login(model, cancellationToken);
+    }
+    
+    /// <inheritdoc />
+    public async Task Logout(string token, CancellationToken cancellationToken = default)
+    {
+        await _authorizationClient.Logout(token, cancellationToken);
+    }
+    
+    /// <inheritdoc />
+    public async Task<LoginResponse> Refresh(CancellationToken cancellationToken = default)
+    {
+        return await _authorizationClient.Refresh(cancellationToken);
     }
 
     /// <inheritdoc />

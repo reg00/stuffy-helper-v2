@@ -1,5 +1,7 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using System.Text.Json;
+using Microsoft.AspNetCore.Http;
 using RestSharp;
 using RestSharp.Serializers.Json;
 using StuffyHelper.Common.Exceptions;
@@ -34,7 +36,9 @@ public abstract class ApiClientBase
         _client = new RestClient(new RestClientOptions(baseUrl)
             {
                 ThrowOnDeserializationError = true,
-                Timeout = TimeSpan.FromHours(1)
+                Timeout = TimeSpan.FromHours(1),
+                CookieContainer = new CookieContainer(),
+                FollowRedirects = true
             },
             configureSerialization: s => s.UseSystemTextJson(SerializerOptions.Value));
     }
@@ -200,6 +204,24 @@ public abstract class ApiClientBase
             }
 
             throw apiError == null ? CreateHttpException(request, response) : BaseException.FromApiError(apiError);
+        }
+        
+        // Проверяем, есть ли куки в ответе
+        if (response.Cookies != null && response.Cookies.Any())
+        {
+            // Устанавливаем куки в ответ гейтвея
+            foreach (var cookie in response.Cookies)
+            {
+                var a = cookie.GetType().Name;
+                response.Cookies.Append(cookie.Name, cookie.Value, new CookieOptions
+                {
+                    Path = "/",
+                    Secure = false, 
+                    HttpOnly = true, 
+                    SameSite = SameSiteMode.None, 
+                    Expires = DateTime.UtcNow.AddDays(30)
+                });
+            }
         }
         
         return response;

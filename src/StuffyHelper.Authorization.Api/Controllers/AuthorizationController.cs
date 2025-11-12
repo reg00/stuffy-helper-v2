@@ -1,9 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using EnsureThat;
+﻿using EnsureThat;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using Microsoft.AspNetCore.Authorization;
+using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Models;
 using StuffyHelper.Common.Configurations;
 using StuffyHelper.Common.Configurators;
@@ -116,20 +116,43 @@ namespace StuffyHelper.Authorization.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [AllowAnonymous]
-        [ProducesResponseType(typeof(string), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.Unauthorized)]
         [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.LoginRoute)]
-        public async Task<string> Login([FromBody] LoginModel model)
+        public async Task<LoginResponse> Login([FromBody] LoginModel model)
         {
             EnsureArg.IsNotNull(model, nameof(model));
 
             if (!ModelState.IsValid)
                 throw new BadRequestException(ModelState);
 
-            var token = await _authorizationService.Login(model, HttpContext);
+            return await _authorizationService.Login(model, HttpContext);
+        }
+        
+        /// <summary>
+        /// Получение нового токена
+        /// </summary>
+        [HttpPost]
+        [ProducesResponseType(typeof(LoginResponse), (int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.RefreshRoute)]
+        public async Task<LoginResponse> Refresh()
+        {
+            return await _authorizationService.Refresh(User, HttpContext, HttpContext.RequestAborted);
+        }
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+        /// <summary>
+        /// Выход
+        /// </summary>
+        [HttpPost]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.Unauthorized)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.LogoutRoute)]
+        public async Task Logout()
+        {
+            await _authorizationService.Logout(HttpContext);
         }
 
         /// <summary>

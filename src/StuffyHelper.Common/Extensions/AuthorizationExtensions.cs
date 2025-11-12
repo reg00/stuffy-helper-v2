@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Primitives;
 using Microsoft.IdentityModel.Tokens;
 using StuffyHelper.Common.Configurators;
 
@@ -36,7 +37,23 @@ public static class AuthorizationExtensions
                     ValidateIssuerSigningKey = true,
                     ValidAudience = config.JWT.ValidAudience,
                     ValidIssuer = config.JWT.ValidIssuer,
-                    IssuerSigningKey = config.JWT.GetSecurityKey()
+                    IssuerSigningKey = config.JWT.GetSecurityKey(),
+                    ClockSkew = TimeSpan.FromMinutes(1),
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = ctx =>
+                    {
+                        if (ctx.Exception is SecurityTokenExpiredException)
+                        {
+                            ctx.Response.Headers.Append(new KeyValuePair<string, StringValues>(
+                                "WWW-Authenticate",
+                                "Bearer error=\"invalid_token\", error_description=\"expired\""
+                            ));
+                        }
+
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

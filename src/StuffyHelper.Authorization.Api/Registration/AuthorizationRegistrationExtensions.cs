@@ -67,6 +67,8 @@ public static class AuthorizationRegistrationExtensions
                 .AddAuthenticationServices()
                 .AddMinioBlobDataStores(configuration.GetSection(StuffyConfiguration.DefaultSection));
 
+        services.AddMemoryCache();
+        
         return services;
     }
 

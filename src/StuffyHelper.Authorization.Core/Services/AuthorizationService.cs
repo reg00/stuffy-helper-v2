@@ -1,10 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using AutoMapper;
 using EnsureThat;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using StuffyHelper.Authorization.Contracts.Entities;
 using StuffyHelper.Authorization.Contracts.Enums;
@@ -24,6 +23,8 @@ public class AuthorizationService : IAuthorizationService
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly AuthorizationConfiguration _authorizationConfiguration;
         private readonly IAvatarService _avatarService;
+        private readonly IMemoryCache _memoryCache;
+        private readonly MemoryCacheEntryOptions _memoryCacheOptions;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -34,22 +35,26 @@ public class AuthorizationService : IAuthorizationService
             RoleManager<IdentityRole> roleManager,
             IAvatarService avatarService,
             IConfiguration configuration,
-            IMapper mapper)
+            IMapper mapper, IMemoryCache memoryCache)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _avatarService = avatarService;
             _mapper = mapper;
+            _memoryCache = memoryCache;
+            _memoryCacheOptions = new MemoryCacheEntryOptions()
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(30)
+            };
 
             var config = configuration.GetConfig();
             _authorizationConfiguration = config.Authorization;
         }
 
         /// <inheritdoc />
-        public async Task<JwtSecurityToken> Login(LoginModel model, HttpContext httpContext)
+        public async Task<LoginResponse> Login(LoginModel model, HttpContext httpContext)
         {
             EnsureArg.IsNotNull(model, nameof(model));
-
             var user = await _userManager.FindByNameAsync(model.Username);
 
             if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
@@ -58,21 +63,57 @@ public class AuthorizationService : IAuthorizationService
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
                 var roles = await _userManager.GetRolesAsync(user);
-                var token = user.CreateToken(roles, _authorizationConfiguration);
+                
+                var (token, exp) = user.CreateAccessToken(roles, _authorizationConfiguration);
+                var refreshModel = AuthorizationExtensions.CreateRefreshToken(user.Id);
 
-                var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme, ClaimTypes.Name, ClaimTypes.Role);
-                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.UserName ?? string.Empty));
-                identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName ?? string.Empty));
-
-                foreach (var role in roles)
-                {
-                    identity.AddClaim(new Claim(ClaimTypes.Role, role));
-                }
-
-                return token;
+                // Memory cache
+                SetNoStore(httpContext);
+                SetRefreshCookie(httpContext, refreshModel);
+                InvalidateCache(refreshModel.Hash);
+                SetCache(refreshModel.Hash, user.Id);
+                
+                return new(token, (long)(exp - DateTime.UtcNow).TotalSeconds);
             }
 
             throw new BadRequestException($"Wrong username/password");
+        }
+
+        /// <inheritdoc />
+        public async Task Logout(HttpContext httpContext)
+        {
+            if (httpContext.Request.Cookies.TryGetValue("refresh_token", out var rt) && !string.IsNullOrEmpty(rt))
+            {
+                InvalidateCache(rt);
+            }
+            ClearRefreshCookie(httpContext);
+        }
+        
+        /// <inheritdoc />
+        public async Task<LoginResponse> Refresh(ClaimsPrincipal user, HttpContext httpContext, CancellationToken cancellationToken = default)
+        {
+            ClearRefreshCookie(httpContext);
+            
+            if (!httpContext.Request.Cookies.TryGetValue("refresh_token", out var refreshToken) ||
+                string.IsNullOrEmpty(refreshToken) || !_memoryCache.TryGetValue(refreshToken, out var userId))
+                throw new AuthorizationException("Cannot find refresh cookie");
+
+            var identityUser = await _userManager.FindByNameAsync(user.Identity.Name);
+            
+            if(identityUser == null || identityUser.Id != userId.ToString())
+                throw new AuthorizationException("Wrong refresh token");
+            
+            var roles = await _userManager.GetRolesAsync(identityUser);
+            var (token, exp) = identityUser.CreateAccessToken(roles, _authorizationConfiguration);
+            var refreshModel = AuthorizationExtensions.CreateRefreshToken(identityUser.Id);
+
+            // Memory cache
+            SetNoStore(httpContext);
+            SetRefreshCookie(httpContext, refreshModel);
+            InvalidateCache(refreshModel.Hash);
+            SetCache(refreshModel.Hash, identityUser.Id);
+            
+            return new(token, (long)(exp - DateTime.UtcNow).TotalSeconds);
         }
 
         /// <inheritdoc />
@@ -336,5 +377,41 @@ public class AuthorizationService : IAuthorizationService
             }
 
             throw new Exception("Во время сброса пароля произошла ошибка");
+        }
+
+        static void ClearRefreshCookie(HttpContext http)
+        {
+            http.Response.Cookies.Delete("refresh_token");
+        }
+        
+        static void SetNoStore(HttpContext http)
+        {
+            http.Response.Headers.CacheControl = "no-store";
+            http.Response.Headers.Pragma = "no-cache";
+        }
+        
+        static void SetRefreshCookie(HttpContext http, RefreshEntity refreshEntity, SameSiteMode sameSite = SameSiteMode.None)
+        {
+            var opts = new CookieOptions
+            {
+                Path = "/",
+                Secure = false, // false для localhost (HTTP)
+                HttpOnly = true, // рекомендуется
+                SameSite = sameSite, // Lax для того же домена; None для кросс-домена (требует Secure)
+                Expires = refreshEntity.ExpiresAt
+                // Не указывать Domain => cookie только для текущего хоста
+            };
+            http.Response.Cookies.Append("refresh_token", refreshEntity.Hash, opts);
+        }
+        
+        private void InvalidateCache(string hash)
+        {
+            if(_memoryCache.TryGetValue(hash, out _))
+                _memoryCache.Remove(hash);
+        }
+
+        private void SetCache(string hash, string id)
+        {
+            _memoryCache.Set(hash, id, _memoryCacheOptions);
         }
     }
