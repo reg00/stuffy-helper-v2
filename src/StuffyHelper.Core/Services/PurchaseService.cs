@@ -14,6 +14,7 @@ namespace StuffyHelper.Core.Services
     public class PurchaseService : IPurchaseService
     {
         private readonly IPurchaseRepository _purchaseRepository;
+        private readonly IPurchaseUsageRepository _purchaseUsageRepository;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -21,10 +22,11 @@ namespace StuffyHelper.Core.Services
         /// </summary>
         public PurchaseService(
             IPurchaseRepository purchaseRepository,
-            IMapper mapper)
+            IMapper mapper, IPurchaseUsageRepository purchaseUsageRepository)
         {
             _purchaseRepository = purchaseRepository;
             _mapper = mapper;
+            _purchaseUsageRepository = purchaseUsageRepository;
         }
 
         /// <inheritdoc />
@@ -103,8 +105,13 @@ namespace StuffyHelper.Core.Services
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             var existingPurchase = await ValidatePurchase(eventId, purchaseId, cancellationToken);
-
+            await _purchaseUsageRepository.DeleteEventPurchaseUsages(eventId, cancellationToken);
             existingPurchase.PatchFrom(purchase);
+            
+            var newPurchaseUsages = purchase.PurchaseUsages.Select(x => _mapper.Map<PurchaseUsageEntry>(x)).ToList();
+            if (newPurchaseUsages.Any())
+                existingPurchase.PurchaseUsages = newPurchaseUsages;
+            
             var result = await _purchaseRepository.UpdatePurchaseAsync(existingPurchase, cancellationToken);
 
             return _mapper.Map<PurchaseShortEntry>(result);

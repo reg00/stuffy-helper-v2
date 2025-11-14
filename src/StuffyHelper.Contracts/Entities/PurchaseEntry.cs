@@ -46,7 +46,7 @@ namespace StuffyHelper.Contracts.Entities
         /// <summary>
         /// Linked purchase usages 
         /// </summary>
-        public virtual List<PurchaseUsageEntry> PurchaseUsages { get; init; } = new();
+        public virtual List<PurchaseUsageEntry> PurchaseUsages { get; set; } = new();
         /// <summary>
         /// Linked event
         /// </summary>

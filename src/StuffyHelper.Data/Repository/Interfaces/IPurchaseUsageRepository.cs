@@ -52,6 +52,13 @@ namespace StuffyHelper.Data.Repository.Interfaces
         Task DeletePurchaseUsageAsync(Guid eventId, Guid purchaseUsageId, CancellationToken cancellationToken = default);
 
         /// <summary>
+        /// Remove purchase usages from event
+        /// </summary>
+        /// <param name="eventId">Event identifier</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        Task DeleteEventPurchaseUsages(Guid eventId, CancellationToken cancellationToken = default);
+        
+        /// <summary>
         /// Update purchase usage information
         /// </summary>
         /// <param name="purchaseUsage">Updated purchase usage data</param>

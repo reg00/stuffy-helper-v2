@@ -126,6 +126,26 @@ namespace StuffyHelper.Data.Repository
             }
         }
 
+        public async Task DeleteEventPurchaseUsages(Guid eventId, CancellationToken cancellationToken = default)
+        {
+            try
+            {
+                var purchaseUsages = await _context.PurchaseUsages
+                    .Include(x => x.Purchase)
+                    .Where(s => s.Purchase.EventId == eventId).ToListAsync(cancellationToken);
+
+                if (purchaseUsages.Any())
+                {
+                    _context.PurchaseUsages.RemoveRange(purchaseUsages);
+                    await _context.SaveChangesAsync(cancellationToken);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new DbStoreException(ex);
+            }
+        }
+
         /// <inheritdoc />
         public async Task<PurchaseUsageEntry> UpdatePurchaseUsageAsync(PurchaseUsageEntry purchaseUsage, CancellationToken cancellationToken = default)
         {

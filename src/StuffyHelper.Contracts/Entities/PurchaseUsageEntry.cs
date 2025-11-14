@@ -47,7 +47,6 @@ namespace StuffyHelper.Contracts.Entities
             EnsureArg.IsNotNull(entry, nameof(entry));
 
             ParticipantId = entry.ParticipantId;
-            PurchaseId = entry.PurchaseId;
             Amount = entry.Amount;
         }
     }

@@ -7,11 +7,11 @@ namespace StuffyHelper.Contracts.Models
     /// </summary>
     public class UpsertPurchaseUsageEntry
     {
-        /// <summary>
-        /// Identifier of the purchase being used
-        /// </summary>
-        [Required]
-        public Guid PurchaseId { get; init; }
+        // /// <summary>
+        // /// Identifier of the purchase being used
+        // /// </summary>
+        // [Required]
+        // public Guid PurchaseId { get; init; }
         
         /// <summary>
         /// Identifier of the participant using the purchase

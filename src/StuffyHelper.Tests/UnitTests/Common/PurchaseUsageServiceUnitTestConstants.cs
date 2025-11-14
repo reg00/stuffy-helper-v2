@@ -28,7 +28,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
             {
                 Amount = 5,
                 ParticipantId = Guid.NewGuid(),
-                PurchaseId = Guid.NewGuid(),
             };
         }
 
@@ -38,7 +37,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
             {
                 Amount = 6,
                 ParticipantId = Guid.NewGuid(),
-                PurchaseId = Guid.NewGuid(),
             };
         }
 
