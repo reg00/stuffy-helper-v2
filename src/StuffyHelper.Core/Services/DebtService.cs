@@ -146,6 +146,8 @@ namespace StuffyHelper.Core.Services
 
             foreach (var purchase in @event.Purchases.Where(x => x.IsComplete == false))
             {
+                var fullAmount = purchase.PurchaseUsages.Select(x => x.Amount).Sum();
+                
                 foreach (var usage in purchase.PurchaseUsages)
                 {
                     // Сам себе не должен
@@ -155,15 +157,18 @@ namespace StuffyHelper.Core.Services
                     var debt = debts.FirstOrDefault(x => x.LenderId == purchase.Owner.UserId && x.DebtorId == usage.Participant.UserId ||
                                                          x.DebtorId == purchase.Owner.UserId && x.LenderId == usage.Participant.UserId);
 
+                    var userDebt = purchase.Cost * usage.Amount / fullAmount;
                     if (debt != null)
                     {
-                        debt.Amount += debt.LenderId == purchase.Owner.UserId ? usage.Amount : -usage.Amount;
+                        debt.Amount += debt.LenderId == purchase.Owner.UserId ? userDebt : -userDebt;
                     }
                     else
                     {
                         debts.Add(new DebtEntry()
                         {
-                            Amount = purchase.IsPartial ? purchase.Cost * usage.Amount : (purchase.Amount * purchase.Cost) / purchase.PurchaseUsages.Count,
+                            //TODO: переделать долги
+                            //Amount = purchase.IsPartial ? purchase.Cost * usage.Amount : (purchase.Amount * purchase.Cost) / purchase.PurchaseUsages.Count,
+                            Amount = userDebt,
                             LenderId = purchase.Owner.UserId,
                             DebtorId = usage.Participant.UserId,
                             CheckoutId = checkout.Id,
@@ -190,9 +195,6 @@ namespace StuffyHelper.Core.Services
                 {
                     debt.Amount *= -1;
                     (debt.LenderId, debt.DebtorId) = (debt.DebtorId, debt.LenderId);
-                    //var temp = debt.LenderId;
-                    //debt.LenderId = debt.DebtorId;
-                    //debt.DebtorId = temp;
                 }
 
                 var existsDebt = await _debtRepository.GetDebtAsync(debt.LenderId, debt.DebtorId, debt.EventId, cancellationToken);

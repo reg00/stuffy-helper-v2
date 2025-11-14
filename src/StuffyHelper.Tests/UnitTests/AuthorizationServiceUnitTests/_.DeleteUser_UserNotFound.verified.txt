@@ -1,4 +1,10 @@
 ﻿{
   Type: EntityNotFoundException,
-  Message: Пользователь с логином test отсутствует
+  HttpStatus: NotFound,
+  ErrorCode: NOT_FOUND_ERROR,
+  MessageTemplate: Cannot find User by username: {UserName} or userId: {UserId},
+  Args: [
+    test,
+    
+  ]
 }

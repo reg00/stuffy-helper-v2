@@ -1,4 +1,9 @@
 ﻿{
-  Type: AuthorizationException,
-  Message: Can not request yourself.
+  Type: BadRequestException,
+  HttpStatus: BadRequest,
+  ErrorCode: BAD_REQUEST_ERROR,
+  MessageTemplate: Can not request yourself. UserId: {UserId},
+  Args: [
+    123
+  ]
 }

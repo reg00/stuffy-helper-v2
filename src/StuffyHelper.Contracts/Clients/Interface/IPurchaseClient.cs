@@ -19,9 +19,8 @@ public interface IPurchaseClient
         string? name = null,
         long? costMin = null,
         long? costMax = null,
-        string[]? purchaseTags = null,
-        Guid? unitTypeId = null,
         bool? isComplete = null,
+        Guid[]? purchaseIds = null,
         CancellationToken cancellationToken = default);
 
     /// <summary>

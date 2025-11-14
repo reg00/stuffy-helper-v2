@@ -3,5 +3,6 @@
   Name: test,
   Description: test,
   EventDateStart: Date_MinValue,
-  IsCompleted: false
+  IsCompleted: false,
+  ImageUri: http://localhost
 }

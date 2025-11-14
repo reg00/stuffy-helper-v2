@@ -26,9 +26,8 @@ namespace StuffyHelper.Data.Repository.Interfaces
         /// <param name="name">Purchase name filter</param>
         /// <param name="costMin">Minimum cost filter</param>
         /// <param name="costMax">Maximum cost filter</param>
-        /// <param name="purchaseTags">Purchase tags filter</param>
-        /// <param name="unitTypeId">Unit type identifier filter</param>
         /// <param name="isComplete">Purchase completion status filter</param>
+        /// <param name="purchaseIds">Purchase ids filter</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Paginated list of purchases</returns>
         Task<Response<PurchaseEntry>> GetPurchasesAsync(
@@ -38,9 +37,8 @@ namespace StuffyHelper.Data.Repository.Interfaces
             string? name = null,
             long? costMin = null,
             long? costMax = null,
-            IEnumerable<string>? purchaseTags = null,
-            Guid? unitTypeId = null,
             bool? isComplete = null,
+            Guid[]? purchaseIds = null,
             CancellationToken cancellationToken = default);
 
         /// <summary>

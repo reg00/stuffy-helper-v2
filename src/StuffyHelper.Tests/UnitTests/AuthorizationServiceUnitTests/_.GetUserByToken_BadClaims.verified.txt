@@ -1,4 +1,6 @@
 ﻿{
   Type: ForbiddenException,
-  Message: Authorization error
+  HttpStatus: Forbidden,
+  ErrorCode: NO_ACCESS_ERROR,
+  MessageTemplate: Authorization error
 }

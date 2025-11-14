@@ -28,9 +28,8 @@ public class PurchaseClient: ApiClientBase, IPurchaseClient
         string? name = null,
         long? costMin = null,
         long? costMax = null,
-        string[]? purchaseTags = null,
-        Guid? unitTypeId = null,
         bool? isComplete = null,
+        Guid[]? purchaseIds = null,
         CancellationToken cancellationToken = default)
     {
         var request = CreateRequest($"{DefaultRoute}/events/{eventId}/purchases")
@@ -40,9 +39,8 @@ public class PurchaseClient: ApiClientBase, IPurchaseClient
             .AddOptionalQueryParameter(nameof(name), name)
             .AddOptionalQueryParameter(nameof(costMin), costMin)
             .AddOptionalQueryParameter(nameof(costMax), costMax)
-            .AddOptionalQueryParameter(nameof(purchaseTags), purchaseTags)
-            .AddOptionalQueryParameter(nameof(unitTypeId), unitTypeId)
-            .AddOptionalQueryParameter(nameof(isComplete), isComplete);
+            .AddOptionalQueryParameter(nameof(isComplete), isComplete)
+            .AddOptionalQueryParameter(nameof(purchaseIds), purchaseIds);
 
         return Get<Response<GetPurchaseEntry>>(request, cancellationToken);
     }

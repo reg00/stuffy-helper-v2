@@ -15,7 +15,8 @@ namespace StuffyHelper.Tests.Common
         protected TestsBase()
         {
             VerifySettings.IgnoreMember<Exception>(x => x.InnerException);
-
+            VerifySettings.IgnoreMember("Message");
+            
             VerifySettings.UseDirectory($"{GetType().Name}/");
             VerifySettings.UseTypeName("_");
             VerifySettings.IgnoreStackTrace();

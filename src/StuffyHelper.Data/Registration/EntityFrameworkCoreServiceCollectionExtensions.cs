@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 using StuffyHelper.Common.Configurations;
-using StuffyHelper.Data.Storage;
 
 namespace StuffyHelper.Data.Registration
 {

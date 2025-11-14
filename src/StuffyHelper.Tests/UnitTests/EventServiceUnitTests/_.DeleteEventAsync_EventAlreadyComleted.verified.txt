@@ -1,4 +1,10 @@
 ﻿{
   Type: BadRequestException,
-  Message: Cannot edit completed event
+  HttpStatus: BadRequest,
+  ErrorCode: BAD_REQUEST_ERROR,
+  MessageTemplate: Cannot edit completed event {EventId}. User: {UserId},
+  Args: [
+    Guid_1,
+    null
+  ]
 }

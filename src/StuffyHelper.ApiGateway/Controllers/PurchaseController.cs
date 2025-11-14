@@ -32,12 +32,11 @@ namespace StuffyHelper.ApiGateway.Controllers
             string? name = null,
             long? costMin = null,
             long? costMax = null,
-            string[]? purchaseTags = null,
-            Guid? unitTypeId = null,
-            bool? isComplete = null)
+            bool? isComplete = null,
+            Guid[]? purchaseIds = null)
         {
             return await _purchaseService.GetPurchasesAsync(Token, eventId, offset, limit, name, costMin, costMax,
-                                                                            purchaseTags, unitTypeId, isComplete, HttpContext.RequestAborted);
+                                                                            isComplete, purchaseIds, HttpContext.RequestAborted);
         }
 
         /// <summary>

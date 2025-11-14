@@ -1,4 +1,10 @@
 ﻿{
   Type: BadRequestException,
-  Message: Cannot confirm not sented debt
+  HttpStatus: BadRequest,
+  ErrorCode: BAD_REQUEST_ERROR,
+  MessageTemplate: Cannot confirm not sent debt {DebtId}. User: {UserId},
+  Args: [
+    Guid_1,
+    123
+  ]
 }

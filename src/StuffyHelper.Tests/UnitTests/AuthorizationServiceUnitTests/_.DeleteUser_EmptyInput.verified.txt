@@ -1,4 +1,6 @@
 ﻿{
-  Type: Exception,
-  Message: UserName or UserId required
+  Type: BadRequestException,
+  HttpStatus: BadRequest,
+  ErrorCode: BAD_REQUEST_ERROR,
+  MessageTemplate: UserName or UserId required
 }

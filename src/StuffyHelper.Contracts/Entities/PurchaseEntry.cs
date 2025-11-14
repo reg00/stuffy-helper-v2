@@ -1,5 +1,4 @@
 ﻿using EnsureThat;
-using StuffyHelper.Contracts.Interfaces;
 using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Contracts.Entities
@@ -7,7 +6,7 @@ namespace StuffyHelper.Contracts.Entities
     /// <summary>
     /// Purchase entity
     /// </summary>
-    public class PurchaseEntry : ITaggableEntry
+    public class PurchaseEntry
     {
         /// <summary>
         /// Identifier of purchase
@@ -23,21 +22,6 @@ namespace StuffyHelper.Contracts.Entities
         /// Purchase cost
         /// </summary>
         public long Cost { get; set; }
-        
-        /// <summary>
-        /// Purchase amount
-        /// </summary>
-        public long Amount { get; set; }
-        
-        /// <summary>
-        /// Is purchase partial
-        /// </summary>
-        public bool IsPartial { get; set; }
-        
-        /// <summary>
-        /// Unit type id
-        /// </summary>
-        public Guid? UnitTypeId { get; set; }
         
         /// <summary>
         /// Participant id
@@ -60,14 +44,6 @@ namespace StuffyHelper.Contracts.Entities
         public bool IsComplete { get; set; }
 
         /// <summary>
-        /// Linked purchase tags
-        /// </summary>
-        public virtual List<PurchaseTagEntry> PurchaseTags { get; set; } = new();
-        /// <summary>
-        /// Linked unit type
-        /// </summary>
-        public virtual UnitTypeEntry? UnitType { get; init; }
-        /// <summary>
         /// Linked purchase usages 
         /// </summary>
         public virtual List<PurchaseUsageEntry> PurchaseUsages { get; init; } = new();
@@ -86,9 +62,6 @@ namespace StuffyHelper.Contracts.Entities
 
             Name = entry.Name;
             Cost = entry.Cost;
-            Amount = entry.Amount;
-            IsPartial = entry.IsPartial;
-            UnitTypeId = entry.UnitTypeId;
         }
     }
 }

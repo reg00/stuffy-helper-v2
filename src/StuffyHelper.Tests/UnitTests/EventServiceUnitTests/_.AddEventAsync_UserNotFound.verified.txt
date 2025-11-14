@@ -1,4 +1,3 @@
 ﻿{
-  Type: EntityNotFoundException,
-  Message: Пользователь с идентификатором отсутствует
+  Type: EntityNotFoundException
 }

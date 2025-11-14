@@ -165,7 +165,7 @@ namespace StuffyHelper.Tests.UnitTests
                 .ReturnsAsync(eventEntry);
 
             var eventService = GetService();
-
+            
             await ThrowsTask(async () => await eventService.DeleteEventAsync(eventEntry.Id, null, CancellationToken), VerifySettings);
         }
 
@@ -334,6 +334,8 @@ namespace StuffyHelper.Tests.UnitTests
                 .ReturnsAsync(eventEntry);
             _eventRepositoryMoq.Setup(x => x.UpdateEventAsync(It.IsAny<EventEntry>(), CancellationToken))
                 .ReturnsAsync(eventEntry);
+            _mediaServiceMoq.Setup(x => x.GetEventPrimalMediaUri(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new Uri("http://localhost"));
 
             var eventService = GetService();
             var result = await eventService.UpdatePrimalEventMediaAsync(eventEntry.Id, file, null, CancellationToken);

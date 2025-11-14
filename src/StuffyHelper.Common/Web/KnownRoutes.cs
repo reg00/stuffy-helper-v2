@@ -16,8 +16,6 @@ public static class KnownRoutes
         private const string ParticipantsSegment = "participants";
         private const string PurchasesSegment = "purchases";
         private const string PurchaseUsagesSegment = "purchase-usages";
-        private const string PurchaseTagsSegment = "purchase-tags";
-        private const string UnitTypesSegment = "unit-types";
         private const string MediaSegment = "media";
         private const string FormFileSegment = "form-file";
         private const string PresignedUrlSegment = "presigned-url";
@@ -32,8 +30,6 @@ public static class KnownRoutes
         private const string ParticipantIdRouteSegment = $"{{{KnownActionParameterNames.ParticipantId}}}";
         private const string PurchaseIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseId}}}";
         private const string PurchaseUsageIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseUsageId}}}";
-        private const string PurchaseTagIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseTagId}}}";
-        private const string UnitTypeIdRouteSegment = $"{{{KnownActionParameterNames.UnitTypeId}}}";
         private const string MediaIdRouteSegment = $"{{{KnownActionParameterNames.MediaId}}}";
         private const string RequestIdRouteSegment = $"{{{KnownActionParameterNames.RequestId}}}";
         private const string DebtIdRouteSegment = $"{{{KnownActionParameterNames.DebtId}}}";
@@ -81,18 +77,6 @@ public static class KnownRoutes
         public const string GetPurchaseUsagesRoute = AddPurchaseUsageRoute;
         public const string DeletePurchaseUsageRoute = GetPurchaseUsageRoute;
         public const string UpdatePurchaseUsageRoute = GetPurchaseUsageRoute;
-
-        public const string AddPurchaseTagRoute = $"{DefaultRouteSegment}/{PurchaseTagsSegment}";
-        public const string GetPurchaseTagRoute = $"{AddPurchaseTagRoute}/{PurchaseTagIdRouteSegment}";
-        public const string GetPurchaseTagsRoute = AddPurchaseTagRoute;
-        public const string DeletePurchaseTagRoute = GetPurchaseTagRoute;
-        public const string UpdatePurchaseTagRoute = GetPurchaseTagRoute;
-
-        public const string AddUnitTypeRoute = $"{DefaultRouteSegment}/{UnitTypesSegment}";
-        public const string GetUnitTypeRoute = $"{AddUnitTypeRoute}/{UnitTypeIdRouteSegment}";
-        public const string GetUnitTypesRoute = AddUnitTypeRoute;
-        public const string DeleteUnitTypeRoute = GetUnitTypeRoute;
-        public const string UpdateUnitTypeRoute = GetUnitTypeRoute;
 
         private const string GetMediaRouteSegment = $"{GetEventRoute}/{MediaSegment}/{MediaIdRouteSegment}";
         public const string RetrieveMediaFromFileRoute = $"{GetMediaRouteSegment}/{FormFileSegment}";

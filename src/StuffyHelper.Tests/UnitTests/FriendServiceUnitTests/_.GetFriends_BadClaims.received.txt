@@ -1,5 +1,0 @@
-﻿{
-  Type: ForbiddenException,
-  ServerMessage: Authorization error,
-  Message: MinIO API responded with message=Authorization error
-}

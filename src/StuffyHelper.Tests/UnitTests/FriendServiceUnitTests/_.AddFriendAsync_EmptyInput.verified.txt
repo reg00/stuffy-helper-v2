@@ -1,5 +1,4 @@
 ﻿{
   Type: ArgumentException,
-  Message: The string can't be left empty, null or consist of only whitespaces.,
   ParamName: userId
 }

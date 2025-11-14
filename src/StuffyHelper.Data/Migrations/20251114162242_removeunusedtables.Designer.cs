@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using StuffyHelper.Data.Storage;
@@ -11,9 +12,11 @@ using StuffyHelper.Data.Storage;
 namespace StuffyHelper.Data.Migrations
 {
     [DbContext(typeof(StuffyHelperContext))]
-    partial class StuffyHelperContextModelSnapshot : ModelSnapshot
+    [Migration("20251114162242_removeunusedtables")]
+    partial class removeunusedtables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -38,9 +38,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 {
                     new()
                     {
-                        Amount = 1,
                         Cost = 1,
-                        IsPartial = true,
                         EventId = Guid.NewGuid(),
                         Name = "test",
                         IsComplete = false,
@@ -63,7 +61,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
                         {
                             UserId = "555"
                         },
-                        UnitType = UnitTypeServiceUnitTestConstants.GetCorrectUnitTypeEntry()
                     }
                 }
             };

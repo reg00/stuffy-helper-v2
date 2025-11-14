@@ -1,7 +1,4 @@
-﻿using EnsureThat;
-using StuffyHelper.Contracts.Models;
-
-namespace StuffyHelper.Contracts.Entities
+﻿namespace StuffyHelper.Contracts.Entities
 {
     /// <summary>
     /// Participant entity

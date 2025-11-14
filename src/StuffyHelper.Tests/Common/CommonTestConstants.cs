@@ -51,9 +51,7 @@ namespace StuffyHelper.Tests.Common
                 cfg.AddProfile(new MediaAutoMapperProfile());
                 cfg.AddProfile(new ParticipantAutoMapperProfile());
                 cfg.AddProfile(new PurchaseAutoMapperProfile());
-                cfg.AddProfile(new PurchaseTagAutoMapperProfile());
                 cfg.AddProfile(new PurchaseUsageAutoMapperProfile());
-                cfg.AddProfile(new UnitTypeAutoMapperProfile());
             });
         }
         

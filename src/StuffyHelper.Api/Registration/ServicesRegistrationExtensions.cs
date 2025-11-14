@@ -47,9 +47,6 @@ namespace StuffyHelper.Api.Registration
             services.AddScoped<IParticipantService, ParticipantService>();
             services.AddScoped<IPurchaseService, PurchaseService>();
             services.AddScoped<IPurchaseUsageService, PurchaseUsageService>();
-            services.AddScoped<IPurchaseTagService, PurchaseTagService>();
-            services.AddScoped<IUnitTypeService, UnitTypeService>();
-            services.AddScoped<IPurchaseTagPipeline, PurchaseTagPipeline>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IDebtService, DebtService>();
 
@@ -74,9 +71,7 @@ namespace StuffyHelper.Api.Registration
                 cfg.AddProfile(new MediaAutoMapperProfile());
                 cfg.AddProfile(new ParticipantAutoMapperProfile());
                 cfg.AddProfile(new PurchaseAutoMapperProfile());
-                cfg.AddProfile(new PurchaseTagAutoMapperProfile());
                 cfg.AddProfile(new PurchaseUsageAutoMapperProfile());
-                cfg.AddProfile(new UnitTypeAutoMapperProfile());
             });
 
             return services;

@@ -20,8 +20,6 @@ namespace StuffyHelper.Data.Registration
             services.AddScoped<IParticipantRepository, ParticipantRepository>();
             services.AddScoped<IPurchaseRepository, PurchaseRepository>();
             services.AddScoped<IPurchaseUsageRepository, PurchaseUsageRepository>();
-            services.AddScoped<IPurchaseTagRepository, EfPurchaseTagRepository>();
-            services.AddScoped<IUnitTypeRepository, UnitTypeRepository>();
             services.AddScoped<IMediaRepository, MediaRepository>();
             services.AddScoped<IDebtRepository, DebtRepository>();
             services.AddScoped<ICheckoutRepository, CheckoutRepository>();

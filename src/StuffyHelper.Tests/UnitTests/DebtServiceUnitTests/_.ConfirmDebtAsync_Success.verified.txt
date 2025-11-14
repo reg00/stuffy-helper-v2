@@ -1,6 +1,6 @@
 ﻿{
   Id: Guid_1,
-  Amount: 1.0,
+  Amount: 1,
   IsSent: true,
   IsComfirmed: true,
   Event: {

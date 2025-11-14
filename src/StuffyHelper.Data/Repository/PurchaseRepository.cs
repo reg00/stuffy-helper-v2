@@ -32,14 +32,10 @@ namespace StuffyHelper.Data.Repository
                 var entry = await _context.Purchases
                     .Include(e => e.Event)
                     .Include(e => e.PurchaseUsages)
-                    .Include(e => e.UnitType)
-                    .Include(e => e.PurchaseTags)
                     .FirstOrDefaultAsync(e => e.Id == purchaseId && e.EventId == eventId, cancellationToken);
 
                 if (entry is null)
                     throw new EntityNotFoundException("Purchase {PurchaseId} not found.", purchaseId);
-                
-                entry.PurchaseTags = entry.PurchaseTags.Where(x => x.IsActive).ToList();
 
                 return entry;
             }
@@ -61,23 +57,19 @@ namespace StuffyHelper.Data.Repository
             string? name = null,
             long? costMin = null,
             long? costMax = null,
-            IEnumerable<string>? purchaseTags = null,
-            Guid? unitTypeId = null,
             bool? isComplete = null,
+            Guid[]? purchaseIds = null,
             CancellationToken cancellationToken = default)
         {
             try
             {
                 var searchedData = await _context.Purchases
-                    .Include(e => e.PurchaseTags)
-                    .Include(e => e.UnitType)
                     .Where(e => (string.IsNullOrWhiteSpace(name) || e.Name.ToLower().Contains(name.ToLower())) &&
                     e.EventId == eventId &&
                     (costMin == null || costMin <= e.Cost) &&
                     (costMax == null || costMax >= e.Cost) &&
-                    (unitTypeId == null || e.UnitTypeId == unitTypeId) &&
                     (isComplete == null || e.IsComplete == isComplete) &&
-                    (purchaseTags == null || !purchaseTags.Any() || e.PurchaseTags.Any(tag => purchaseTags.Select(s => s.ToLower()).Contains(tag.Name.ToLower()))))
+                    (purchaseIds == null || purchaseIds.Any() || purchaseIds.Contains(e.Id)))
                     .OrderByDescending(e => e.Event.CreatedDate)
                     .ToListAsync(cancellationToken);
 
@@ -103,8 +95,6 @@ namespace StuffyHelper.Data.Repository
             {
                 var entry = await _context.Purchases.AddAsync(purchase, cancellationToken);
                 await _context.SaveChangesAsync(cancellationToken);
-                await _context.Entry(entry.Entity).Reference(x => x.UnitType).LoadAsync(cancellationToken);
-                entry.Entity.PurchaseTags = entry.Entity.PurchaseTags.Where(x => x.IsActive).ToList();
                 return entry.Entity;
             }
             catch (Exception ex)
@@ -175,7 +165,6 @@ namespace StuffyHelper.Data.Repository
             {
                 var entry = _context.Purchases.Update(purchase);
                 await _context.SaveChangesAsync(cancellationToken);
-                entry.Entity.PurchaseTags = entry.Entity.PurchaseTags.Where(x => x.IsActive).ToList();
                 return entry.Entity;
             }
             catch (EntityNotFoundException)

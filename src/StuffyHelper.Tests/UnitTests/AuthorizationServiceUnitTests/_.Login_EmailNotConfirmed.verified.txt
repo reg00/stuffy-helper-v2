@@ -1,4 +1,6 @@
 ﻿{
   Type: ForbiddenException,
-  Message: Вы не подтвердили свой email
+  HttpStatus: Forbidden,
+  ErrorCode: NO_ACCESS_ERROR,
+  MessageTemplate: Email not confirmed!
 }

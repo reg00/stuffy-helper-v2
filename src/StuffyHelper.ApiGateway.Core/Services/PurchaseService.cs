@@ -27,13 +27,12 @@ namespace StuffyHelper.ApiGateway.Core.Services
             string? name = null,
             long? costMin = null,
             long? costMax = null,
-            string[]? purchaseTags = null,
-            Guid? unitTypeId = null,
             bool? isComplete = null,
+            Guid[]? purchaseIds = null,
             CancellationToken cancellationToken = default)
         {
             return await _purchaseClient.GetPurchasesAsync(token, eventId, offset, limit, name, costMin, costMax,
-                                                              purchaseTags, unitTypeId, isComplete, cancellationToken);
+                                                              isComplete, purchaseIds, cancellationToken);
         }
 
         public async Task<PurchaseShortEntry> AddPurchaseAsync(string token, Guid eventId, AddPurchaseEntry purchase, CancellationToken cancellationToken = default)

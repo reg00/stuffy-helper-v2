@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StuffyHelper.Contracts.Models
 {
@@ -22,33 +21,15 @@ namespace StuffyHelper.Contracts.Models
         public long Cost { get; init; }
         
         /// <summary>
-        /// Amount
-        /// </summary>
-        [Required]
-        [Range(1, long.MaxValue, ErrorMessage = "Значение должно быть больше 0")]
-        public long Amount { get; init; }
-        
-        /// <summary>
         /// Participant id
         /// </summary>
         [Required]
         public Guid ParticipantId { get; init; }
-        
+
         /// <summary>
-        /// Purchase tags
-        /// </summary>
-        public List<PurchaseTagShortEntry> PurchaseTags { get; set; } = new();
-        
-        /// <summary>
-        /// Unit type id
+        /// Purchase usages
         /// </summary>
         [Required]
-        public Guid UnitTypeId { get; init; }
-        
-        /// <summary>
-        /// Is purchase partial
-        /// </summary>
-        [Required]
-        public bool IsPartial { get; init; }
+        public UpsertPurchaseUsageEntry[] PurchaseUsages { get; set; } = Array.Empty<UpsertPurchaseUsageEntry>();
     }
 }

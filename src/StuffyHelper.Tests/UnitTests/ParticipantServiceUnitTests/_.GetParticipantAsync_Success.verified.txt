@@ -16,6 +16,5 @@
     Description: test,
     EventDateStart: Date_MinValue,
     IsCompleted: true
-  },
-  PurchaseUsages: []
+  }
 }

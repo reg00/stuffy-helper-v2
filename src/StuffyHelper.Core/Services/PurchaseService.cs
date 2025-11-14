@@ -14,7 +14,6 @@ namespace StuffyHelper.Core.Services
     public class PurchaseService : IPurchaseService
     {
         private readonly IPurchaseRepository _purchaseRepository;
-        private readonly IPurchaseTagPipeline _purchaseTagPipeline;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -22,11 +21,9 @@ namespace StuffyHelper.Core.Services
         /// </summary>
         public PurchaseService(
             IPurchaseRepository purchaseRepository,
-            IPurchaseTagPipeline purchaseTagPipeline,
             IMapper mapper)
         {
             _purchaseRepository = purchaseRepository;
-            _purchaseTagPipeline = purchaseTagPipeline;
             _mapper = mapper;
         }
 
@@ -49,13 +46,12 @@ namespace StuffyHelper.Core.Services
             string? name = null,
             long? costMin = null,
             long? costMax = null,
-            IEnumerable<string>? purchaseTags = null,
-            Guid? unitTypeId = null,
             bool? isComplete = null,
+            Guid[]? purchaseIds = null,
             CancellationToken cancellationToken = default)
         {
             var resp = await _purchaseRepository.GetPurchasesAsync(eventId, offset, limit, name, costMin, costMax,
-                                                              purchaseTags, unitTypeId, isComplete, cancellationToken);
+                                                              isComplete, purchaseIds, cancellationToken);
 
             return new Response<GetPurchaseEntry>()
             {
@@ -72,7 +68,6 @@ namespace StuffyHelper.Core.Services
 
             var entry = _mapper.Map<PurchaseEntry>(purchase);
             entry.EventId = eventId;
-            await _purchaseTagPipeline.ProcessAsync(entry, purchase.PurchaseTags, cancellationToken);
             var result = await _purchaseRepository.AddPurchaseAsync(entry, cancellationToken);
 
             return _mapper.Map<PurchaseShortEntry>(result);
@@ -110,7 +105,6 @@ namespace StuffyHelper.Core.Services
             var existingPurchase = await ValidatePurchase(eventId, purchaseId, cancellationToken);
 
             existingPurchase.PatchFrom(purchase);
-            await _purchaseTagPipeline.ProcessAsync(existingPurchase, purchase.PurchaseTags, cancellationToken);
             var result = await _purchaseRepository.UpdatePurchaseAsync(existingPurchase, cancellationToken);
 
             return _mapper.Map<PurchaseShortEntry>(result);

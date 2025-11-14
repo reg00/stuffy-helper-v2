@@ -4,13 +4,13 @@
       PurchaseUsageId: Guid_1,
       PurchaseId: Guid_2,
       ParticipantId: Guid_3,
-      Amount: 1.0
+      Amount: 1
     },
     {
       PurchaseUsageId: Guid_4,
       PurchaseId: Guid_5,
       ParticipantId: Guid_6,
-      Amount: 5.0
+      Amount: 5
     }
   ],
   TotalPages: 1,

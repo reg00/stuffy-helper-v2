@@ -3,7 +3,6 @@
   Name: Test,
   Cost: 1.0,
   Amount: 1.0,
-  IsPartial: true,
   IsComplete: true,
   UnitType: {
     Id: Guid_2,

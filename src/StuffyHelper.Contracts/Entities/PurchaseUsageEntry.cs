@@ -28,7 +28,6 @@ namespace StuffyHelper.Contracts.Entities
         /// Amount
         /// </summary>
         public long Amount { get; set; }
-
         
         /// <summary>
         /// Linked participant

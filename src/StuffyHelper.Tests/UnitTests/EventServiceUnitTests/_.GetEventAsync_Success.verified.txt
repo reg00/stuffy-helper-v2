@@ -4,20 +4,15 @@
   Description: test,
   IsCompleted: true,
   User: {
-    Id: test,
+    Id: 123,
     Name: test
   },
   Purchases: [
     {
+      EventId: Guid_2,
       Name: test,
-      Cost: 1.0,
-      Amount: 1.0,
-      IsPartial: true,
-      IsComplete: false,
-      UnitType: {
-        Id: Guid_2,
-        Name: Test
-      }
+      Cost: 1,
+      IsComplete: false
     }
   ]
 }

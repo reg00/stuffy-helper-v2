@@ -1,5 +1,4 @@
 ﻿{
   Type: ArgumentNullException,
-  Message: Value cannot be null.,
   ParamName: Поля login,code должны быть заполнены
 }

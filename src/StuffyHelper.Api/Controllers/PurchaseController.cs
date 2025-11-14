@@ -39,12 +39,11 @@ namespace StuffyHelper.Api.Controllers
             string? name = null,
             long? costMin = null,
             long? costMax = null,
-            IEnumerable<string>? purchaseTags = null,
-            Guid? unitTypeId = null,
-            bool? isComplete = null)
+            bool? isComplete = null,
+            Guid[]? purchaseIds = null)
         {
             return await _purchaseService.GetPurchasesAsync(eventId, offset, limit, name, costMin, costMax,
-                                                                            purchaseTags, unitTypeId, isComplete, HttpContext.RequestAborted);
+                isComplete, purchaseIds, HttpContext.RequestAborted);
         }
 
         /// <summary>

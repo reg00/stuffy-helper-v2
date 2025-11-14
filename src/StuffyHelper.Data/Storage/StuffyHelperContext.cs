@@ -1,10 +1,6 @@
 ﻿using EnsureThat;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using StuffyHelper.Common.Configurations;
 using StuffyHelper.Contracts.Entities;
-using StuffyHelper.Data.Common;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
 namespace StuffyHelper.Data.Storage
@@ -22,8 +18,6 @@ namespace StuffyHelper.Data.Storage
         public virtual DbSet<ParticipantEntry> Participants { get; set; }
         public virtual DbSet<PurchaseEntry> Purchases { get; set; }
         public virtual DbSet<PurchaseUsageEntry> PurchaseUsages { get; set; }
-        public virtual DbSet<PurchaseTagEntry> PurchaseTags { get; set; }
-        public virtual DbSet<UnitTypeEntry> UnitTypes { get; set; }
         public virtual DbSet<MediaEntry> Medias { get; set; }
         public virtual DbSet<DebtEntry> Debts { get; set; }
         public virtual DbSet<CheckoutEntry> Checkouts { get; set; }
@@ -86,18 +80,13 @@ namespace StuffyHelper.Data.Storage
 
                 entity.HasOne(e => e.Event).WithMany(e => e.Purchases).HasForeignKey(e => e.EventId);
                 entity.HasMany(e => e.PurchaseUsages).WithOne(e => e.Purchase).HasForeignKey(e => e.PurchaseId);
-                entity.HasOne(e => e.UnitType).WithMany(e => e.Purchases).HasForeignKey(e => e.UnitTypeId);
 
                 entity.HasIndex(e => e.Name);
 
                 entity.Property(e => e.Name).IsRequired();
                 entity.Property(e => e.EventId).IsRequired();
-                entity.Property(e => e.UnitTypeId).IsRequired(false);
-                entity.Property(e => e.Amount).IsRequired()
-                    .HasAnnotation("Range", new[] { 1, long.MaxValue });
                 entity.Property(e => e.Cost).IsRequired()
                     .HasAnnotation("Range", new[] { 1, long.MaxValue });
-                entity.Property(e => e.IsPartial).IsRequired().HasDefaultValue(false);
                 entity.Property(e => e.IsComplete).IsRequired().HasDefaultValue(false);
             });
 
@@ -117,27 +106,6 @@ namespace StuffyHelper.Data.Storage
                 entity.Property(e => e.ParticipantId).IsRequired();
                 entity.Property(e => e.Amount).IsRequired()
                     .HasAnnotation("Range", new[] { 1, long.MaxValue });
-            });
-
-            modelBuilder.Entity<PurchaseTagEntry>(entity =>
-            {
-                entity.ToTable("purchase-tags");
-                entity.HasKey(e => e.Id);
-
-                entity.HasIndex(e => e.Name).IsUnique();
-
-                entity.Property(e => e.Name).IsRequired();
-            });
-
-            modelBuilder.Entity<UnitTypeEntry>(entity =>
-            {
-                entity.ToTable("unit-types");
-                entity.HasKey(e => e.Id);
-
-                entity.HasMany(e => e.Purchases).WithOne(e => e.UnitType).HasForeignKey(e => e.UnitTypeId);
-                entity.HasIndex(e => e.Name).IsUnique();
-
-                entity.Property(e => e.Name).IsRequired();
             });
 
             modelBuilder.Entity<MediaEntry>(entity =>
@@ -183,14 +151,7 @@ namespace StuffyHelper.Data.Storage
                 entity.Property(e => e.EventId).IsRequired();
             });
 
-            SeedData(modelBuilder);
-
             OnModelCreatingPartial(modelBuilder);
-        }
-
-        private void SeedData(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<UnitTypeEntry>().HasData(SeedHelper.GetSeedUnitTypes());
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);

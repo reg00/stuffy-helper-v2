@@ -31,9 +31,7 @@ namespace StuffyHelper.ApiGateway.Registration
             services.AddScoped<IMediaClient>(_ => new MediaClient(stuffyEndpoint));
             services.AddScoped<IParticipantClient>(_ => new ParticipantClient(stuffyEndpoint));
             services.AddScoped<IPurchaseClient>(_ => new PurchaseClient(stuffyEndpoint));
-            services.AddScoped<IPurchaseTagClient>(_ => new PurchaseTagClient(stuffyEndpoint));
             services.AddScoped<IPurchaseUsageClient>(_ => new PurchaseUsageClient(stuffyEndpoint));
-            services.AddScoped<IUnitTypeClient>(_ => new UnitTypeClient(stuffyEndpoint));
 
             return services;
         }
@@ -51,9 +49,6 @@ namespace StuffyHelper.ApiGateway.Registration
             services.AddScoped<IEventService, EventService>();
             services.AddScoped<IParticipantService, ParticipantService>();
             services.AddScoped<IPurchaseService, PurchaseService>();
-            services.AddScoped<IPurchaseUsageService, PurchaseUsageService>();
-            services.AddScoped<IPurchaseTagService, PurchaseTagService>();
-            services.AddScoped<IUnitTypeService, UnitTypeService>();
             services.AddScoped<IMediaService, MediaService>();
             services.AddScoped<IDebtService, DebtService>();
 

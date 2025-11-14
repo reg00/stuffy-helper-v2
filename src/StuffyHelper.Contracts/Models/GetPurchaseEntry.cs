@@ -26,18 +26,6 @@ namespace StuffyHelper.Contracts.Models
         public long Cost { get; init; }
         
         /// <summary>
-        /// Amount/quantity of the purchase
-        /// </summary>
-        [Required]
-        public long Amount { get; init; }
-        
-        /// <summary>
-        /// Indicates whether the purchase can be partially used
-        /// </summary>
-        [Required]
-        public bool IsPartial { get; init; }
-        
-        /// <summary>
         /// Indicates whether the purchase is completed
         /// </summary>
         [Required]
@@ -48,17 +36,6 @@ namespace StuffyHelper.Contracts.Models
         /// </summary>
         [Required]
         public Guid EventId { get; init; }
-        
-        /// <summary>
-        /// List of tags associated with the purchase
-        /// </summary>
-        public List<PurchaseTagShortEntry> PurchaseTags { get; init; }
-        
-        /// <summary>
-        /// Unit type for the purchase amount
-        /// </summary>
-        [Required]
-        public UnitTypeShortEntry? UnitType { get; init; }
         
         /// <summary>
         /// List of usage records for this purchase
