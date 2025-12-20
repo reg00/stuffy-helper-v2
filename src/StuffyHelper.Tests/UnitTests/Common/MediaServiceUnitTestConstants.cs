@@ -1,4 +1,6 @@
-﻿using StuffyHelper.Core.Features.Media;
+﻿using StuffyHelper.Contracts.Entities;
+using StuffyHelper.Contracts.Enums;
+using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {
@@ -22,7 +24,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
         {
             return new()
             {
-                EventId = Guid.NewGuid(),
                 MediaType = MediaType.Link
             };
         }
@@ -31,7 +32,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
         {
             return new()
             {
-                EventId = Guid.NewGuid(),
                 MediaType = MediaType.Image
             };
         }
@@ -40,7 +40,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
         {
             return new()
             {
-                EventId = Guid.NewGuid(),
                 MediaType = MediaType.Link,
                 Link = "test"
             };

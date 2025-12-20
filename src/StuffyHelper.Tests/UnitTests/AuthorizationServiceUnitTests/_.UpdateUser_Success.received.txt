@@ -1,0 +1,10 @@
+﻿{
+  Id: ,
+  Name: ,
+  Email: ,
+  Role: Admin,
+  FirstName: ,
+  MiddleName: ,
+  LastName: ,
+  Phone: 
+}

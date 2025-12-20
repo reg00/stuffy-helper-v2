@@ -1,4 +1,9 @@
 ﻿{
   Type: EntityAlreadyExistsException,
-  Message: Пользователь с логином TTTest уже существует
+  HttpStatus: Conflict,
+  ErrorCode: ALREADY_EXISTS_ERROR,
+  MessageTemplate: User with login {Login} already exists.,
+  Args: [
+    TTTest
+  ]
 }

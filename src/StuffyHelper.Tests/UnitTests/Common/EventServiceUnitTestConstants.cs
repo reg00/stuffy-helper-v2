@@ -1,7 +1,6 @@
-﻿using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.Event;
-using StuffyHelper.Core.Features.Purchase;
-using StuffyHelper.Core.Features.PurchaseUsage;
+﻿using StuffyHelper.Common.Messages;
+using StuffyHelper.Contracts.Entities;
+using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {
@@ -39,9 +38,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 {
                     new()
                     {
-                        Amount = 1,
                         Cost = 1,
-                        IsPartial = true,
                         EventId = Guid.NewGuid(),
                         Name = "test",
                         IsComplete = false,
@@ -64,7 +61,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
                         {
                             UserId = "555"
                         },
-                        UnitType = UnitTypeServiceUnitTestConstants.GetCorrectUnitTypeEntry()
                     }
                 }
             };

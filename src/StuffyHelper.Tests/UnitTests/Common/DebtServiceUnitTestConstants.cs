@@ -1,5 +1,5 @@
-﻿using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.Debt;
+﻿using StuffyHelper.Common.Messages;
+using StuffyHelper.Contracts.Entities;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {

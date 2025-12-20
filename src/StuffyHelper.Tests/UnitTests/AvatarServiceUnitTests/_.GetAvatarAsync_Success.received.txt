@@ -1,0 +1,4 @@
+﻿{
+  ContentType: image/jpeg,
+  Ext: .jpg
+}

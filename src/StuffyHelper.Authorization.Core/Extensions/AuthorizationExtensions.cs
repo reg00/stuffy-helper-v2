@@ -1,40 +1,48 @@
-﻿using EnsureThat;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using EnsureThat;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core.Configs;
-using StuffyHelper.Authorization.Core.Exceptions;
-using StuffyHelper.Authorization.Core.Models;
-using StuffyHelper.Authorization.Core.Models.User;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using StuffyHelper.Authorization.Contracts.Entities;
+using StuffyHelper.Authorization.Contracts.Enums;
+using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Common.Configurations;
+using StuffyHelper.Common.Exceptions;
 
-namespace StuffyHelper.Authorization.Core.Extensions
-{
-    public static class AuthorizationExtensions
+namespace StuffyHelper.Authorization.Core.Extensions;
+
+/// <summary>
+/// Authorization extensions
+/// </summary>
+public static class AuthorizationExtensions
     {
+        /// <summary>
+        /// Get JwtSecurityToken
+        /// </summary>
         private static JwtSecurityToken GetToken(this List<Claim> authClaims, AuthorizationConfiguration authorizationConfiguration)
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authorizationConfiguration.JWT.Secret));
-
             var token = new JwtSecurityToken(
                 issuer: authorizationConfiguration.JWT.ValidIssuer,
                 audience: authorizationConfiguration.JWT.ValidAudience,
                 expires: DateTime.UtcNow.AddHours(authorizationConfiguration.JWT.TokenExpireInHours),
                 claims: authClaims,
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                signingCredentials: new SigningCredentials(authorizationConfiguration.JWT.GetSecurityKey(), SecurityAlgorithms.HmacSha256)
                 );
 
             return token;
         }
 
+        /// <summary>
+        /// Creates JWT token
+        /// </summary>
         public static JwtSecurityToken CreateToken(this StuffyUser user, IEnumerable<string> roles, AuthorizationConfiguration authorizationConfiguration)
         {
             var authClaims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new (ClaimTypes.Sid, user.Id),
+                    new(ClaimTypes.Name, user.UserName ?? string.Empty),
+                    new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new(ClaimTypes.Uri, user.ImageUri?.AbsoluteUri ?? string.Empty)
                 };
 
             foreach (var userRole in roles)
@@ -43,27 +51,36 @@ namespace StuffyHelper.Authorization.Core.Extensions
             return authClaims.GetToken(authorizationConfiguration);
         }
 
-        public static async Task CreateRolesIfNotExists(this RoleManager<IdentityRole> _roleManager)
+        /// <summary>
+        /// Create role if not exists
+        /// </summary>
+        public static async Task CreateRolesIfNotExists(this RoleManager<IdentityRole> roleManager)
         {
-            if (!await _roleManager.RoleExistsAsync(nameof(UserType.Admin)))
-                await _roleManager.CreateAsync(new IdentityRole(nameof(UserType.Admin)));
-            if (!await _roleManager.RoleExistsAsync(nameof(UserType.User)))
-                await _roleManager.CreateAsync(new IdentityRole(nameof(UserType.User)));
+            if (!await roleManager.RoleExistsAsync(nameof(UserType.Admin)))
+                await roleManager.CreateAsync(new IdentityRole(nameof(UserType.Admin)));
+            if (!await roleManager.RoleExistsAsync(nameof(UserType.User)))
+                await roleManager.CreateAsync(new IdentityRole(nameof(UserType.User)));
         }
 
-        public static async Task AddRoleToUser(this StuffyUser user, RoleManager<IdentityRole> _roleManager, UserManager<StuffyUser> _userManager, UserType role)
+        /// <summary>
+        /// Add role to user
+        /// </summary>
+        public static async Task AddRoleToUser(this StuffyUser user, RoleManager<IdentityRole> roleManager, UserManager<StuffyUser> userManager, UserType role)
         {
             EnsureArg.IsNotNull(user, nameof(user));
-            EnsureArg.IsNotNull(_roleManager, nameof(_roleManager));
-            EnsureArg.IsNotNull(_userManager, nameof(_userManager));
+            EnsureArg.IsNotNull(roleManager, nameof(roleManager));
+            EnsureArg.IsNotNull(userManager, nameof(userManager));
 
-            if (role == UserType.Admin && await _roleManager.RoleExistsAsync(nameof(UserType.Admin)))
-                await _userManager.AddToRoleAsync(user, nameof(UserType.Admin));
+            if (role == UserType.Admin && await roleManager.RoleExistsAsync(nameof(UserType.Admin)))
+                await userManager.AddToRoleAsync(user, nameof(UserType.Admin));
 
-            if (await _roleManager.RoleExistsAsync(nameof(UserType.User)))
-                await _userManager.AddToRoleAsync(user, nameof(UserType.User));
+            if (await roleManager.RoleExistsAsync(nameof(UserType.User)))
+                await userManager.AddToRoleAsync(user, nameof(UserType.User));
         }
 
+        /// <summary>
+        /// Initialize user
+        /// </summary>
         public static StuffyUser InitializeUser(this RegisterModel model)
         {
             return new()
@@ -75,17 +92,18 @@ namespace StuffyHelper.Authorization.Core.Extensions
         }
 
 
+        /// <summary>
+        /// Handle identity result
+        /// </summary>
         public static void HandleIdentityResult(this IdentityResult identityResult)
         {
-            if (!identityResult.Succeeded)
-            {
-                var errors = string.Join(' ', identityResult.Errors.Select(y => y.Description));
+            if (identityResult.Succeeded) return;
+            
+            var errors = string.Join(' ', identityResult.Errors.Select(y => y.Description));
 
-                if (identityResult.Errors.Any(x => x.Code == "DuplicateUserName"))
-                    throw new EntityAlreadyExistsException(errors);
+            if (identityResult.Errors.Any(x => x.Code == "DuplicateUserName"))
+                throw new EntityAlreadyExistsException("Username already exists. Details : {Details}", errors);
 
-                throw new AuthorizationException($"Ошибка обновления пользователя!. Детали: {errors}");
-            }
+            throw new DbStoreException("Error while updating user!. Details: {Details}", errors);
         }
     }
-}

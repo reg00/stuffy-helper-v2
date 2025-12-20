@@ -5,15 +5,10 @@
   },
   Purchase: {
     Id: Guid_2,
+    EventId: Guid_3,
     Name: Test,
-    Cost: 1.0,
-    Amount: 1.0,
-    IsPartial: true,
-    IsComplete: true,
-    UnitType: {
-      Id: Guid_3,
-      Name: Test
-    }
+    Cost: 1,
+    IsComplete: true
   },
-  Amount: 1.0
+  Amount: 1
 }

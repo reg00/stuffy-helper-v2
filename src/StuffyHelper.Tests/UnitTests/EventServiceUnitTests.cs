@@ -1,9 +1,12 @@
 ﻿using Moq;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Authorization.Core.Features;
-using StuffyHelper.Core.Features.Event;
-using StuffyHelper.Core.Features.Media;
-using StuffyHelper.Core.Features.Participant;
+using StuffyHelper.Authorization.Contracts.Clients.Interface;
+using StuffyHelper.Contracts.Entities;
+using StuffyHelper.Contracts.Models;
+using StuffyHelper.Core.Services;
+using StuffyHelper.Core.Services.Interfaces;
+using StuffyHelper.Data.Repository.Interfaces;
+using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -13,14 +16,27 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class EventServiceUnitTests : UnitTestsBase
     {
+        private readonly Mock<IEventRepository> _eventRepositoryMoq = new();
+        private readonly Mock<IParticipantService> _participantServiceMoq = new();
+        private readonly Mock<IAuthorizationClient> _authorizationClientMoq = new();
+        private readonly Mock<IMediaService> _mediaServiceMoq = new();
+
+        private EventService GetService()
+        {
+            var mapper = CommonTestConstants.GetMapperConfiguration().CreateMapper();
+
+            return new EventService(
+                _eventRepositoryMoq.Object,
+                _participantServiceMoq.Object,
+                _mediaServiceMoq.Object,
+                _authorizationClientMoq.Object,
+                mapper);
+        }
+        
         [Fact]
         public async Task GetEventAsync_EmptyInput()
         {
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.GetEventAsync(Guid.Empty, string.Empty, CancellationToken), VerifySettings);
         }
@@ -29,42 +45,12 @@ namespace StuffyHelper.Tests.UnitTests
         public async Task GetEventAsync_EventNotFound()
         {
             var eventId = Guid.Parse("90c0fde5-5357-4274-9142-8c5eec2ee3b1");
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.GetEventAsync(It.IsAny<Guid>(), It.IsAny<string>(), CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.GetEventAsync(It.IsAny<Guid>(), It.IsAny<string>(), CancellationToken))
                 .ThrowsAsync(new EntityNotFoundException($"Event with Id '{eventId}' Not Found."));
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.GetEventAsync(eventId, string.Empty, CancellationToken), VerifySettings);
-        }
-
-        [Fact]
-        public async Task GetEventAsync_UserNotFound()
-        {
-            var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
-
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.GetEventAsync(eventEntry.Id, eventEntry.UserId, CancellationToken))
-                .ReturnsAsync(eventEntry);
-
-            var authorizationServiceMoq = new Mock<IAuthorizationService>();
-            authorizationServiceMoq.Setup(x =>
-            x.GetUserById(eventEntry.UserId))
-                .ThrowsAsync(new EntityNotFoundException($"User with Id '{eventEntry.UserId}' not found"));
-
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                authorizationServiceMoq.Object,
-            new Mock<IMediaService>().Object);
-
-            await ThrowsTask(async () => await eventService.GetEventAsync(eventEntry.Id, eventEntry.UserId, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -72,22 +58,13 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
 
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.GetEventAsync(eventEntry.Id, eventEntry.UserId, CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, eventEntry.UserId, CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            var authorizationServiceMoq = new Mock<IAuthorizationService>();
-            authorizationServiceMoq.Setup(x =>
-            x.GetUserById(eventEntry.UserId))
+            _authorizationClientMoq.Setup(x => x.GetUserById(eventEntry.UserId, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                authorizationServiceMoq.Object,
-            new Mock<IMediaService>().Object);
-
+            var eventService = GetService();
             var result = await eventService.GetEventAsync(eventEntry.Id, eventEntry.UserId, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -98,8 +75,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var eventResult = EventServiceUnitTestConstants.GetCorrectEventsResponse();
 
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
+            _eventRepositoryMoq.Setup(x =>
             x.GetEventsAsync(
                 It.IsAny<int>(),
                 It.IsAny<int>(),
@@ -119,12 +95,7 @@ namespace StuffyHelper.Tests.UnitTests
                 It.IsAny<CancellationToken>()))
                 .ReturnsAsync(eventResult);
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
-
+            var eventService = GetService();
             var result = await eventService.GetEventsAsync(cancellationToken: CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -133,11 +104,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task AddEventAsync_NullInput()
         {
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.AddEventAsync(null, null, CancellationToken), VerifySettings);
         }
@@ -145,12 +112,12 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task AddEventAsync_UserNotFound()
         {
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
-
+            _authorizationClientMoq.Setup(x =>
+                    x.GetUserById(It.IsAny<string>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new EntityNotFoundException($"Пользователь с идентификатором отсутствует"));
+            
+            var eventService = GetService();
+            
             await ThrowsTask(async () => await eventService.AddEventAsync(new(), new(), CancellationToken), VerifySettings);
         }
 
@@ -159,24 +126,15 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var addEventEntry = EventServiceUnitTestConstants.GetCorrectAddEventEntry();
             var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
-            var claims = AuthorizationServiceUnitTestConstants.GetCorrectClaims();
+            var claims = AuthorizationServiceUnitTestConstants.GetCorrectStuffyClaims();
 
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.AddEventAsync(It.IsAny<EventEntry>(), CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.AddEventAsync(It.IsAny<EventEntry>(), CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            var authorizationServiceMoq = new Mock<IAuthorizationService>();
-            authorizationServiceMoq.Setup(x =>
-            x.GetUserByName(It.IsAny<string>()))
+            _authorizationClientMoq.Setup(x => x.GetUserById(It.IsAny<string>(), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(AuthorizationServiceUnitTestConstants.GetCorrectUserEntry());
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                authorizationServiceMoq.Object,
-            new Mock<IMediaService>().Object);
-
+            var eventService = GetService();
             var result = await eventService.AddEventAsync(addEventEntry, claims, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -185,11 +143,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task DeleteEventAsync_EmptyInput()
         {
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.DeleteEventAsync(Guid.Empty, null, CancellationToken), VerifySettings);
         }
@@ -197,11 +151,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task DeleteEventAsync_EventNotFound()
         {
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.DeleteEventAsync(Guid.Parse("b7e55b0e-6bfe-4e76-90b7-5d3073e22216"), null, CancellationToken), VerifySettings);
         }
@@ -211,17 +161,11 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
 
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.GetEventAsync(eventEntry.Id, null, CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, null, CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
-
+            var eventService = GetService();
+            
             await ThrowsTask(async () => await eventService.DeleteEventAsync(eventEntry.Id, null, CancellationToken), VerifySettings);
         }
 
@@ -231,30 +175,19 @@ namespace StuffyHelper.Tests.UnitTests
             var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
             eventEntry.IsCompleted = false;
 
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.GetEventAsync(eventEntry.Id, null, CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, null, CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
-
+            var eventService = GetService();
             await eventService.DeleteEventAsync(eventEntry.Id, null, CancellationToken);
 
-            eventStoreMoq.Verify(x => x.DeleteEventAsync(eventEntry.Id, CancellationToken), Times.Once());
+            _eventRepositoryMoq.Verify(x => x.DeleteEventAsync(eventEntry.Id, CancellationToken), Times.Once());
         }
 
         [Fact]
         public async Task UpdateEventAsync_EmptyInput()
         {
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.UpdateEventAsync(Guid.Empty, null, null, CancellationToken), VerifySettings);
         }
@@ -262,11 +195,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task UpdateEventAsync_EventNotFound()
         {
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.UpdateEventAsync(Guid.Parse("b7e55b0e-6bfe-4e76-90b7-5d3073e22216"), new(), null, CancellationToken), VerifySettings);
         }
@@ -276,16 +205,10 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
 
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.GetEventAsync(eventEntry.Id, null, CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, null, CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.UpdateEventAsync(eventEntry.Id, new(), null, CancellationToken), VerifySettings);
         }
@@ -297,20 +220,12 @@ namespace StuffyHelper.Tests.UnitTests
             var updateEntry = EventServiceUnitTestConstants.GetCorrectUpdateEventEntry();
             eventEntry.IsCompleted = false;
 
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.GetEventAsync(eventEntry.Id, null, CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, null, CancellationToken))
                 .ReturnsAsync(eventEntry);
-            eventStoreMoq.Setup(x =>
-            x.UpdateEventAsync(It.IsAny<EventEntry>(), CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.UpdateEventAsync(It.IsAny<EventEntry>(), CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
-
+            var eventService = GetService();
             var result = await eventService.UpdateEventAsync(eventEntry.Id, updateEntry, null, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -319,11 +234,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task DeletePrimalEventMedia_EmptyInput()
         {
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.DeletePrimalEventMedia(Guid.Empty, null, CancellationToken), VerifySettings);
         }
@@ -331,11 +242,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task DeletePrimalEventMedia_EventNotFound()
         {
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.DeletePrimalEventMedia(Guid.Parse("b7e55b0e-6bfe-4e76-90b7-5d3073e22216"), null, CancellationToken), VerifySettings);
         }
@@ -345,16 +252,10 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
 
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.GetEventAsync(eventEntry.Id, null, CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, null, CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.DeletePrimalEventMedia(eventEntry.Id, null, CancellationToken), VerifySettings);
         }
@@ -363,41 +264,27 @@ namespace StuffyHelper.Tests.UnitTests
         public async Task DeletePrimalEventMedia_Success()
         {
             var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
-            var updateEntry = EventServiceUnitTestConstants.GetCorrectUpdateEventEntry();
             eventEntry.IsCompleted = false;
 
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.GetEventAsync(eventEntry.Id, null, CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, null, CancellationToken))
                 .ReturnsAsync(eventEntry);
-            eventStoreMoq.Setup(x =>
-            x.UpdateEventAsync(It.IsAny<EventEntry>(), CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.UpdateEventAsync(It.IsAny<EventEntry>(), CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            var mediaServiceMoq = new Mock<IMediaService>();
-            mediaServiceMoq.Setup(x =>
+            _mediaServiceMoq.Setup(x =>
             x.GetPrimalEventMedia(eventEntry.Id, CancellationToken))
                 .ReturnsAsync((GetMediaEntry)null);
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-                mediaServiceMoq.Object);
-
+            var eventService = GetService();
             await eventService.DeletePrimalEventMedia(eventEntry.Id, null, CancellationToken);
 
-            mediaServiceMoq.Verify(x => x.GetPrimalEventMedia(eventEntry.Id, CancellationToken), Times.Once());
+            _mediaServiceMoq.Verify(x => x.GetPrimalEventMedia(eventEntry.Id, CancellationToken), Times.Once());
         }
 
         [Fact]
         public async Task UpdatePrimalEventMediaAsync_NullInput()
         {
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.UpdatePrimalEventMediaAsync(Guid.Empty, null, null, CancellationToken), VerifySettings);
         }
@@ -407,11 +294,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var file = AvatarServiceUnitTestConstants.GetNotImageAddAvatarEntry().File;
 
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.UpdatePrimalEventMediaAsync(Guid.Parse("b7e55b0e-6bfe-4e76-90b7-5d3073e22216"), file, null, CancellationToken), VerifySettings);
         }
@@ -421,11 +304,7 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var file = AvatarServiceUnitTestConstants.GetImageAddAvatarEntry().File;
 
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.UpdatePrimalEventMediaAsync(Guid.Parse("b7e55b0e-6bfe-4e76-90b7-5d3073e22216"), file, null, CancellationToken), VerifySettings);
         }
@@ -436,16 +315,10 @@ namespace StuffyHelper.Tests.UnitTests
             var file = AvatarServiceUnitTestConstants.GetImageAddAvatarEntry().File;
             var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
 
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.GetEventAsync(eventEntry.Id, null, CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, null, CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.UpdatePrimalEventMediaAsync(eventEntry.Id, file, null, CancellationToken), VerifySettings);
         }
@@ -457,20 +330,14 @@ namespace StuffyHelper.Tests.UnitTests
             var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
             eventEntry.IsCompleted = false;
 
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.GetEventAsync(eventEntry.Id, null, CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, null, CancellationToken))
                 .ReturnsAsync(eventEntry);
-            eventStoreMoq.Setup(x =>
-            x.UpdateEventAsync(It.IsAny<EventEntry>(), CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.UpdateEventAsync(It.IsAny<EventEntry>(), CancellationToken))
                 .ReturnsAsync(eventEntry);
+            _mediaServiceMoq.Setup(x => x.GetEventPrimalMediaUri(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new Uri("http://localhost"));
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
-
+            var eventService = GetService();
             var result = await eventService.UpdatePrimalEventMediaAsync(eventEntry.Id, file, null, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -479,11 +346,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task CompleteEventAsync_EmptyInput()
         {
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.CompleteEventAsync(Guid.Empty, null, true, CancellationToken), VerifySettings);
         }
@@ -491,11 +354,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task CompleteEventAsync_EventNotFound()
         {
-            var eventService = new EventService(
-                new Mock<IEventStore>().Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
+            var eventService = GetService();
 
             await ThrowsTask(async () => await eventService.CompleteEventAsync(Guid.Parse("b7e55b0e-6bfe-4e76-90b7-5d3073e22216"), null, true, CancellationToken), VerifySettings);
         }
@@ -505,20 +364,12 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var eventEntry = EventServiceUnitTestConstants.GetCorrectEventEntry();
 
-            var eventStoreMoq = new Mock<IEventStore>();
-            eventStoreMoq.Setup(x =>
-            x.GetEventAsync(eventEntry.Id, null, CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.GetEventAsync(eventEntry.Id, null, CancellationToken))
                 .ReturnsAsync(eventEntry);
-            eventStoreMoq.Setup(x =>
-            x.UpdateEventAsync(It.IsAny<EventEntry>(), CancellationToken))
+            _eventRepositoryMoq.Setup(x => x.UpdateEventAsync(It.IsAny<EventEntry>(), CancellationToken))
                 .ReturnsAsync(eventEntry);
 
-            var eventService = new EventService(
-                eventStoreMoq.Object,
-                new Mock<IParticipantService>().Object,
-                new Mock<IAuthorizationService>().Object,
-            new Mock<IMediaService>().Object);
-
+            var eventService = GetService();
             var result = await eventService.CompleteEventAsync(eventEntry.Id, null, true, CancellationToken);
 
             await Verify(result, VerifySettings);

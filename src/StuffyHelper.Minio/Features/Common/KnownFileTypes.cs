@@ -1,5 +1,8 @@
 ﻿namespace StuffyHelper.Minio.Features.Common
 {
+    /// <summary>
+    /// File extensions
+    /// </summary>
     public static class KnownFileTypes
     {
         public const string Jpg = ".jpg";

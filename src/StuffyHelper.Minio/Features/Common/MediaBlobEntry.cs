@@ -1,26 +1,28 @@
-﻿using EnsureThat;
-
-namespace StuffyHelper.Minio.Features.Common
+﻿namespace StuffyHelper.Minio.Features.Common
 {
+    /// <summary>
+    /// Record for files
+    /// </summary>
     public class MediaBlobEntry
     {
-        public MediaBlobEntry(Stream stream, string fileName, FileType fileType)
-        {
-            EnsureArg.IsNotNull(stream, nameof(stream));
-            EnsureArg.IsNotNullOrWhiteSpace(fileName, nameof(fileName));
-            stream.Seek(0, SeekOrigin.Begin);
-
-            Stream = stream;
-            FileName = fileName;
-            ContentType = FileTypeMapper.MapContentTypeFromFileType(fileType);
-            Ext = FileTypeMapper.MapExtFromFileType(fileType);
-        }
-
+        /// <summary>
+        /// Stream of file
+        /// </summary>
         public Stream Stream { get; set; }
 
-        public string FileName { get; set; }
-        public string ContentType { get; set; }
-
-        public string Ext { get; set; }
+        /// <summary>
+        /// Filename
+        /// </summary>
+        public string FileName { get; init; }
+        
+        /// <summary>
+        /// Content type of file
+        /// </summary>
+        public string ContentType { get; init; }
+        
+        /// <summary>
+        /// Extension of file
+        /// </summary>
+        public string Ext { get; init; }
     }
 }

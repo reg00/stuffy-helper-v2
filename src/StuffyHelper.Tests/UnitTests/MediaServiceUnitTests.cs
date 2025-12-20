@@ -1,7 +1,10 @@
 ﻿using Moq;
 using Reg00.Infrastructure.Errors;
-using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.Media;
+using StuffyHelper.Contracts.Enums;
+using StuffyHelper.Core.Services;
+using StuffyHelper.Data.Repository.Interfaces;
+using StuffyHelper.Minio.Features.Storage;
+using StuffyHelper.Tests.Common;
 using StuffyHelper.Tests.UnitTests.Common;
 
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -9,14 +12,25 @@ namespace StuffyHelper.Tests.UnitTests
 {
     public class MediaServiceUnitTests : UnitTestsBase
     {
+        private readonly Mock<IMediaRepository> _mediaRepositoryMoq = new();
+        private readonly Mock<IFileStore> _fileRepositoryMoq = new();
+
+        private MediaService GetService()
+        {
+            var mapper = CommonTestConstants.GetMapperConfiguration().CreateMapper();
+            
+            return new MediaService(
+                _mediaRepositoryMoq.Object,
+                _fileRepositoryMoq.Object,
+                mapper);
+        }
+        
         [Fact]
         public async Task DeleteMediaAsync_EmptyInput()
         {
-            var mediaService = new MediaService(
-                new Mock<IMediaStore>().Object,
-                new Mock<IFileStore>().Object);
+            var mediaService = GetService();
 
-            await ThrowsTask(async () => await mediaService.DeleteMediaAsync(Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await mediaService.DeleteMediaAsync(Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -24,26 +38,19 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var media = MediaServiceUnitTestConstants.GetCorrectMediaEntry();
 
-            var mediaStoreMoq = new Mock<IMediaStore>();
-            mediaStoreMoq.Setup(x =>
-            x.GetMediaAsync(media.Id, CancellationToken))
+            _mediaRepositoryMoq.Setup(x => x.GetMediaAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media.Id, CancellationToken))
                 .ReturnsAsync(media);
 
-            var mediaService = new MediaService(
-                mediaStoreMoq.Object,
-                new Mock<IFileStore>().Object);
+            var mediaService = GetService();
+            await mediaService.DeleteMediaAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media.Id, CancellationToken);
 
-            await mediaService.DeleteMediaAsync(media.Id, CancellationToken);
-
-            mediaStoreMoq.Verify(x => x.DeleteMediaAsync(media, CancellationToken), Times.Once());
+            _mediaRepositoryMoq.Verify(x => x.DeleteMediaAsync(media, CancellationToken), Times.Once());
         }
 
         [Fact]
         public async Task GetEventPrimalMediaUri_EmptyInput()
         {
-            var mediaService = new MediaService(
-                new Mock<IMediaStore>().Object,
-                new Mock<IFileStore>().Object);
+            var mediaService = GetService();
 
             await ThrowsTask(async () => await mediaService.GetEventPrimalMediaUri(Guid.Empty, CancellationToken), VerifySettings);
         }
@@ -53,20 +60,13 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var media = MediaServiceUnitTestConstants.GetCorrectMediaEntry();
 
-            var mediaStoreMoq = new Mock<IMediaStore>();
-            mediaStoreMoq.Setup(x =>
-            x.GetPrimalEventMedia(media.EventId, CancellationToken))
+            _mediaRepositoryMoq.Setup(x => x.GetPrimalEventMedia(media.EventId, CancellationToken))
                 .ReturnsAsync(media);
 
-            var fileStoreMoq = new Mock<IFileStore>();
-            fileStoreMoq.Setup(x =>
-            x.ObtainGetPresignedUrl(It.IsAny<string>(), CancellationToken))
+            _fileRepositoryMoq.Setup(x => x.ObtainGetPresignedUrl(It.IsAny<string>(), CancellationToken))
                 .ReturnsAsync(new Uri("blank:about"));
 
-            var mediaService = new MediaService(
-                mediaStoreMoq.Object,
-                fileStoreMoq.Object);
-
+            var mediaService = GetService();
             var result = await mediaService.GetEventPrimalMediaUri(media.EventId, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -75,11 +75,9 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task GetMediaFormFileAsync_EmptyInput()
         {
-            var mediaService = new MediaService(
-                new Mock<IMediaStore>().Object,
-                new Mock<IFileStore>().Object);
+            var mediaService = GetService();
 
-            await ThrowsTask(async () => await mediaService.GetMediaFormFileAsync(Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await mediaService.GetMediaFormFileAsync(Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -87,21 +85,15 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var media = MediaServiceUnitTestConstants.GetCorrectMediaEntry();
 
-            var mediaStoreMoq = new Mock<IMediaStore>();
-            mediaStoreMoq.Setup(x =>
-            x.GetMediaAsync(media.Id, CancellationToken))
+            _mediaRepositoryMoq.Setup(x => x.GetMediaAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media.Id, CancellationToken))
                 .ReturnsAsync(media);
 
-            var fileStoreMoq = new Mock<IFileStore>();
-            fileStoreMoq.Setup(x =>
-            x.GetFileAsync(It.IsAny<string>(), CancellationToken))
+            _fileRepositoryMoq.Setup(x => x.GetFileAsync(It.IsAny<string>(), CancellationToken))
                 .ReturnsAsync(new MemoryStream());
 
-            var mediaService = new MediaService(
-                mediaStoreMoq.Object,
-                fileStoreMoq.Object);
+            var mediaService = GetService();
 
-            var result = await mediaService.GetMediaFormFileAsync(media.Id, CancellationToken);
+            var result = await mediaService.GetMediaFormFileAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -109,11 +101,9 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task GetMediaMetadataAsync_EmptyInput()
         {
-            var mediaService = new MediaService(
-                new Mock<IMediaStore>().Object,
-                new Mock<IFileStore>().Object);
+            var mediaService = GetService();
 
-            await ThrowsTask(async () => await mediaService.GetMediaMetadataAsync(Guid.Empty, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await mediaService.GetMediaMetadataAsync(Guid.Empty, Guid.Empty, CancellationToken), VerifySettings);
         }
 
         [Fact]
@@ -121,16 +111,11 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var media = MediaServiceUnitTestConstants.GetCorrectMediaEntry();
 
-            var mediaStoreMoq = new Mock<IMediaStore>();
-            mediaStoreMoq.Setup(x =>
-            x.GetMediaAsync(media.Id, CancellationToken))
+            _mediaRepositoryMoq.Setup(x => x.GetMediaAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media.Id, CancellationToken))
                 .ReturnsAsync(media);
 
-            var mediaService = new MediaService(
-                mediaStoreMoq.Object,
-                new Mock<IFileStore>().Object);
-
-            var result = await mediaService.GetMediaMetadataAsync(media.Id, CancellationToken);
+            var mediaService = GetService();
+            var result = await mediaService.GetMediaMetadataAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media.Id, CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -138,9 +123,7 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task GetPrimalEventMedia_EmptyInput()
         {
-            var mediaService = new MediaService(
-                new Mock<IMediaStore>().Object,
-                new Mock<IFileStore>().Object);
+            var mediaService = GetService();
 
             await ThrowsTask(async () => await mediaService.GetPrimalEventMedia(Guid.Empty, CancellationToken), VerifySettings);
         }
@@ -150,15 +133,10 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var media = MediaServiceUnitTestConstants.GetCorrectMediaEntry();
 
-            var mediaStoreMoq = new Mock<IMediaStore>();
-            mediaStoreMoq.Setup(x =>
-            x.GetPrimalEventMedia(media.EventId, CancellationToken))
+            _mediaRepositoryMoq.Setup(x => x.GetPrimalEventMedia(media.EventId, CancellationToken))
                 .ReturnsAsync(media);
 
-            var mediaService = new MediaService(
-                mediaStoreMoq.Object,
-                new Mock<IFileStore>().Object);
-
+            var mediaService = GetService();
             var result = await mediaService.GetPrimalEventMedia(media.EventId, CancellationToken);
 
             await Verify(result, VerifySettings);
@@ -167,23 +145,19 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task GetMediaMetadatasAsync_EmptyInput()
         {
-            var mediaStoreMoq = new Mock<IMediaStore>();
-            mediaStoreMoq.Setup(x =>
+            _mediaRepositoryMoq.Setup(x =>
             x.GetMediasAsync(
+                It.IsAny<Guid>(),
                 It.IsAny<int>(),
                 It.IsAny<int>(),
-                It.IsAny<Guid?>(),
                 It.IsAny<DateTimeOffset?>(),
                 It.IsAny<DateTimeOffset?>(),
                 It.IsAny<MediaType?>(),
                 It.IsAny<CancellationToken>()))
                 .ThrowsAsync(new EntityNotFoundException("Media not found"));
 
-            var mediaService = new MediaService(
-                mediaStoreMoq.Object,
-                new Mock<IFileStore>().Object);
-
-            var result = await mediaService.GetMediaMetadatasAsync(0, 10, cancellationToken: CancellationToken);
+            var mediaService = GetService();
+            var result = await mediaService.GetMediaMetadatasAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"),0, 10, cancellationToken: CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -193,23 +167,19 @@ namespace StuffyHelper.Tests.UnitTests
         {
             var medias = MediaServiceUnitTestConstants.GetCorrectMediaEntries();
 
-            var mediaStoreMoq = new Mock<IMediaStore>();
-            mediaStoreMoq.Setup(x =>
+            _mediaRepositoryMoq.Setup(x =>
             x.GetMediasAsync(
+                It.IsAny<Guid>(),
                 It.IsAny<int>(),
                 It.IsAny<int>(),
-                It.IsAny<Guid?>(),
                 It.IsAny<DateTimeOffset?>(),
                 It.IsAny<DateTimeOffset?>(),
                 It.IsAny<MediaType?>(),
                 It.IsAny<CancellationToken>()))
                 .ReturnsAsync(medias);
 
-            var mediaService = new MediaService(
-                mediaStoreMoq.Object,
-                new Mock<IFileStore>().Object);
-
-            var result = await mediaService.GetMediaMetadatasAsync(0, 10, cancellationToken: CancellationToken);
+            var mediaService = GetService();
+            var result = await mediaService.GetMediaMetadatasAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), 0, 10, cancellationToken: CancellationToken);
 
             await Verify(result, VerifySettings);
         }
@@ -217,35 +187,27 @@ namespace StuffyHelper.Tests.UnitTests
         [Fact]
         public async Task StoreMediaFormFileAsync_EmptyInput()
         {
-            var mediaService = new MediaService(
-                new Mock<IMediaStore>().Object,
-                new Mock<IFileStore>().Object);
+            var mediaService = GetService();
 
-            await ThrowsTask(async () => await mediaService.StoreMediaFormFileAsync(null, false, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await mediaService.StoreMediaFormFileAsync(Guid.Empty, null, false, CancellationToken), VerifySettings);
         }
 
         [Fact]
         public async Task StoreMediaFormFileAsync_MediaTypeLinkEmpty()
         {
             var media = MediaServiceUnitTestConstants.GetEmptyLinkMediaEntry();
+            var mediaService = GetService();
 
-            var mediaService = new MediaService(
-                new Mock<IMediaStore>().Object,
-                new Mock<IFileStore>().Object);
-
-            await ThrowsTask(async () => await mediaService.StoreMediaFormFileAsync(media, false, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await mediaService.StoreMediaFormFileAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media, false, CancellationToken), VerifySettings);
         }
 
         [Fact]
         public async Task StoreMediaFormFileAsync_MediaTypeFileEmpty()
         {
             var media = MediaServiceUnitTestConstants.GetEmptyFileMediaEntry();
+            var mediaService = GetService();
 
-            var mediaService = new MediaService(
-                new Mock<IMediaStore>().Object,
-                new Mock<IFileStore>().Object);
-
-            await ThrowsTask(async () => await mediaService.StoreMediaFormFileAsync(media, false, CancellationToken), VerifySettings);
+            await ThrowsTask(async () => await mediaService.StoreMediaFormFileAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media, false, CancellationToken), VerifySettings);
         }
 
 
@@ -253,12 +215,8 @@ namespace StuffyHelper.Tests.UnitTests
         public async Task StoreMediaFormFileAsync_Success()
         {
             var media = MediaServiceUnitTestConstants.GetCorrectAddMediaEntry();
-
-            var mediaService = new MediaService(
-                new Mock<IMediaStore>().Object,
-                new Mock<IFileStore>().Object);
-
-            var result = await mediaService.StoreMediaFormFileAsync(media, false, CancellationToken);
+            var mediaService = GetService();
+            var result = await mediaService.StoreMediaFormFileAsync(Guid.Parse("76a258e7-a85d-44b3-b48f-40c4891ebaa0"), media, false, CancellationToken);
 
             await Verify(result, VerifySettings);
         }

@@ -1,5 +1,6 @@
-﻿using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.PurchaseUsage;
+﻿using StuffyHelper.Common.Messages;
+using StuffyHelper.Contracts.Entities;
+using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {
@@ -27,7 +28,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
             {
                 Amount = 5,
                 ParticipantId = Guid.NewGuid(),
-                PurchaseId = Guid.NewGuid(),
             };
         }
 
@@ -37,7 +37,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
             {
                 Amount = 6,
                 ParticipantId = Guid.NewGuid(),
-                PurchaseId = Guid.NewGuid(),
             };
         }
 

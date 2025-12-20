@@ -1,4 +1,9 @@
 ﻿{
-  Type: AuthorizationException,
-  Message: Ошибка обновления пользователя!. Детали: error 1 error 2
+  Type: DbStoreException,
+  HttpStatus: InternalServerError,
+  ErrorCode: DATABASE_ERROR,
+  MessageTemplate: Error while updating user!. Details: {Details},
+  Args: [
+    error 1 error 2
+  ]
 }

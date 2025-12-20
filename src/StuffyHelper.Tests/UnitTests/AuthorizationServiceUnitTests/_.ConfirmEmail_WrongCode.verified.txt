@@ -1,4 +1,6 @@
 ﻿{
   Type: ForbiddenException,
-  Message: Неверный код
+  HttpStatus: Forbidden,
+  ErrorCode: NO_ACCESS_ERROR,
+  MessageTemplate: Wrong code
 }

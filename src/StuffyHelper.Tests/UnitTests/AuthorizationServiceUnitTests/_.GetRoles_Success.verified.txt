@@ -2,13 +2,11 @@
   {
     Id: 1,
     Name: User,
-    NormalizedName: USER,
-    ConcurrencyStamp: Guid_1
+    NormalizedName: USER
   },
   {
     Id: 2,
     Name: Admin,
-    NormalizedName: ADMIN,
-    ConcurrencyStamp: Guid_2
+    NormalizedName: ADMIN
   }
 ]

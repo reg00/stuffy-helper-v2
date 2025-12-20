@@ -1,0 +1,107 @@
+﻿namespace StuffyHelper.Common.Web;
+
+/// <summary>
+/// Stuffy helper auth routes
+/// </summary>
+public static class KnownRoutes
+{
+    private const string DefaultRouteSegment = "api/v1";
+
+        private const string AuthRoute = $"{DefaultRouteSegment}/{AuthRouteSegment}";
+        private const string EmailRoute = $"{DefaultRouteSegment}/{EmailRouteSegment}";
+        
+        private const string EmailRouteSegment = "email";
+        private const string AuthRouteSegment = "auth";
+        private const string EventsSegment = "events";
+        private const string ParticipantsSegment = "participants";
+        private const string PurchasesSegment = "purchases";
+        private const string PurchaseUsagesSegment = "purchase-usages";
+        private const string MediaSegment = "media";
+        private const string FormFileSegment = "form-file";
+        private const string PresignedUrlSegment = "presigned-url";
+        private const string MetadataSegment = "metadata";
+        private const string RequestSegment = "requests";
+        private const string FriendsSegment = "friends";
+        private const string DebtsSegment = "debts";
+
+
+        private const string UserIdRouteSegment = $"{{{KnownActionParameterNames.UserId}}}";
+        private const string EventIdRouteSegment = $"{{{KnownActionParameterNames.EventId}}}";
+        private const string ParticipantIdRouteSegment = $"{{{KnownActionParameterNames.ParticipantId}}}";
+        private const string PurchaseIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseId}}}";
+        private const string PurchaseUsageIdRouteSegment = $"{{{KnownActionParameterNames.PurchaseUsageId}}}";
+        private const string MediaIdRouteSegment = $"{{{KnownActionParameterNames.MediaId}}}";
+        private const string RequestIdRouteSegment = $"{{{KnownActionParameterNames.RequestId}}}";
+        private const string DebtIdRouteSegment = $"{{{KnownActionParameterNames.DebtId}}}";
+
+
+        public const string RegisterRoute = $"{AuthRoute}/register";
+        public const string RolesRoute = $"{AuthRoute}/roles";
+        public const string LoginRoute = $"{AuthRoute}/login";
+        public const string EmailConfirmRoute = $"{AuthRoute}/email-confirm";
+        public const string EditUserRoute = $"{AuthRoute}/edit";
+        public const string AvatarRoute = $"{AuthRoute}/avatar";
+        public const string LogoutRoute = $"{AuthRoute}/logout";
+        public const string IsAdminRoute = $"{AuthRoute}/is-admin";
+        public const string AccountRoute = $"{AuthRoute}/account";
+        public const string UserLoginsRoute = $"{AuthRoute}/users";
+        public const string ResetPasswordRoute = $"{AuthRoute}/reset-password";
+        public const string ResetPasswordConfirmRoute = $"{AuthRoute}/reset-password-confirm";
+        public const string GetUserByIdRoute = $"{UserLoginsRoute}/{UserIdRouteSegment}";
+
+        public const string AddEventRoute = $"{DefaultRouteSegment}/{EventsSegment}";
+        public const string GetEventRoute = $"{AddEventRoute}/{EventIdRouteSegment}";
+        public const string GetEventsRoute = AddEventRoute;
+        public const string DeleteEventRoute = GetEventRoute;
+        public const string UpdateEventRoute = GetEventRoute;
+        public const string UpdateEventPrimalMediaRoute = $"{GetEventRoute}/photo";
+        public const string DeleteEventPrimalMediaRoute = $"{GetEventRoute}/photo";
+        public const string CompleteEventRoute = $"{GetEventRoute}/complete";
+        public const string ReopenEventRoute = $"{GetEventRoute}/reopen";
+        public const string CheckoutEventRoute = $"{GetEventRoute}/checkout";
+
+        public const string AddParticipantRoute = $"{GetEventRoute}/{ParticipantsSegment}";
+        public const string GetParticipantRoute = $"{AddParticipantRoute}/{ParticipantIdRouteSegment}";
+        public const string GetParticipantsRoute = AddParticipantRoute;
+        public const string DeleteParticipantRoute = GetParticipantRoute;
+        public const string UpdateParticipantRoute = GetParticipantRoute;
+
+        public const string AddPurchaseRoute = $"{GetEventRoute}/{PurchasesSegment}";
+        public const string GetPurchaseRoute = $"{AddPurchaseRoute}/{PurchaseIdRouteSegment}";
+        public const string GetPurchasesRoute = AddPurchaseRoute;
+        public const string DeletePurchaseRoute = GetPurchaseRoute;
+        public const string UpdatePurchaseRoute = GetPurchaseRoute;
+
+        public const string AddPurchaseUsageRoute = $"{GetEventRoute}/{PurchaseUsagesSegment}";
+        public const string GetPurchaseUsageRoute = $"{AddPurchaseUsageRoute}/{PurchaseUsageIdRouteSegment}";
+        public const string GetPurchaseUsagesRoute = AddPurchaseUsageRoute;
+        public const string DeletePurchaseUsageRoute = GetPurchaseUsageRoute;
+        public const string UpdatePurchaseUsageRoute = GetPurchaseUsageRoute;
+
+        private const string GetMediaRouteSegment = $"{GetEventRoute}/{MediaSegment}/{MediaIdRouteSegment}";
+        public const string RetrieveMediaFromFileRoute = $"{GetMediaRouteSegment}/{FormFileSegment}";
+        public const string RetrieveMediaPresignedUrlRoute = $"{GetMediaRouteSegment}/{PresignedUrlSegment}";
+        public const string GetMediaMetadataRoute = $"{GetMediaRouteSegment}/{MetadataSegment}";
+        public const string GetMediasMetadatasRoute = $"{GetEventRoute}/{MediaSegment}/{MetadataSegment}";
+        public const string StoreMediaFormFileRoute = $"{GetEventRoute}/{MediaSegment}/{FormFileSegment}";
+        public const string StoreMediaPresignedUrlRoute = $"{GetEventRoute}/{MediaSegment}/{PresignedUrlSegment}";
+        public const string DeleteMediaRoute = GetMediaRouteSegment;
+
+        public const string RequestRoute = $"{DefaultRouteSegment}/{RequestSegment}";
+        public const string AddRequestRoute = RequestRoute;
+        public const string AcceptRequestRoute = $"{GetRequestRoute}/accept";
+        public const string GetRequestRoute = $"{RequestRoute}/{RequestIdRouteSegment}";
+        public const string GetSendedRequestsRoute = $"{RequestRoute}/sended";
+        public const string GetIncomingRequestsRoute = $"{RequestRoute}/incoming";
+        public const string DeleteRequestRoute = GetRequestRoute;
+        public const string UpdateRequestRoute = GetRequestRoute;
+
+        public const string GetFriendsRoute = $"{DefaultRouteSegment}/{FriendsSegment}";
+
+        public const string GetDebtsRoute = $"{GetEventRoute}/{DebtsSegment}";
+        public const string GetDebtRoute = $"{GetDebtsRoute}/{DebtIdRouteSegment}";
+        public const string SendDebtRoute = $"{GetDebtRoute}/send";
+        public const string ConfirmDebtRoute = $"{GetDebtRoute}/confirm";
+        
+        public const string SendEmailRoute = $"{EmailRoute}/send";
+}

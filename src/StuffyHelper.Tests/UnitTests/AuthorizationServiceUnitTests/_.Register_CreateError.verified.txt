@@ -1,4 +1,9 @@
 ﻿{
-  Type: Exception,
-  Message: Ошибка создания пользователя! Детали: error 1 error 2
+  Type: BadRequestException,
+  HttpStatus: BadRequest,
+  ErrorCode: BAD_REQUEST_ERROR,
+  MessageTemplate: User creating error! Details: {Details},
+  Args: [
+    error 1 error 2
+  ]
 }

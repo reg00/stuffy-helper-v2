@@ -1,29 +1,34 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StuffyHelper.Api.Web;
-using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.Debt;
-using StuffyHelper.Core.Features.Event;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using StuffyHelper.Common.Contracts;
+using StuffyHelper.Common.Helpers;
+using StuffyHelper.Common.Messages;
+using StuffyHelper.Common.Web;
+using StuffyHelper.Contracts.Models;
+using StuffyHelper.Core.Helpers;
+using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {
-    [Authorize]
-    public class EventController : Controller
+    /// <summary>
+    /// Ивенты
+    /// </summary>
+    public class EventController : AuthorizedApiController
     {
         private readonly IEventService _eventService;
         private readonly IDebtService _debtService;
-        private readonly IPermissionService _permissionService;
 
+        private StuffyClaims UserClaims => IdentityClaims.GetUserClaims();
+        
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public EventController(
             IEventService eventService,
-            IDebtService debtService,
-            IPermissionService permissionService)
+            IDebtService debtService)
         {
             _eventService = eventService;
             _debtService = debtService;
-            _permissionService = permissionService;
         }
 
         /// <summary>
@@ -32,10 +37,10 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Response<EventShortEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetEventsRoute)]
-        public async Task<IActionResult> GetAsync(
+        public async Task<Response<EventShortEntry>> GetAsync(
             int offset = 0,
             int limit = 10,
             string? name = null,
@@ -52,13 +57,11 @@ namespace StuffyHelper.Api.Controllers
             Guid? participantId = null,
             Guid? purchaseId = null)
         {
-            userId = await _permissionService.GetUserId(User, userId, HttpContext.RequestAborted);
+            userId = PermissionHelper.GetUserId(UserClaims, userId);
 
-            var eventResponse = await _eventService.GetEventsAsync(offset, limit, name, description, createdDateStart, createdDateEnd,
+            return await _eventService.GetEventsAsync(offset, limit, name, description, createdDateStart, createdDateEnd,
                                                                    eventDateStartMin, eventDateStartMax, eventDateEndMin, eventDateEndMax, userId,
                                                                    isCompleted, isActive, participantId, purchaseId, HttpContext.RequestAborted);
-
-            return Ok(eventResponse);
         }
 
         /// <summary>
@@ -67,16 +70,13 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(GetEventEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetEventRoute)]
-        public async Task<IActionResult> GetAsync(Guid eventId)
+        public async Task<GetEventEntry> GetAsync(Guid eventId)
         {
-            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
-
-            var @event = await _eventService.GetEventAsync(eventId, userId, HttpContext.RequestAborted);
-
-            return Ok(@event);
+            var userId = PermissionHelper.GetUserId(UserClaims);
+            return await _eventService.GetEventAsync(eventId, userId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -84,16 +84,14 @@ namespace StuffyHelper.Api.Controllers
         /// </summary>
         [HttpPost]
         [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddEventRoute)]
-        public async Task<IActionResult> PostAsync([FromBody] AddEventEntry entry)
+        public async Task<EventShortEntry> PostAsync([FromBody] AddEventEntry entry)
         {
-            var @event = await _eventService.AddEventAsync(
+            return await _eventService.AddEventAsync(
                 entry,
-                User,
+                UserClaims,
                 HttpContext.RequestAborted);
-
-            return Ok(@event);
         }
 
         /// <summary>
@@ -101,15 +99,11 @@ namespace StuffyHelper.Api.Controllers
         /// </summary>
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteEventRoute)]
-        public async Task<IActionResult> DeleteAsync(Guid eventId)
+        public async Task DeleteAsync(Guid eventId)
         {
-            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
-
-            await _eventService.DeleteEventAsync(eventId, userId, HttpContext.RequestAborted);
-
-            return Ok();
+            await _eventService.DeleteEventAsync(eventId, UserClaims.UserId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -118,15 +112,13 @@ namespace StuffyHelper.Api.Controllers
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdateEventRoute)]
-        public async Task<IActionResult> PatchAsync(Guid eventId, [FromBody] UpdateEventEntry updateEntry)
+        public async Task<EventShortEntry> PatchAsync(Guid eventId, [FromBody] UpdateEventEntry updateEntry)
         {
-            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+            var userId = PermissionHelper.GetUserId(UserClaims);
 
-            var entry = await _eventService.UpdateEventAsync(eventId, updateEntry, userId, HttpContext.RequestAborted);
-
-            return Ok(entry);
+            return await _eventService.UpdateEventAsync(eventId, updateEntry, userId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -139,13 +131,11 @@ namespace StuffyHelper.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeleteEventPrimalMediaRoute)]
-        public async Task<IActionResult> DeletePrimalMediaAsync([FromRoute] Guid eventId)
+        public async Task DeletePrimalMediaAsync([FromRoute] Guid eventId)
         {
-            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+            var userId = PermissionHelper.GetUserId(UserClaims);
 
             await _eventService.DeletePrimalEventMedia(eventId, userId, HttpContext.RequestAborted);
-
-            return Ok();
         }
 
         /// <summary>
@@ -157,15 +147,13 @@ namespace StuffyHelper.Api.Controllers
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdateEventPrimalMediaRoute)]
-        public async Task<IActionResult> PatchPrimalMediaAsync([FromRoute] Guid eventId, IFormFile file)
+        public async Task<EventShortEntry> PatchPrimalMediaAsync([FromRoute] Guid eventId, IFormFile file)
         {
-            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+            var userId = PermissionHelper.GetUserId(UserClaims);
 
-            var @event = await _eventService.UpdatePrimalEventMediaAsync(eventId, file, userId, HttpContext.RequestAborted);
-
-            return Ok(@event);
+            return await _eventService.UpdatePrimalEventMediaAsync(eventId, file, userId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -175,16 +163,14 @@ namespace StuffyHelper.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
-        [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.CompleteEventRoute)]
-        public async Task<IActionResult> CompleteEventAsync([FromRoute] Guid eventId)
+        public async Task CompleteEventAsync([FromRoute] Guid eventId)
         {
-            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+            var userId = PermissionHelper.GetUserId(UserClaims);
 
             await _eventService.CompleteEventAsync(eventId, userId, true, HttpContext.RequestAborted);
-
-            return Ok();
         }
 
         /// <summary>
@@ -194,16 +180,14 @@ namespace StuffyHelper.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
-        [ProducesResponseType(typeof(EventShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.ReopenEventRoute)]
-        public async Task<IActionResult> ReopenEventAsync([FromRoute] Guid eventId)
+        public async Task ReopenEventAsync([FromRoute] Guid eventId)
         {
-            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+            var userId = PermissionHelper.GetUserId(UserClaims);
 
             await _eventService.CompleteEventAsync(eventId, userId, false, HttpContext.RequestAborted);
-
-            return Ok();
         }
 
         /// <summary>
@@ -213,16 +197,14 @@ namespace StuffyHelper.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.CheckoutEventRoute)]
-        public async Task<IActionResult> CheckoutEventAsync([FromRoute] Guid eventId)
+        public async Task CheckoutEventAsync([FromRoute] Guid eventId)
         {
-            var userId = await _permissionService.GetUserId(User, null, HttpContext.RequestAborted);
+            var userId = PermissionHelper.GetUserId(UserClaims);
 
             await _debtService.CheckoutEvent(eventId, userId, HttpContext.RequestAborted);
-
-            return Ok();
         }
-
     }
 }

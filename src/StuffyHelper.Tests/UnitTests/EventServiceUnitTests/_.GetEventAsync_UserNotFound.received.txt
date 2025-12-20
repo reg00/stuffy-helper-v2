@@ -1,0 +1,15 @@
+﻿{
+  Type: AutoMapperMappingException,
+  Types: {
+    SourceType: StuffyClaims,
+    DestinationType: UserShortEntry,
+    IsConstructedGenericType: false,
+    ContainsGenericParameters: false
+  },
+  Message:
+Missing type map configuration or unsupported mapping.
+
+Mapping types:
+StuffyClaims -> UserShortEntry
+StuffyHelper.Common.Contracts.StuffyClaims -> StuffyHelper.Authorization.Contracts.Models.UserShortEntry
+}

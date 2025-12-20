@@ -3,14 +3,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using Reg00.Infrastructure.Minio.Configs;
-using StuffyHelper.Core.Features.Common;
 using StuffyHelper.Minio.Configs;
 using StuffyHelper.Minio.Features.Storage;
 
 namespace StuffyHelper.Minio.Registration
 {
+    /// <summary>
+    /// File store registration extensions
+    /// </summary>
     public static class ServiceCollectionMinioExtensions
     {
+        /// <summary>
+        /// Add minio support
+        /// </summary>
         public static IServiceCollection AddMinioBlobDataStores(this IServiceCollection services, IConfiguration configuration)
         {
             EnsureArg.IsNotNull(services, nameof(services));
@@ -27,6 +32,9 @@ namespace StuffyHelper.Minio.Registration
             return services;
         }
 
+        /// <summary>
+        /// Add minio client
+        /// </summary>
         private static IServiceCollection AddMinioClient(this IServiceCollection services, MinioClientOptions minioClientOptions)
         {
             EnsureArg.IsNotNull(minioClientOptions, nameof(minioClientOptions));
@@ -41,18 +49,23 @@ namespace StuffyHelper.Minio.Registration
             return services;
         }
 
+        /// <summary>
+        /// Add minio data store
+        /// </summary>
         private static IServiceCollection AddMinioBlobStore(this IServiceCollection services, IConfiguration configuration, MinioClientOptions minioClientOptions)
         {
             EnsureArg.IsNotNull(minioClientOptions, nameof(minioClientOptions));
 
-            var options = new FileStoreConfiguration();
+            var a = configuration.GetSection(FileStoreConfiguration.DefaultSection);
+            
+            var fileStoreConfiguration = new FileStoreConfiguration();
             configuration.GetSection(FileStoreConfiguration.DefaultSection)
-               .Bind(options);
+               .Bind(fileStoreConfiguration);
 
             services.AddScoped<IFileStore>(sp =>
             {
                 var minioClient = sp.GetRequiredService<MinioClient>();
-                return new MinioFileStore(minioClient, options.ContainerName, minioClientOptions);
+                return new MinioFileStore(minioClient, fileStoreConfiguration.ContainerName, minioClientOptions);
             });
 
             return services;

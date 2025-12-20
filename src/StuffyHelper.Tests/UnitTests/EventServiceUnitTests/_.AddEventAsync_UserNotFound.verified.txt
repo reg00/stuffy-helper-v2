@@ -1,4 +1,3 @@
 ﻿{
-  Type: ForbiddenException,
-  Message: Authorization error
+  Type: EntityNotFoundException
 }

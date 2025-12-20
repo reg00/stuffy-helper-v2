@@ -1,5 +1,6 @@
-﻿using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.Participant;
+﻿using StuffyHelper.Common.Messages;
+using StuffyHelper.Contracts.Entities;
+using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {
@@ -20,7 +21,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
         {
             return new()
             {
-                EventId = Guid.NewGuid(),
                 UserId = "123"
             };
         }

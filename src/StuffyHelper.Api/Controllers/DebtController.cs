@@ -1,25 +1,28 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using StuffyHelper.Api.Web;
-using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.Debt;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
-using IAuthorizationService = StuffyHelper.Authorization.Core.Features.IAuthorizationService;
+using StuffyHelper.Common.Contracts;
+using StuffyHelper.Common.Helpers;
+using StuffyHelper.Common.Messages;
+using StuffyHelper.Common.Web;
+using StuffyHelper.Contracts.Models;
+using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {
-    [Authorize]
-    public class DebtController : Controller
+    /// <summary>
+    /// Долги
+    /// </summary>
+    public class DebtController : AuthorizedApiController
     {
         private readonly IDebtService _debtService;
-        private readonly IAuthorizationService _authorizationService;
-
-        public DebtController(
-            IDebtService debtService,
-            IAuthorizationService authorizationService)
+        private StuffyClaims UserClams => IdentityClaims.GetUserClaims();
+        
+        /// <summary>
+        /// Ctor.
+        /// </summary>
+        public DebtController(IDebtService debtService)
         {
             _debtService = debtService;
-            _authorizationService = authorizationService;
         }
 
         /// <summary>
@@ -28,54 +31,60 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Response<GetDebtEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetDebtsRoute)]
-        public async Task<IActionResult> GetDebtsAsync(int offset = 0, int limit = 10)
+        public async Task<Response<GetDebtEntry>> GetDebtsAsync([FromRoute] Guid eventId, int offset = 0, int limit = 10)
         {
-            var user = await _authorizationService.GetUserByToken(User, HttpContext.RequestAborted);
+            return await _debtService.GetDebtsByUserAsync(UserClams.UserId, eventId, offset, limit, HttpContext.RequestAborted);
+        }
 
-            var debtsResponce = await _debtService.GetDebtsByUserAsync(user.Id, offset, limit, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, debtsResponce);
+        /// <summary>
+        /// Получение информации о долге
+        /// </summary>
+        /// <param name="eventId">Event id</param>
+        /// <param name="debtId">Debt id</param>
+        [HttpGet]
+        [ProducesResponseType(typeof(GetDebtEntry), (int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.Forbidden)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
+        [Route(KnownRoutes.GetDebtRoute)]
+        public async Task<GetDebtEntry> GetDebtAsync([FromRoute] Guid eventId, [FromRoute] Guid debtId)
+        {
+            return await _debtService.GetDebtAsync(eventId, debtId, HttpContext.RequestAborted);
         }
 
         /// <summary>
         /// Оплатить долг
         /// </summary>
-        /// <param name="debtId">Id пользователя - должника</param>
+        /// <param name="eventId">Event id</param>
+        /// <param name="debtId">Debt id</param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
         [Route(KnownRoutes.SendDebtRoute)]
-        public async Task<IActionResult> SendDebtAsync([FromRoute] Guid debtId)
+        public async Task SendDebtAsync([FromRoute] Guid eventId, [FromRoute] Guid debtId)
         {
-            var user = await _authorizationService.GetUserByToken(User, HttpContext.RequestAborted);
-
-            await _debtService.SendDebtAsync(user.Id, debtId, HttpContext.RequestAborted);
-
-            return Ok("Succeccfully send debt");
+            await _debtService.SendDebtAsync(UserClams.UserId, eventId, debtId, HttpContext.RequestAborted);
         }
 
         /// <summary>
         /// Оплатить долг
         /// </summary>
-        /// <param name="debtId">Id пользователя - должника</param>
+        /// <param name="eventId">Event id</param>
+        /// <param name="debtId">Debt id</param>
         /// <returns></returns>
         [HttpPost]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
         [Route(KnownRoutes.ConfirmDebtRoute)]
-        public async Task<IActionResult> ConfirmDebtAsync([FromRoute] Guid debtId)
+        public async Task ConfirmDebtAsync([FromRoute] Guid eventId, [FromRoute] Guid debtId)
         {
-            var user = await _authorizationService.GetUserByToken(User, HttpContext.RequestAborted);
-
-            await _debtService.ConfirmDebtAsync(user.Id, debtId, HttpContext.RequestAborted);
-
-            return Ok("Succeccfully confirm debt");
+            await _debtService.ConfirmDebtAsync(UserClams.UserId, eventId, debtId, HttpContext.RequestAborted);
         }
     }
 }

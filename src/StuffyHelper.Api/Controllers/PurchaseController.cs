@@ -1,17 +1,23 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using StuffyHelper.Api.Web;
-using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.Purchase;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Net;
+using StuffyHelper.Common.Exceptions;
+using StuffyHelper.Common.Messages;
+using StuffyHelper.Common.Web;
+using StuffyHelper.Contracts.Models;
+using StuffyHelper.Core.Services.Interfaces;
 
 namespace StuffyHelper.Api.Controllers
 {
-    [Authorize]
-    public class PurchaseController : Controller
+    /// <summary>
+    /// Покупки
+    /// </summary>
+    public class PurchaseController : AuthorizedApiController
     {
         private readonly IPurchaseService _purchaseService;
 
+        /// <summary>
+        /// Ctor.
+        /// </summary>
         public PurchaseController(IPurchaseService purchaseService)
         {
             _purchaseService = purchaseService;
@@ -23,24 +29,21 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(Response<GetPurchaseEntry>), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetPurchasesRoute)]
-        public async Task<IActionResult> GetAsync(
+        public async Task<Response<GetPurchaseEntry>> GetAsync(
+            Guid eventId,
             int offset = 0,
             int limit = 10,
             string? name = null,
-            double? costMin = null,
-            double? costMax = null,
-            Guid? eventId = null,
-            IEnumerable<string>? purchaseTags = null,
-            Guid? unitTypeId = null,
-            bool? isComplete = null)
+            long? costMin = null,
+            long? costMax = null,
+            bool? isComplete = null,
+            Guid[]? purchaseIds = null)
         {
-            var purchaseResponse = await _purchaseService.GetPurchasesAsync(offset, limit, name, costMin, costMax, eventId,
-                                                                            purchaseTags, unitTypeId, isComplete, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, purchaseResponse);
+            return await _purchaseService.GetPurchasesAsync(eventId, offset, limit, name, costMin, costMax,
+                isComplete, purchaseIds, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -49,14 +52,12 @@ namespace StuffyHelper.Api.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(GetPurchaseEntry), (int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.Forbidden)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.NotFound)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.NotFound)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.GetPurchaseRoute)]
-        public async Task<IActionResult> GetAsync(Guid purchaseId)
+        public async Task<GetPurchaseEntry> GetAsync([FromRoute] Guid eventId, [FromRoute] Guid purchaseId)
         {
-            var purchaseEntry = await _purchaseService.GetPurchaseAsync(purchaseId, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, purchaseEntry);
+             return await _purchaseService.GetPurchaseAsync(eventId, purchaseId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -65,18 +66,16 @@ namespace StuffyHelper.Api.Controllers
         [HttpPost]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(PurchaseShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.AddPurchaseRoute)]
-        public async Task<IActionResult> PostAsync([FromBody] AddPurchaseEntry addEntry)
+        public async Task<PurchaseShortEntry> PostAsync([FromRoute] Guid eventId, [FromBody] AddPurchaseEntry addEntry)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ErrorResponse(ModelState));
+                throw new BadRequestException(ModelState);
             }
 
-            var purchase = await _purchaseService.AddPurchaseAsync(addEntry, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, purchase);
+            return await _purchaseService.AddPurchaseAsync(eventId, addEntry, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -84,13 +83,11 @@ namespace StuffyHelper.Api.Controllers
         /// </summary>
         [HttpDelete]
         [ProducesResponseType((int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.DeletePurchaseRoute)]
-        public async Task<IActionResult> DeleteAsync(Guid purchaseId)
+        public async Task DeleteAsync([FromRoute] Guid eventId, [FromRoute] Guid purchaseId)
         {
-            await _purchaseService.DeletePurchaseAsync(purchaseId, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK);
+            await _purchaseService.DeletePurchaseAsync(eventId, purchaseId, HttpContext.RequestAborted);
         }
 
         /// <summary>
@@ -99,18 +96,16 @@ namespace StuffyHelper.Api.Controllers
         [HttpPatch]
         [Produces(KnownContentTypes.ApplicationJson)]
         [ProducesResponseType(typeof(PurchaseShortEntry), (int)HttpStatusCode.OK)]
-        [ProducesResponseType(typeof(ErrorResponse), (int)HttpStatusCode.BadRequest)]
+        [ProducesResponseType(typeof(ApiError), (int)HttpStatusCode.BadRequest)]
         [Route(KnownRoutes.UpdatePurchaseRoute)]
-        public async Task<IActionResult> PatchAsync(Guid purchaseId, [FromBody] UpdatePurchaseEntry updateEntry)
+        public async Task<PurchaseShortEntry> PatchAsync([FromRoute] Guid eventId, [FromRoute] Guid purchaseId, [FromBody] UpdatePurchaseEntry updateEntry)
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(new ErrorResponse(ModelState));
+                throw new BadRequestException(ModelState);
             }
 
-            var entry = await _purchaseService.UpdatePurchaseAsync(purchaseId, updateEntry, HttpContext.RequestAborted);
-
-            return StatusCode((int)HttpStatusCode.OK, entry);
+            return await _purchaseService.UpdatePurchaseAsync(eventId, purchaseId, updateEntry, HttpContext.RequestAborted);
         }
     }
 }

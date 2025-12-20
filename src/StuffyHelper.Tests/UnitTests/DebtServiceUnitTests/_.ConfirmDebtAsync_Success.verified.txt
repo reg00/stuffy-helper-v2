@@ -1,6 +1,6 @@
 ﻿{
   Id: Guid_1,
-  Amount: 1.0,
+  Amount: 1,
   IsSent: true,
   IsComfirmed: true,
   Event: {
@@ -11,11 +11,11 @@
     IsCompleted: true
   },
   Lender: {
-    Id: 123,
-    Name: test
+    Id: 651,
+    Name: vtor
   },
   Debtor: {
-    Id: 321,
-    Name: 
+    Id: 123,
+    Name: test
   }
 }

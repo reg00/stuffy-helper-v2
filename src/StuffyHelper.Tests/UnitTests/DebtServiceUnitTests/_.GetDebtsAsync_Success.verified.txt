@@ -15,8 +15,8 @@
         Name: test
       },
       Debtor: {
-        Id: 321,
-        Name: 
+        Id: 651,
+        Name: vtor
       }
     },
     {
@@ -30,8 +30,8 @@
         IsCompleted: false
       },
       Lender: {
-        Id: 321,
-        Name: 
+        Id: 651,
+        Name: vtor
       },
       Debtor: {
         Id: 123,

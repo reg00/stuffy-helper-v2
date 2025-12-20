@@ -4,22 +4,28 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
-using StuffyHelper.EmailService.Core.Configs;
-using StuffyHelper.EmailService.Core.Service;
+using StuffyHelper.Common.Configurators;
+using StuffyHelper.EmailService.Core.Service.Interfaces;
 
 namespace StuffyHelper.EmailService.Core.Registration
 {
+    /// <summary>
+    /// Email service registration extensions
+    /// </summary>
     public static class EmailServiceRegistrationExtension
     {
+        /// <summary>
+        /// Add email service references
+        /// </summary>
         public static IServiceCollection AddEmailService(this IServiceCollection services, IConfiguration configuration)
         {
             EnsureArg.IsNotNull(services, nameof(services));
             EnsureArg.IsNotNull(configuration, nameof(configuration));
 
-            var emailServiceConfiguration = new EmailServiceConfiguration();
-            configuration.GetSection(EmailServiceConfiguration.DefaultSectionName)
-                .Bind(emailServiceConfiguration);
+            var emailServiceConfiguration = configuration.GetConfig().EmailService;
 
+            EnsureArg.IsNotNull(emailServiceConfiguration, nameof(emailServiceConfiguration));
+            
             services.AddSingleton(Options.Create(emailServiceConfiguration));
 
             services.AddMailKit(options =>
@@ -37,7 +43,7 @@ namespace StuffyHelper.EmailService.Core.Registration
                 });
             });
 
-            services.AddScoped<IEmailService, Service.EmailService>();
+            services.AddScoped<IStuffyEmailService, Service.StuffyStuffyEmailService>();
 
             return services;
         }

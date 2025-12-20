@@ -1,5 +1,6 @@
-﻿using StuffyHelper.Core.Features.Common;
-using StuffyHelper.Core.Features.Purchase;
+﻿using StuffyHelper.Common.Messages;
+using StuffyHelper.Contracts.Entities;
+using StuffyHelper.Contracts.Models;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {
@@ -9,17 +10,13 @@ namespace StuffyHelper.Tests.UnitTests.Common
         {
             return new()
             {
-                Amount = 1,
                 Cost = 1,
                 EventId = Guid.NewGuid(),
                 Id = Guid.NewGuid(),
                 IsComplete = true,
-                IsPartial = true,
                 Name = "Test",
                 ParticipantId = Guid.NewGuid(),
-                UnitTypeId = Guid.NewGuid(),
                 Event = EventServiceUnitTestConstants.GetCorrectEventEntry(),
-                UnitType = UnitTypeServiceUnitTestConstants.GetCorrectUnitTypeEntry(),
                 Owner = ParticipantServiceUnitTestConstants.GetCorrectParticipantEntry(),
             };
         }
@@ -28,13 +25,9 @@ namespace StuffyHelper.Tests.UnitTests.Common
         {
             return new()
             {
-                Amount = 1,
                 Cost = 1,
-                EventId = Guid.NewGuid(),
-                IsPartial = true,
                 Name = "Test",
                 ParticipantId = Guid.NewGuid(),
-                UnitTypeId = Guid.NewGuid(),
             };
         }
 
@@ -42,11 +35,8 @@ namespace StuffyHelper.Tests.UnitTests.Common
         {
             return new()
             {
-                Amount = 3,
                 Cost = 3,
-                IsPartial = false,
                 Name = "Test",
-                UnitTypeId = Guid.NewGuid(),
             };
         }
 
@@ -60,32 +50,24 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 {
                     new()
                     {
-                        Amount = 1,
                         Cost = 1,
                         EventId = Guid.NewGuid(),
                         Id = Guid.NewGuid(),
                         IsComplete = true,
-                        IsPartial = true,
                         Name = "Test",
                         ParticipantId = Guid.NewGuid(),
-                        UnitTypeId = Guid.NewGuid(),
                         Event = EventServiceUnitTestConstants.GetCorrectEventEntry(),
-                        UnitType = UnitTypeServiceUnitTestConstants.GetCorrectUnitTypeEntry(),
                         Owner = ParticipantServiceUnitTestConstants.GetCorrectParticipantEntry(),
                     },
                     new()
                     {
-                        Amount = 5,
                         Cost = 5,
                         EventId = Guid.NewGuid(),
                         Id = Guid.NewGuid(),
                         IsComplete = true,
-                        IsPartial = true,
                         Name = "Test 2",
                         ParticipantId = Guid.NewGuid(),
-                        UnitTypeId = Guid.NewGuid(),
                         Event = EventServiceUnitTestConstants.GetCorrectEventEntry(),
-                        UnitType = UnitTypeServiceUnitTestConstants.GetCorrectUnitTypeEntry(),
                         Owner = ParticipantServiceUnitTestConstants.GetCorrectParticipantEntry(),
                     }
                 }

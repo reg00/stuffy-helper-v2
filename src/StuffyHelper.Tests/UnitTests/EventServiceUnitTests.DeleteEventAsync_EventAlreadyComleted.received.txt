@@ -1,0 +1,15 @@
+﻿{
+  Type: BadRequestException,
+  HttpStatus: BadRequest,
+  ErrorCode: BAD_REQUEST_ERROR,
+  MessageTemplate: Cannot edit completed event {EventId}. User: {UserId},
+  Args: [
+    Guid_1,
+    null
+  ],
+  Message: Cannot edit completed event 86a6cc4c-750b-4a9f-a926-f6b7d2867bed. User: ,
+  StackTrace:
+at StuffyHelper.Core.Services.EventService.ValidateEventAsync(Guid eventId, String userId, Boolean checkIsComplete, CancellationToken cancellationToken)
+at StuffyHelper.Core.Services.EventService.DeleteEventAsync(Guid eventId, String userId, CancellationToken cancellationToken)
+--- End of stack trace from previous location ---
+}

@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using StuffyHelper.Authorization.Core.Configs;
-using StuffyHelper.Authorization.Core.Models;
-using StuffyHelper.Authorization.Core.Models.User;
 using System.Security.Claims;
 using System.Text;
+using StuffyHelper.Authorization.Contracts.Entities;
+using StuffyHelper.Authorization.Contracts.Enums;
+using StuffyHelper.Authorization.Contracts.Models;
+using StuffyHelper.Common.Contracts;
 
 namespace StuffyHelper.Tests.UnitTests.Common
 {
@@ -50,7 +51,7 @@ namespace StuffyHelper.Tests.UnitTests.Common
             };
         }
 
-        public static UserEntry GetCorrectUserEntry()
+        public static GetUserEntry GetCorrectUserEntry()
         {
             return new()
             {
@@ -61,15 +62,16 @@ namespace StuffyHelper.Tests.UnitTests.Common
                 Name = "test"
             };
         }
-
-        public static UserEntry GetCorrectSecontUserEntry()
+        
+        public static GetUserEntry GetCorrectSecondUserEntry()
         {
             return new()
             {
-                FirstName = "Тест",
-                MiddleName = "Тестович",
-                LastName = "Тестов",
-                Id = "321",
+                FirstName = "Второв",
+                MiddleName = "Вторович",
+                LastName = "Второв",
+                Id = "651",
+                Name = "vtor"
             };
         }
 
@@ -112,21 +114,6 @@ namespace StuffyHelper.Tests.UnitTests.Common
             };
         }
 
-        public static AuthorizationConfiguration GetCorrectAuthorizationConfiguration()
-        {
-            return new()
-            {
-                ConnectionString = "connectionString",
-                JWT = new()
-                {
-                    ValidAudience = "audience",
-                    Secret = "secret",
-                    TokenExpireInHours = 1,
-                    ValidIssuer = "issuer"
-                }
-            };
-        }
-
         public static RegisterModel GetCorrectRegisterModel()
         {
             return new()
@@ -154,6 +141,16 @@ namespace StuffyHelper.Tests.UnitTests.Common
             };
         }
 
+        public static StuffyClaims GetCorrectStuffyClaims()
+        {
+            return new StuffyClaims()
+            {
+                UserId = "test",
+                Roles = new List<string>() { "admin", "user" },
+                Username = "test"
+            };
+        }
+        
         public static ClaimsPrincipal GetCorrectClaims()
         {
             var claims = new List<Claim>()

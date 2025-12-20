@@ -1,74 +1,82 @@
 version: '3.7'
-services:
-  nginx:
-    image: nginx
-    volumes:
-      - ./conf/nginx.conf:/etc/nginx/nginx.conf
-    ports:
-      - 80:80
-      - 443:443
-    networks:
-      - app-network
-    depends_on:
-      - backend
-      - frontend
-    environment:
-      - NGINX_PORT=80
 
-  frontend:
-    container_name: frontend
-    image: salmasov/stuffy-helper-frontend:latest
+x-common-variables: &common
+  StuffyHelper__Endpoints__EmailEndpoint: ${EMAIL_ENDPOINT}
+  StuffyHelper__Endpoints__AuthorizationEndpoint: ${AUTH_ENDPOINT}
+  StuffyHelper__Endpoints__StuffyEndpoint: ${STUFFY_ENDPOINT}
+  StuffyHelper__MinioStore__Endpoint: ${MINIO_ENDPOINT}
+  StuffyHelper__MinioStore__AccessKey: ${MINIO_ACCESS}
+  StuffyHelper__MinioStore__SecretKey: ${MINIO_SECRET}
+  StuffyHelper__MinioStore__NetworkTimeout: 3600
+  StuffyHelper__MinioStore__PresignedUrlExpiry: 12:00:00
+  StuffyHelper__FileStore__ContainerName: ${FILE_CONTAINER_NAME}
+  StuffyHelper__EntityFramework__DbProvider: ${EF_PROVIDER}
+  StuffyHelper__EntityFramework__ConnectionString: ${EF_CONN_STR}
+  StuffyHelper__Authorization__ConnectionString: ${AUTH_CONN_STR}
+  StuffyHelper__Authorization__JWT__Secret: ${AUTH_JWT_SECRET}
+  StuffyHelper__Authorization__JWT__ValidIssuer: ${AUTH_JWT_ISSUER}
+  StuffyHelper__Authorization__JWT__ValidAudience: ${AUTH_JWT_AUDIENCE}
+  StuffyHelper__Authorization__JWT__TokenExpireInHourse: 24
+  StuffyHelper__CheckFinderClient__Endpoint: ${CHECK_FINDER_ENDPOINT}
+  StuffyHelper__EmailService__Server: ${EMAIL_SERVER}
+  StuffyHelper__EmailService__Port: ${EMAIL_PORT}
+  StuffyHelper__EmailService__Account: ${EMAIL_ACCOUNT}
+  StuffyHelper__EmailService__Password: ${EMAIL_PASSWORD}
+  StuffyHelper__EmailService__SenderEmail: ${EMAIL_SENDER_EMAIL}
+  StuffyHelper__EmailService__SenderName: ${EMAIL_SENDER_NAME}
+  StuffyHelper__Frontend__Endpoint: ${FRONTEND_ENDPOINT}
+
+services:
+  stuffy-gateway:
+    image: slavadno/stuffy-gateway:latest
     ports:
-      - 8080:80
-    restart: unless-stopped
+      - 7654:7654
+    environment: 
+      <<: *common
+    depends_on:
+      - stuffy
     networks:
       - app-network
-      
-  backend:
-    container_name: backend
-    image: slavadno/stuffyhelper
-    build: .
-    ports:
-      - 7777:7777
-    environment:
-      - Authorization__ConnectionString=${AUTH_CONN_STR}
-      - Authorization__JWT__Secret==${AUTH_JWT_SECRET}
-      - Authorization__JWT__ValidIssuer=${AUTH_JWT_ISSUER}
-      - Authorization__JWT__ValidAudience=${AUTH_JWT_AUDIENCE}
-      - EntityFramework__DbProvider=${EF_PROVIDER}
-      - EntityFramework__ConnectionString=${EF_CONN_STR}
-      - MinioStore__Endpoint=${MINIO_ENDPOINT}
-      - MinioStore__AccessKey=${MINIO_ACCESS}
-      - MinioStore__SecretKey=${MINIO_SECRET}
-      - MinioStore__NetworkTimeout=3600
-      - MinioStore__PresignedUrlExpiry=12:00:00
-      - StuffyFileWeb__StuffyFileStore__ContainerName=${FILE_CONTAINER_NAME}
-      - EmailService__Server=${EMAIL_SERVER}
-      - EmailService__Port=${EMAIL_PORT}
-      - EmailService__Account=${EMAIL_ACCOUNT}
-      - EmailService__Password=${EMAIL_PASSWORD}
-      - EmailService__SenderEmail=${EMAIL_SENDER_EMAIL}
-      - EmailService__SenderName=${EMAIL_SENDER_NAME}
-      - Frontend__Endpoint=${FRONTEND_ENDPOINT}
+
+  stuffy:
+    image: slavadno/stuffy-core:latest
+    # ports:
+      # - 7777:7777
+    environment: 
+      <<: *common
+    restart: always
     depends_on:
       - postgres-web
       - s3
-    restart: unless-stopped
+      - stuffy-email
+      - stuffy-auth
+    networks:
+      - app-network
+
+  stuffy-auth:
+    image: slavadno/stuffy-auth:latest
+    # ports:
+      # - 7168:7168
+    environment: 
+      <<: *common
+    depends_on:
+      - postgres-web
+      - s3
+      - stuffy-email
+    restart: always
+    networks:
+      - app-network
+  
+  stuffy-email:
+    image: slavadno/stuffy-email:latest
+    # ports:
+      # - 7755:7755
+    environment: 
+      <<: *common
+    restart: always
     networks:
       - app-network
       
-  check-finder:
-    container_name: check-finder
-    image: romqsqd/check-finder:latest
-    ports:
-      - 5062:5062
-    environment:
-      - ProverkaChecka__Endpoint=${CHECK_SERVICE_ENDPOINT}
-      - ProverkaChecka__Token=${CHECK_SERVICE_TOKEN}
-    restart: unless-stopped
-    networks:
-      - app-network
-     
   postgres-web:
     image: postgres:12.4-alpine
     environment:
@@ -94,6 +102,20 @@ services:
     command: server /data
     networks:
       - app-network
+    restart: always
+      
+  #gateway:
+  #  image: nginx:alpine
+  #  ports:
+  #    - "80:80"
+  #    - "443:443"  # Если нужен HTTPS
+  #  volumes:
+  #    - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # Основной конфиг
+  #  depends_on:
+  #    - stuffy-email
+  #    - stuffy-auth
+  #    - stuffy
+  #  restart: always
 
 networks:
   app-network:

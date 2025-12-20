@@ -2,6 +2,9 @@
 using Microsoft.AspNetCore.Http;
 using Moq;
 using System.Security.Claims;
+using AutoMapper;
+using StuffyHelper.Authorization.Contracts.AutoMapper;
+using StuffyHelper.Contracts.AutoMapper;
 
 namespace StuffyHelper.Tests.Common
 {
@@ -32,6 +35,36 @@ namespace StuffyHelper.Tests.Common
             };
 
             return httpContext;
+        }
+        
+        public static MapperConfiguration GetMapperConfiguration()
+        {
+            return new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile(new FriendsRequestAutoMapperProfile());
+                cfg.AddProfile(new FriendAutoMapperProfile());
+                cfg.AddProfile(new UserAutoMapperProfile());
+                cfg.AddProfile(new AvatarAutoMapperProfile());
+                cfg.AddProfile(new DebtAutoMapperProfile());
+                cfg.AddProfile(new CheckoutAutoMapperProfile());
+                cfg.AddProfile(new EventAutoMapperProfile());
+                cfg.AddProfile(new MediaAutoMapperProfile());
+                cfg.AddProfile(new ParticipantAutoMapperProfile());
+                cfg.AddProfile(new PurchaseAutoMapperProfile());
+                cfg.AddProfile(new PurchaseUsageAutoMapperProfile());
+            });
+        }
+        
+        public static Dictionary<string, string> GetCorrectStuffyConfigurationAsDictionary()
+        {
+            return new Dictionary<string, string>()
+            {
+                {"StuffyHelper:Authorization:ConnectionString", "connectionString"},
+                {"StuffyHelper:Authorization:JWT:ValidAudience", "audience"},
+                {"StuffyHelper:Authorization:JWT:Secret", "secret"},
+                {"StuffyHelper:Authorization:JWT:TokenExpireInHours", "1"},
+                {"StuffyHelper:Authorization:JWT:ValidIssuer", "issuer"},
+            };
         }
     }
 }
