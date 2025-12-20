@@ -6,7 +6,7 @@
     public class DebtEntry
     {
         /// <summary>
-        /// Identifier of debt
+        /// Identifier of debt 
         /// </summary>
         public Guid Id { get; init; }
         
