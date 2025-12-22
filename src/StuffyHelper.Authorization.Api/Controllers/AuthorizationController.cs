@@ -61,11 +61,13 @@ namespace StuffyHelper.Authorization.Api.Controllers
 
             if (!ModelState.IsValid)
                 throw new BadRequestException(ModelState);
-            
+
             var code = await _authorizationService.Register(model);
             try
             {
-                var callbackUrl = new Uri($"{_frontEndConfiguration.Endpoint.OriginalString.TrimEnd('/')}/email-confirm?login={model.Username}&code={code}");
+                var baseUrl = _frontEndConfiguration.Endpoint.OriginalString.TrimEnd('/');
+                var query = Uri.EscapeDataString($"login={model.Username}&code={code}");
+                var callbackUrl = new Uri($"{baseUrl}/email-confirm?{query}");
 
                 var request = new SendEmailRequest()
                 {
