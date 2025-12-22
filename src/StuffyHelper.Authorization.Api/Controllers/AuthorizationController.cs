@@ -66,7 +66,7 @@ namespace StuffyHelper.Authorization.Api.Controllers
             try
             {
                 var baseUrl = _frontEndConfiguration.Endpoint.OriginalString.TrimEnd('/');
-                var query = Uri.EscapeDataString($"login={model.Username}&code={code}");
+                var query = $"login={Uri.EscapeDataString(model.Username)}&code={Uri.EscapeDataString(code)}";
                 var callbackUrl = new Uri($"{baseUrl}/email-confirm?{query}");
 
                 var request = new SendEmailRequest()
