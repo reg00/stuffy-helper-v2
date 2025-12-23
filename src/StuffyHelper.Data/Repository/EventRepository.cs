@@ -30,6 +30,8 @@ namespace StuffyHelper.Data.Repository
             try
             {
                 var entry = await _context.Events
+                    .Include(x => x.Purchases)
+                    .Include(x => x.Debts)
                     .FirstOrDefaultAsync(e =>
                     ((e.Id == eventId) &&
                     (string.IsNullOrWhiteSpace(userId) || e.Participants.Any(x => x.UserId == userId))),

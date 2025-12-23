@@ -192,6 +192,12 @@ namespace StuffyHelper.Core.Services
         {
             var existingEvent = await ValidateEventAsync(eventId, userId, false, cancellationToken);
 
+            if(existingEvent.Purchases.Any(purchase => !purchase.IsComplete))
+                throw new BadRequestException("Cannot complete event {EventId}. You have not completed purchases. User: {UserId}", eventId, userId);
+            
+            if(existingEvent.Debts.Any(debt => !debt.IsSent))
+                throw new BadRequestException("Cannot complete event {EventId}. You have not completed debts. User: {UserId}", eventId, userId);
+            
             existingEvent.IsCompleted = isComplete;
             var result = await _eventRepository.UpdateEventAsync(existingEvent, cancellationToken);
 
@@ -210,7 +216,7 @@ namespace StuffyHelper.Core.Services
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
             var existingEvent = await _eventRepository.GetEventAsync(eventId, userId, cancellationToken);
-
+            
             if (existingEvent is null)
             {
                 throw new EntityNotFoundException("Event {EventId} not found.", eventId);
