@@ -141,6 +141,9 @@ namespace StuffyHelper.Core.Services
                 throw new EntityNotFoundException($"Event Id '{eventId}' not found");
             }
 
+            if(@event.Purchases.All(purchase => purchase.IsComplete))
+                return;
+            
             var checkout = _mapper.Map<CheckoutEntry>(eventId);
             checkout = await _checkoutRepository.AddCheckoutAsync(checkout, cancellationToken);
 
