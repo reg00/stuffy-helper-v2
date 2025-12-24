@@ -60,7 +60,7 @@ namespace StuffyHelper.Data.Repository
             try
             {
                 return await _context.Debts
-                    .FirstOrDefaultAsync(e => e.LenderId == lenderId && e.DebtorId == debtorId && e.EventId == eventId,
+                    .FirstOrDefaultAsync(e => e.LenderId == lenderId && e.DebtorId == debtorId && e.EventId == eventId && e.IsSent == false,
                     cancellationToken);
             }
             catch (EntityNotFoundException)

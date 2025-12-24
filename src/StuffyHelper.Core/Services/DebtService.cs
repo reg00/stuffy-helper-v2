@@ -147,7 +147,8 @@ namespace StuffyHelper.Core.Services
             var checkout = _mapper.Map<CheckoutEntry>(eventId);
             checkout = await _checkoutRepository.AddCheckoutAsync(checkout, cancellationToken);
 
-            foreach (var purchase in @event.Purchases.Where(x => !x.IsComplete).ToList())
+            var notCompletedPurchases = @event.Purchases.Where(x => !x.IsComplete).ToList();
+            foreach (var purchase in notCompletedPurchases)
             {
                 var fullAmount = purchase.PurchaseUsages.Select(x => x.Amount).Sum();
                 
