@@ -123,7 +123,7 @@ namespace StuffyHelper.Core.Services
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
 
-            await ValidateEventAsync(eventId, userId, true, cancellationToken);
+            await ValidateEventAsync(eventId, userId, true,true, cancellationToken);
 
             await _eventRepository.DeleteEventAsync(eventId, cancellationToken);
         }
@@ -133,7 +133,7 @@ namespace StuffyHelper.Core.Services
         {
             EnsureArg.IsNotNull(updateEvent, nameof(updateEvent));
 
-            var existingEvent = await ValidateEventAsync(eventId, userId, true, cancellationToken);
+            var existingEvent = await ValidateEventAsync(eventId, userId, true, true, cancellationToken);
 
             existingEvent.PatchFrom(updateEvent);
             var result = await _eventRepository.UpdateEventAsync(existingEvent, cancellationToken);
@@ -144,7 +144,7 @@ namespace StuffyHelper.Core.Services
         /// <inheritdoc />
         public async Task DeletePrimalEventMedia(Guid eventId, string? userId, CancellationToken cancellationToken = default)
         {
-            var existingEvent = await ValidateEventAsync(eventId, userId, true, cancellationToken);
+            var existingEvent = await ValidateEventAsync(eventId, userId, true, false, cancellationToken);
 
             var primalMedia = await _mediaService.GetPrimalEventMedia(eventId, cancellationToken);
 
@@ -163,7 +163,7 @@ namespace StuffyHelper.Core.Services
 
             FileTypeMapper.ValidateExtIsImage(Path.GetExtension(file.FileName));
 
-            var existingEvent = await ValidateEventAsync(eventId, userId, true, cancellationToken);
+            var existingEvent = await ValidateEventAsync(eventId, userId, true, false, cancellationToken);
             var primalMedia = await _mediaService.GetPrimalEventMedia(eventId, cancellationToken);
 
             if (primalMedia is not null)
@@ -190,7 +190,7 @@ namespace StuffyHelper.Core.Services
         /// <inheritdoc />
         public async Task<EventShortEntry> CompleteEventAsync(Guid eventId, string? userId, bool isComplete, CancellationToken cancellationToken = default)
         {
-            var existingEvent = await ValidateEventAsync(eventId, userId, false, cancellationToken);
+            var existingEvent = await ValidateEventAsync(eventId, userId, false, true, cancellationToken);
 
             if (isComplete)
             {
@@ -218,6 +218,7 @@ namespace StuffyHelper.Core.Services
             Guid eventId,
             string? userId,
             bool checkIsComplete = true,
+            bool checkPermissions = true,
             CancellationToken cancellationToken = default)
         {
             EnsureArg.IsNotDefault(eventId, nameof(eventId));
@@ -234,7 +235,8 @@ namespace StuffyHelper.Core.Services
                 throw new BadRequestException("Cannot edit completed event {EventId}. User: {UserId}", eventId, userId);
             }
 
-            CheckEventPermissionsAsync(eventId, existingEvent.UserId, userId);
+            if(checkPermissions)
+                CheckEventPermissionsAsync(eventId, existingEvent.UserId, userId);
 
             return existingEvent;
         }
